@@ -30,6 +30,33 @@
       ]
     },
   "navigation": {
+     "groups": [
+      {
+        "group": "API Reference",
+        "pages": [
+          {
+            "group": "User Management", 
+            "pages": [
+              {
+                "group": "Authentication",
+                "pages": [
+                  "api-reference/auth/login",
+                  "api-reference/auth/logout"
+                ]
+              },
+              {
+                "group": "User Operations",
+                "pages": [
+                  "api-reference/users/create",
+                  "api-reference/users/get",
+                  "api-reference/users/update"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "versions": [
       {
         "version": "2.2",
