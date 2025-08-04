@@ -45,16 +45,6 @@
             "pages": [
               "data-api/index",
               {
-                "group": "API Reference",
-                "openapi": "https://api.moralis.com/api-json"
-              }
-            ]
-          },
-          {
-            "tab": "Solana API",
-            "pages": [
-              "web3-data-api/solana",
-              {
                 "group": "Getting Started",
                 "pages": [
                   "web3-data-api/solana/getting-started",
@@ -63,7 +53,7 @@
               },
               {
                 "group": "API Reference",
-                "openapi": "https://solana-gateway.moralis.io/api-json"
+                "openapi": "https://api.moralis.com/api-json"
               },
               {
                 "group": "FAQs",
@@ -75,7 +65,41 @@
             ]
           },
           {
-            "tab": "Streams API",
+            "tab": "Streams",
+            "pages": [
+              "streams-api/evm",
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "streams-api/evm/getting-started",
+                  "streams-api/evm/setup-secret-key"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+              }
+            ]
+          },
+          {
+            "tab": "Datashare",
+            "pages": [
+              "streams-api/evm",
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "streams-api/evm/getting-started",
+                  "streams-api/evm/setup-secret-key"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+              }
+            ]
+          },
+          {
+            "tab": "Cortex API",
             "pages": [
               "streams-api/evm",
               {
