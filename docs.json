@@ -33,23 +33,6 @@
     "versions": [
       {
         "version": "2.2",
-        "anchors": [
-        {
-          "anchor": "Status",
-          "href": "https://status.moralis.io/",
-          "icon": "signal"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://moralis.com/joindiscord/",
-          "icon": "discord"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://moralis.com/blog/",
-          "icon": "newspaper"
-        }
-      ], 
         "tabs": [
           {
             "tab": "Get Started",
@@ -67,7 +50,24 @@
                   "get-started/faqs"
                 ]
               }
-            ]
+            ],
+            "anchors": [
+        {
+          "anchor": "Status",
+          "href": "https://status.moralis.io/",
+          "icon": "signal"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://moralis.com/joindiscord/",
+          "icon": "discord"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://moralis.com/blog/",
+          "icon": "newspaper"
+        }
+      ]
           },
           {
             "tab": "Data APIs",
