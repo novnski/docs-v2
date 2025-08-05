@@ -35,7 +35,7 @@
         "version": "2.2",
         "tabs": [
           {
-            "tab": "Get Started",
+            "tab": "Home",
          "pages": [
               {
                 "group": "Introduction",
@@ -49,25 +49,15 @@
                   "get-started/supported-chains",
                   "get-started/faqs"
                 ]
+              },
+           {
+                "group": "Getting Started",
+                "pages": [
+                  "web3-data-api/solana/getting-started",
+                  "web3-data-api/solana/get-your-api-key"
+                ]
               }
-            ],
-            "anchors": [
-        {
-          "anchor": "Status",
-          "href": "https://status.moralis.io/",
-          "icon": "signal"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://moralis.com/joindiscord/",
-          "icon": "discord"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://moralis.com/blog/",
-          "icon": "newspaper"
-        }
-      ]
+            ]
           },
           {
             "tab": "Data APIs",
