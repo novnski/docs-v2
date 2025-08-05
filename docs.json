@@ -46,8 +46,8 @@
                             {
                                 "group": "Getting Started",
                                 "pages": [
-                                    "get-started/get-started",
-                                    "get-started/get-your-api-key"
+                                    "get-started/get-your-api-key",
+                                    "get-started/first-request"
                                 ]
                             },
                             {
