@@ -36,6 +36,23 @@
         "tabs": [
           {
             "tab": "Get Started",
+      "anchors": [
+        {
+          "anchor": "Status",
+          "href": "https://status.moralis.io/",
+          "icon": "signal"
+        },
+        {
+          "anchor": "Community",
+          "href": "https://moralis.com/joindiscord/",
+          "icon": "discord"
+        },
+        {
+          "anchor": "Blog",
+          "href": "https://moralis.com/blog/",
+          "icon": "newspaper"
+        }
+      ],
             "pages": [
               {
                 "group": "Introduction",
@@ -49,7 +66,7 @@
                   "get-started/supported-chains",
                   "get-started/faqs"
                 ]
-              },
+              }
             ]
           },
           {
@@ -167,26 +184,7 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Status",
-          "href": "https://status.moralis.io/",
-          "icon": "signal"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://moralis.com/joindiscord/",
-          "icon": "discord"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://moralis.com/blog/",
-          "icon": "newspaper"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.png",
