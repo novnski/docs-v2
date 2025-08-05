@@ -53,7 +53,16 @@
                             {
                                 "group": "Pricing & Resources",
                                 "pages": [
-                                    "get-started/pricing",
+                                    {
+                                        "group": "Pricing",
+                                        "pages": [
+                                            "get-started/pricing",
+                                            "data-api/pricing",
+                                            "streams/pricing",
+                                            "datashare/pricing",
+                                            "nodes/pricing"
+                                        ]
+                                    },
                                     "get-started/supported-chains",
                                     "get-started/faqs"
                                 ]
@@ -137,7 +146,7 @@
                     {
                         "tab": "Streams",
                         "pages": [
-                            "streams-api/evm",
+                            "streams/index",
                             {
                                 "group": "Getting Started",
                                 "pages": [
@@ -154,7 +163,7 @@
                     {
                         "tab": "Datashare",
                         "pages": [
-                            "streams-api/evm",
+                            "datashare/index",
                             {
                                 "group": "Getting Started",
                                 "pages": [
@@ -171,7 +180,7 @@
                     {
                         "tab": "RPC Nodes",
                         "pages": [
-                            "data-api/index",
+                            "nodes/index",
                             {
                                 "group": "Getting Started",
                                 "pages": [
