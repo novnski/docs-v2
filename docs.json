@@ -101,6 +101,36 @@
                                 "pages": [
                                     "data-api/token-api/index"
                                 ]
+                            },
+                            {
+                                "group": "NFT API",
+                                "pages": [
+                                    "data-api/nft-api/index"
+                                ]
+                            },
+                            {
+                                "group": "Price API",
+                                "pages": [
+                                    "data-api/price-api/index"
+                                ]
+                            },
+                            {
+                                "group": "DeFi API",
+                                "pages": [
+                                    "data-api/defi-api/index"
+                                ]
+                            },
+                            {
+                                "group": "Entity API",
+                                "pages": [
+                                    "data-api/entity-api/index"
+                                ]
+                            },
+                            {
+                                "group": "Blockchain API",
+                                "pages": [
+                                    "data-api/blockchain-api/index"
+                                ]
                             }
                         ]
                     },
