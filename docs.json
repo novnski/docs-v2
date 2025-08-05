@@ -46,8 +46,8 @@
               {
                 "group": "Getting Started",
                 "pages": [
-                  "web3-data-api/solana/getting-started",
-                  "web3-data-api/solana/get-your-api-key"
+                  "get-started/get-started",
+                  "get-started/get-your-api-key"
                 ]
               },
               {
@@ -72,15 +72,14 @@
                   {
                     "group": "Data API Quickstart",
                     "pages": [
-                      "web3-data-api/solana/getting-started",
-                      "web3-data-api/solana/get-your-api-key"
+                      "data-api/get-started",
+                      "data-api/get-your-api-key"
                     ]
                   },
                   {
                     "group": "Data API FAQs",
                     "pages": [
-                      "web3-data-api/solana/faqs",
-                      "web3-data-api/solana/nft-metadata-faq"
+                      "data-api/faqs"
                     ]
                   }
                 ]
