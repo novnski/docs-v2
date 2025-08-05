@@ -32,7 +32,7 @@
   "navigation": {
     "versions": [
       {
-        "version": "1",
+        "version": "v1.0",
         "tabs": [
           {
             "tab": "Get Started",
@@ -68,14 +68,14 @@
                 "pages": [
                   "data-api/index",
                   "data-api/pricing",
-                  "data-api/supported-chains"
-                ]
-              },
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "web3-data-api/solana/getting-started",
-                  "web3-data-api/solana/get-your-api-key"
+                  "data-api/supported-chains",
+                  {
+                    "group": "Data API Quickstart",
+                    "pages": [
+                      "web3-data-api/solana/getting-started",
+                      "web3-data-api/solana/get-your-api-key"
+                    ]
+                  }
                 ]
               },
               {
