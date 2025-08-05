@@ -3,3 +3,42 @@ title: "Pricing"
 sidebarTitle: "Pricing"
 description: "Pricing information about our products."
 ---
+
+All Moralis plans come with generous monthly request limits. The number of included requests depends on your plan - check the [pricing page](#) for details.
+
+Moralis uses **Compute Units (CUs)** as a standard way to measure and bill for usage across all products - including [**Data API**](/data-api/pricing), **Streams**, **DataShare**, and **RPC Nodes**.
+
+CUs provide a unified way to account for **computational complexity** and **rate limits**, regardless of the product you're using.
+
+## What is a Compute Unit?
+
+A **Compute Unit (CU)** represents the relative computational cost of a request, task, or operation within the Moralis platform. Simple operations consume fewer CUs, while more complex or resource-intensive ones consume more.
+
+For example:
+
+- A basic wallet balance check may consume a small number of CUs.
+- A multi-chain portfolio aggregation, or a high-frequency stream of on-chain events, may consume significantly more.
+
+CUs ensure you're only billed for the resources you actually use - and that high-load workloads are fairly metered across the system.
+
+## CU Cost
+
+Each product applies CU-based billing differently. Generally:
+
+- **CUs are deducted from your plan’s included quota**.
+- **Usage beyond your quota may incur overage charges**, depending on your plan and product.
+
+Visit the individual pricing pages to see how CUs apply to each product:
+
+- [Data API Pricing](/data-api/pricing)
+- [Streams Pricing](#)
+- [Datashare Pricing](#)
+- [Nodes Pricing](#)
+
+## CU Throughput (CU/s)
+
+CUs are also used to enforce **rate limits**, measured in **CUs per second (CU/s)**.
+
+This helps manage request throughput and protect system performance - allowing heavier requests to be made less frequently, while lightweight calls remain fast and responsive.
+
+Different products may enforce CU/s limits differently. Check the respective documentation for details.
