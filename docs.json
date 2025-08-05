@@ -43,7 +43,14 @@
           {
             "tab": "Data APIs",
             "pages": [
-              "data-api/index",
+              {
+                "group": "Introduction",
+                "pages": [
+                  "data-api/index",
+                  "data-api/pricing",
+                  "data-api/supported-chains"
+                ]
+              },
               {
                 "group": "Getting Started",
                 "pages": [
