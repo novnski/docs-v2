@@ -88,15 +88,13 @@
                                 "group": "Wallet API",
                                 "pages": [
                                     "data-api/wallet-api/index"
-                                ],
-                                "openapi": "https://api.moralis.com/api-json"
+                                ]
                             },
                             {
                                 "group": "Token API",
                                 "pages": [
                                     "data-api/token-api/index"
-                                ],
-                                "openapi": "https://api.moralis.com/api-json"
+                                ]
                             }
                         ]
                     },
