@@ -87,9 +87,14 @@
                             {
                                 "group": "Wallet API",
                                 "pages": [
-                                    "data-api/wallet-api/index"
-                                ],
-                              "openapi": "https://api.moralis.com/api-json"
+                                    "data-api/wallet-api/index",
+                                  {
+                                    "group": "Wallet API Reference",
+                                    "pages": [
+                                      "data-api/wallet-api/get-wallet-swaps"
+                                    ]
+                                  }
+                                ]
                             },
                             {
                                 "group": "Token API",
