@@ -32,7 +32,7 @@
   "navigation": {
     "versions": [
       {
-        "version": "2.2",
+        "version": "1",
         "tabs": [
           {
             "tab": "Get Started",
@@ -41,6 +41,13 @@
                 "group": "Introduction",
                 "pages": [
                   "get-started/index"
+                ]
+              },
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "web3-data-api/solana/getting-started",
+                  "web3-data-api/solana/get-your-api-key"
                 ]
               },
               {
