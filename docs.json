@@ -91,7 +91,7 @@
                                   {
                                     "group": "Wallet API Reference",
                                     "pages": [
-                                      "data-api/wallet-api/get-wallet-swaps"
+                                      "data-api/wallet-api/endpoints/get-wallet-swaps"
                                     ]
                                   }
                                 ]
