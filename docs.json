@@ -1,208 +1,215 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Moralis",
-  "colors": {
-    "primary": "#0f7fff",
-    "light": "#0f7fff",
-    "dark": "#0f7fff"
-  },
-  "favicon": "/favicon.png",
+    "$schema": "https://mintlify.com/docs.json",
+    "theme": "mint",
+    "name": "Moralis",
+    "colors": {
+        "primary": "#0f7fff",
+        "light": "#0f7fff",
+        "dark": "#0f7fff"
+    },
+    "favicon": "/favicon.png",
     "appearance": {
-      "default": "light"
+        "default": "light"
     },
     "background": {
-      "color": {
-        "dark": "#191B19"
-      }
+        "color": {
+            "dark": "#191B19"
+        }
     },
     "fonts": {
-      "family": "sw",
-      "source": "https://mintlify-assets.b-cdn.net/fonts/sw.woff2",
-      "format": "woff2"
+        "family": "sw",
+        "source": "https://mintlify-assets.b-cdn.net/fonts/sw.woff2",
+        "format": "woff2"
     },
     "contextual": {
-      "options": [
-        "chatgpt",
-        "claude",
-        "copy",
-        "view"
-      ]
-    },
-  "navigation": {
-    "versions": [
-      {
-        "version": "v1.0",
-        "tabs": [
-          {
-            "tab": "Get Started",
-         "pages": [
-              {
-                "group": "Introduction",
-                "pages": [
-                  "get-started/index"
-                ]
-              },
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "get-started/get-started",
-                  "get-started/get-your-api-key"
-                ]
-              },
-              {
-                "group": "Pricing & Resources",
-                "pages": [
-                  "get-started/pricing",
-                  "get-started/supported-chains",
-                  "get-started/faqs"
-                ]
-              }
-            ]
-          },
-          {
-            "tab": "Data API",
-            "pages": [
-              {
-                "group": "Introduction",
-                "pages": [
-                  "data-api/index",
-                  "data-api/pricing",
-                  "data-api/supported-chains",
-                  {
-                    "group": "Data API Quickstart",
-                    "pages": [
-                      "data-api/get-started",
-                      "data-api/get-your-api-key"
-                    ]
-                  },
-                  {
-                    "group": "Data API FAQs",
-                    "pages": [
-                      "data-api/faqs"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Wallet API",
-                "pages": [
-                    "data-api/wallet-api/index",                  
-                ]
-                "openapi": "https://api.moralis.com/api-json"
-              }
-            ]
-          },
-          {
-            "tab": "Streams",
-            "pages": [
-              "streams-api/evm",
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "streams-api/evm/getting-started",
-                  "streams-api/evm/setup-secret-key"
-                ]
-              },
-              {
-                "group": "API Reference",
-                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
-              }
-            ]
-          },
-          {
-            "tab": "Datashare",
-            "pages": [
-              "streams-api/evm",
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "streams-api/evm/getting-started",
-                  "streams-api/evm/setup-secret-key"
-                ]
-              },
-              {
-                "group": "API Reference",
-                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
-              }
-            ]
-          },
-          {
-            "tab": "RPC Nodes",
-            "pages": [
-              "data-api/index",
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "web3-data-api/solana/getting-started",
-                  "web3-data-api/solana/get-your-api-key"
-                ]
-              },
-              {
-                "group": "API Reference",
-                "openapi": "https://api.moralis.com/api-json"
-              },
-              {
-                "group": "FAQs",
-                "pages": [
-                  "web3-data-api/solana/faqs",
-                  "web3-data-api/solana/nft-metadata-faq"
-                ]
-              }
-            ]
-          },
-          {
-            "tab": "Cortex API",
-            "pages": [
-              "streams-api/evm",
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "streams-api/evm/getting-started",
-                  "streams-api/evm/setup-secret-key"
-                ]
-              },
-              {
-                "group": "API Reference",
-                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
-              }
-            ]
-          },
-          {
-            "tab": "Changelog",
-            "pages": [
-              "changelog",
-              "changelog/get-tokens-by-exchange-api"
-            ]
-          }
+        "options": [
+            "chatgpt",
+            "claude",
+            "copy",
+            "view"
         ]
-      }
-    ]
-  },
-  "logo": {
-    "light": "/logo/light.png",
-    "dark": "/logo/dark.png",
-    "page": "index"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Login",
-        "href": "https://admin.moralis.com/"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Start for Free",
-      "href": "https://admin.moralis.com/register"
+    },
+    "navigation": {
+        "versions": [
+            {
+                "version": "v1.0",
+                "tabs": [
+                    {
+                        "tab": "Get Started",
+                        "pages": [
+                            {
+                                "group": "Introduction",
+                                "pages": [
+                                    "get-started/index"
+                                ]
+                            },
+                            {
+                                "group": "Getting Started",
+                                "pages": [
+                                    "get-started/get-started",
+                                    "get-started/get-your-api-key"
+                                ]
+                            },
+                            {
+                                "group": "Pricing & Resources",
+                                "pages": [
+                                    "get-started/pricing",
+                                    "get-started/supported-chains",
+                                    "get-started/faqs"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "Data API",
+                        "pages": [
+                            {
+                                "group": "Introduction",
+                                "pages": [
+                                    "data-api/index",
+                                    "data-api/pricing",
+                                    "data-api/supported-chains",
+                                    {
+                                        "group": "Data API Quickstart",
+                                        "pages": [
+                                            "data-api/get-started",
+                                            "data-api/get-your-api-key"
+                                        ]
+                                    },
+                                    {
+                                        "group": "Data API FAQs",
+                                        "pages": [
+                                            "data-api/faqs"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "group": "Wallet API",
+                                "pages": [
+                                    "data-api/wallet-api/index"
+                                ],
+                                "openapi": "https://api.moralis.com/api-json"
+                            },
+                            {
+                                "group": "Token API",
+                                "pages": [
+                                    "data-api/token-api/index"
+                                ],
+                                "openapi": "https://api.moralis.com/api-json"
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "Streams",
+                        "pages": [
+                            "streams-api/evm",
+                            {
+                                "group": "Getting Started",
+                                "pages": [
+                                    "streams-api/evm/getting-started",
+                                    "streams-api/evm/setup-secret-key"
+                                ]
+                            },
+                            {
+                                "group": "API Reference",
+                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "Datashare",
+                        "pages": [
+                            "streams-api/evm",
+                            {
+                                "group": "Getting Started",
+                                "pages": [
+                                    "streams-api/evm/getting-started",
+                                    "streams-api/evm/setup-secret-key"
+                                ]
+                            },
+                            {
+                                "group": "API Reference",
+                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "RPC Nodes",
+                        "pages": [
+                            "data-api/index",
+                            {
+                                "group": "Getting Started",
+                                "pages": [
+                                    "web3-data-api/solana/getting-started",
+                                    "web3-data-api/solana/get-your-api-key"
+                                ]
+                            },
+                            {
+                                "group": "API Reference",
+                                "openapi": "https://api.moralis.com/api-json"
+                            },
+                            {
+                                "group": "FAQs",
+                                "pages": [
+                                    "web3-data-api/solana/faqs",
+                                    "web3-data-api/solana/nft-metadata-faq"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "Cortex API",
+                        "pages": [
+                            "streams-api/evm",
+                            {
+                                "group": "Getting Started",
+                                "pages": [
+                                    "streams-api/evm/getting-started",
+                                    "streams-api/evm/setup-secret-key"
+                                ]
+                            },
+                            {
+                                "group": "API Reference",
+                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "Changelog",
+                        "pages": [
+                            "changelog",
+                            "changelog/get-tokens-by-exchange-api"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "logo": {
+        "light": "/logo/light.png",
+        "dark": "/logo/dark.png",
+        "page": "index"
+    },
+    "navbar": {
+        "links": [
+            {
+                "label": "Login",
+                "href": "https://admin.moralis.com/"
+            }
+        ],
+        "primary": {
+            "type": "button",
+            "label": "Start for Free",
+            "href": "https://admin.moralis.com/register"
+        }
+    },
+    "footer": {
+        "socials": {
+            "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
+            "x": "https://x.com/moralisdevs",
+            "linkedin": "https://www.linkedin.com/company/moralisweb3/",
+            "discord": "https://discord.gg/s3UfDvXQTc"
+        }
     }
-  },
-  "footer": {
-    "socials": {
-      "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
-      "x": "https://x.com/moralisdevs",
-      "linkedin": "https://www.linkedin.com/company/moralisweb3/",
-      "discord": "https://discord.gg/s3UfDvXQTc"
-    }
-  }
 }
