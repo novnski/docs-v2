@@ -36,24 +36,7 @@
         "tabs": [
           {
             "tab": "Get Started",
-      "anchors": [
-        {
-          "anchor": "Status",
-          "href": "https://status.moralis.io/",
-          "icon": "signal"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://moralis.com/joindiscord/",
-          "icon": "discord"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://moralis.com/blog/",
-          "icon": "newspaper"
-        }
-      ],
-            "pages": [
+         "pages": [
               {
                 "group": "Introduction",
                 "pages": [
