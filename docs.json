@@ -53,16 +53,7 @@
                             {
                                 "group": "Pricing & Resources",
                                 "pages": [
-                                    {
-                                        "group": "Pricing",
-                                        "pages": [
-                                            "get-started/pricing",
-                                            "data-api/pricing",
-                                            "streams/pricing",
-                                            "datashare/pricing",
-                                            "nodes/pricing"
-                                        ]
-                                    },
+                                    "get-started/pricing",
                                     "get-started/supported-chains",
                                     "get-started/faqs"
                                 ]
