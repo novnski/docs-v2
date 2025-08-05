@@ -75,19 +75,19 @@
                       "web3-data-api/solana/getting-started",
                       "web3-data-api/solana/get-your-api-key"
                     ]
+                  },
+                  {
+                    "group": "Data API FAQs",
+                    "pages": [
+                      "web3-data-api/solana/faqs",
+                      "web3-data-api/solana/nft-metadata-faq"
+                    ]
                   }
                 ]
               },
               {
                 "group": "API Reference",
                 "openapi": "https://api.moralis.com/api-json"
-              },
-              {
-                "group": "FAQs",
-                "pages": [
-                  "web3-data-api/solana/faqs",
-                  "web3-data-api/solana/nft-metadata-faq"
-                ]
               }
             ]
           },
