@@ -35,9 +35,21 @@
         "version": "2.2",
         "tabs": [
           {
-            "tab": "Home",
+            "tab": "Get Started",
             "pages": [
-              "index"
+              {
+                "group": "Introduction",
+                "pages": [
+                  "get-started/index"
+                ]
+              },{
+                "group": "Pricing & Resources",
+                "pages": [
+                  "get-started/pricing",
+                  "get-started/supported-chains",
+                  "get-started/faqs"
+                ]
+              },
             ]
           },
           {
