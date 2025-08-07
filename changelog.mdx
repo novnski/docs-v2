@@ -6,6 +6,18 @@ import {HeroCard} from '/snippets/hero-card.mdx';
 
 <Update label="May 15 2025" description="Data API" tags={["New Feature"]}>
 ## Get Tokens by Exchange API
+
+We're excited to announce our new Get Tokens by Exchange API endpoints\! This powerful addition to our Token API suite enables developers to track tokens at various lifecycle stages on decentralized exchanges, with tama.meme as our initial supported DEX.
+
+### What's New?
+
+| Name                          | Description                                                           | API Reference                                                                                                 |
+| ----------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Get Newly Launched Tokens** | Retrieve a list of newly created tokens on a specific exchange        | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-new-tokens-by-exchange)       |
+| **Get Bonding Tokens**        | Access tokens currently in bonding curve phase on a specific exchange | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-bonding-tokens-by-exchange)   |
+| **Get Graduated Tokens**      | List tokens that have graduated from bonding curve to full trading    | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-graduated-tokens-by-exchange) |
+| **Get Token Bonding Status**  | Check the bonding curve status and progress for a specific token      | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-token-bonding-status)         |
+
 <HeroCard title="Read More" href="/changelog/get-tokens-by-exchange-api" />
 </Update>
 
