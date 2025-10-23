@@ -68,7 +68,7 @@
                         ]
                     },
                     {
-                        "tab": "EVM API",
+                        "tab": "Data API",
                         "pages": [
                             {
                                 "group": "Introduction",
@@ -149,74 +149,6 @@
                                 "group": "Blockchain API",
                                 "pages": [
                                     "data-api/blockchain-api/index"
-                                ]
-                            }
-                        ]
-                    },
-                  {
-                        "tab": "Solana API",
-                        "pages": [
-                            {
-                                "group": "Introduction",
-                                "pages": [
-                                    "data-api/index",
-                                    "data-api/pricing",
-                                    "data-api/supported-chains",
-                                    {
-                                        "group": "Data API Quickstart",
-                                        "pages": [
-                                            "data-api/get-started",
-                                            "data-api/get-your-api-key"
-                                        ]
-                                    },
-                                    {
-                                        "group": "Data API FAQs",
-                                        "pages": [
-                                            "data-api/faqs"
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "group": "Wallet API",
-                                "pages": [
-                                    "data-api/wallet-api/index",
-                                  {
-                                    "group": "Wallet API Reference",
-                                    "pages": [
-                                      "data-api/wallet-api/endpoints/get-wallet-swaps"
-                                    ]
-                                  },
-                                  {
-                                    "group": "Wallet API FAQs",
-                                    "pages": [
-                                      "data-api/wallet-api/faqs/faqs"
-                                    ]
-                                  },
-                                  {
-                                    "group": "Wallet API Tutorials",
-                                    "pages": [
-                                      "data-api/wallet-api/tutorials/build-revoke-cash"
-                                    ]
-                                  }
-                                ]
-                            },
-                            {
-                                "group": "Token API",
-                                "pages": [
-                                    "data-api/token-api/index"
-                                ]
-                            },
-                            {
-                                "group": "NFT API",
-                                "pages": [
-                                    "data-api/nft-api/index"
-                                ]
-                            },
-                            {
-                                "group": "Price API",
-                                "pages": [
-                                    "data-api/price-api/index"
                                 ]
                             }
                         ]
