@@ -133,14 +133,14 @@
                                       {
                                         "group": "Token Info",
                                         "pages": [
-                                          "token-api/token-api/endpoints/token-metadata",
+                                          "evm-api/token-api/endpoints/token-metadata",
                                           "universal-api/token-api/endpoints/token-score"
                                         ]
                                       },
                                       {
                                         "group": "Token Activity",
                                         "pages": [
-                                          "token-api/token-api/endpoints/token-transfers",
+                                          "evm-api/token-api/endpoints/token-transfers",
                                     "universal-api/token-api/endpoints/token-analytics",
                                     "universal-api/token-api/endpoints/token-analytics-multi",
                                     "universal-api/token-api/endpoints/token-analytics-timeseries"
@@ -149,13 +149,13 @@
                                       {
                                         "group": "Prices & Liquidity",
                                         "pages": [
-                                          "token-api/token-api/endpoints/token-price"               
+                                          "evm-api/token-api/endpoints/token-price"               
                                         ]
                                       },
                                       {
                                         "group": "Holders",
                                         "pages": [
-                                          "token-api/token-api/endpoints/token-holders"               
+                                          "evm-api/token-api/endpoints/token-holders"               
                                         ]
                                       },
                                       {
@@ -186,11 +186,18 @@
                                   },
                                   {
                                     "group": "Price API",
-                                    "pages": []
+                                    "pages": [
+                                      "evm-api/token-api/endpoints/token-price",
+                                      "evm-api/nft-api/endpoints/floor-price-collection"
+                                    ]
                                   },
                                   {
                                     "group": "DeFi API",
-                                    "pages": []
+                                    "pages": [
+                                      "evm-api/defi-api/endpoints/wallet-protocols",
+                                      "evm-api/defi-api/endpoints/wallet-positions",
+                                      "evm-api/defi-api/endpoints/wallet-positions-detailed"
+                                    ]
                                   },
                                   {
                                     "group": "Blockchain API",
