@@ -208,7 +208,7 @@
                           {
                                 "group": "Solana API",
                                 "pages": [
-                                    "solana-api/index",
+                                    "data-api/solana-index",
                                   {
                                     "group": "Wallet API",
                                     "pages": []
