@@ -156,6 +156,30 @@
                   {
                         "tab": "EVM API",
                         "pages": [
+                          {
+                                "group": "Wallet API",
+                                "pages": [
+                                    "data-api/wallet-api/index",
+                                  {
+                                    "group": "Wallet API Reference",
+                                    "pages": [
+                                      "data-api/wallet-api/endpoints/get-wallet-swaps"
+                                    ]
+                                  },
+                                  {
+                                    "group": "Wallet API FAQs",
+                                    "pages": [
+                                      "data-api/wallet-api/faqs/faqs"
+                                    ]
+                                  },
+                                  {
+                                    "group": "Wallet API Tutorials",
+                                    "pages": [
+                                      "data-api/wallet-api/tutorials/build-revoke-cash"
+                                    ]
+                                  }
+                                ]
+                            },
                             {
                                 "group": "API Reference",
                                 "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
