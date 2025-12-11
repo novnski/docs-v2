@@ -84,7 +84,10 @@
                                   "group": "Token API",
                                   "pages": [
                                     "universal-api/token-api/endpoints/token-search",
-                                    "universal-api/token-api/endpoints/token-score"
+                                    "universal-api/token-api/endpoints/token-score",
+                                    "universal-api/token-api/endpoints/token-analytics",
+                                    "universal-api/token-api/endpoints/token-analytics-multi",
+                                    "universal-api/token-api/endpoints/token-analytics-timeseries"
                                   ]
                                 }
                               ]
