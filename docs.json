@@ -115,7 +115,47 @@
                                   },
                                   {
                                     "group": "Token API",
-                                    "pages": []
+                                    "pages": [
+                                      {
+                                        "group": "Token Info",
+                                        "pages": [
+                                          "universal-api/token-api/endpoints/token-metadata",
+                                          "universal-api/token-api/endpoints/token-score"
+                                        ]
+                                      },
+                                      {
+                                        "group": "Token Activity",
+                                        "pages": [
+                                    "universal-api/token-api/endpoints/token-analytics",
+                                    "universal-api/token-api/endpoints/token-analytics-multi",
+                                    "universal-api/token-api/endpoints/token-analytics-timeseries"
+                                        ]
+                                      },
+                                      {
+                                        "group": "Prices & Liquidity",
+                                        "pages": [
+                                          "universal-api/token-api/endpoints/token-search"               
+                                        ]
+                                      },
+                                      {
+                                        "group": "Holders",
+                                        "pages": [
+                                          "universal-api/token-api/endpoints/token-search"               
+                                        ]
+                                      },
+                                      {
+                                        "group": "Token Discovery",
+                                        "pages": [
+                                          "universal-api/token-api/endpoints/token-search"               
+                                        ]
+                                      },
+                                      {
+                                        "group": "Wallet Data",
+                                        "pages": [
+                                          "evm-api/token-api/endpoints/get-token-balances"
+                                        ]
+                                      }
+                                    ]
                                   },
                                   {
                                     "group": "NFT API",
