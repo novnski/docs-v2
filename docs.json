@@ -88,9 +88,35 @@
                                   }
                                 ]
                             },
-                            {
-                                "group": "API Reference",
-                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+                          {
+                                "group": "Token API",
+                                "pages": [
+                                    "evm-api/token-api/index",
+                                  {
+                                    "group": "Token API Reference",
+                                    "pages": []
+                                  }
+                                ]
+                            },
+                          {
+                                "group": "NFT API",
+                                "pages": [
+                                    "evm-api/nft-api/index",
+                                  {
+                                    "group": "NFT API Reference",
+                                    "pages": []
+                                  }
+                                ]
+                            },
+                          {
+                                "group": "Price API",
+                                "pages": [
+                                    "evm-api/price-api/index",
+                                  {
+                                    "group": "Price API Reference",
+                                    "pages": []
+                                  }
+                                ]
                             }
                         ]
                     },
