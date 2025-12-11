@@ -81,8 +81,10 @@
                               "pages": [
                                 "universal-api/index",
                                 {
-                                  "group": "Token Search API Reference",
+                                  "group": "Token API Reference",
                                   "pages": [
+                                    "universal-api/token-api/endpoints/token-search",
+                                    "universal-api/token-api/endpoints/token-score"
                                   ]
                                 }
                               ]
