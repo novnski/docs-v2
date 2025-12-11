@@ -111,7 +111,12 @@
                                     {
                                       "group": "Transactions",
                                       "pages": [
-                                        "evm-api/wallet-api/endpoints/get-wallet-history"
+                                        "evm-api/wallet-api/endpoints/get-wallet-history",
+                                        "evm-api/wallet-api/endpoints/token-transfers",
+                                        "evm-api/wallet-api/endpoints/nft-transfers",
+                                        "evm-api/wallet-api/endpoints/wallet-swaps",
+                                        "evm-api/wallet-api/endpoints/wallet-transactions",
+                                        "evm-api/wallet-api/endpoints/decoded-transactions"
                                       ]
                                     },
                                     {
