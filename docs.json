@@ -153,6 +153,15 @@
                             }
                         ]
                     },
+                  {
+                        "tab": "EVM API",
+                        "pages": [
+                            {
+                                "group": "API Reference",
+                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+                            }
+                        ]
+                    },
                     {
                         "tab": "Streams",
                         "pages": [
