@@ -199,32 +199,11 @@
                                 ]
                             },
                             {
-                                "group": "API Reference",
-                                "openapi": "https://api.moralis.com/api-json"
-                            },
-                            {
                                 "group": "FAQs",
                                 "pages": [
                                     "web3-data-api/solana/faqs",
                                     "web3-data-api/solana/nft-metadata-faq"
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        "tab": "Cortex API",
-                        "pages": [
-                            "streams-api/evm",
-                            {
-                                "group": "Getting Started",
-                                "pages": [
-                                    "streams-api/evm/getting-started",
-                                    "streams-api/evm/setup-secret-key"
-                                ]
-                            },
-                            {
-                                "group": "API Reference",
-                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
                             }
                         ]
                     },
