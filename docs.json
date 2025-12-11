@@ -68,6 +68,48 @@
                         ]
                     },
                   {
+                        "tab": "Data API",
+                        "pages": [
+                          {
+                                "group": "Introduction",
+                                "pages": [
+                                    "data-api/index"
+                                ]
+                            },
+                          {
+                              "group": "Universal API",
+                              "pages": [
+                                "universal-api/index",
+                                {
+                                  "group": "Token Search API Reference",
+                                  "pages": [
+                                  ]
+                                }
+                              ]
+                            },
+                          {
+                                "group": "EVM API",
+                                "pages": [
+                                    "evm-api/token-api/index",
+                                  {
+                                    "group": "Token API Reference",
+                                    "pages": []
+                                  }
+                                ]
+                            },
+                          {
+                                "group": "Solana API",
+                                "pages": [
+                                    "evm-api/nft-api/index",
+                                  {
+                                    "group": "NFT API Reference",
+                                    "pages": []
+                                  }
+                                ]
+                            }
+                        ]
+                    },
+                  {
                         "tab": "EVM API",
                         "pages": [
                           {
