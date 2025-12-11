@@ -122,7 +122,7 @@
                                     {
                                       "group": "Token Balances",
                                       "pages": [
-                                        "data-api/token-api/endpoints/token-balances"
+                                        "data-api/wallet-api/endpoints/token-balances"
                                       ]
                                     }
                                   ]
