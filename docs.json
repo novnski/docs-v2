@@ -95,7 +95,20 @@
                                     "evm-api/index",
                                   {
                                     "group": "Wallet API",
-                                    "pages": []
+                                    "pages": [
+                                    {
+                                      "group": "Transactions",
+                                      "pages": [
+                                        "evm-api/wallet-api/endpoints/get-wallet-history"
+                                      ]
+                                    },
+                                    {
+                                      "group": "Token Balances",
+                                      "pages": [
+                                        "evm-api/token-api/endpoints/get-token-balances"
+                                      ]
+                                    }
+                                  ]
                                   },
                                   {
                                     "group": "Token API",
