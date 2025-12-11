@@ -307,7 +307,12 @@
                   {
                         "tab": "Solana API",
                         "pages": [
-                            "solana-api/index"
+                          {
+                                "group": "Introduction",
+                                "pages": [
+                                    "solana-api/index"
+                                ]
+                            }
                         ]
                     },
                     {
