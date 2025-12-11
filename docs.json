@@ -95,7 +95,7 @@
                                   "pages": [
                                     "universal-api/global-api/endpoints/trading-stats",
                                     "universal-api/global-api/endpoints/trading-stats-category",
-                                    "trading-stats-timeseries",
+                                    "universal-api/global-api/endpoints/trading-stats-timeseries",
                                     "universal-api/global-api/endpoints/trading-stats-category-timeseries"
                                   ]
                                 }
