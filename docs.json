@@ -77,22 +77,27 @@
                                 ]
                             },
                           {
-                                "group": "Wallet API",
-                                "pages": [
-                                    "evm-api/wallet-api/index",
-                                  {
-                                    "group": "Wallet API Reference",
-                                    "pages": [
-                                      "evm-api/wallet-api/endpoints/get-wallet-history",
-                                      {
-          "group": "Transactions",
-          "pages": [
-            "evm-api/wallet-api/transactions/your-page-here"
-          ]
-        }
-                                    ]
-                                  }
-                                ]
+                              "group": "Wallet API",
+                              "pages": [
+                                "evm-api/wallet-api/index",
+                                {
+                                  "group": "Wallet API Reference",
+                                  "pages": [
+                                    {
+                                      "group": "Transactions",
+                                      "pages": [
+                                        "evm-api/wallet-api/endpoints/get-wallet-history"
+                                      ]
+                                    },
+                                    {
+                                      "group": "Token Balances",
+                                      "pages": [
+                                        "evm-api/wallet-api/endpoints/get-token-balances"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
                             },
                           {
                                 "group": "Token API",
