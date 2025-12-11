@@ -23,6 +23,8 @@
     },
     "contextual": {
         "options": [
+            "chatgpt",
+            "claude",
             "copy",
             "view"
         ]
