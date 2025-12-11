@@ -162,6 +162,15 @@
                             }
                         ]
                     },
+                  {
+                        "tab": "Solana API",
+                        "pages": [
+                            {
+                                "group": "API Reference",
+                                "openapi": "https://solana-gateway.moralis.io/api-json"
+                            }
+                        ]
+                    },
                     {
                         "tab": "Streams",
                         "pages": [
