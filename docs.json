@@ -83,7 +83,13 @@
                                   {
                                     "group": "Wallet API Reference",
                                     "pages": [
-                                      "evm-api/wallet-api/endpoints/get-wallet-history"
+                                      "evm-api/wallet-api/endpoints/get-wallet-history",
+                                      {
+          "group": "Transactions",
+          "pages": [
+            "evm-api/wallet-api/transactions/your-page-here"
+          ]
+        }
                                     ]
                                   }
                                 ]
