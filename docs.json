@@ -92,7 +92,7 @@
                                     {
                                       "group": "Token Balances",
                                       "pages": [
-                                        "evm-api/wallet-api/endpoints/get-token-balances"
+                                        "evm-api/token-api/endpoints/get-token-balances"
                                       ]
                                     }
                                   ]
