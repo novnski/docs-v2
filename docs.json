@@ -73,7 +73,16 @@
                           {
                                 "group": "Introduction",
                                 "pages": [
-                                    "data-api/index"
+                                    "data-api/index",
+                                    "data-api/pricing",
+                                    "data-api/supported-chains",
+                                    {
+                                      "group":"Quickstart",
+                                      "pages": [
+                                        "data-api/get-your-api-key",
+                                        "data-api/quickstart"
+                                      ]
+                                    }
                                 ]
                             },
                           {
