@@ -263,6 +263,12 @@
                                       ]
                                     }
                                   ]
+                                },
+                                {
+                                  "group": "Wallet API FAQs",
+                                  "pages": [
+                                    "evm-api/wallet-api/faqs/index"
+                                  ]
                                 }
                               ]
                             },
