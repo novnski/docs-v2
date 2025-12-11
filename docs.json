@@ -122,7 +122,7 @@
                                     {
                                       "group": "Token Balances",
                                       "pages": [
-                                        "evm-api/token-api/endpoints/get-token-balances"
+                                        "data-api/token-api/endpoints/token-balances"
                                       ]
                                     }
                                   ]
@@ -259,7 +259,7 @@
                                     {
                                       "group": "Token Balances",
                                       "pages": [
-                                        "evm-api/token-api/endpoints/get-token-balances"
+                                        "evm-api/token-api/endpoints/token-balances"
                                       ]
                                     }
                                   ]
