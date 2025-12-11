@@ -91,7 +91,7 @@
                                   ]
                                 },
                                 {
-                                  "group": "Global Stats API",
+                                  "group": "Trading Stats API",
                                   "pages": [
                                     "universal-api/global-api/endpoints/trading-stats",
                                     "universal-api/global-api/endpoints/trading-stats-category",
@@ -162,12 +162,6 @@
                                         "group": "Token Discovery",
                                         "pages": [
                                           "universal-api/token-api/endpoints/token-search"               
-                                        ]
-                                      },
-                                      {
-                                        "group": "Wallet Data",
-                                        "pages": [
-                                          "evm-api/token-api/endpoints/get-token-balances"
                                         ]
                                       }
                                     ]
