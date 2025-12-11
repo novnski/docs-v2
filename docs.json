@@ -81,7 +81,7 @@
                               "pages": [
                                 "universal-api/index",
                                 {
-                                  "group": "Token API Reference",
+                                  "group": "Token API",
                                   "pages": [
                                     "universal-api/token-api/endpoints/token-search",
                                     "universal-api/token-api/endpoints/token-score"
@@ -92,9 +92,29 @@
                           {
                                 "group": "EVM API",
                                 "pages": [
-                                    "evm-api/token-api/index",
+                                    "evm-api/index",
                                   {
-                                    "group": "Token API Reference",
+                                    "group": "Wallet API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "Token API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "NFT API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "Price API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "DeFi API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "Blockchain API",
                                     "pages": []
                                   }
                                 ]
@@ -102,9 +122,21 @@
                           {
                                 "group": "Solana API",
                                 "pages": [
-                                    "evm-api/nft-api/index",
+                                    "solana-api/index",
                                   {
-                                    "group": "NFT API Reference",
+                                    "group": "Wallet API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "Token API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "NFT API",
+                                    "pages": []
+                                  },
+                                  {
+                                    "group": "Price API",
                                     "pages": []
                                   }
                                 ]
