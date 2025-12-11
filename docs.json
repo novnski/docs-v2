@@ -117,6 +117,7 @@
                                   {
                                     "group": "Wallet API",
                                     "pages": [
+                                      "data-api/wallet-api/index",
                                     {
                                       "group": "Transactions",
                                       "pages": [
