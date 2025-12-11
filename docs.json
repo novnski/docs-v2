@@ -126,6 +126,7 @@
                                       {
                                         "group": "Token Activity",
                                         "pages": [
+                                          "universal-api/token-api/endpoints/token-transfers",
                                     "universal-api/token-api/endpoints/token-analytics",
                                     "universal-api/token-api/endpoints/token-analytics-multi",
                                     "universal-api/token-api/endpoints/token-analytics-timeseries"
@@ -134,13 +135,13 @@
                                       {
                                         "group": "Prices & Liquidity",
                                         "pages": [
-                                          "universal-api/token-api/endpoints/token-search"               
+                                          "universal-api/token-api/endpoints/token-price"               
                                         ]
                                       },
                                       {
                                         "group": "Holders",
                                         "pages": [
-                                          "universal-api/token-api/endpoints/token-search"               
+                                          "universal-api/token-api/endpoints/token-holders"               
                                         ]
                                       },
                                       {
