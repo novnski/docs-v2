@@ -52,7 +52,7 @@
                                         "pages": [
                                             "data-api/quickstart",
                                             "streams/quickstart",
-                                          "datashare/quickstart"
+                                            "datashare/quickstart"
                                         ]
                                     }
                                 ]
@@ -80,7 +80,7 @@
                                       "group":"Quickstart",
                                       "pages": [
                                         "data-api/get-your-api-key",
-                                        "data-api/quickstart"
+                                        "data-api/first-request"
                                       ]
                                     }
                                 ]
