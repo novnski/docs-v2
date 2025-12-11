@@ -89,6 +89,15 @@
                                     "universal-api/token-api/endpoints/token-analytics-multi",
                                     "universal-api/token-api/endpoints/token-analytics-timeseries"
                                   ]
+                                },
+                                {
+                                  "group": "Global Stats API",
+                                  "pages": [
+                                    "universal-api/global-api/endpoints/trading-stats",
+                                    "universal-api/global-api/endpoints/trading-stats-category",
+                                    "trading-stats-timeseries",
+                                    "universal-api/global-api/endpoints/trading-stats-category-timeseries"
+                                  ]
                                 }
                               ]
                             },
