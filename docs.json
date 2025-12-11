@@ -100,7 +100,7 @@
                                   ]
                                 },
                                 {
-                                  "group": "Trading Stats API",
+                                  "group": "Market Metrics API",
                                   "pages": [
                                     "universal-api/global-api/endpoints/trading-stats",
                                     "universal-api/global-api/endpoints/trading-stats-category",
