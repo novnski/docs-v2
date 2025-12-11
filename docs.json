@@ -159,23 +159,11 @@
                           {
                                 "group": "Wallet API",
                                 "pages": [
-                                    "data-api/wallet-api/index",
+                                    "evm-api/wallet-api/index",
                                   {
                                     "group": "Wallet API Reference",
                                     "pages": [
-                                      "data-api/wallet-api/endpoints/get-wallet-swaps"
-                                    ]
-                                  },
-                                  {
-                                    "group": "Wallet API FAQs",
-                                    "pages": [
-                                      "data-api/wallet-api/faqs/faqs"
-                                    ]
-                                  },
-                                  {
-                                    "group": "Wallet API Tutorials",
-                                    "pages": [
-                                      "data-api/wallet-api/tutorials/build-revoke-cash"
+                                      "evm-api/wallet-api/endpoints/get-wallet-history"
                                     ]
                                   }
                                 ]
