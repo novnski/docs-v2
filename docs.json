@@ -252,7 +252,7 @@
                             },
                           {
                                 "group": "API Reference",
-                                "openapi": "https://api.moralis-streams.com/api-docs/swagger.json"
+                                "openapi": "openapi-files/stream-api/stream.yaml"
                             }
                         ]
                     },
