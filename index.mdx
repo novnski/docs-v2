@@ -1,19 +1,17 @@
 ---
 title: "Overview"
 sidebarTitle: "Overview"
-description: "Learn how to get started with Moralis."
+description: "Moralis is the complete onchain data platform offering Data APIs, Streams, Datashare, and a Data Indexer to fetch, monitor, index, and export blockchain data across 30+ chains."
 mode: "wide"
 ---
 
-<Tip>
-  **Don't have an API key yet?**
+## Moralis Data Platform
 
-  Sign-up to Moralis to [get your free API key](https://admin.moralis.com/register) and start building today.
-</Tip>
+Moralis is an onchain data platform that provides a complete, production-grade data layer for Web3.
 
-## Moralis Data Products
+It enables teams to fetch, monitor, index, and export blockchain data across 30+ supported chains - without running RPCs, indexers, or custom infrastructure.
 
-Moralis has three core data products: **Data API**, **Streams** and **Datashare**.
+The platform is built for scale, low latency, and reliability, and is used by both startups and enterprises to power wallets, analytics, automation, and data pipelines.
 
 <Columns cols={4}>
   <Card title="Data APIs" icon="database" cta="Fetch Crypto Data">
@@ -32,20 +30,41 @@ Moralis has three core data products: **Data API**, **Streams** and **Datashare*
 
 ### Data API
 
-The universal multichain [Data API](/data-api/index) provides a single, consistent interface for accessing blockchain data across 30+ supported chains, including Ethereum, Solana, Base, Binance Smart Chain, and more. It standardizes complex on-chain data into clean, developer-friendly formats.
+The [Data API](/data-api/index) provides a **single**, **consistent interface** for accessing decoded and enriched onchain data across EVM and Solana chains.
+
+It delivers **low-latency**, **high-throughput APIs** for wallets, tokens, NFTs, prices, DeFi, and raw blockchain data, allowing teams to build multi-chain applications from a single backend.
+
+**Best for: **powering user-facing applications, dashboards, and backend services that need fast, reliable onchain reads.
 
 ### Streams
 
-[Streams](/streams/index) delivers real-time webhooks for wallet activity, contract events, and other on-chain triggers - allowing you to react instantly without needing to poll the blockchain.
+[Streams](/streams/index) enables **real-time access to onchain events **through webhooks, allowing applications to react instantly without polling the blockchain.
+
+Teams can subscribe to wallet activity, transfers, contract events, or custom triggers and receive events as they happen onchain.
+
+**Best for: **notifications, automation, monitoring, and event-driven workflows.
 
 ### Datashare
 
-[Datashare](/datashare/index) gives you full access to historical and real-time blockchain datasets via cloud storage (e.g., S3), making it easy to power analytics pipelines, machine learning models, compliance workflows, and more.
+[Datashare](/datashare/index) provides access to l**arge-scale historical and ongoing onchain datasets**, delivered directly into cloud storage or data warehouses.
 
-## AI & Tooling
+It is designed for analytics, machine learning, compliance, and reporting workflows, exporting **normalized**, **decoded**, **cross-chain data** in formats optimized for data pipelines.
 
-In addition to our core data products, Moralis offers a suite of tools and APIs to support AI workflows, token discovery, and node infrastructure:
+**Best for:** analytics, BI, AI/ML training, compliance, and batch data processing.
 
-- **RPC Nodes** provide reliable, low-latency access to supported chains - ideal for sending transactions, reading state, and powering your dApp infrastructure.
-- **Cortex API** brings AI to Web3 via a natural language interface, allowing you to ask on-chain questions, extract wallet insights, and build intelligent assistants using Moralis’ Multichain Copilot (MCP).
-- **Token Explorer** is a powerful web app for discovering and analyzing tokens across chains - complete with filtering, sorting, and real-time metrics for DeFi, NFTs, and more.
+### Data Indexer
+
+The [Data Indexer](/data-indexer/index) is a managed, enterprise-grade indexing solution for building **custom onchain data pipelines**.
+
+It combines historical backfills with real-time indexing, supports **custom schemas**, and delivers indexed data directly into your infrastructure - giving teams full control without the operational burden of running indexers in-house.
+
+**Best for:** custom data models, internal analytics systems, and enterprise workloads requiring tailored onchain data.
+
+## How the platform fits together
+
+- **Data API →** Read onchain data on demand with low latency
+- **Streams →** React to onchain events in real time
+- **Datashare → **Export and analyze onchain data at scale
+- **Data Indexer → **Build custom, controlled onchain data pipelines
+
+Together, these products form Moralis’ **onchain data layer**, enabling teams to build, scale, and operate Web3 products on a single platform.
