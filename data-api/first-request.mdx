@@ -6,8 +6,8 @@ description: "Learn how to get started with the Moralis Data API."
 
 ### Your first request
 
-Let's make your first request using the [Wallet API](data-api/wallet-api/index).\
-In this example, we'll retrieve **token balances** for a wallet on Ethereum - including **formatted balances, USD values, prices, and metadata** - with a single API call.
+Let's make your first request using the [Wallet API](/data-api/wallet-api/index).\
+In this example, we'll retrieve **token balances** for a wallet on Ethereum - including **formatted balances, USD values, prices, and metadata** - with a single API call using [Token Balances](/data-api/wallet-api/endpoints/token-balances).
 
 ### What we'll fetch
 
@@ -17,31 +17,21 @@ In this example, we'll retrieve **token balances** for a wallet on Ethereum - in
 
 ### Make the request
 
-<RequestExample>
-
 ```bash cURL expandable
 curl --request GET \
   --url 'https://deep-index.moralis.io/api/v2.2/wallets/0xcB1C1FdE09f811B294172696404e88E658659905/tokens?chain=eth' \
   --header 'X-API-Key: YOUR_API_KEY'
 ```
 
-</RequestExample>
-
-```bash cURL
-curl --request GET \
-  --url 'https://deep-index.moralis.io/api/v2.2/wallets/0xcB1C1FdE09f811B294172696404e88E658659905/tokens?chain=eth' \
-  --header 'X-API-Key: YOUR_API_KEY'
-```
-
-Replace `YOUR_API_KEY` with the API key from your Moralis dashboard.
+<Info>
+  Replace `YOUR_API_KEY` with the API key from your Moralis dashboard.
+</Info>
 
 ### Response
 
 The API returns a JSON object containing the wallet's token balances. Each entry includes balances, prices, USD values, and security metadata.
 
-<ResponseExample>
-
-```json (JSON) expandable
+```json Response (JSON)
 {
     "cursor": null,
     "page": 0,
@@ -99,8 +89,6 @@ The API returns a JSON object containing the wallet's token balances. Each entry
 	]
 }
 ```
-
-</ResponseExample>
 
 ### What you get
 
