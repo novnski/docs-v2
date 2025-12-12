@@ -4,7 +4,23 @@ sidebarTitle: "Overview"
 description: "The universal multichain Data API provides a single, consistent interface for accessing blockchain data across 30+ supported chains, including Ethereum, Solana, Base, Binance Smart Chain, and more. It standardizes complex on-chain data into clean, developer-friendly formats."
 ---
 
-**Explore Data APIs:**
+### How it's structured
+
+The Data API is made up of **three core components**, designed to balance **cross-chain consistency** with **chain-specific depth**:
+
+#### **Universal API**
+
+Cross-chain endpoints that work across **EVM and Solana**, using unified schemas wherever possible. Ideal for applications that need to support multiple chains without maintaining separate integrations.
+
+#### **EVM API**
+
+Deep, EVM-specific APIs covering Ethereum and EVM-compatible chains, exposing rich transaction, token, NFT, DeFi, and contract-level data.
+
+#### **Solana API**
+
+Native Solana APIs that provide parsed, high-performance access to Solana transactions, programs, token accounts, and NFTs, designed around Solana’s unique architecture.
+
+### Explore Data APIs
 
 <Columns cols={3}>
   <Card title="Wallet API" icon="wallet" href="https://docs.moralis.com/web3-data-api/evm/reference/wallet-api">
@@ -26,3 +42,33 @@ description: "The universal multichain Data API provides a single, consistent in
     Raw blocks, transactions, internal transactions and logs.
   </Card>
 </Columns>
+
+### Types of use cases
+
+- Building wallets and portfolio trackers
+- Powering Web3 dashboards and analytics tools
+- Supporting multi-chain dApps from a single backend
+- Tracking wallet activity, balances, and history
+- Token discovery, monitoring, and market analysis
+- NFT marketplaces and NFT analytics platforms
+- DeFi apps showing positions, liquidity, and protocol data
+- Backend services that need low-latency blockchain reads
+
+### Key features
+
+- **Low-latency APIs** optimized for production workloads
+- **Unified schemas** across EVM and Solana where possible
+- **Decoded and enriched data** (tokens, NFTs, prices, metadata)
+- **Multi-chain support** across 30+ blockchains
+- **High throughput & reliability** at scale
+- **Consistent developer experience** across chains
+- **Enterprise-grade infrastructure**, SLAs, and security
+- No RPC management or custom indexer maintenance
+
+### For which teams
+
+- **Product teams** building wallets, dashboards, and user-facing apps
+- **Backend engineers** who need reliable blockchain data without infra overhead
+- **Frontend teams** consuming clean, predictable APIs
+- **Analytics teams** accessing structured on-chain data
+- **Startups and enterprises** scaling multi-chain applications
