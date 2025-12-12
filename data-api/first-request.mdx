@@ -17,21 +17,21 @@ In this example, we'll retrieve **token balances** for a wallet on Ethereum - in
 
 ### Make the request
 
-```bash cURL expandable
+```bash cURL
 curl --request GET \
   --url 'https://deep-index.moralis.io/api/v2.2/wallets/0xcB1C1FdE09f811B294172696404e88E658659905/tokens?chain=eth' \
   --header 'X-API-Key: YOUR_API_KEY'
 ```
 
 <Info>
-  Replace `YOUR_API_KEY` with the API key from your Moralis dashboard.
+  Replace `YOUR_API_KEY` with the API key from your [Moralis dashboard](/data-api/get-your-api-key).
 </Info>
 
 ### Response
 
 The API returns a JSON object containing the wallet's token balances. Each entry includes balances, prices, USD values, and security metadata.
 
-```json Response (JSON)
+```json Response (JSON) expandable
 {
     "cursor": null,
     "page": 0,
