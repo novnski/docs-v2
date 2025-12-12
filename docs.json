@@ -250,7 +250,7 @@
                                     "streams-api/evm/setup-secret-key"
                                 ]
                             },
-                            {
+                          {
                                 "group": "API Reference",
                                 "openapi": "https://api.moralis-streams.com/api-docs/swagger.json"
                             }
