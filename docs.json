@@ -239,92 +239,6 @@
                             }
                         ]
                     },
-                  {
-                        "tab": "EVM API",
-                        "pages": [
-                          {
-                                "group": "Introduction",
-                                "pages": [
-                                    "evm-api/index"
-                                ]
-                            },
-                          {
-                              "group": "Wallet API",
-                              "pages": [
-                                "evm-api/wallet-api/index",
-                                {
-                                  "group": "Wallet API Reference",
-                                  "pages": [
-                                    {
-                                      "group": "Transactions",
-                                      "pages": [
-                                        "evm-api/wallet-api/endpoints/wallet-history",
-                                        "evm-api/wallet-api/endpoints/token-transfers",
-                                        "evm-api/wallet-api/endpoints/nft-transfers",
-                                        "evm-api/wallet-api/endpoints/wallet-swaps",
-                                        "evm-api/wallet-api/endpoints/wallet-transactions",
-                                        "evm-api/wallet-api/endpoints/decoded-transactions"
-                                      ]
-                                    },
-                                    {
-                                      "group": "Token Balances",
-                                      "pages": [
-                                        "evm-api/token-api/endpoints/token-balances"
-                                      ]
-                                    }
-                                  ]
-                                },
-                                {
-                                  "group": "Wallet API FAQs",
-                                  "pages": [
-                                    "evm-api/wallet-api/faqs/index"
-                                  ]
-                                }
-                              ]
-                            },
-                          {
-                                "group": "Token API",
-                                "pages": [
-                                    "evm-api/token-api/index",
-                                  {
-                                    "group": "Token API Reference",
-                                    "pages": []
-                                  }
-                                ]
-                            },
-                          {
-                                "group": "NFT API",
-                                "pages": [
-                                    "evm-api/nft-api/index",
-                                  {
-                                    "group": "NFT API Reference",
-                                    "pages": []
-                                  }
-                                ]
-                            },
-                          {
-                                "group": "Price API",
-                                "pages": [
-                                    "evm-api/price-api/index",
-                                  {
-                                    "group": "Price API Reference",
-                                    "pages": []
-                                  }
-                                ]
-                            }
-                        ]
-                    },
-                  {
-                        "tab": "Solana API",
-                        "pages": [
-                          {
-                                "group": "Introduction",
-                                "pages": [
-                                    "solana-api/index"
-                                ]
-                            }
-                        ]
-                    },
                     {
                         "tab": "Streams",
                         "pages": [
@@ -349,13 +263,18 @@
                             {
                                 "group": "Getting Started",
                                 "pages": [
-                                    "streams-api/evm/getting-started",
-                                    "streams-api/evm/setup-secret-key"
                                 ]
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        "tab": "Data Indexer",
+                        "pages": [
+                            "data-indexer/index",
                             {
-                                "group": "API Reference",
-                                "openapi": "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json"
+                                "group": "Getting Started",
+                                "pages": [
+                                ]
                             }
                         ]
                     },
