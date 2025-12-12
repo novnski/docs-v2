@@ -19,7 +19,7 @@ In this example, we'll retrieve **token balances** for a wallet on Ethereum - in
 
 <RequestExample>
 
-```bash cURL
+```bash cURL expandable
 curl --request GET \
   --url 'https://deep-index.moralis.io/api/v2.2/wallets/0xcB1C1FdE09f811B294172696404e88E658659905/tokens?chain=eth' \
   --header 'X-API-Key: YOUR_API_KEY'
@@ -27,7 +27,7 @@ curl --request GET \
 
 </RequestExample>
 
-```bash
+```bash cURL
 curl --request GET \
   --url 'https://deep-index.moralis.io/api/v2.2/wallets/0xcB1C1FdE09f811B294172696404e88E658659905/tokens?chain=eth' \
   --header 'X-API-Key: YOUR_API_KEY'
@@ -41,7 +41,7 @@ The API returns a JSON object containing the wallet's token balances. Each entry
 
 <ResponseExample>
 
-``` Response (JSON)
+```json (JSON) expandable
 {
     "cursor": null,
     "page": 0,
