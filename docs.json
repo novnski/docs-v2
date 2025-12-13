@@ -82,6 +82,16 @@
                                         "data-api/get-your-api-key",
                                         "data-api/first-request"
                                       ]
+                                    },
+                                    {
+                                      "group":"Resources",
+                                      "pages": [
+                                        "data-api/resources/index",
+                                        "data-api/resources/response-codes",
+                                        "data-api/resources/rate-limits",
+                                        "data-api/resources/pagination",
+                                        "data-api/resources/spam-filtering"
+                                      ]
                                     }
                                 ]
                             },
