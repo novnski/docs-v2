@@ -260,22 +260,14 @@
                         "tab": "Datashare",
                         "pages": [
                             "datashare/index",
-                            {
-                                "group": "Getting Started",
-                                "pages": [
-                                ]
-                            }
+                            "datashare/early-access"
                         ]
                     },
                     {
                         "tab": "Data Indexer",
                         "pages": [
                             "data-indexer/index",
-                            {
-                                "group": "Getting Started",
-                                "pages": [
-                                ]
-                            }
+                            "data-indexer/early-access"
                         ]
                     },
                     {
