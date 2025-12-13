@@ -1,340 +1,319 @@
 {
-    "$schema": "https://mintlify.com/docs.json",
-    "theme": "mint",
-    "name": "Moralis",
-    "colors": {
-        "primary": "#0f7fff",
-        "light": "#0f7fff",
-        "dark": "#0f7fff"
-    },
-    "favicon": "/favicon.png",
-    "appearance": {
-        "default": "light"
-    },
-    "background": {
-        "color": {
-            "dark": "#191B19"
-        }
-    },
-    "fonts": {
-        "family": "sw",
-        "source": "https://mintlify-assets.b-cdn.net/fonts/sw.woff2",
-        "format": "woff2"
-    },
-    "contextual": {
-        "options": [
-            "chatgpt",
-            "claude",
-            "copy",
-            "view"
-        ]
-    },
-    "navigation": {
-        "versions": [
-            {
-                "version": "v1.0",
-                "tabs": [
-                    {
-                        "tab": "Get Started",
-                        "pages": [
-                            {
-                                "group": "Introduction",
-                                "pages": [
-                                    "index"
-                                ]
-                            },
-                            {
-                                "group": "Getting Started",
-                                "pages": [
-                                    "get-started/get-your-api-key",
-                                    {
-                                        "group": "Quickstart Guides",
-                                        "pages": [
-                                            "data-api/quickstart",
-                                            "streams/quickstart",
-                                            "datashare/quickstart"
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                "group": "Pricing & Resources",
-                                "pages": [
-                                    "get-started/pricing",
-                                    "get-started/supported-chains",
-                                    "get-started/faqs"
-                                ]
-                            }
-                        ]
-                    },
-                  {
-                        "tab": "Data API",
-                        "pages": [
-                          {
-                                "group": "Introduction",
-                                "pages": [
-                                    "data-api/index",
-                                    "data-api/pricing",
-                                    "data-api/supported-chains",
-                                    {
-                                      "group":"Quickstart",
-                                      "pages": [
-                                        "data-api/get-your-api-key",
-                                        "data-api/first-request"
-                                      ]
-                                    },
-                                    {
-                                      "group":"Resources",
-                                      "pages": [
-                                        "data-api/resources/index",
-                                        "data-api/resources/response-codes",
-                                        "data-api/resources/rate-limits",
-                                        "data-api/resources/pagination",
-                                        "data-api/resources/spam-filtering"
-                                      ]
-                                    }
-                                ]
-                            },
-                          {
-                              "group": "Universal API",
-                              "pages": [
-                                "universal-api/index",
-                                {
-                                  "group": "Token API",
-                                  "pages": [
-                                    "universal-api/token-api/endpoints/token-search",
-                                    "universal-api/token-api/endpoints/token-score",
-                                    "universal-api/token-api/endpoints/token-analytics",
-                                    "universal-api/token-api/endpoints/token-analytics-multi",
-                                    "universal-api/token-api/endpoints/token-analytics-timeseries"
-                                  ]
-                                },
-                                {
-                                  "group": "Market Metrics API",
-                                  "pages": [
-                                    "universal-api/global-api/endpoints/trading-stats",
-                                    "universal-api/global-api/endpoints/trading-stats-category",
-                                    "universal-api/global-api/endpoints/trading-stats-timeseries",
-                                    "universal-api/global-api/endpoints/trading-stats-category-timeseries"
-                                  ]
-                                }
-                              ]
-                            },
-                          {
-                                "group": "EVM API",
-                                "pages": [
-                                    "data-api/evm-index",
-                                  {
-                                    "group": "Wallet API",
-                                    "pages": [
-                                      "data-api/wallet-api/index",
-                                    {
-                                      "group": "Transactions",
-                                      "pages": [
-                                        "data-api/wallet-api/endpoints/wallet-history",
-                                        "data-api/wallet-api/endpoints/token-transfers",
-                                        "data-api/wallet-api/endpoints/nft-transfers",
-                                        "data-api/wallet-api/endpoints/wallet-swaps",
-                                        "data-api/wallet-api/endpoints/wallet-transactions",
-                                        "data-api/wallet-api/endpoints/decoded-transactions"
-                                      ]
-                                    },
-                                    {
-                                      "group": "Token Balances",
-                                      "pages": [
-                                        "data-api/wallet-api/endpoints/token-balances"
-                                      ]
-                                    }
-                                  ]
-                                  },
-                                  {
-                                    "group": "Token API",
-                                    "pages": [
-                                      {
-                                        "group": "Token Info",
-                                        "pages": [
-                                          "evm-api/token-api/endpoints/token-metadata",
-                                          "universal-api/token-api/endpoints/token-score"
-                                        ]
-                                      },
-                                      {
-                                        "group": "Token Activity",
-                                        "pages": [
-                                          "evm-api/token-api/endpoints/token-transfers",
-                                    "universal-api/token-api/endpoints/token-analytics",
-                                    "universal-api/token-api/endpoints/token-analytics-multi",
-                                    "universal-api/token-api/endpoints/token-analytics-timeseries"
-                                        ]
-                                      },
-                                      {
-                                        "group": "Prices & Liquidity",
-                                        "pages": [
-                                          "evm-api/token-api/endpoints/token-price"               
-                                        ]
-                                      },
-                                      {
-                                        "group": "Holders",
-                                        "pages": [
-                                          "evm-api/token-api/endpoints/token-holders"               
-                                        ]
-                                      },
-                                      {
-                                        "group": "Token Discovery",
-                                        "pages": [
-                                          "universal-api/token-api/endpoints/token-search"               
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "group": "NFT API",
-                                    "pages": [
-                                    {
-                                      "group": "Metadata",
-                                      "pages": [
-                                        "evm-api/nft-api/endpoints/nft-metadata",
-                                        "evm-api/nft-api/endpoints/collection-metadata"
-                                      ]
-                                    },
-                                    {
-                                      "group": "Prices",
-                                      "pages": [
-                                        "evm-api/nft-api/endpoints/floor-price-collection"
-                                      ]
-                                    }
-                                  ]
-                                  },
-                                  {
-                                    "group": "Price API",
-                                    "pages": [
-                                      "evm-api/token-api/endpoints/token-price",
-                                      "evm-api/nft-api/endpoints/floor-price-collection"
-                                    ]
-                                  },
-                                  {
-                                    "group": "DeFi API",
-                                    "pages": [
-                                      "evm-api/defi-api/endpoints/wallet-protocols",
-                                      "evm-api/defi-api/endpoints/wallet-positions",
-                                      "evm-api/defi-api/endpoints/wallet-positions-detailed"
-                                    ]
-                                  },
-                                  {
-                                    "group": "Blockchain API",
-                                    "pages": []
-                                  }
-                                ]
-                            },
-                          {
-                                "group": "Solana API",
-                                "pages": [
-                                    "data-api/solana-index",
-                                  {
-                                    "group": "Wallet API",
-                                    "pages": []
-                                  },
-                                  {
-                                    "group": "Token API",
-                                    "pages": []
-                                  },
-                                  {
-                                    "group": "NFT API",
-                                    "pages": []
-                                  },
-                                  {
-                                    "group": "Price API",
-                                    "pages": []
-                                  }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "tab": "Streams",
-                        "pages": [
-                            "streams/index",
-                            {
-                                "group": "Getting Started",
-                                "pages": [
-                                    "streams-api/evm/getting-started",
-                                    "streams-api/evm/setup-secret-key"
-                                ]
-                            },
-                          {
-                                "group": "API Reference",
-                                "openapi": "openapi-files/stream-api/stream.yaml"
-                            }
-                        ]
-                    },
-                    {
-                        "tab": "Datashare",
-                        "pages": [
-                            "datashare/index",
-                            "datashare/early-access"
-                        ]
-                    },
-                    {
-                        "tab": "Data Indexer",
-                        "pages": [
-                            "data-indexer/index",
-                            "data-indexer/early-access"
-                        ]
-                    },
-                    {
-                        "tab": "RPC Nodes",
-                        "pages": [
-                            "nodes/index",
-                            {
-                                "group": "Getting Started",
-                                "pages": [
-                                    "web3-data-api/solana/getting-started",
-                                    "web3-data-api/solana/get-your-api-key"
-                                ]
-                            },
-                            {
-                                "group": "FAQs",
-                                "pages": [
-                                    "web3-data-api/solana/faqs",
-                                    "web3-data-api/solana/nft-metadata-faq"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "tab": "Changelog",
-                        "pages": [
-                            "changelog",
-                            "changelog/get-tokens-by-exchange-api"
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    "logo": {
-        "light": "/logo/light.png",
-        "dark": "/logo/dark.png",
-        "page": "index"
-    },
-    "navbar": {
-        "links": [
-            {
-                "label": "Login",
-                "href": "https://admin.moralis.com/"
-            }
-        ],
-        "primary": {
-            "type": "button",
-            "label": "Start for Free",
-            "href": "https://admin.moralis.com/register"
-        }
-    },
-    "footer": {
-        "socials": {
-            "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
-            "x": "https://x.com/moralisdevs",
-            "linkedin": "https://www.linkedin.com/company/moralisweb3/",
-            "discord": "https://discord.gg/s3UfDvXQTc"
-        }
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Moralis",
+  "colors": {
+    "primary": "#0f7fff",
+    "light": "#0f7fff",
+    "dark": "#0f7fff"
+  },
+  "favicon": "/favicon.png",
+  "appearance": {
+    "default": "light"
+  },
+  "background": {
+    "color": {
+      "dark": "#191B19"
     }
+  },
+  "fonts": {
+    "family": "sw",
+    "source": "https://mintlify-assets.b-cdn.net/fonts/sw.woff2",
+    "format": "woff2"
+  },
+  "contextual": {
+    "options": [
+      "chatgpt",
+      "claude",
+      "copy",
+      "view"
+    ]
+  },
+  "navigation": {
+    "versions": [
+      {
+        "version": "v1.0",
+        "tabs": [
+          {
+            "tab": "Get Started",
+            "pages": [
+              {
+                "group": "Introduction",
+                "pages": [
+                  "index"
+                ]
+              },
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "get-started/get-your-api-key",
+                  {
+                    "group": "Quickstart Guides",
+                    "pages": [
+                      "data-api/quickstart",
+                      "streams/quickstart",
+                      "datashare/quickstart"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Pricing & Resources",
+                "pages": [
+                  "get-started/pricing",
+                  "get-started/supported-chains",
+                  "get-started/faqs"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Data API",
+            "pages": [
+              {
+                "group": "Introduction",
+                "pages": [
+                  "data-api/index",
+                  "data-api/pricing",
+                  "data-api/supported-chains",
+                  {
+                    "group": "Quickstart",
+                    "pages": [
+                      "data-api/get-your-api-key",
+                      "data-api/first-request"
+                    ]
+                  },
+                  {
+                    "group": "Resources",
+                    "pages": [
+                      "data-api/resources/response-codes",
+                      "data-api/resources/rate-limits",
+                      "data-api/resources/pagination",
+                      "data-api/resources/spam-filtering"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Universal API",
+                "pages": [
+                  "universal-api/index",
+                  {
+                    "group": "Token API",
+                    "pages": [
+                      "universal-api/token-api/endpoints/token-search",
+                      "universal-api/token-api/endpoints/token-score",
+                      "universal-api/token-api/endpoints/token-analytics",
+                      "universal-api/token-api/endpoints/token-analytics-multi",
+                      "universal-api/token-api/endpoints/token-analytics-timeseries"
+                    ]
+                  },
+                  {
+                    "group": "Market Metrics API",
+                    "pages": [
+                      "universal-api/global-api/endpoints/trading-stats",
+                      "universal-api/global-api/endpoints/trading-stats-category",
+                      "universal-api/global-api/endpoints/trading-stats-timeseries",
+                      "universal-api/global-api/endpoints/trading-stats-category-timeseries"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "EVM API",
+                "pages": [
+                  "data-api/evm-index",
+                  {
+                    "group": "Wallet API",
+                    "pages": [
+                      "data-api/wallet-api/index",
+                      {
+                        "group": "Transactions",
+                        "pages": [
+                          "data-api/wallet-api/endpoints/wallet-history",
+                          "data-api/wallet-api/endpoints/token-transfers",
+                          "data-api/wallet-api/endpoints/nft-transfers",
+                          "data-api/wallet-api/endpoints/wallet-swaps",
+                          "data-api/wallet-api/endpoints/wallet-transactions",
+                          "data-api/wallet-api/endpoints/decoded-transactions"
+                        ]
+                      },
+                      {
+                        "group": "Token Balances",
+                        "pages": [
+                          "data-api/wallet-api/endpoints/token-balances"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Token API",
+                    "pages": [
+                      {
+                        "group": "Token Info",
+                        "pages": [
+                          "evm-api/token-api/endpoints/token-metadata",
+                          "universal-api/token-api/endpoints/token-score"
+                        ]
+                      },
+                      {
+                        "group": "Token Activity",
+                        "pages": [
+                          "evm-api/token-api/endpoints/token-transfers",
+                          "universal-api/token-api/endpoints/token-analytics",
+                          "universal-api/token-api/endpoints/token-analytics-multi",
+                          "universal-api/token-api/endpoints/token-analytics-timeseries"
+                        ]
+                      },
+                      {
+                        "group": "Prices & Liquidity",
+                        "pages": [
+                          "evm-api/token-api/endpoints/token-price"
+                        ]
+                      },
+                      {
+                        "group": "Holders",
+                        "pages": [
+                          "evm-api/token-api/endpoints/token-holders"
+                        ]
+                      },
+                      {
+                        "group": "Token Discovery",
+                        "pages": [
+                          "universal-api/token-api/endpoints/token-search"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "NFT API",
+                    "pages": [
+                      {
+                        "group": "Metadata",
+                        "pages": [
+                          "evm-api/nft-api/endpoints/nft-metadata",
+                          "evm-api/nft-api/endpoints/collection-metadata"
+                        ]
+                      },
+                      {
+                        "group": "Prices",
+                        "pages": [
+                          "evm-api/nft-api/endpoints/floor-price-collection"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Price API",
+                    "pages": [
+                      "evm-api/token-api/endpoints/token-price",
+                      "evm-api/nft-api/endpoints/floor-price-collection"
+                    ]
+                  },
+                  {
+                    "group": "DeFi API",
+                    "pages": [
+                      "evm-api/defi-api/endpoints/wallet-protocols",
+                      "evm-api/defi-api/endpoints/wallet-positions",
+                      "evm-api/defi-api/endpoints/wallet-positions-detailed"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Solana API",
+                "pages": [
+                  "data-api/solana-index"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Streams",
+            "pages": [
+              "streams/index",
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "streams-api/evm/getting-started",
+                  "streams-api/evm/setup-secret-key"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "openapi": "openapi-files/stream-api/stream.yaml"
+              }
+            ]
+          },
+          {
+            "tab": "Datashare",
+            "pages": [
+              "datashare/index",
+              "datashare/early-access"
+            ]
+          },
+          {
+            "tab": "Data Indexer",
+            "pages": [
+              "data-indexer/index",
+              "data-indexer/early-access"
+            ]
+          },
+          {
+            "tab": "RPC Nodes",
+            "pages": [
+              "nodes/index",
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "web3-data-api/solana/getting-started",
+                  "web3-data-api/solana/get-your-api-key"
+                ]
+              },
+              {
+                "group": "FAQs",
+                "pages": [
+                  "web3-data-api/solana/faqs",
+                  "web3-data-api/solana/nft-metadata-faq"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Changelog",
+            "pages": [
+              "changelog",
+              "changelog/get-tokens-by-exchange-api"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png",
+    "page": "index"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Login",
+        "href": "https://admin.moralis.com/"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Start for Free",
+      "href": "https://admin.moralis.com/register"
+    }
+  },
+  "footer": {
+    "socials": {
+      "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
+      "x": "https://x.com/moralisdevs",
+      "linkedin": "https://www.linkedin.com/company/moralisweb3/",
+      "discord": "https://discord.gg/s3UfDvXQTc"
+    }
+  }
 }
