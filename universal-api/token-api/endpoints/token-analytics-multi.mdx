@@ -4,6 +4,9 @@ openapi: "https://deep-index.moralis.io/api-docs-2.2/v2.2/swagger.json POST /tok
 description: "Fetch analytics for multiple tokens, including buy volume, sell volume, buyers, sellers, transactions, liquidity and FDV trends over time. Accepts an array of up to 200 tokens, each requiring chain and tokenAddress."
 ---
 
-<Info>
-  **Endpoint cost:** 150 CUs. [Learn more about compute units](/data-api/pricing).
-</Info>
+import ProBanner from '/snippets/premium-pro.mdx'
+import CuBanner from '/snippets/cu-banner.mdx'
+
+<ProBanner/>
+
+<CuBanner CUs={150}/>
