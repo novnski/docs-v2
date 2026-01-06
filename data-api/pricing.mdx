@@ -6,10 +6,25 @@ description: "Detailed pricing information for our Data API."
 
 For a detailed explanation of Compute Units (CUs) and how they work, check out our [Compute Units section](/get-started/pricing).
 
-## Data API Compute Units
+## Universal API Compute Units
+| Method | CU Cost | CU Throughput |
+| ------ | ------- | ------------- |
+| [searchTokens](/universal-api/token-api/endpoints/token-search) | 150 | 50  |
+| [getTokenScore](/universal-api/token-api/endpoints/token-score) | 100 | 100 |
+| [getTokenAnalytics](/universal-api/token-api/endpoints/token-analytics) | 80 | 50 |
+| [getMultipleTokenAnalytics](/universal-api/token-api/endpoints/token-analytics-multi) | 150      | 50 |
+| [getTimeSeriesTokenAnalytics](/universal-api/token-api/endpoints/token-analytics-timeseries) | 200 | 20 |
+| [getVolumeStatsByChain](/universal-api/global-api/endpoints/trading-stats) | 150      | 20|
+| [getVolumeStatsByCategory](/universal-api/global-api/endpoints/trading-stats-category) | 150 | 20 |
+| [getTimeSeriesVolume](/universal-api/global-api/endpoints/trading-stats-timeseries) | 150 | 20 |
+| [getTimeSeriesVolumeByCategory](/universal-api/global-api/endpoints/trading-stats-category-timeseries) | 150 | 20 |
+
+## EVM API Compute Units
 
 | Method                                                                     | CU Cost | CU Throughput |
 | -------------------------------------------------------------------------- | ------- | ------------- |
 | [getSwapsByWalletAddress](/data-api/wallet-api/endpoints/get-wallet-swaps) | 50      | 20            |
 | getSwapsByTokenAddress                                                     | 50      | 20            |
 | getSwapsByPairAddress                                                      | 50      | 20            |
+
+## Solana API Compute Units

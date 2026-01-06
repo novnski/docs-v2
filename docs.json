@@ -116,6 +116,15 @@
                       "universal-api/global-api/endpoints/trading-stats-timeseries",
                       "universal-api/global-api/endpoints/trading-stats-category-timeseries"
                     ]
+                  },
+                  {
+                    "group": "Entity API",
+                    "pages": [
+                      "universal-api/entity-api/endpoints/entity-search",
+                      "universal-api/entity-api/endpoints/entity-by-id",
+                      "universal-api/entity-api/endpoints/entity-by-category",
+                      "universal-api/entity-api/endpoints/entity-categories"
+                    ]
                   }
                 ]
               },
