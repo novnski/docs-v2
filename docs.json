@@ -96,8 +96,27 @@
               {
                 "group": "Data Features",
                 "pages": [
-                  "v1-0/data-api/data-features/token-scores",
-                  "data-api/resources/spam-filtering"
+                  {
+                    "group": "Data Enrichment",
+                    "pages": [
+                      "v1-0/data-api/data-features/data-enrichment/transaction-decoding"
+                    ]
+                  },
+                  {
+                    "group": "Safety & Trust",
+                    "pages": [
+                      "data-api/resources/spam-filtering",
+                      "data-api/data-features/token-scores"
+                    ]
+                  },
+                  {
+                    "group": "Search & Discovery",
+                    "pages": []
+                  },
+                  {
+                    "group": "Integrations",
+                    "pages": []
+                  }
                 ]
               },
               {
