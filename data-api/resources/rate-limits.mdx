@@ -1,5 +1,45 @@
 ---
-title: 'Rate Limits'
-description: 'Description of your new file.'
+title: "Rate Limits"
+description: "Moralis APIs use a throughput-based rate-limiting system, measured in Compute Units (CUs)."
 ---
 
+Every API endpoint has a **rate limit cost** (CUs per request). Your plan defines how many CUs you can consume per second. If you exceed this, requests will be rate-limited.
+
+## Throughput & Rolling Window
+
+Throughput limits are evaluated over a **rolling 4-second window**, not per exact second.
+
+This allows short request bursts, as long as total CU usage stays within your plan’s limits over that window.
+
+## Example
+
+The `getWalletTokenBalancesPrice` endpoint has a rate limit cost of **20 CUs per call**:
+
+```json
+{
+  "endpoint": "getWalletTokenBalancesPrice",
+  "path": "/wallets/{address}/tokens",
+  "price": 100,
+  "rateLimitCost": 20
+}
+```
+
+#### Maximum calls per second
+
+| Plan       | Throughput | Max calls / second |
+| :--------- | :--------- | :----------------- |
+| Free       | 1,000 CU/s | 50                 |
+| Starter    | 1,000 CU/s | 50                 |
+| Pro        | 2,000 CU/s | 100                |
+| Business   | 5,000 CU/s | 250                |
+| Enterprise | Custom     | Custom / Unlimited |
+
+## Avoiding Rate Limits
+
+To avoid rate limiting:
+
+- Keep total CU usage within your plan’s throughput
+- Avoid sustained spikes that exceed the rolling 4-second limit
+- Upgrade your plan if you consistently hit limits
+
+If you exceed your throughput, the API will return a **429 Too Many Requests** response.
