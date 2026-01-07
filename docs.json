@@ -88,10 +88,16 @@
                     "pages": [
                       "data-api/resources/response-codes",
                       "data-api/resources/rate-limits",
-                      "data-api/resources/pagination",
-                      "data-api/resources/spam-filtering"
+                      "data-api/resources/pagination"
                     ]
                   }
+                ]
+              },
+              {
+                "group": "Data Features",
+                "pages": [
+                  "v1-0/data-api/data-features/token-scores",
+                  "data-api/resources/spam-filtering"
                 ]
               },
               {
