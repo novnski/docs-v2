@@ -106,6 +106,7 @@
                   {
                     "group": "Safety & Trust",
                     "pages": [
+                      "v1-0/data-api/data-features/safety-and-trust/verified-contracts",
                       "data-api/resources/spam-filtering",
                       "data-api/data-features/token-scores"
                     ]
@@ -113,6 +114,7 @@
                   {
                     "group": "Search & Discovery",
                     "pages": [
+                      "v1-0/data-api/data-features/search-and-discovery/token-filtering",
                       "v1-0/data-api/data-features/search-and-discovery/token-search"
                     ]
                   },
