@@ -112,7 +112,9 @@
                   },
                   {
                     "group": "Search & Discovery",
-                    "pages": []
+                    "pages": [
+                      "v1-0/data-api/data-features/search-and-discovery/token-search"
+                    ]
                   },
                   {
                     "group": "Integrations",
