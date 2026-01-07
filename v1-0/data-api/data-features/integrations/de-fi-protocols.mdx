@@ -1,0 +1,64 @@
+---
+title: "DeFi Protocols"
+description: "A list of DeFi protocols supported by Moralis, including how protocol coverage works, what data is enriched, and how support expands over time."
+---
+
+## Supported Blockchains
+
+DeFi protocol support is available across the following blockchain networks:
+
+- Arbitrum
+- Avalance
+- Base
+- Binance
+- Ethereum
+- Linea
+- Monad
+- Optimism
+- Polygon
+- Sei
+
+<Note>
+  **Important:** DeFi protocol support is **not uniform across all chains**. The level of support depends on protocol availability, adoption, and chain-specific deployments.
+</Note>
+
+Refer to the table below for a detailed breakdown of **which protocols are supported on each chain**.
+
+## Supported Protocols
+
+<Info>
+  By default, we track all forked Uniswap v2 protocols. If a particular protocol has not yet been decoded, it will appear as `unknown` within the API responses. Please reach out to our support team, and we will prioritize decoding these protocols.
+</Info>
+
+| Protocol       | Query Parameter  | Supported Chains                                                                                                      |
+| -------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Aave v2        | `aave-v2`        | - Ethereum <br />- Polygon                                                                                            |
+| Aave v3        | `aave-v3`        | - Base <br />- Ethereum <br />- Polygon                                                                               |
+| Dragonswap v2  | `dragonswap-v2`  | - Sei                                                                                                                 |
+| Dragonswap v3  | `dragonswap-v3`  | - Sei                                                                                                                 |
+| Eigenlayer     | `eigenlayer`     | - Ethereum                                                                                                            |
+| Etherfi\*      | `etherfi`        | - Ethereum<br />- Arbitrum<br />- Base<br />- Binance<br />- Linea<br />- Optimism                                    |
+| FraxSwap v1    | `fraxswap-v1`    | - Binance<br />- Ethereum<br />- Polygon                                                                              |
+| Kintsu         | `kintsu`         | - Monad                                                                                                               |
+| FraxSwap v2    | `fraxswap-v2`    | - Binance<br />- Ethereum<br />- Polygon                                                                              |
+| Lido           | `lido`           | - Ethereum                                                                                                            |
+| MakerDAO       | `makerdao`       | - Ethereum                                                                                                            |
+| Neverland      | `neverland`      | - Monad                                                                                                               |
+| OKU Trade      | `okutrade`       | - Sei                                                                                                                 |
+| Pancakeswap v2 | `pancakeswap-v2` | - Arbitrum <br />- Base <br />- Binance <br />- Ethereum<br />- Linea<br />- Monad                                    |
+| Pancakeswap v3 | `pancakeswap-v3` | - Arbitrum <br />- Base <br />- Binance <br />- Ethereum<br />- Linea<br />- Monad                                    |
+| Pendle         | `pendle`         | - Ethereum                                                                                                            |
+| QuickSwap v2   | `quickswap-v2`   | - Polygon                                                                                                             |
+| QuickSwap v3   | `quickswap-v3`   | - Polygon                                                                                                             |
+| Rocket Pool    | `rocketpool`     | - Ethereum<br />- Arbitrum<br />- Base<br />- Polygon<br />- Optimism                                                 |
+| Sailor Swap    | `sailorswap`     | - Sei                                                                                                                 |
+| Spark          | `sparkfi`        | - Ethereum                                                                                                            |
+| SushiSwap v2   | `sushiswap-v2`   | - Base <br />- Binance <br />- Ethereum <br />- Polygon                                                               |
+| Takara Lend    | `takara-lend`    | - Sei                                                                                                                 |
+| Uniswap v2\*\* | `uniswap-v2`     | - Arbitrum <br />- Base <br />- Binance <br />- Ethereum <br />- Linea<br />- Monad<br />- Polygon                    |
+| Uniswap v3     | `uniswap-v3`     | - Arbitrum <br />- Avalanche <br />- Base <br />- Binance<br />- Ethereum<br />- Monad<br />- Optimism<br />- Polygon |
+| Yei Finance    | `yei-finance`    | - Sei                                                                                                                 |
+
+_\*Etherfi currently only supports Staking positions. Yield positions are not yet supported._
+
+Many more protocols are on the way as we prioritize the top protocols and chains based on Total Value Locked (TVL).

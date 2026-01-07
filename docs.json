@@ -121,7 +121,9 @@
                   },
                   {
                     "group": "Integrations",
-                    "pages": []
+                    "pages": [
+                      "v1-0/data-api/data-features/integrations/de-fi-protocols"
+                    ]
                   }
                 ]
               },
