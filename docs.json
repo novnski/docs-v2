@@ -99,6 +99,7 @@
                   {
                     "group": "Data Enrichment",
                     "pages": [
+                      "v1-0/data-api/data-features/data-enrichment/address-labelling",
                       "v1-0/data-api/data-features/data-enrichment/transaction-decoding"
                     ]
                   },
