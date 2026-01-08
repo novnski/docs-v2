@@ -235,11 +235,12 @@
                   },
                   {
                     "group": "Token API",
+                    "tag": "New Features",
                     "pages": [
                       "v1-0/data-api/evm-api/token-api/token-api-overview",
                       {
                         "group": "Metadata & Info",
-                        "tag": "New Features",
+                        "tag": "New",
                         "pages": [
                           "evm-api/token-api/endpoints/token-metadata",
                           "evm-api/token-api/endpoints/token-score"
