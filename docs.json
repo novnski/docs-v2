@@ -187,8 +187,9 @@
                         "pages": [
                           "data-api/wallet-api/endpoints/wallet-history",
                           "data-api/wallet-api/endpoints/token-transfers",
-                          "data-api/wallet-api/endpoints/nft-transfers",
                           "data-api/wallet-api/endpoints/wallet-swaps",
+                          "data-api/wallet-api/endpoints/nft-transfers",
+                          "data-api/wallet-api/endpoints/nft-transfers-copied-1",
                           "data-api/wallet-api/endpoints/wallet-transactions",
                           "data-api/wallet-api/endpoints/decoded-transactions",
                           "v1-0/data-api/evm-api/wallet-api/activity/chain-activity"
