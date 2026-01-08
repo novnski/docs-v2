@@ -101,7 +101,14 @@
                     "group": "Data Enrichment",
                     "pages": [
                       "v1-0/data-api/data-features/data-enrichment/address-labelling",
-                      "v1-0/data-api/data-features/data-enrichment/transaction-decoding"
+                      "v1-0/data-api/data-features/data-enrichment/transaction-decoding",
+                      "v1-0/data-api/data-features/data-enrichment/internal-transactions",
+                      "v1-0/data-api/data-features/data-enrichment/nft-metadata",
+                      "v1-0/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
+                      "v1-0/data-api/data-features/data-enrichment/nft-rarity",
+                      "v1-0/data-api/data-features/data-enrichment/profitability-pn-l",
+                      "v1-0/data-api/data-features/data-enrichment/token-metadata",
+                      "v1-0/data-api/data-features/data-enrichment/token-prices"
                     ]
                   },
                   {
@@ -219,6 +226,7 @@
                       {
                         "group": "Identity",
                         "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/identity/resolve-address",
                           "v1-0/data-api/evm-api/wallet-api/identity/ens-lookup"
                         ]
                       }
