@@ -185,7 +185,15 @@
                         "pages": [
                           "data-api/wallet-api/endpoints/token-balances"
                         ]
-                      }
+                      },
+                      {
+                        "group": "NFT Balances",
+                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/nft-balances/nft-balances",
+                          "v1-0/data-api/evm-api/wallet-api/nft-balances/nft-collections"
+                        ]
+                      },
+                      "v1-0/data-api/evm-api/wallet-api/net-worth"
                     ]
                   },
                   {
