@@ -208,7 +208,11 @@
                       },
                       {
                         "group": "DeFi Positions",
-                        "pages": []
+                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
+                          "v1-0/data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
+                          "v1-0/data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
+                        ]
                       },
                       {
                         "group": "Net-worth",
