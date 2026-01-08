@@ -217,7 +217,7 @@
                         ]
                       },
                       {
-                        "group": "Net-worth & PnL",
+                        "group": "Net Worth & PnL",
                         "pages": [
                           "v1-0/data-api/evm-api/wallet-api/net-worth",
                           "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
