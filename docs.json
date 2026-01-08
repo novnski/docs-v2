@@ -170,7 +170,7 @@
                     "pages": [
                       "data-api/wallet-api/index",
                       {
-                        "group": "Transactions",
+                        "group": "Activity",
                         "pages": [
                           "data-api/wallet-api/endpoints/wallet-history",
                           "data-api/wallet-api/endpoints/token-transfers",
@@ -181,19 +181,47 @@
                         ]
                       },
                       {
-                        "group": "Token Balances",
+                        "group": "Tokens",
                         "pages": [
                           "data-api/wallet-api/endpoints/token-balances"
                         ]
                       },
                       {
-                        "group": "NFT Balances",
+                        "group": "NFTs",
                         "pages": [
                           "v1-0/data-api/evm-api/wallet-api/nft-balances/nft-balances",
                           "v1-0/data-api/evm-api/wallet-api/nft-balances/nft-collections"
                         ]
                       },
-                      "v1-0/data-api/evm-api/wallet-api/net-worth"
+                      {
+                        "group": "DeFi Positions",
+                        "pages": []
+                      },
+                      {
+                        "group": "Net-worth",
+                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/net-worth"
+                        ]
+                      },
+                      {
+                        "group": "Approvals",
+                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/approvals"
+                        ]
+                      },
+                      {
+                        "group": "PnL",
+                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
+                          "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
+                        ]
+                      },
+                      {
+                        "group": "Identity",
+                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/identity/ens-lookup"
+                        ]
+                      }
                     ]
                   },
                   {
