@@ -190,13 +190,15 @@
                           "data-api/wallet-api/endpoints/nft-transfers",
                           "data-api/wallet-api/endpoints/wallet-swaps",
                           "data-api/wallet-api/endpoints/wallet-transactions",
-                          "data-api/wallet-api/endpoints/decoded-transactions"
+                          "data-api/wallet-api/endpoints/decoded-transactions",
+                          "v1-0/data-api/evm-api/wallet-api/activity/chain-activity"
                         ]
                       },
                       {
                         "group": "Tokens",
                         "pages": [
-                          "data-api/wallet-api/endpoints/token-balances"
+                          "data-api/wallet-api/endpoints/token-balances",
+                          "v1-0/data-api/evm-api/wallet-api/approvals"
                         ]
                       },
                       {
@@ -215,20 +217,9 @@
                         ]
                       },
                       {
-                        "group": "Net-worth",
+                        "group": "Net-worth & PnL",
                         "pages": [
-                          "v1-0/data-api/evm-api/wallet-api/net-worth"
-                        ]
-                      },
-                      {
-                        "group": "Approvals",
-                        "pages": [
-                          "v1-0/data-api/evm-api/wallet-api/approvals"
-                        ]
-                      },
-                      {
-                        "group": "PnL",
-                        "pages": [
+                          "v1-0/data-api/evm-api/wallet-api/net-worth",
                           "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
                           "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
                         ]
