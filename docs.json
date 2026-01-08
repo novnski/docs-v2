@@ -238,25 +238,22 @@
                     "pages": [
                       "v1-0/data-api/evm-api/token-api/token-api-overview",
                       {
-                        "group": "Token Info",
+                        "group": "Metadata & Info",
                         "pages": [
                           "evm-api/token-api/endpoints/token-metadata",
                           "evm-api/token-api/endpoints/token-score"
                         ]
                       },
                       {
-                        "group": "Token Activity",
+                        "group": "Prices",
                         "pages": [
-                          "evm-api/token-api/endpoints/token-transfers",
-                          "universal-api/token-api/endpoints/token-analytics",
-                          "universal-api/token-api/endpoints/token-analytics-multi",
-                          "universal-api/token-api/endpoints/token-analytics-timeseries"
+                          "evm-api/token-api/endpoints/token-price"
                         ]
                       },
                       {
-                        "group": "Prices & Liquidity",
+                        "group": "Transfers",
                         "pages": [
-                          "evm-api/token-api/endpoints/token-price"
+                          "evm-api/token-api/endpoints/token-transfers"
                         ]
                       },
                       {
@@ -266,9 +263,32 @@
                         ]
                       },
                       {
-                        "group": "Token Discovery",
+                        "group": "Swaps & Pairs",
                         "pages": [
-                          "universal-api/token-api/endpoints/token-search"
+                          "v1-0/data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
+                          "v1-0/data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
+                          "v1-0/data-api/evm-api/token-api/swaps-and-pairs/pair-swaps"
+                        ]
+                      },
+                      {
+                        "group": "Market Metrics",
+                        "pages": [
+                          "universal-api/token-api/endpoints/token-analytics",
+                          "universal-api/token-api/endpoints/token-analytics-multi",
+                          "universal-api/token-api/endpoints/token-analytics-timeseries"
+                        ]
+                      },
+                      {
+                        "group": "Search & Discovery",
+                        "pages": [
+                          "universal-api/token-api/endpoints/token-search",
+                          "v1-0/data-api/evm-api/token-api/search-and-discovery/filtered-tokens"
+                        ]
+                      },
+                      {
+                        "group": "Advanced Signals",
+                        "pages": [
+                          "v1-0/data-api/evm-api/token-api/advanced-signals/snipers"
                         ]
                       }
                     ]
