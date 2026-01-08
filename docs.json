@@ -301,16 +301,54 @@
                     "pages": [
                       "v1-0/data-api/evm-api/nft-api/nft-api-overview",
                       {
-                        "group": "Metadata",
+                        "group": "Metadata & Info",
                         "pages": [
                           "evm-api/nft-api/endpoints/nft-metadata",
                           "evm-api/nft-api/endpoints/collection-metadata"
                         ]
                       },
                       {
+                        "group": "Transfers",
+                        "pages": [
+                          "v1-0/data-api/evm-api/nft-api/transfers/token-id-transfers",
+                          "v1-0/data-api/evm-api/nft-api/transfers/collection-transfers"
+                        ]
+                      },
+                      {
+                        "group": "Ownership",
+                        "pages": [
+                          "v1-0/data-api/evm-api/nft-api/ownership/owners-by-contract"
+                        ]
+                      },
+                      {
                         "group": "Prices",
                         "pages": [
                           "evm-api/nft-api/endpoints/floor-price-collection"
+                        ]
+                      },
+                      {
+                        "group": "Trades",
+                        "pages": [
+                          "v1-0/data-api/evm-api/nft-api/trades/collection-trades"
+                        ]
+                      },
+                      {
+                        "group": "Traits & Rarity",
+                        "pages": [
+                          "v1-0/data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection"
+                        ]
+                      },
+                      {
+                        "group": "Discovery",
+                        "pages": [
+                          "v1-0/data-api/evm-api/nft-api/discovery/untitled-page"
+                        ]
+                      },
+                      {
+                        "group": "Utilities",
+                        "pages": [
+                          "v1-0/data-api/evm-api/nft-api/utilities/resync-nft-metadata",
+                          "v1-0/data-api/evm-api/nft-api/utilities/resync-nft-traits"
                         ]
                       }
                     ]
