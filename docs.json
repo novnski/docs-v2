@@ -113,6 +113,7 @@
                   },
                   {
                     "group": "Safety & Trust",
+                    "tag": "New Features",
                     "pages": [
                       "v1-0/data-api/data-features/safety-and-trust/verified-contracts",
                       "data-api/resources/spam-filtering",
