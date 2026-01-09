@@ -327,7 +327,11 @@
                       {
                         "group": "Prices",
                         "pages": [
-                          "evm-api/nft-api/endpoints/floor-price-collection"
+                          "data-api/evm-api/nft-api/floor-price-collection",
+                          "data-api/evm-api/nft-api/prices/floor",
+                          "data-api/evm-api/nft-api/historical-floor-price",
+                          "data-api/evm-api/nft-api/prices/sale-price-by-contract",
+                          "data-api/evm-api/nft-api/prices/sale-price-by-token-id"
                         ]
                       },
                       {
