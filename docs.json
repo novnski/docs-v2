@@ -89,7 +89,7 @@
                       "data-api/resources/response-codes",
                       "data-api/resources/rate-limits",
                       "data-api/resources/pagination",
-                      "v1-0/data-api/introduction/resources/premium-endpoints"
+                      "data-api/introduction/resources/premium-endpoints"
                     ]
                   }
                 ]
@@ -97,28 +97,28 @@
               {
                 "group": "Data Features",
                 "pages": [
-                  "v1-0/data-api/data-features/data-features-overview",
+                  "data-api/data-features/data-features-overview",
                   {
                     "group": "Data Enrichment",
                     "pages": [
-                      "v1-0/data-api/data-features/data-enrichment/overview",
-                      "v1-0/data-api/data-features/data-enrichment/address-labelling",
-                      "v1-0/data-api/data-features/data-enrichment/transaction-decoding",
-                      "v1-0/data-api/data-features/data-enrichment/internal-transactions",
-                      "v1-0/data-api/data-features/data-enrichment/nft-metadata",
-                      "v1-0/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
-                      "v1-0/data-api/data-features/data-enrichment/nft-rarity",
-                      "v1-0/data-api/data-features/data-enrichment/profitability-pn-l",
-                      "v1-0/data-api/data-features/data-enrichment/token-metadata",
-                      "v1-0/data-api/data-features/data-enrichment/token-prices"
+                      "data-api/data-features/data-enrichment/overview",
+                      "data-api/data-features/data-enrichment/address-labelling",
+                      "data-api/data-features/data-enrichment/transaction-decoding",
+                      "data-api/data-features/data-enrichment/internal-transactions",
+                      "data-api/data-features/data-enrichment/nft-metadata",
+                      "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
+                      "data-api/data-features/data-enrichment/nft-rarity",
+                      "data-api/data-features/data-enrichment/profitability-pn-l",
+                      "data-api/data-features/data-enrichment/token-metadata",
+                      "data-api/data-features/data-enrichment/token-prices"
                     ]
                   },
                   {
                     "group": "Safety & Trust",
                     "tag": "New Features",
                     "pages": [
-                      "v1-0/data-api/data-features/safety-and-trust/overview",
-                      "v1-0/data-api/data-features/safety-and-trust/verified-contracts",
+                      "data-api/data-features/safety-and-trust/overview",
+                      "data-api/data-features/safety-and-trust/verified-contracts",
                       "data-api/resources/spam-filtering",
                       "data-api/data-features/token-scores"
                     ]
@@ -126,16 +126,16 @@
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "v1-0/data-api/data-features/search-and-discovery/overview",
+                      "data-api/data-features/search-and-discovery/overview",
                       "data-api/data-features/search-and-discovery/token-filtering",
-                      "v1-0/data-api/data-features/search-and-discovery/token-search"
+                      "data-api/data-features/search-and-discovery/token-search"
                     ]
                   },
                   {
                     "group": "Integrations",
                     "pages": [
-                      "v1-0/data-api/data-features/integrations/overview",
-                      "v1-0/data-api/data-features/integrations/de-fi-protocols"
+                      "data-api/data-features/integrations/overview",
+                      "data-api/data-features/integrations/de-fi-protocols"
                     ]
                   }
                 ]
@@ -192,44 +192,44 @@
                           "data-api/wallet-api/endpoints/nft-transfers-copied-1",
                           "data-api/wallet-api/endpoints/wallet-transactions",
                           "data-api/wallet-api/endpoints/decoded-transactions",
-                          "v1-0/data-api/evm-api/wallet-api/activity/chain-activity"
+                          "data-api/evm-api/wallet-api/activity/chain-activity"
                         ]
                       },
                       {
                         "group": "Tokens",
                         "pages": [
                           "data-api/wallet-api/endpoints/token-balances",
-                          "v1-0/data-api/evm-api/wallet-api/approvals"
+                          "data-api/evm-api/wallet-api/approvals"
                         ]
                       },
                       {
                         "group": "NFTs",
                         "pages": [
-                          "v1-0/data-api/evm-api/wallet-api/nft-balances/nft-balances",
-                          "v1-0/data-api/evm-api/wallet-api/nft-balances/nft-collections"
+                          "data-api/evm-api/wallet-api/nft-balances/nft-balances",
+                          "data-api/evm-api/wallet-api/nft-balances/nft-collections"
                         ]
                       },
                       {
                         "group": "DeFi Positions",
                         "pages": [
-                          "v1-0/data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
-                          "v1-0/data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
-                          "v1-0/data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
+                          "data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
+                          "data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
+                          "data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
                         ]
                       },
                       {
                         "group": "Net Worth & PnL",
                         "pages": [
-                          "v1-0/data-api/evm-api/wallet-api/net-worth",
-                          "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
-                          "v1-0/data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
+                          "data-api/evm-api/wallet-api/net-worth",
+                          "data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
+                          "data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
                         ]
                       },
                       {
                         "group": "Identity",
                         "pages": [
-                          "v1-0/data-api/evm-api/wallet-api/identity/resolve-address",
-                          "v1-0/data-api/evm-api/wallet-api/identity/ens-lookup"
+                          "data-api/evm-api/wallet-api/identity/resolve-address",
+                          "data-api/evm-api/wallet-api/identity/ens-lookup"
                         ]
                       }
                     ]
@@ -238,39 +238,44 @@
                     "group": "Token API",
                     "tag": "New Features",
                     "pages": [
-                      "v1-0/data-api/evm-api/token-api/token-api-overview",
+                      "data-api/evm-api/token-api/token-api-overview",
                       {
                         "group": "Metadata & Info",
                         "tag": "New",
                         "pages": [
-                          "evm-api/token-api/endpoints/token-metadata",
-                          "evm-api/token-api/endpoints/token-score"
+                          "data-api/evm-api/token-api/endpoints/token-metadata",
+                          "data-api/evm-api/token-api/endpoints/token-score"
                         ]
                       },
                       {
                         "group": "Prices",
                         "pages": [
-                          "evm-api/token-api/endpoints/token-price"
+                          "data-api/evm-api/token-api/endpoints/token-price",
+                          "data-api/evm-api/token-api/prices/token-prices-batch",
+                          "data-api/evm-api/token-api/prices/ohlc"
                         ]
                       },
                       {
                         "group": "Transfers",
                         "pages": [
-                          "evm-api/token-api/endpoints/token-transfers"
+                          "data-api/evm-api/token-api/endpoints/token-transfers"
                         ]
                       },
                       {
                         "group": "Holders",
                         "pages": [
-                          "evm-api/token-api/endpoints/token-holders"
+                          "data-api/evm-api/token-api/endpoints/token-holders",
+                          "data-api/evm-api/token-api/holders/token-holder-stats",
+                          "data-api/evm-api/token-api/holders/historical-token-holders"
                         ]
                       },
                       {
                         "group": "Swaps & Pairs",
                         "pages": [
-                          "v1-0/data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
-                          "v1-0/data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
-                          "v1-0/data-api/evm-api/token-api/swaps-and-pairs/pair-swaps"
+                          "data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
+                          "data-api/evm-api/token-api/swaps-and-pairs/pair-swaps",
+                          "data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
+                          "data-api/evm-api/token-api/swaps-and-pairs/pair-stats"
                         ]
                       },
                       {
