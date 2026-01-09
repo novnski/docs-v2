@@ -304,7 +304,10 @@
                         "group": "Metadata & Info",
                         "pages": [
                           "evm-api/nft-api/endpoints/nft-metadata",
-                          "evm-api/nft-api/endpoints/collection-metadata"
+                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/nft-metadata-batch",
+                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
+                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
+                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/collection-stats"
                         ]
                       },
                       {
@@ -317,7 +320,8 @@
                       {
                         "group": "Ownership",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/ownership/owners-by-contract"
+                          "v1-0/data-api/evm-api/nft-api/ownership/owners-by-contract",
+                          "v1-0/data-api/evm-api/nft-api/ownership/owners-by-token-id"
                         ]
                       },
                       {
@@ -488,7 +492,8 @@
       "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
       "x": "https://x.com/moralisdevs",
       "linkedin": "https://www.linkedin.com/company/moralisweb3/",
-      "discord": "https://discord.gg/s3UfDvXQTc"
+      "discord": "https://discord.gg/s3UfDvXQTc",
+      "website": "https://moralis.com/"
     }
   }
 }
