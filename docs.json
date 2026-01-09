@@ -374,8 +374,14 @@
                     "group": "Price API",
                     "pages": [
                       "v1-0/data-api/evm-api/price-api/price-api-overview",
-                      "evm-api/token-api/endpoints/token-price",
-                      "evm-api/nft-api/endpoints/floor-price-collection"
+                      "v1-0/data-api/evm-api/price-api/token-price",
+                      "v1-0/data-api/evm-api/price-api/token-prices-batch",
+                      "v1-0/data-api/evm-api/price-api/ohlc",
+                      "v1-0/data-api/evm-api/price-api/collection-floor-price",
+                      "v1-0/data-api/evm-api/price-api/token-id-floor-price",
+                      "v1-0/data-api/evm-api/price-api/timeseries-floor-price",
+                      "v1-0/data-api/evm-api/price-api/sale-prices-by-collection",
+                      "v1-0/data-api/evm-api/price-api/sale-price-by-token-id"
                     ]
                   },
                   {
@@ -390,7 +396,15 @@
                   {
                     "group": "Blockchain API",
                     "pages": [
-                      "v1-0/data-api/evm-api/blockchain-api/blockchain-api-overview"
+                      "v1-0/data-api/evm-api/blockchain-api/blockchain-api-overview",
+                      {
+                        "group": "Blocks",
+                        "pages": []
+                      },
+                      {
+                        "group": "Transactions",
+                        "pages": []
+                      }
                     ]
                   }
                 ]
