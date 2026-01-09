@@ -285,13 +285,13 @@
                         "group": "Search & Discovery",
                         "pages": [
                           "universal-api/token-api/endpoints/token-search",
-                          "v1-0/data-api/evm-api/token-api/search-and-discovery/filtered-tokens"
+                          "data-api/evm-api/token-api/search-and-discovery/filtered-tokens"
                         ]
                       },
                       {
                         "group": "Advanced Signals",
                         "pages": [
-                          "v1-0/data-api/evm-api/token-api/advanced-signals/snipers"
+                          "data-api/evm-api/token-api/advanced-signals/snipers"
                         ]
                       }
                     ]
@@ -299,29 +299,29 @@
                   {
                     "group": "NFT API",
                     "pages": [
-                      "v1-0/data-api/evm-api/nft-api/nft-api-overview",
+                      "data-api/evm-api/nft-api/nft-api-overview",
                       {
                         "group": "Metadata & Info",
                         "pages": [
-                          "evm-api/nft-api/endpoints/nft-metadata",
-                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/nft-metadata-batch",
-                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
-                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
-                          "v1-0/data-api/evm-api/nft-api/metadata-and-info/collection-stats"
+                          "data-api/evm-api/nft-api/endpoints/nft-metadata",
+                          "data-api/evm-api/nft-api/metadata-and-info/nft-metadata-batch",
+                          "data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
+                          "data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
+                          "data-api/evm-api/nft-api/metadata-and-info/collection-stats"
                         ]
                       },
                       {
                         "group": "Transfers",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/transfers/token-id-transfers",
-                          "v1-0/data-api/evm-api/nft-api/transfers/collection-transfers"
+                          "data-api/evm-api/nft-api/transfers/token-id-transfers",
+                          "data-api/evm-api/nft-api/transfers/collection-transfers"
                         ]
                       },
                       {
                         "group": "Ownership",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/ownership/owners-by-contract",
-                          "v1-0/data-api/evm-api/nft-api/ownership/owners-by-token-id"
+                          "data-api/evm-api/nft-api/ownership/owners-by-contract",
+                          "data-api/evm-api/nft-api/ownership/owners-by-token-id"
                         ]
                       },
                       {
@@ -337,26 +337,30 @@
                       {
                         "group": "Trades",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/trades/collection-trades"
+                          "data-api/evm-api/nft-api/trades/collection-trades",
+                          "data-api/evm-api/nft-api/trades/trades-by-token-id"
                         ]
                       },
                       {
                         "group": "Traits & Rarity",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection"
+                          "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection",
+                          "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection-paginated",
+                          "data-api/evm-api/nft-api/traits-and-rarity/nfts-by-traits"
                         ]
                       },
                       {
                         "group": "Discovery",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/discovery/untitled-page"
+                          "evm-api/nft-api/discovery/untitled-page",
+                          "data-api/evm-api/nft-api/discovery/nfts-by-volume"
                         ]
                       },
                       {
                         "group": "Utilities",
                         "pages": [
-                          "v1-0/data-api/evm-api/nft-api/utilities/resync-nft-metadata",
-                          "v1-0/data-api/evm-api/nft-api/utilities/resync-nft-traits"
+                          "data-api/evm-api/nft-api/utilities/resync-nft-metadata",
+                          "data-api/evm-api/nft-api/utilities/resync-nft-traits"
                         ]
                       }
                     ]
