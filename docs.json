@@ -143,7 +143,6 @@
               },
               {
                 "group": "Universal API",
-                "tag": "New Features",
                 "pages": [
                   "universal-api/index",
                   {
