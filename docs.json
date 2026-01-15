@@ -89,6 +89,7 @@
                       "data-api/resources/response-codes",
                       "data-api/resources/rate-limits",
                       "data-api/resources/pagination",
+                      "v1-0/data-api/introduction/resources/performance-and-reliability",
                       "data-api/introduction/resources/premium-endpoints"
                     ]
                   }
@@ -474,15 +475,25 @@
                       },
                       {
                         "group": "Market Metrics",
-                        "pages": []
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/market-metrics/token-analytics"
+                        ]
                       },
                       {
                         "group": "Search & Discovery",
-                        "pages": []
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/search-and-discovery/token-search",
+                          "v1-0/data-api/solana-api/token-api/search-and-discovery/filtered-tokens",
+                          "v1-0/data-api/solana-api/token-api/search-and-discovery/pump-fun-new-tokens",
+                          "v1-0/data-api/solana-api/token-api/search-and-discovery/pump-fund-bonding-tokens",
+                          "v1-0/data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens"
+                        ]
                       },
                       {
                         "group": "Advanced Signals",
-                        "pages": []
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/advanced-signals/snipers"
+                        ]
                       }
                     ]
                   }
