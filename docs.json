@@ -436,9 +436,54 @@
                   },
                   {
                     "group": "Token API",
+                    "icon": "bitcoin-sign",
+                    "tag": "New features",
                     "pages": [
-                      "v1-0/data-api/solana-api/token-api/token-metadata",
-                      "v1-0/data-api/solana-api/token-api/token-score"
+                      {
+                        "group": "Metadata & Info",
+                        "tag": "New features",
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/token-metadata",
+                          "v1-0/data-api/solana-api/token-api/token-score"
+                        ]
+                      },
+                      {
+                        "group": "Prices",
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/prices/token-p-rice",
+                          "v1-0/data-api/solana-api/token-api/prices/token-price-batch",
+                          "v1-0/data-api/solana-api/token-api/prices/ohlc"
+                        ]
+                      },
+                      {
+                        "group": "Holders",
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/holders/top-holders",
+                          "v1-0/data-api/solana-api/token-api/holders/holder-metrics",
+                          "v1-0/data-api/solana-api/token-api/holders/historical-holders"
+                        ]
+                      },
+                      {
+                        "group": "Swaps & Pairs",
+                        "pages": [
+                          "v1-0/data-api/solana-api/token-api/swaps-and-pairs/token-swaps",
+                          "v1-0/data-api/solana-api/token-api/swaps-and-pairs/pair-swaps",
+                          "v1-0/data-api/solana-api/token-api/swaps-and-pairs/token-pairs",
+                          "v1-0/data-api/solana-api/token-api/swaps-and-pairs/pair-stats"
+                        ]
+                      },
+                      {
+                        "group": "Market Metrics",
+                        "pages": []
+                      },
+                      {
+                        "group": "Search & Discovery",
+                        "pages": []
+                      },
+                      {
+                        "group": "Advanced Signals",
+                        "pages": []
+                      }
                     ]
                   }
                 ]
