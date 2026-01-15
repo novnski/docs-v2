@@ -147,7 +147,6 @@
                   "universal-api/index",
                   {
                     "group": "Token API",
-                    "icon": "bitcoin-sign",
                     "tag": "New features",
                     "pages": [
                       "universal-api/token-api/endpoints/token-search",
@@ -159,7 +158,6 @@
                   },
                   {
                     "group": "Market Metrics API",
-                    "icon": "chart-mixed",
                     "pages": [
                       "universal-api/global-api/endpoints/trading-stats",
                       "universal-api/global-api/endpoints/trading-stats-category",
@@ -169,7 +167,6 @@
                   },
                   {
                     "group": "Entity API",
-                    "icon": "tags",
                     "pages": [
                       "universal-api/entity-api/endpoints/entity-search",
                       "universal-api/entity-api/endpoints/entity-by-id",
@@ -185,7 +182,6 @@
                   "data-api/evm-index",
                   {
                     "group": "Wallet API",
-                    "icon": "wallet",
                     "pages": [
                       "data-api/wallet-api/index",
                       {
@@ -245,7 +241,6 @@
                   },
                   {
                     "group": "Token API",
-                    "icon": "bitcoin-sign",
                     "tag": "New Features",
                     "pages": [
                       "data-api/evm-api/token-api/token-api-overview",
@@ -313,7 +308,6 @@
                   },
                   {
                     "group": "NFT API",
-                    "icon": "cat",
                     "pages": [
                       "data-api/evm-api/nft-api/nft-api-overview",
                       {
@@ -383,7 +377,6 @@
                   },
                   {
                     "group": "Price API",
-                    "icon": "chart-candlestick",
                     "pages": [
                       "v1-0/data-api/evm-api/price-api/price-api-overview",
                       "data-api/evm-api/price-api/token-price",
@@ -398,7 +391,6 @@
                   },
                   {
                     "group": "DeFi API",
-                    "icon": "chart-pie",
                     "pages": [
                       "v1-0/data-api/evm-api/de-fi-api/de-fi-api-overview",
                       "evm-api/defi-api/endpoints/wallet-protocols",
@@ -408,7 +400,6 @@
                   },
                   {
                     "group": "Blockchain API",
-                    "icon": "block-brick",
                     "pages": [
                       "v1-0/data-api/evm-api/blockchain-api/blockchain-api-overview",
                       "data-api/evm-api/blockchain-api/block-by-hash",
@@ -428,7 +419,6 @@
                   "data-api/solana-index",
                   {
                     "group": "Wallet API",
-                    "icon": "wallet",
                     "pages": [
                       "data-api/solana-api/wallet-api/native-balance",
                       "data-api/solana-api/wallet-api/portfolio",
@@ -439,7 +429,6 @@
                   },
                   {
                     "group": "Token API",
-                    "icon": "bitcoin-sign",
                     "tag": "New features",
                     "pages": [
                       {
@@ -503,14 +492,12 @@
                   },
                   {
                     "group": "NFT API",
-                    "icon": "cat",
                     "pages": [
                       "data-api/solana-api/nft-api/nft-metadata"
                     ]
                   },
                   {
                     "group": "Price API",
-                    "icon": "chart-candlestick",
                     "pages": [
                       "data-api/solana-api/price-api/token-price",
                       "v1-0/data-api/solana-api/price-api/token-prices-batch",
