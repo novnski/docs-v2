@@ -501,6 +501,22 @@
                         ]
                       }
                     ]
+                  },
+                  {
+                    "group": "NFT API",
+                    "icon": "cat",
+                    "pages": [
+                      "data-api/solana-api/nft-api/nft-metadata"
+                    ]
+                  },
+                  {
+                    "group": "Price API",
+                    "icon": "chart-candlestick",
+                    "pages": [
+                      "data-api/solana-api/price-api/token-price",
+                      "v1-0/data-api/solana-api/price-api/token-prices-batch",
+                      "data-api/solana-api/price-api/ohlc"
+                    ]
                   }
                 ]
               },
