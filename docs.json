@@ -515,10 +515,6 @@
                     "pages": [
                       "data-api/cortex-api/getting-started"
                     ]
-                  },
-                  {
-                    "group": "API Reference",
-                    "openapi": "https://cortex-api.moralis.com/documentation#/"
                   }
                 ]
               }
@@ -537,7 +533,29 @@
               },
               {
                 "group": "API Reference",
-                "openapi": "openapi-files/stream-api/streams.json"
+                "pages": [
+                  {
+                    "group": "Streams",
+                    "pages": [
+                      "streams/api-reference/streams/get-streams",
+                      "streams/api-reference/streams/create-streams",
+                      "streams/api-reference/streams/update-stream",
+                      "streams/api-reference/streams/delete-stream"
+                    ]
+                  },
+                  {
+                    "group": "History",
+                    "pages": []
+                  },
+                  {
+                    "group": "Project",
+                    "pages": []
+                  },
+                  {
+                    "group": "Stats",
+                    "pages": []
+                  }
+                ]
               }
             ]
           },
