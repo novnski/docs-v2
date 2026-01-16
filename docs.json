@@ -513,13 +513,12 @@
                   {
                     "group": "Getting Started",
                     "pages": [
-                      "data-api/cortex-api/getting-started",
-                      "streams-api/evm/setup-secret-key"
+                      "data-api/cortex-api/getting-started"
                     ]
                   },
                   {
                     "group": "API Reference",
-                    "openapi": "openapi-files/stream-api/stream.yaml"
+                    "openapi": "https://cortex-api.moralis.com/documentation#/"
                   }
                 ]
               }
@@ -538,7 +537,7 @@
               },
               {
                 "group": "API Reference",
-                "openapi": "openapi-files/stream-api/stream.yaml"
+                "openapi": "openapi-files/stream-api/streams.json"
               }
             ]
           },
