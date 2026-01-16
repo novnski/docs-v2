@@ -1,5 +1,56 @@
 ---
 title: "Universal API"
 sidebarTitle: "Overview"
-description: "The universal multichain Data API provides a single, consistent interface for accessing blockchain data across 30+ supported chains, including Ethereum, Solana, Base, Binance Smart Chain, and more. It standardizes complex on-chain data into clean, developer-friendly formats."
+description: "A unified, multichain API for accessing blockchain data across 30+ EVM networks and Solana through a single, consistent interface."
 ---
+
+### Overview
+
+The **Universal API** is Moralis’ unified, multichain Data API, designed to provide a **single, consistent interface** for accessing blockchain data across **30+ supported chains**, including both **EVM networks and Solana**.
+
+It standardizes complex on-chain data into **clean, developer-friendly formats**, allowing you to build multichain applications without handling chain-specific differences.
+
+---
+
+### What the Universal API Is For
+
+The Universal API is intended for:
+
+- Applications that support **both EVM and Solana**
+- Teams building **chain-agnostic** products
+- Use cases where a **consistent data model** across chains is more important than chain-specific depth
+
+Where possible, new endpoints are introduced in the Universal API first.
+
+---
+
+### Consolidation Strategy
+
+Moralis is **gradually consolidating cross-chain functionality into the Universal API**.
+
+This means:
+
+- New multichain endpoints are added to the Universal API
+- Existing EVM- or Solana-specific endpoints may be mirrored or superseded over time
+- No breaking changes are introduced without notice
+
+The Universal API represents the **long-term direction** for multichain data access at Moralis.
+
+---
+
+### When to Use the Universal API
+
+Use the Universal API if you:
+
+- Need the **same endpoint to work across EVM and Solana**
+- Want to minimize chain-specific logic
+- Are building dashboards, analytics, or wallets that span multiple ecosystems
+
+---
+
+### When Not to Use It
+
+For advanced, chain-specific features, you may still want:
+
+- **EVM API** for deep EVM-only functionality
+- **Solana Data API** for Solana-specific data and semantics

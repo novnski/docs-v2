@@ -1,28 +1,41 @@
 ---
 title: "Solana Data API"
 sidebarTitle: "Overview"
-description: "The Solana Data API provides a single, consistent interface for accessing Solana blockchain data across, standardizing complex onchain data into clean, developer-friendly formats."
+description: "A dedicated API for accessing Solana blockchain data with Solana-native semantics and structures."
 ---
 
-**Explore Data APIs:**
+### Overview
 
-<Columns cols={3}>
-  <Card title="Wallet API" icon="wallet" href="https://docs.moralis.com/web3-data-api/evm/reference/wallet-api">
-    Wallet history, transfers balances, tokens and PnL.
-  </Card>
-  <Card title="Token API" icon="hexagon-plus" href="https://docs.moralis.com/web3-data-api/evm/reference/token-api">
-    Token search, balances, transfers, holders and swaps.
-  </Card>
-  <Card title="NFT API" icon="shield-cat" href="https://docs.moralis.com/web3-data-api/evm/reference/nft-api">
-    Metadata, floor prices, transfers and ownership.
-  </Card>
-  <Card title="Price API" icon="chart-candlestick" href="https://docs.moralis.com/web3-data-api/evm/reference/price-api">
-    Real-time crypto prices, OHLC, trading volume.
-  </Card>
-  <Card title="DeFi API" icon="chart-line-up" href="https://docs.moralis.com/web3-data-api/evm/reference/price-api">
-    DeFi positions, liquidity, reserves and token pairs.
-  </Card>
-  <Card title="Blockchain API" icon="cubes" href="https://docs.moralis.com/web3-data-api/evm/reference/blockchain-api">
-    Raw blocks, transactions, internal transactions and logs.
-  </Card>
-</Columns>
+The **Solana Data API** provides **deep, Solana-native access** to Solana blockchain data, standardizing complex on-chain structures into clean, developer-friendly formats.
+
+It is designed specifically around **Solana’s account model, programs, and transaction semantics**, rather than forcing Solana data into an EVM-style abstraction.
+
+---
+
+### What the Solana Data API Is For
+
+The Solana Data API is built for:
+
+- Applications focused exclusively on **Solana**
+- Use cases that require **Solana-specific data models**
+- Developers who need precise control over Solana program and account data
+
+---
+
+### Relationship to the Universal API
+
+- The Universal API includes **shared EVM + Solana functionality**
+- The Solana Data API provides **deeper Solana-specific coverage**
+- Some Solana-specific endpoints are not available in the Universal API
+
+As with EVM, not all Solana features are suitable for a fully universal abstraction.
+
+---
+
+### When to Use the Solana Data API
+
+Use the Solana Data API if you:
+
+- Are building a Solana-only application
+- Need Solana-specific transaction or account details
+- Want the most accurate representation of Solana on-chain behavior
