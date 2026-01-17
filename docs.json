@@ -121,6 +121,7 @@
                       "data-api/data-features/safety-and-trust/overview",
                       "data-api/data-features/safety-and-trust/verified-contracts",
                       "data-api/resources/spam-filtering",
+                      "data-api/data-features/safety-and-trust/liquidity-filtering",
                       "data-api/data-features/token-scores"
                     ]
                   },
@@ -537,23 +538,47 @@
                   {
                     "group": "Streams",
                     "pages": [
-                      "streams/api-reference/streams/get-streams",
                       "streams/api-reference/streams/create-streams",
                       "streams/api-reference/streams/update-stream",
-                      "streams/api-reference/streams/delete-stream"
+                      "streams/api-reference/streams/delete-stream",
+                      "streams/api-reference/streams/get-stream-by-id",
+                      "streams/api-reference/streams/get-streams",
+                      "streams/api-reference/streams/duplicate-stream",
+                      "streams/api-reference/streams/update-stream-status",
+                      "v1-0/streams/api-reference/streams/get-stream-block-data",
+                      "v1-0/streams/api-reference/streams/get-block-data-to-webhook"
+                    ]
+                  },
+                  {
+                    "group": "Addresses",
+                    "pages": [
+                      "streams/api-reference/streams/get-addresses-by-stream",
+                      "streams/api-reference/streams/add-address-to-stream",
+                      "streams/api-reference/streams/replace-address-on-stream",
+                      "streams/api-reference/streams/delete-address-from-stream"
                     ]
                   },
                   {
                     "group": "History",
-                    "pages": []
+                    "pages": [
+                      "streams/api-reference/history/get-history",
+                      "streams/api-reference/history/replay-history",
+                      "streams/api-reference/history/get-logs"
+                    ]
                   },
                   {
                     "group": "Project",
-                    "pages": []
+                    "pages": [
+                      "streams/api-reference/project/get-project-settings",
+                      "streams/api-reference/project/set-project-settings"
+                    ]
                   },
                   {
                     "group": "Stats",
-                    "pages": []
+                    "pages": [
+                      "streams/api-reference/stats/get-stats",
+                      "streams/api-reference/stats/get-stats-by-stream"
+                    ]
                   }
                 ]
               }
