@@ -510,13 +510,8 @@
               {
                 "group": "Cortex API",
                 "pages": [
-                  "data-api/cortex-index",
-                  {
-                    "group": "Getting Started",
-                    "pages": [
-                      "data-api/cortex-api/getting-started"
-                    ]
-                  }
+                  "v1-0/data-api/cortex-api/overview",
+                  "v1-0/data-api/cortex-api/chat"
                 ]
               }
             ]
