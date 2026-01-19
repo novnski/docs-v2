@@ -1,5 +1,116 @@
 ---
 title: "Streams"
 sidebarTitle: "Overview"
-description: "Streams delivers real-time webhooks for wallet activity, contract events, and other on-chain triggers - allowing you to react instantly without needing to poll the blockchain."
+description: "Real-time blockchain webhooks for wallets, contracts, and on-chain events with guaranteed delivery and flexible filtering."
 ---
+
+## Overview
+
+Moralis **Streams** lets you receive **real-time blockchain events** directly in your backend via webhooks.
+
+Instead of polling APIs or indexing chains yourself, Streams pushes on-chain activity to you the moment it happens - based on rules you define.
+
+---
+
+## What Is Moralis Streams?
+
+Moralis Streams allows you to **listen to blockchain activity in real time**, including:
+
+- Wallet activity (transfers, swaps, interactions)
+- Contract events (via ABI decoding)
+- NFT and token transfers
+- Native and internal transactions
+- Custom on-chain conditions using filters
+
+When a matching event occurs, Moralis delivers a **webhook** to your server with a structured data payload.
+
+---
+
+## How Streams Works
+
+At a high level:
+
+1. A new block is produced on-chain
+2. Moralis processes and evaluates the block
+3. Your stream rules are applied
+4. Matching events are detected
+5. A webhook is delivered to your endpoint
+
+All delivery is handled by Moralis - no nodes, polling, or infrastructure required.
+
+---
+
+## What You Can Listen To
+
+With Streams, you can:
+
+- Monitor one address or **millions of addresses** with a single stream
+- Listen to **all contract events** or only specific ABI events
+- Track transfers, swaps, mints, burns, and internal transactions
+- Apply **advanced filters** (amounts, addresses, tokens, contracts)
+- Run **read-only smart contract functions** as part of event processing
+- Enrich events with balances and decoded data
+
+---
+
+## Common Use Cases
+
+Streams is commonly used for:
+
+- **Real-time wallet notifications**\
+  (send, receive, swap, stake, burn)
+- **Asset monitoring**\
+  (token or NFT movement, price-sensitive events)
+- **Games & apps**\
+  (in-game actions, state changes, achievements)
+- **Token sales & launches**\
+  (participation tracking, contribution thresholds)
+- **Protocol monitoring**\
+  (liquidity events, contract interactions)
+
+---
+
+## Working With Webhooks
+
+Streams delivers events via **HTTP webhooks**:
+
+- Webhooks are sent using `POST` requests
+- Payloads include decoded, structured event data
+- Delivery is retried automatically on failure
+- Events can be replayed manually if needed
+
+To ensure correctness, Moralis sends a **mandatory test webhook** whenever a stream is created or updated.
+
+---
+
+## Reliability & Guarantees
+
+Streams is built for production workloads:
+
+- Guaranteed webhook delivery with retries
+- Automatic backoff if your service is unavailable
+- Manual replay support
+- Spam detection and filtering
+- Secure webhook signing
+
+---
+
+## When to Use Streams
+
+Use Streams if you need:
+
+- Real-time blockchain events
+- Push-based architecture
+- Low-latency notifications
+- Reliable delivery without running infrastructure
+
+If you only need historical data, use the [**Data APIs**](/data-api/index) instead.
+
+---
+
+## Get Started
+
+- **Quickstart**
+- **Stream Configuration**
+- **Webhooks**
+- **Tutorials**

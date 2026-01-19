@@ -518,13 +518,50 @@
           },
           {
             "tab": "Streams",
-            "pages": [
-              "streams/index",
+            "groups": [
               {
-                "group": "Getting Started",
+                "group": "Introduction",
                 "pages": [
-                  "streams-api/evm/getting-started",
-                  "streams-api/evm/setup-secret-key"
+                  "streams/index",
+                  "streams/pricing",
+                  "streams/supported-chains",
+                  {
+                    "group": "Quickstart",
+                    "pages": [
+                      "streams/quickstart/create-your-first-stream",
+                      "streams/quickstart/receive-your-first-webhook"
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Streams Concepts",
+                "pages": [
+                  "streams/streams-concepts/parsed-data",
+                  "streams/streams-concepts/filters",
+                  "streams/streams-concepts/triggers",
+                  "streams/streams-concepts/rate-limits",
+                  "streams/streams-concepts/error-handling",
+                  "streams/streams-concepts/advanced-options"
+                ]
+              },
+              {
+                "group": "Webhooks",
+                "pages": [
+                  "streams/webhooks/webhook-delivery",
+                  "streams/webhooks/webhook-payloads",
+                  "streams/webhooks/transaction-webhooks",
+                  "streams/webhooks/test-webhooks",
+                  "streams/webhooks/retries-and-replays"
+                ]
+              },
+              {
+                "group": "Security & Reliability",
+                "pages": [
+                  "streams/security-and-reliability/webhook-security",
+                  "streams/security-and-reliability/spam-detection",
+                  "streams/security-and-reliability/delivery-guarantees",
+                  "streams/security-and-reliability/ordering-and-idempotency"
                 ]
               },
               {
