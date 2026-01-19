@@ -1,4 +1,182 @@
 ---
 title: "Filters"
+description: "Learn how to filter Streams events using logical operators, value comparisons, and special stream variables to control exactly which on-chain events trigger webhooks."
 ---
 
+## Overview
+
+Streams filters allow you to **control exactly which events trigger webhooks** by applying logical conditions to on-chain data.
+
+Filters are evaluated **before** a webhook is delivered. Events that do not match your filter rules are ignored and do not consume usage.
+
+---
+
+## How Filters Work
+
+Filters are defined as a **JSON expression** using logical operators and comparison rules.
+
+- Filters apply to **decoded event data**
+- Filters require a **valid ABI** for the event being filtered
+- All conditions must resolve to `true` for the event to trigger a webhook
+
+---
+
+## Supported Operators
+
+### Logical operators
+
+| Operator | Description                              | Notes                   | Example                                     |
+| :------- | :--------------------------------------- | ----------------------- | ------------------------------------------- |
+| `and`    | All nested conditions must match         | Need at least 2 filters | `{ "or" : [ {..filter1}, {...filter2} ]}`   |
+| `or`     | At least one nested condition must match | Need at least 2 filters | `{ "and" : [ {..filter1}, {...filter2} ]}	` |
+
+### Comparison operators
+
+| Operator | Description           | Notes               | Example                                |
+| :------- | :-------------------- | :------------------ | -------------------------------------- |
+| `eq`     | Equal to              |                     | `{ "eq": ["value", "1000"] }`          |
+| `ne`     | Not equal to          |                     | `{ "ne": ["address", "0x...325"] }`    |
+| `lt`     | Less than             | Numeric values only | `{ "lt": ["amount", "50"] }`           |
+| `gt`     | Greater than          | Numeric values only | `{ "gt": ["price", "500000"] }`        |
+| `lte`    | Less than or equal    | Numeric values only | `{ "lte": ["amount", "100"] }`         |
+| `gte`    | Greater than or equal | Numeric values only | `{ "gte": ["amount", "100"] }`         |
+| `in`     | Value exists in array | Array required      | `{ "in": ["name": ["alice", "bob"]]}`  |
+| `nin`    | Value not in array    | Array required      | `{ "nin": ["name": ["bob", "alice"]]}` |
+
+---
+
+## Special Stream Variables
+
+Moralis provides special variables that can be used in filters to access stream-level metadata.
+
+| Variable                           | Description                               |
+| :--------------------------------- | :---------------------------------------- |
+| `moralis_streams_contract_address` | Contract emitting the event (lowercase)   |
+| `moralis_streams_chain_id`         | Chain ID for the event                    |
+| `moralis_streams_possibleSpam`     | Indicates if the event is flagged as spam |
+
+### Example: filter by contract address
+
+```javascript
+{
+  "eq": ["moralis_streams_contract_address", "0x0000000000000000000000000000000000000000"]
+}
+```
+
+<Info>
+  Note: contract addresses must be lowercase.
+</Info>
+
+---
+
+## Filtering Possible Spam Events
+
+Some contract addresses are associated with spam, phishing attempts, or other suspicious activity. Moralis identifies these and flags them with `possibleSpam = true`.
+
+You can exclude these events entirely by enabling:
+
+```javascript
+"filterPossibleSpamAddresses": true
+```
+
+When enabled:
+
+- Events involving contracts flagged as possible spam are excluded
+- No webhook is sent
+- No usage is consumed
+
+By default, `filterPossibleSpamAddresses` is set to `false`.
+
+Learn more about spam detection in the **Safety & Trust** section.
+
+---
+
+## Example: Different Rules per Contract
+
+You can apply different thresholds depending on which contract emitted the event.
+
+```javascript
+{
+  "or": [
+    {
+      "and": [
+        { "eq": ["moralis_streams_contract_address", "0x1"] },
+        { "gte": ["value", 1000000000] }
+      ]
+    },
+    {
+      "and": [
+        { "eq": ["moralis_streams_contract_address", "0x2"] },
+        { "gte": ["value", 1000000000000000000000] }
+      ]
+    }
+  ]
+}
+```
+
+This is useful when monitoring multiple tokens with different decimals or value semantics.
+
+---
+
+## Example: Filtering by Value Range
+
+Filter transfers where the amount is between two values:
+
+```javascript
+{
+  "and": [
+    { "gt": ["value", 5000000000] },
+    { "lt": ["value", 50000000000] }
+  ]
+}
+```
+
+> Example assumes a token with 6 decimals (e.g. USDC).
+
+---
+
+## Example: Mint and Burn Detection
+
+A zero address indicates:
+
+- **Mint** when used as `from`
+- **Burn** when used as `to`
+
+```javascript
+{
+  "or": [
+    {
+      "and": [
+        { "eq": ["from", "0x0000000000000000000000000000000000000000"] },
+        { "gte": ["value", 10000000000] }
+      ]
+    },
+    {
+      "and": [
+        { "eq": ["to", "0x0000000000000000000000000000000000000000"] },
+        { "gte": ["value", 10000000000] }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## Important Notes
+
+- Filters require a **valid ABI** for the event being filtered
+- Filters are evaluated **before webhook delivery**
+- Invalid filters will prevent the stream from working
+- Filters use **AND / OR logic only** (no implicit precedence)
+
+---
+
+## When to Use Filters
+
+Use filters to:
+
+- Reduce webhook volume
+- Exclude spam or low-value events
+- Trigger alerts only for meaningful activity
+- Apply different logic per contract or chain

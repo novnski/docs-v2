@@ -1,4 +1,96 @@
 ---
 title: "Parsed Data"
+description: "Learn how to extract typed, decoded data from Streams webhooks, including ERC-20 transfers/approvals, NFT transfers/approvals, and custom contract events."
 ---
 
+## Overview
+
+Moralis Streams makes it easy to work with webhook payloads by providing **parsed, structured data** for common on-chain activity.
+
+Depending on your stream configuration, Moralis can include ready-to-use parsed sections such as:
+
+- **ERC-20 transfers**
+- **ERC-20 approvals**
+- **NFT transfers**
+- **NFT approvals**
+- **Custom smart contract events** (decoded using your ABI)
+
+This helps you avoid manually decoding logs and building your own parsing pipeline.
+
+---
+
+## What Moralis Parses for You
+
+When enabled for a stream, webhook payloads can include structured arrays for:
+
+- `erc20Transfers`
+- `erc20Approvals`
+- `nftTransfers`
+- `nftApprovals`
+- `logs` (raw logs for your configured ABI events)
+
+For custom contract events, you can decode logs into a typed structure using the ABI provided in the webhook payload.
+
+---
+
+## Parsing Smart Contract Events (Typed Example)
+
+If you are streaming a smart contract event, you can decode the logs from the webhook into a typed structure.
+
+```javascript
+import Moralis from "moralis";
+import { BigNumber } from "@moralisweb3/core";
+
+interface URI {
+  value: string;
+  id: BigNumber;
+}
+
+const webhookData = {
+  confirmed: true,
+  chainId: "0x1",
+  abi: [
+    {
+      anonymous: false,
+      inputs: [
+        { indexed: false, internalType: "string", name: "value", type: "string" },
+        { indexed: true, internalType: "uint256", name: "id", type: "uint256" },
+      ],
+      name: "URI",
+      type: "event",
+    },
+  ],
+  logs: [
+    {
+      logIndex: "475",
+      transactionHash:
+        "0x55125fa34ce16c295c222d48fc3efe210864dc2fb017f5965b4e3743d72342d5",
+      address: "0x495f947276749ce646f68ac8c248420045cb7b5e",
+      data: "0x0000000000000000000000000000000000000000000000000000000000000020...",
+      topic0:
+        "0x6bb7ff708619ba0610cba295a58592e0451dee2622938c8755667688daf3529b",
+      topic1:
+        "0xab6953e647a36018fc48d6223583597b84c755a0000000000000010000000001",
+      topic2: null,
+      topic3: null,
+    },
+  ],
+  erc20Transfers: [],
+  erc20Approvals: [],
+  nftApprovals: { ERC1155: [], ERC721: [] },
+  nftTransfers: [],
+};
+
+const decodedLogs = Moralis.Streams.parsedLogs<URI>(webhookData);
+
+console.log(decodedLogs[0].value);
+console.log(decodedLogs[0].id.toString());
+```
+
+---
+
+## Notes
+
+- For ERC-20 and NFT activity, use the dedicated parsed arrays (`erc20Transfers`, `nftTransfers`, etc.) when available.
+- For contract events, decoding relies on the ABI you configure for the stream.
+- Raw logs remain available in the payload even when parsed data is provided.

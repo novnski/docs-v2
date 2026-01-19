@@ -537,6 +537,7 @@
               {
                 "group": "Streams Concepts",
                 "pages": [
+                  "v1-0/streams/streams-concepts/stream-lifecycle-and-management",
                   "streams/streams-concepts/parsed-data",
                   "streams/streams-concepts/filters",
                   "streams/streams-concepts/triggers",
