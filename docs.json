@@ -541,6 +541,7 @@
                   "streams/streams-concepts/parsed-data",
                   "streams/streams-concepts/filters",
                   "streams/streams-concepts/triggers",
+                  "streams/streams-concepts/re-org-handling",
                   "streams/streams-concepts/rate-limits",
                   "streams/streams-concepts/error-handling",
                   "streams/streams-concepts/advanced-options"

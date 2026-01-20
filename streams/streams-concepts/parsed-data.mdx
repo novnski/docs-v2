@@ -9,6 +9,8 @@ Moralis Streams makes it easy to work with webhook payloads by providing **parse
 
 Depending on your stream configuration, Moralis can include ready-to-use parsed sections such as:
 
+- **Transactions**
+- **Internal transactions**
 - **ERC-20 transfers**
 - **ERC-20 approvals**
 - **NFT transfers**
@@ -16,6 +18,28 @@ Depending on your stream configuration, Moralis can include ready-to-use parsed 
 - **Custom smart contract events** (decoded using your ABI)
 
 This helps you avoid manually decoding logs and building your own parsing pipeline.
+
+Example payload:
+
+```javascript
+{
+  "confirmed": false,
+  "chainId": "0x1",
+  "streamId": "uuid",
+  "tag": "string",
+  "retries": 0,
+  "block": { },
+  "logs": [],
+  "txs": [],
+  "txsInternal": [],
+  "erc20Transfers": [],
+  "erc20Approvals": [],
+  "nftTransfers": [],
+  "nftApprovals": { "ERC721": [], "ERC1155": [] }
+}
+```
+
+Learn more about [Webhook Payloads](/streams/webhooks/webhook-payloads).
 
 ---
 
