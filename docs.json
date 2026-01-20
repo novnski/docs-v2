@@ -537,7 +537,7 @@
               {
                 "group": "Streams Concepts",
                 "pages": [
-                  "v1-0/streams/streams-concepts/stream-lifecycle-and-management",
+                  "streams/streams-concepts/stream-lifecycle-and-management",
                   "streams/streams-concepts/parsed-data",
                   "streams/streams-concepts/filters",
                   "streams/streams-concepts/triggers",
@@ -552,7 +552,7 @@
                 "pages": [
                   "streams/webhooks/webhook-delivery",
                   "streams/webhooks/webhook-payloads",
-                  "streams/webhooks/transaction-webhooks",
+                  "streams/webhooks/confirmation-and-finality",
                   "streams/webhooks/test-webhooks",
                   "streams/webhooks/retries-and-replays"
                 ]

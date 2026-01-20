@@ -1,0 +1,121 @@
+---
+title: "Confirmation & Finality"
+description: "Understand how blockchain confirmations work, how Moralis defines finality, and how confirmed and unconfirmed webhooks should be handled."
+---
+
+### Overview
+
+Blockchains are probabilistic systems. A transaction may appear in a block and later be removed due to a chain reorganization (re-org).
+
+To handle this safely, Moralis Streams distinguishes between **unconfirmed** and **confirmed** events and delivers both to your backend.
+
+This page explains **what confirmation and finality mean**, and how they are exposed through Streams.
+
+---
+
+### What Is Confirmation?
+
+When a transaction is included in a newly mined block, it is considered **unconfirmed**.
+
+At this stage:
+
+- The block may still be replaced
+- Transactions may be reordered or dropped
+- State changes are _not final_
+
+Streams delivers these events with:
+
+```javascript
+"confirmed": false
+```
+
+This enables **low-latency, real-time reactions**.
+
+See also:
+
+- [**Webhook Delivery**](/streams/webhooks/webhook-delivery)
+- [**Webhook Payload**](/streams/webhooks/webhook-payloads)
+
+---
+
+### What Is Finality?
+
+A transaction becomes **confirmed** once enough blocks have been mined on top of it.
+
+At this point:
+
+- The risk of re-org is extremely low
+- State can be safely persisted
+- Balances and ownership can be finalized
+
+Streams delivers a second webhook with:
+
+```javascript
+"confirmed": true
+```
+
+Confirmation thresholds vary by chain. See [**Supported Chains**](/streams/supported-chains)**.**
+
+---
+
+### Why Streams Sends Two Webhooks
+
+Streams intentionally sends **both states** so you can:
+
+- React instantly (unconfirmed)
+- Persist safely (confirmed)
+
+This avoids the need to:
+
+- Poll block explorers
+- Manually track confirmations
+- Reconcile state after re-orgs
+
+For how Streams handles re-orgs internally:
+
+- [**Re-org Handling**](/streams/streams-concepts/re-org-handling)
+
+---
+
+### Ordering & Edge Cases
+
+In rare cases:
+
+- A `confirmed: true` webhook may arrive before `confirmed: false`
+
+This can occur due to:
+
+- Network latency
+- Retry behavior
+- Regional delivery differences
+
+Your system should:
+
+- Treat each webhook independently
+- Use transaction hash + confirmation flag
+- Be idempotent
+
+---
+
+### Common Patterns
+
+**Real-time UX**
+
+- Act on `confirmed: false`
+- Update UI optimistically
+
+**Accounting / Persistence**
+
+- Only persist on `confirmed: true`
+
+**Analytics**
+
+- Use both, but deduplicate by transaction hash
+
+---
+
+### Next Steps
+
+- How re-orgs are handled internally → Explore [Re-org Handling](/streams/streams-concepts/re-org-handling)
+- How delivery works end-to-end →  Explore [Webhook Delivery](/streams/webhooks/webhook-delivery)
+- How to replay affected blocks → Explore [Retries & Replays](/streams/webhooks/retries-and-replays)
