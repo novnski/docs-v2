@@ -1,6 +1,6 @@
 ---
-title: "eth_call"
-description: "Executes a new message call immediately without creating a transaction on the blockchain."
+title: "eth_estimateGas"
+description: "Generates and returns an estimate of how much gas is necessary to allow the transaction to complete."
 ---
 
 #### Path parameters
@@ -15,7 +15,7 @@ description: "Executes a new message call immediately without creating a transac
   The address the transaction is sent from
 </ResponseField>
 
-<ResponseField name="to" type="string" required>
+<ResponseField name="to" type="string">
   The address the transaction is directed to
 </ResponseField>
 
@@ -44,12 +44,9 @@ description: "Executes a new message call immediately without creating a transac
 ```javascript
 [
   {
-    "from": "0x0000000000000000000000000000000000000000",
-    "to": "0x0000000000000000000000000000000000000000",
-    "gas": "0x76c0",
-    "gasPrice": "0x9184e72a000",
-    "value": "0x9184e72a",
-    "data": "0x"
+    "from": "0x8D97689C9818892B700e27F316cc3E41e17fBeb9",
+    "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
+    "value": "0x186a0"
   },
   "latest"
 ]
@@ -61,7 +58,7 @@ description: "Executes a new message call immediately without creating a transac
 curl https://site1.moralis-nodes.com/eth/:apiKey \
   -X POST \
   -H "Content-Type: application/json" \
-  -d '{"jsonrpc": "2.0", "method": "eth_call", "params": [{"from": "0xb60e8dd61c5d32be8058bb8eb970870f07233155", "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"}, "latest"], "id": 1}'
+  -d '{"jsonrpc": "2.0", "method": "eth_estimateGas", "params": [{"from": "0x8D97689C9818892B700e27F316cc3E41e17fBeb9", "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601", "value": "0x186a0"}, "latest"], "id": 1}'
 ```
 
 </RequestExample>
@@ -72,7 +69,7 @@ curl https://site1.moralis-nodes.com/eth/:apiKey \
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "result": "0x15536ee"
+  "result": "0x5208"
 }
 ```
 

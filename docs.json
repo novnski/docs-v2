@@ -655,7 +655,11 @@
                     "group": "Ethereum JSON-RPC API",
                     "pages": [
                       "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber",
-                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call"
+                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call",
+                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-chain-id",
+                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-create-access-list",
+                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-estimate-gas",
+                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-fee-history"
                     ]
                   }
                 ]
