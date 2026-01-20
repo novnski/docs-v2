@@ -3,14 +3,20 @@ title: "eth_blockNumber"
 description: "Returns the latest block number of the blockchain."
 ---
 
-Here's an example for eth_blockNumber
+#### Path parameters
 
- 
+<ResponseField name="chain" type="string" default="eth" required>
+  The blockchain to query
+</ResponseField>
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
 
 <RequestExample>
 
 ```shellscript curl
-curl https://site1.moralis-nodes.com/:chain/:apiKey \
+curl https://site1.moralis-nodes.com/eth/:apiKey \
   -X POST \
   -H "Content-Type: application/json" \
   --data '{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}'
