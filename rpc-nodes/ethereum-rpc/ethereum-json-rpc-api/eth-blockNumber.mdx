@@ -1,0 +1,31 @@
+---
+title: "eth_blockNumber"
+description: "Returns the latest block number of the blockchain."
+---
+
+Here's an example for eth_blockNumber
+
+ 
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/:chain/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  --data '{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x15536ee"
+}
+```
+
+</ResponseExample>

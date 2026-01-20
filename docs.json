@@ -634,20 +634,29 @@
           },
           {
             "tab": "RPC Nodes",
-            "pages": [
-              "nodes/index",
+            "groups": [
               {
-                "group": "Getting Started",
+                "group": "Ethereum RPC",
                 "pages": [
-                  "web3-data-api/solana/getting-started",
-                  "web3-data-api/solana/get-your-api-key"
+                  "rpc-nodes/ethereum-rpc/overview",
+                  {
+                    "group": "Ethereum JSON-RPC API",
+                    "pages": [
+                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber"
+                    ]
+                  }
                 ]
               },
               {
-                "group": "FAQs",
+                "group": "Introduction",
                 "pages": [
-                  "web3-data-api/solana/faqs",
-                  "web3-data-api/solana/nft-metadata-faq"
+                  "nodes/index",
+                  "rpc-nodes/introduction/pricing",
+                  "rpc-nodes/introduction/supported-chains",
+                  {
+                    "group": "Quickstart",
+                    "pages": []
+                  }
                 ]
               }
             ]
