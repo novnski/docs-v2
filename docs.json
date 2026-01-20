@@ -636,18 +636,6 @@
             "tab": "RPC Nodes",
             "groups": [
               {
-                "group": "Ethereum RPC",
-                "pages": [
-                  "rpc-nodes/ethereum-rpc/overview",
-                  {
-                    "group": "Ethereum JSON-RPC API",
-                    "pages": [
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber"
-                    ]
-                  }
-                ]
-              },
-              {
                 "group": "Introduction",
                 "pages": [
                   "nodes/index",
@@ -656,6 +644,18 @@
                   {
                     "group": "Quickstart",
                     "pages": []
+                  }
+                ]
+              },
+              {
+                "group": "Ethereum RPC",
+                "pages": [
+                  "rpc-nodes/ethereum-rpc/overview",
+                  {
+                    "group": "Ethereum JSON-RPC API",
+                    "pages": [
+                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber"
+                    ]
                   }
                 ]
               }
