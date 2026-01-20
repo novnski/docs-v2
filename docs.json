@@ -654,7 +654,8 @@
                   {
                     "group": "Ethereum JSON-RPC API",
                     "pages": [
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber"
+                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber",
+                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call"
                     ]
                   }
                 ]
