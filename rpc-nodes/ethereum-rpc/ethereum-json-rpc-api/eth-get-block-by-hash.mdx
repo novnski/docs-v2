@@ -1,0 +1,62 @@
+---
+title: "eth_getBlockByHash"
+description: "Returns information about a block by hash."
+---
+
+#### Path parameters
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+#### Request body
+<ResponseField name="hash" type="string" required>
+  Hash of a block
+</ResponseField>
+<ResponseField name="fullTransactionObjects" type="boolean" required>
+  If true it returns the full transaction objects, if false only the hashes of the transactions
+</ResponseField>
+#### Example request
+```javascript
+[
+  "0xd5f1812548be429cbdc6376b29611fc49e06f1359758c4ceaaa3b393e2239f9c",
+  false
+]
+```
+<RequestExample>
+```shellscript curl
+curl https://site1.moralis-nodes.com/eth/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getBlockByHash", "params": ["0xd5f1812548be429cbdc6376b29611fc49e06f1359758c4ceaaa3b393e2239f9c", false], "id": 1}'
+```
+</RequestExample>
+<ResponseExample>
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "difficulty": "0x4ea3f27bc",
+    "extraData": "0x476574682f4c5649562f76312e302e302f6c696e75782f676f312e342e32",
+    "gasLimit": "0x1388",
+    "gasUsed": "0x0",
+    "hash": "0xd5f1812548be429cbdc6376b29611fc49e06f1359758c4ceaaa3b393e2239f9c",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "miner": "0x4e65fda2159562a496f9f3522f89122a3088497a",
+    "mixHash": "0x5d4ec0e3d9e22e6b4f33d8fbf1c4a4e7f8e3e6b8b8e3e6b8b8e3e6b8b8e3e6b8",
+    "nonce": "0xe04d296d2460cfb8472af2c5fd05b5a214109c25688d3704aed5484f9a7792f2",
+    "number": "0x1b4",
+    "parentHash": "0xe99e022112df268ce40b72a0f47de52f0a3e8e8e3b5e1b8d3e5e8e8e3b5e1b8d",
+    "receiptsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    "sha3Uncles": "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+    "size": "0x220",
+    "stateRoot": "0xddc8b0234c2e0cad087c8b389aa7ef01f7d79b2570bccb77ce48648aa61c904d",
+    "timestamp": "0x55ba467c",
+    "totalDifficulty": "0x78ed983323d",
+    "transactions": [],
+    "transactionsRoot": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    "uncles": []
+  }
+}
+```
+</ResponseExample>
+
