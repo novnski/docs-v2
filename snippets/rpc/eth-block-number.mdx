@@ -8,7 +8,7 @@ export const RpcMethod = ({ chain }) => (
 
     <RequestExample>
       <CodeBlock language="shellscript" filename="curl">
-{`curl https://site1.moralis-nodes.com/${chain}/:apiKey \\
+{`curl https://site1.moralis-nodes.com/{chain}/:apiKey \\
   -X POST \\
   -H "Content-Type: application/json" \\
   --data '{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}'`}
