@@ -10,7 +10,7 @@
   The address the transaction is sent from
 </ResponseField>
 
-<ResponseField name="to" type="string" required>
+<ResponseField name="to" type="string">
   The address the transaction is directed to
 </ResponseField>
 
@@ -20,6 +20,14 @@
 
 <ResponseField name="gasPrice" type="string">
   Integer of the gasPrice used for each paid gas
+</ResponseField>
+
+<ResponseField name="maxPriorityFeePerGas" type="string">
+  Maximum fee per gas the sender is willing to pay to miners
+</ResponseField>
+
+<ResponseField name="maxFeePerGas" type="string">
+  Maximum total fee per gas the sender is willing to pay
 </ResponseField>
 
 <ResponseField name="value" type="string">
@@ -40,12 +48,12 @@ Example request `params`:
 ```javascript
 [
   {
-    "from": "0x0000000000000000000000000000000000000000",
-    "to": "0x0000000000000000000000000000000000000000",
+    "from": "0x8ba1f109551bd432803012645haca66c9834d7c6",
+    "to": "0x6b175474e89094c44da98b954eedeac495271d0f",
     "gas": "0x76c0",
     "gasPrice": "0x9184e72a000",
     "value": "0x9184e72a",
-    "data": "0x"
+    "data": "0xa9059cbb0000000000000000000000008ba1f109551bd432803012645haca66c9834d7c60000000000000000000000000000000000000000000000000de0b6b3a7640000"
   },
   "latest"
 ]
@@ -57,7 +65,7 @@ Example request `params`:
 curl https://site1.moralis-nodes.com/{chain}/:apiKey \
   -X POST \
   -H "Content-Type: application/json" \
-  -d '{"jsonrpc": "2.0", "method": "eth_call", "params": [{"from": "0xb60e8dd61c5d32be8058bb8eb970870f07233155", "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"}, "latest"], "id": 1}'
+  -d '{"jsonrpc": "2.0", "method": "eth_createAccessList", "params": [{"from": "0x8ba1f109551bd432803012645haca66c9834d7c6", "to": "0x6b175474e89094c44da98b954eedeac495271d0f", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "data": "0xa9059cbb0000000000000000000000008ba1f109551bd432803012645haca66c9834d7c60000000000000000000000000000000000000000000000000de0b6b3a7640000"}, "latest"], "id": 1}'
 ```
 
 </RequestExample>
@@ -68,7 +76,17 @@ curl https://site1.moralis-nodes.com/{chain}/:apiKey \
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "result": "0x15536ee"
+  "result": {
+    "accessList": [
+      {
+        "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+        "storageKeys": [
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ]
+      }
+    ],
+    "gasUsed": "0x7671"
+  }
 }
 ```
 

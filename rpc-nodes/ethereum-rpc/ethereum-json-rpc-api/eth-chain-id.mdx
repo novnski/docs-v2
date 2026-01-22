@@ -3,35 +3,6 @@ title: "eth_chainId"
 description: "Returns the chain ID of the current connected node as described in the EIP-695."
 ---
 
-#### Path parameters
+import rpcMethod from '/snippets/rpc/eth-chain-id.mdx'
 
-<ResponseField name="apiKey" type="string" required>
-  Your API key for authentication
-</ResponseField>
-
-#### Request body
-
-No parameters required.
-
-<RequestExample>
-
-```shellscript curl
-curl https://site1.moralis-nodes.com/eth/:apiKey \
-  -X POST \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc": "2.0", "method": "eth_chainId", "params": [], "id": 1}'
-```
-
-</RequestExample>
-
-<ResponseExample>
-
-```json JSON
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": "0x1"
-}
-```
-
-</ResponseExample>
+<rpcMethod chain={eth}/>
