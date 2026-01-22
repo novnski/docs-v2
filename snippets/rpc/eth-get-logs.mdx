@@ -2,7 +2,8 @@
 <ResponseField name="apiKey" type="string" required>
   Your API key for authentication
 </ResponseField>
-#### Request body
+
+#### Request
 <ResponseField name="fromBlock" type="string">
   Integer block number, or "latest" for the last mined block or "pending", "earliest" for not yet mined transactions
 </ResponseField>
@@ -18,7 +19,8 @@
 <ResponseField name="blockhash" type="string">
   Using blockhash is equivalent to fromBlock = toBlock = the block number with hash blockhash
 </ResponseField>
-#### Example request
+
+#### Example request `params`
 ```javascript
 [
   {

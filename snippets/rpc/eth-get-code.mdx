@@ -2,14 +2,16 @@
 <ResponseField name="apiKey" type="string" required>
   Your API key for authentication
 </ResponseField>
-#### Request body
+
+#### Request
 <ResponseField name="address" type="string" required>
   Address to get the code from
 </ResponseField>
 <ResponseField name="tag" type="string">
   Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
 </ResponseField>
-#### Example request
+
+#### Example request `params`
 ```javascript
 [
   "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b",

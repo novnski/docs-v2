@@ -6,7 +6,8 @@ title: "eth-fee-history"
 <ResponseField name="apiKey" type="string" required>
   Your API key for authentication
 </ResponseField>
-#### Request body
+
+#### Request
 <ResponseField name="blockCount" type="string" required>
   Number of blocks in the requested range
 </ResponseField>
@@ -16,7 +17,8 @@ title: "eth-fee-history"
 <ResponseField name="rewardPercentiles" type="array">
   Array of percentile values to sample from each block's effective priority fees per gas
 </ResponseField>
-#### Example request
+
+#### Example request `params`
 ```javascript
 [
   "0x4",

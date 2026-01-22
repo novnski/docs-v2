@@ -2,14 +2,16 @@
 <ResponseField name="apiKey" type="string" required>
   Your API key for authentication
 </ResponseField>
-#### Request body
+
+#### Request
 <ResponseField name="hash" type="string" required>
   Hash of a block
 </ResponseField>
 <ResponseField name="fullTransactionObjects" type="boolean" required>
   If true it returns the full transaction objects, if false only the hashes of the transactions
 </ResponseField>
-#### Example request
+
+#### Example request `params`
 ```javascript
 [
   "0xd5f1812548be429cbdc6376b29611fc49e06f1359758c4ceaaa3b393e2239f9c",

@@ -2,14 +2,16 @@
 <ResponseField name="apiKey" type="string" required>
   Your API key for authentication
 </ResponseField>
-#### Request body
+
+#### Request
 <ResponseField name="address" type="string" required>
   Address to get transaction count for
 </ResponseField>
 <ResponseField name="tag" type="string">
   Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
 </ResponseField>
-#### Example request
+
+#### Example request `params`
 ```javascript
 [
   "0x407d73d8a49eeb85d32cf465507dd71d507100c1",

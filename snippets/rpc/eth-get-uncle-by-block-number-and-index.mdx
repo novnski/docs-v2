@@ -2,14 +2,16 @@
 <ResponseField name="apiKey" type="string" required>
   Your API key for authentication
 </ResponseField>
-#### Request body
+
+#### Request
 <ResponseField name="blockNumber" type="string" required>
   A block number, or the string "earliest", "latest" or "pending"
 </ResponseField>
 <ResponseField name="index" type="string" required>
   The uncle's index position
 </ResponseField>
-#### Example request
+
+#### Example request `params`
 ```javascript
 [
   "0x29c",
