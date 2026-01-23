@@ -1,3 +1,5 @@
+import { VariableCodeBlock } from "/snippets/variable-code-block.jsx";
+
 #### Path parameters
 
 <ResponseField name="apiKey" type="string" required>
@@ -9,16 +11,17 @@
 No parameters required.
 
 <RequestExample>
-  <CodeBlock language="shellscript" filename="curl">
-{`curl https://site1.moralis-nodes.com/${chain}/:apiKey \\
+
+<VariableCodeBlock language="bash" filename="curl">
+{`curl https://site1.moralis-nodes.com/{chain}/:apiKey \\
   -X POST \\
   -H "Content-Type: application/json" \\
   -d '{"jsonrpc": "2.0", "method": "eth_chainId", "params": [], "id": 1}'`}
-  </CodeBlock>
+</VariableCodeBlock>
+
 </RequestExample>
 
 <ResponseExample>
-
 ```json JSON
 {
   "jsonrpc": "2.0",
