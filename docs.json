@@ -656,7 +656,6 @@
                     "pages": [
                       "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber",
                       "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-chain-id",
                       "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-create-access-list",
                       "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-estimate-gas",
                       "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-fee-history",
