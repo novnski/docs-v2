@@ -89,7 +89,7 @@
                       "data-api/resources/response-codes",
                       "data-api/resources/rate-limits",
                       "data-api/resources/pagination",
-                      "v1-0/data-api/introduction/resources/performance-and-reliability",
+                      "data-api/introduction/resources/performance-and-reliability",
                       "data-api/introduction/resources/premium-endpoints"
                     ]
                   }
@@ -136,6 +136,7 @@
                   {
                     "group": "Integrations",
                     "pages": [
+                      "data-api/data-features/integrations/nft-marketplaces",
                       "data-api/data-features/integrations/overview",
                       "data-api/data-features/integrations/de-fi-protocols"
                     ]
@@ -302,7 +303,8 @@
                       {
                         "group": "Advanced Signals",
                         "pages": [
-                          "data-api/evm-api/token-api/advanced-signals/snipers"
+                          "data-api/evm-api/token-api/advanced-signals/snipers",
+                          "data-api/evm-api/token-api/advanced-signals/top-traders"
                         ]
                       }
                     ]
