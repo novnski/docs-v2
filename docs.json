@@ -102,7 +102,6 @@
                   {
                     "group": "Data Enrichment",
                     "pages": [
-                      "data-api/data-features/data-enrichment/overview",
                       "data-api/data-features/data-enrichment/address-labelling",
                       "data-api/data-features/data-enrichment/transaction-decoding",
                       "data-api/data-features/data-enrichment/internal-transactions",
@@ -125,7 +124,6 @@
                     "group": "Safety & Trust",
                     "tag": "New Features",
                     "pages": [
-                      "data-api/data-features/safety-and-trust/overview",
                       "data-api/data-features/safety-and-trust/verified-contracts",
                       "data-api/resources/spam-filtering",
                       "data-api/data-features/safety-and-trust/liquidity-filtering",
@@ -135,7 +133,6 @@
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "data-api/data-features/search-and-discovery/overview",
                       "data-api/data-features/search-and-discovery/token-filtering",
                       "data-api/data-features/search-and-discovery/token-search"
                     ]
@@ -143,7 +140,6 @@
                   {
                     "group": "Integrations",
                     "pages": [
-                      "data-api/data-features/integrations/overview",
                       "data-api/data-features/integrations/supported-dexs",
                       "data-api/data-features/integrations/de-fi-protocols",
                       "data-api/data-features/integrations/nft-marketplaces"
