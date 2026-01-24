@@ -110,8 +110,15 @@
                       "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
                       "data-api/data-features/data-enrichment/nft-rarity",
                       "data-api/data-features/data-enrichment/profitability-pn-l",
-                      "data-api/data-features/data-enrichment/token-metadata",
-                      "data-api/data-features/data-enrichment/token-prices"
+                      "data-api/data-features/data-enrichment/token-metadata"
+                    ]
+                  },
+                  {
+                    "group": "Prices",
+                    "pages": [
+                      "data-api/data-features/data-enrichment/token-prices",
+                      "data-api/data-features/prices/sale-prices",
+                      "data-api/data-features/prices/floor-prices"
                     ]
                   },
                   {
@@ -136,9 +143,10 @@
                   {
                     "group": "Integrations",
                     "pages": [
-                      "data-api/data-features/integrations/nft-marketplaces",
                       "data-api/data-features/integrations/overview",
-                      "data-api/data-features/integrations/de-fi-protocols"
+                      "data-api/data-features/integrations/supported-dexs",
+                      "data-api/data-features/integrations/de-fi-protocols",
+                      "data-api/data-features/integrations/nft-marketplaces"
                     ]
                   }
                 ]
@@ -193,7 +201,7 @@
                           "data-api/wallet-api/endpoints/token-transfers",
                           "data-api/wallet-api/endpoints/wallet-swaps",
                           "data-api/wallet-api/endpoints/nft-transfers",
-                          "data-api/wallet-api/endpoints/nft-transfers-copied-1",
+                          "data-api/wallet-api/endpoints/nft-trades-by-wallet",
                           "data-api/wallet-api/endpoints/wallet-transactions",
                           "data-api/wallet-api/endpoints/decoded-transactions",
                           "data-api/evm-api/wallet-api/activity/chain-activity"
