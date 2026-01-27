@@ -137,6 +137,73 @@ The Token Score is an informational onchain quality signal suitable for:
 
 ---
 
+## Historical Token Scores
+
+In addition to the latest score, Moralis provides [historical Token Scores](/data-api/universal-api/token-api/token-score-timeseries), allowing you to track how a token’s onchain quality evolves over time.
+
+Historical scores return a **time-series of Token Scores**, making it possible to:
+
+- Visualize long-term trends
+- Detect momentum shifts
+- Identify improving or deteriorating tokens
+- Backtest filters and ranking strategies
+
+This is especially powerful when combined with discovery, alerts, or trading analytics.
+
+---
+
+### Supported Timeframes
+
+Historical Token Scores support the following lookback windows and resolutions:
+
+- **1 day** → hourly resolution
+- **7 days** → hourly resolution
+- **30 days** → daily resolution
+
+Each data point represents the Token Score at the start of the aggregation window.
+
+---
+
+### Historical Token Score Endpoint
+
+Developers can fetch the historical scoring breakdown using the [Timeseries Token Score](/data-api/universal-api/token-api/token-score-timeseries) endpoint:
+
+```
+GET /tokens/{tokenAddress}/score/historical
+```
+
+Example response:
+
+```javascript
+{
+  "chainId": "0x1",
+  "tokenAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+  "timeseries": [
+    {
+      "timestamp": "2026-01-22T00:00:00Z",
+      "score": 85
+    },
+    {
+      "timestamp": "2026-01-21T00:00:00Z",
+      "score": 84
+    },
+    {
+      "timestamp": "2026-01-20T00:00:00Z",
+      "score": 82
+    },
+    {},
+    {},
+    {}
+  ]
+}
+```
+
+<Note>
+  Note: This endpoint is available on **Pro plans and above**.
+</Note>
+
+---
+
 ## Accessing Detailed Score Data
 
 Developers can fetch the full scoring breakdown using the [Token Score](/universal-api/token-api/endpoints/token-score) endpoint:

@@ -157,6 +157,7 @@
                     "pages": [
                       "universal-api/token-api/endpoints/token-search",
                       "universal-api/token-api/endpoints/token-score",
+                      "data-api/universal-api/token-api/token-score-timeseries",
                       "universal-api/token-api/endpoints/token-analytics",
                       "universal-api/token-api/endpoints/token-analytics-multi",
                       "universal-api/token-api/endpoints/token-analytics-timeseries"
@@ -255,7 +256,8 @@
                         "tag": "New",
                         "pages": [
                           "data-api/evm-api/token-api/endpoints/token-metadata",
-                          "data-api/evm-api/token-api/endpoints/token-score"
+                          "data-api/evm-api/token-api/endpoints/token-score",
+                          "data-api/evm-api/token-api/metadata-and-info/token-score-timeseries"
                         ]
                       },
                       {
