@@ -1,4 +1,140 @@
 ---
 title: "Liquidity Filtering"
+description: "Understand how Moralis uses liquidity filtering to protect price accuracy, including default thresholds, pair-side liquidity rules, endpoint behavior, and custom liquidity controls."
 ---
 
+## Liquidity Filtering
+
+Liquidity Filtering is a **safety mechanism** used across Moralis price-dependent features to avoid returning unreliable or easily manipulated prices.
+
+It ensures that prices are only derived from pools with **sufficient onchain liquidity**, making downstream data (net worth, PnL, analytics) safer and more predictable.
+
+Liquidity filtering is applied consistently across:
+
+- [Token Prices](/data-api/evm-api/token-api/prices/token-prices-batch)
+- [Wallet Token Balances](/data-api/wallet-api/endpoints/token-balances) (with prices)
+- [Wallet Net Worth](/data-api/evm-api/wallet-api/net-worth)
+- Other price-dependent features
+
+---
+
+## Why Liquidity Filtering Exists
+
+Onchain markets often include:
+
+- Thin or inactive pools
+- Short-lived pools created for price manipulation
+- Long-tail tokens with misleading prices
+
+Without liquidity filtering, these pools could:
+
+- Inflate portfolio values
+- Distort rankings and analytics
+- Create poor user experiences
+
+Liquidity filtering acts as a **minimum quality bar** for any price Moralis returns.
+
+---
+
+## Default Liquidity Thresholds
+
+Moralis enforces minimum liquidity requirements per chain.
+
+Default thresholds:
+
+- **EVM chains:**\
+  \$50 minimum **pair-side liquidity**
+- **Solana:**\
+  No enforced liquidity threshold
+
+### What “pair-side liquidity” means
+
+“Pair-side liquidity” refers to the liquidity of **the token being priced**, not the counter asset in the pool.
+
+Example:
+
+- In a TOKEN / USDC pool, pair-side liquidity measures the TOKEN side, not the USDC side.
+- This prevents deep stablecoin liquidity from masking an illiquid token.
+
+---
+
+## Low Liquidity Behavior
+
+When a pool does not meet the liquidity threshold, behavior depends on the endpoint.
+
+### Endpoint-specific behavior
+
+- [Get Token Price](/evm-api/price-api/endpoints/token-price)\
+  Returns a `404` error indicating insufficient liquidity
+- [Get Multiple Token Prices](/data-api/evm-api/token-api/prices/token-prices-batch)\
+  The token is omitted from the response
+- [Wallet Token Balances](/data-api/wallet-api/endpoints/token-balances) (with prices)\
+  Token price is returned as `null`
+- [Wallet Net Worth](/data-api/evm-api/wallet-api/net-worth)\
+  Token is excluded from the net worth calculation
+
+This behavior is intentional and consistent across all price-dependent features.
+
+---
+
+## Consistency Across Features
+
+Liquidity filtering is applied uniformly so that:
+
+- A token excluded from Token Prices\
+  will also be excluded from Wallet Net Worth
+- A token with `null` price in balances\
+  will not silently inflate portfolio values
+
+This consistency is critical for building reliable dashboards, analytics, and financial logic on top of Moralis.
+
+---
+
+## Custom Liquidity Thresholds
+
+You can override the default thresholds using the `min_pair_side_liquidity_usd` query parameter.
+
+Example:
+
+```
+min_pair_side_liquidity_usd=5000
+```
+
+This ensures that **only pools with at least \$5,000 of pair-side liquidity** are considered when resolving prices.
+
+---
+
+### Common Use Cases for Custom Thresholds
+
+- Risk-averse or institutional reporting
+- Cleaner portfolio and net worth calculations
+- Excluding long-tail or thinly traded tokens
+- Reducing exposure to short-lived or manipulated pools
+
+Custom thresholds are especially useful when building:
+
+- Analytics platforms
+- Compliance-oriented tools
+- Professional portfolio dashboards
+
+---
+
+## What Liquidity Filtering Does _Not_ Do
+
+Liquidity filtering:
+
+- Does **not** guarantee market fairness
+- Does **not** detect scams by itself
+- Does **not** replace deeper risk analysis
+
+It is one component of Moralis’ broader **Safety & Trust** model and should be used alongside:
+
+- Token Scores
+- Spam Filtering
+- Verified Contracts
+
+Related pages:
+
+- [Token Prices](/data-api/data-features/data-enrichment/token-prices)
+- [Spam Filtering](/data-api/resources/spam-filtering)
+- [Token Scores](/data-api/data-features/token-scores)
