@@ -389,7 +389,7 @@
               {
                 "group": "Price API",
                 "pages": [
-                  "v1-0/data-api/evm-api/price-api/price-api-overview",
+                  "data-api/evm-api/price-api/price-api-overview",
                   "data-api/evm-api/price-api/token-price",
                   "data-api/evm-api/price-api/token-prices-batch",
                   "data-api/evm-api/price-api/ohlc",
@@ -403,7 +403,7 @@
               {
                 "group": "DeFi API",
                 "pages": [
-                  "v1-0/data-api/evm-api/de-fi-api/de-fi-api-overview",
+                  "data-api/evm-api/de-fi-api/de-fi-api-overview",
                   "evm-api/defi-api/endpoints/wallet-protocols",
                   "evm-api/defi-api/endpoints/wallet-positions",
                   "evm-api/defi-api/endpoints/wallet-positions-detailed"
@@ -412,7 +412,7 @@
               {
                 "group": "Blockchain API",
                 "pages": [
-                  "v1-0/data-api/evm-api/blockchain-api/blockchain-api-overview",
+                  "data-api/evm-api/blockchain-api/blockchain-api-overview",
                   "data-api/evm-api/blockchain-api/block-by-hash",
                   "data-api/evm-api/blockchain-api/block-by-date",
                   "data-api/evm-api/blockchain-api/latest-block",
@@ -513,7 +513,7 @@
                 "group": "Price API",
                 "pages": [
                   "data-api/solana-api/price-api/token-price",
-                  "v1-0/data-api/solana-api/price-api/token-prices-batch",
+                  "data-api/solana-api/price-api/token-prices-batch",
                   "data-api/solana-api/price-api/ohlc"
                 ]
               }
@@ -522,8 +522,8 @@
           {
             "group": "Cortex API",
             "pages": [
-              "v1-0/data-api/cortex-api/overview",
-              "v1-0/data-api/cortex-api/chat"
+              "data-api/cortex-api/overview",
+              "data-api/cortex-api/chat"
             ]
           }
         ]
@@ -591,8 +591,8 @@
                   "streams/api-reference/streams/get-streams",
                   "streams/api-reference/streams/duplicate-stream",
                   "streams/api-reference/streams/update-stream-status",
-                  "v1-0/streams/api-reference/streams/get-stream-block-data",
-                  "v1-0/streams/api-reference/streams/get-block-data-to-webhook"
+                  "streams/api-reference/streams/get-webhook-data-by-block-number",
+                  "streams/api-reference/streams/send-webhook-data-by-block-number"
                 ]
               },
               {
@@ -676,7 +676,7 @@
                 "group": "Ethereum JSON-RPC API",
                 "pages": [
                   "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber",
-                  "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call",
                   "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-chain-id",
                   "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-create-access-list",
                   "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-estimate-gas",
