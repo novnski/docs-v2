@@ -158,16 +158,16 @@ Pair-based queries bypass this logic and always use the specified pool.
 
 ## Liquidity Thresholds
 
-To avoid unreliable prices, Moralis enforces minimum liquidity requirements.
+Moralis enforces minimum liquidity requirements per chain.
 
 Default thresholds:
 
-- **EVM chains:** \$50 minimum pair-side liquidity
+- **EVM chains:** \$50 minimum liquidity per side (each token in the pair)
 - **Solana:** no enforced liquidity threshold
 
-“Pair-side liquidity” refers to the liquidity of **the token being priced**, not the counter asset.
+This threshold applies at the pool level and is evaluated for both assets in the pair. The pool is considered eligible only if **both sides** meet the minimum threshold.
 
-Liquidity filtering applies to both token-based and pair-based price queries.
+Read more about [Liquidity Thresholds](/data-api/data-features/safety-and-trust/liquidity-filtering).
 
 ---
 
