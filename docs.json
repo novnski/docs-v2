@@ -30,728 +30,729 @@
     ]
   },
   "navigation": {
-    "versions": [
+    "tabs": [
       {
-        "version": "v1.0",
-        "tabs": [
+        "tab": "Get Started",
+        "pages": [
           {
-            "tab": "Get Started",
+            "group": "Introduction",
             "pages": [
+              "index"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "get-started/get-your-api-key",
               {
-                "group": "Introduction",
+                "group": "Quickstart Guides",
                 "pages": [
-                  "index"
-                ]
-              },
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "get-started/get-your-api-key",
-                  {
-                    "group": "Quickstart Guides",
-                    "pages": [
-                      "data-api/quickstart",
-                      "streams/quickstart",
-                      "datashare/quickstart"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Pricing & Resources",
-                "pages": [
-                  "get-started/pricing",
-                  "get-started/supported-chains"
+                  "data-api/quickstart",
+                  "streams/quickstart",
+                  "datashare/quickstart"
                 ]
               }
             ]
           },
           {
-            "tab": "Data API",
+            "group": "Pricing & Resources",
             "pages": [
+              "get-started/pricing",
+              "get-started/supported-chains"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Data API",
+        "pages": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "data-api/index",
+              "data-api/pricing",
+              "data-api/supported-chains",
               {
-                "group": "Introduction",
+                "group": "Quickstart",
                 "pages": [
-                  "data-api/index",
-                  "data-api/pricing",
-                  "data-api/supported-chains",
+                  "data-api/get-your-api-key",
+                  "data-api/first-request"
+                ]
+              },
+              {
+                "group": "Resources",
+                "pages": [
+                  "data-api/resources/response-codes",
+                  "data-api/resources/rate-limits",
+                  "data-api/resources/pagination",
+                  "data-api/introduction/resources/performance-and-reliability",
+                  "data-api/introduction/resources/premium-endpoints"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Data Features",
+            "pages": [
+              "data-api/data-features/data-features-overview",
+              {
+                "group": "Data Enrichment",
+                "pages": [
+                  "data-api/data-features/data-enrichment/address-labelling",
+                  "data-api/data-features/data-enrichment/transaction-decoding",
+                  "data-api/data-features/data-enrichment/internal-transactions",
+                  "data-api/data-features/data-enrichment/nft-metadata",
+                  "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
+                  "data-api/data-features/data-enrichment/nft-rarity",
+                  "data-api/data-features/data-enrichment/profitability-pn-l",
+                  "data-api/data-features/data-enrichment/token-metadata"
+                ]
+              },
+              {
+                "group": "Prices",
+                "pages": [
+                  "data-api/data-features/data-enrichment/token-prices",
+                  "data-api/data-features/safety-and-trust/liquidity-filtering",
+                  "data-api/data-features/prices/sale-prices",
+                  "data-api/data-features/prices/floor-prices"
+                ]
+              },
+              {
+                "group": "Safety & Trust",
+                "tag": "New Features",
+                "pages": [
+                  "data-api/data-features/safety-and-trust/verified-contracts",
+                  "data-api/resources/spam-filtering",
+                  "data-api/data-features/token-scores"
+                ]
+              },
+              {
+                "group": "Search & Discovery",
+                "pages": [
+                  "data-api/data-features/search-and-discovery/token-filtering",
+                  "data-api/data-features/search-and-discovery/token-search"
+                ]
+              },
+              {
+                "group": "Integrations",
+                "pages": [
+                  "data-api/data-features/integrations/supported-dexs",
+                  "data-api/data-features/integrations/de-fi-protocols",
+                  "data-api/data-features/integrations/nft-marketplaces"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Universal API",
+            "pages": [
+              "universal-api/index",
+              {
+                "group": "Token API",
+                "tag": "New features",
+                "pages": [
+                  "universal-api/token-api/endpoints/token-search",
+                  "universal-api/token-api/endpoints/token-score",
+                  "data-api/universal-api/token-api/token-score-timeseries",
+                  "data-api/universal-api/token-api/filtered-tokens",
+                  "data-api/universal-api/token-api/top-gainers",
+                  "data-api/universal-api/token-api/top-losers",
+                  "universal-api/token-api/endpoints/token-analytics",
+                  "universal-api/token-api/endpoints/token-analytics-multi",
+                  "universal-api/token-api/endpoints/token-analytics-timeseries"
+                ]
+              },
+              {
+                "group": "Market Metrics API",
+                "pages": [
+                  "universal-api/global-api/endpoints/trading-stats",
+                  "universal-api/global-api/endpoints/trading-stats-category",
+                  "universal-api/global-api/endpoints/trading-stats-timeseries",
+                  "universal-api/global-api/endpoints/trading-stats-category-timeseries"
+                ]
+              },
+              {
+                "group": "Entity API",
+                "pages": [
+                  "universal-api/entity-api/endpoints/entity-search",
+                  "universal-api/entity-api/endpoints/entity-by-id",
+                  "universal-api/entity-api/endpoints/entity-by-category",
+                  "universal-api/entity-api/endpoints/entity-categories"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "EVM API",
+            "pages": [
+              "data-api/evm-index",
+              {
+                "group": "Wallet API",
+                "pages": [
+                  "data-api/wallet-api/index",
                   {
-                    "group": "Quickstart",
+                    "group": "Activity",
                     "pages": [
-                      "data-api/get-your-api-key",
-                      "data-api/first-request"
+                      "data-api/wallet-api/endpoints/wallet-history",
+                      "data-api/wallet-api/endpoints/token-transfers",
+                      "data-api/wallet-api/endpoints/wallet-swaps",
+                      "data-api/wallet-api/endpoints/nft-transfers",
+                      "data-api/wallet-api/endpoints/nft-trades-by-wallet",
+                      "data-api/wallet-api/endpoints/wallet-transactions",
+                      "data-api/wallet-api/endpoints/decoded-transactions",
+                      "data-api/evm-api/wallet-api/activity/chain-activity"
                     ]
                   },
                   {
-                    "group": "Resources",
+                    "group": "Tokens",
                     "pages": [
-                      "data-api/resources/response-codes",
-                      "data-api/resources/rate-limits",
-                      "data-api/resources/pagination",
-                      "data-api/introduction/resources/performance-and-reliability",
-                      "data-api/introduction/resources/premium-endpoints"
+                      "data-api/wallet-api/endpoints/token-balances",
+                      "data-api/evm-api/wallet-api/tokens/native-balance",
+                      "data-api/evm-api/wallet-api/tokens/native-balances-batch",
+                      "data-api/evm-api/wallet-api/approvals",
+                      "data-api/evm-api/wallet-api/tokens/token-balances-legacy"
+                    ]
+                  },
+                  {
+                    "group": "NFTs",
+                    "pages": [
+                      "data-api/evm-api/wallet-api/nft-balances/nft-balances",
+                      "data-api/evm-api/wallet-api/nft-balances/nft-collections"
+                    ]
+                  },
+                  {
+                    "group": "DeFi Positions",
+                    "pages": [
+                      "data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
+                      "data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
+                      "data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
+                    ]
+                  },
+                  {
+                    "group": "Net Worth & PnL",
+                    "pages": [
+                      "data-api/evm-api/wallet-api/net-worth",
+                      "data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
+                      "data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
+                    ]
+                  },
+                  {
+                    "group": "Identity",
+                    "pages": [
+                      "data-api/evm-api/wallet-api/identity/resolve-address",
+                      "data-api/evm-api/wallet-api/identity/ens-lookup"
                     ]
                   }
                 ]
               },
               {
-                "group": "Data Features",
+                "group": "Token API",
+                "tag": "New Features",
                 "pages": [
-                  "data-api/data-features/data-features-overview",
+                  "data-api/evm-api/token-api/token-api-overview",
                   {
-                    "group": "Data Enrichment",
+                    "group": "Metadata & Info",
+                    "tag": "New",
                     "pages": [
-                      "data-api/data-features/data-enrichment/address-labelling",
-                      "data-api/data-features/data-enrichment/transaction-decoding",
-                      "data-api/data-features/data-enrichment/internal-transactions",
-                      "data-api/data-features/data-enrichment/nft-metadata",
-                      "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
-                      "data-api/data-features/data-enrichment/nft-rarity",
-                      "data-api/data-features/data-enrichment/profitability-pn-l",
-                      "data-api/data-features/data-enrichment/token-metadata"
+                      "data-api/evm-api/token-api/endpoints/token-metadata",
+                      "data-api/evm-api/token-api/endpoints/token-score",
+                      "data-api/evm-api/token-api/metadata-and-info/token-score-timeseries"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/data-features/data-enrichment/token-prices",
-                      "data-api/data-features/safety-and-trust/liquidity-filtering",
-                      "data-api/data-features/prices/sale-prices",
-                      "data-api/data-features/prices/floor-prices"
+                      "data-api/evm-api/token-api/endpoints/token-price",
+                      "data-api/evm-api/token-api/prices/token-prices-batch",
+                      "data-api/evm-api/token-api/prices/ohlc"
                     ]
                   },
                   {
-                    "group": "Safety & Trust",
-                    "tag": "New Features",
+                    "group": "Transfers",
                     "pages": [
-                      "data-api/data-features/safety-and-trust/verified-contracts",
-                      "data-api/resources/spam-filtering",
-                      "data-api/data-features/token-scores"
+                      "data-api/evm-api/token-api/endpoints/token-transfers"
                     ]
                   },
                   {
-                    "group": "Search & Discovery",
+                    "group": "Holders",
                     "pages": [
-                      "data-api/data-features/search-and-discovery/token-filtering",
-                      "data-api/data-features/search-and-discovery/token-search"
+                      "data-api/evm-api/token-api/endpoints/token-holders",
+                      "data-api/evm-api/token-api/holders/token-holder-stats",
+                      "data-api/evm-api/token-api/holders/historical-token-holders"
                     ]
                   },
                   {
-                    "group": "Integrations",
+                    "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/data-features/integrations/supported-dexs",
-                      "data-api/data-features/integrations/de-fi-protocols",
-                      "data-api/data-features/integrations/nft-marketplaces"
+                      "data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
+                      "data-api/evm-api/token-api/swaps-and-pairs/pair-swaps",
+                      "data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
+                      "data-api/evm-api/token-api/swaps-and-pairs/pair-stats"
                     ]
-                  }
-                ]
-              },
-              {
-                "group": "Universal API",
-                "pages": [
-                  "universal-api/index",
+                  },
                   {
-                    "group": "Token API",
-                    "tag": "New features",
+                    "group": "Market Metrics",
                     "pages": [
-                      "universal-api/token-api/endpoints/token-search",
-                      "universal-api/token-api/endpoints/token-score",
-                      "data-api/universal-api/token-api/token-score-timeseries",
-                      "data-api/universal-api/token-api/filtered-tokens",
                       "universal-api/token-api/endpoints/token-analytics",
                       "universal-api/token-api/endpoints/token-analytics-multi",
                       "universal-api/token-api/endpoints/token-analytics-timeseries"
                     ]
                   },
                   {
-                    "group": "Market Metrics API",
+                    "group": "Search & Discovery",
                     "pages": [
-                      "universal-api/global-api/endpoints/trading-stats",
-                      "universal-api/global-api/endpoints/trading-stats-category",
-                      "universal-api/global-api/endpoints/trading-stats-timeseries",
-                      "universal-api/global-api/endpoints/trading-stats-category-timeseries"
+                      "universal-api/token-api/endpoints/token-search",
+                      "data-api/evm-api/token-api/search-and-discovery/filtered-tokens",
+                      "data-api/evm-api/token-api/search-and-discovery/top-gainers",
+                      "data-api/evm-api/token-api/search-and-discovery/top-losers",
+                      "data-api/evm-api/token-api/search-and-discovery/token-categories"
                     ]
                   },
                   {
-                    "group": "Entity API",
+                    "group": "Advanced Signals",
                     "pages": [
-                      "universal-api/entity-api/endpoints/entity-search",
-                      "universal-api/entity-api/endpoints/entity-by-id",
-                      "universal-api/entity-api/endpoints/entity-by-category",
-                      "universal-api/entity-api/endpoints/entity-categories"
+                      "data-api/evm-api/token-api/advanced-signals/snipers",
+                      "data-api/evm-api/token-api/advanced-signals/top-traders"
                     ]
                   }
                 ]
               },
               {
-                "group": "EVM API",
+                "group": "NFT API",
                 "pages": [
-                  "data-api/evm-index",
+                  "data-api/evm-api/nft-api/nft-api-overview",
                   {
-                    "group": "Wallet API",
+                    "group": "Metadata & Info",
                     "pages": [
-                      "data-api/wallet-api/index",
-                      {
-                        "group": "Activity",
-                        "pages": [
-                          "data-api/wallet-api/endpoints/wallet-history",
-                          "data-api/wallet-api/endpoints/token-transfers",
-                          "data-api/wallet-api/endpoints/wallet-swaps",
-                          "data-api/wallet-api/endpoints/nft-transfers",
-                          "data-api/wallet-api/endpoints/nft-trades-by-wallet",
-                          "data-api/wallet-api/endpoints/wallet-transactions",
-                          "data-api/wallet-api/endpoints/decoded-transactions",
-                          "data-api/evm-api/wallet-api/activity/chain-activity"
-                        ]
-                      },
-                      {
-                        "group": "Tokens",
-                        "pages": [
-                          "data-api/wallet-api/endpoints/token-balances",
-                          "data-api/evm-api/wallet-api/tokens/native-balance",
-                          "data-api/evm-api/wallet-api/tokens/native-balances-batch",
-                          "data-api/evm-api/wallet-api/approvals",
-                          "data-api/evm-api/wallet-api/tokens/token-balances-legacy"
-                        ]
-                      },
-                      {
-                        "group": "NFTs",
-                        "pages": [
-                          "data-api/evm-api/wallet-api/nft-balances/nft-balances",
-                          "data-api/evm-api/wallet-api/nft-balances/nft-collections"
-                        ]
-                      },
-                      {
-                        "group": "DeFi Positions",
-                        "pages": [
-                          "data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
-                          "data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
-                          "data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
-                        ]
-                      },
-                      {
-                        "group": "Net Worth & PnL",
-                        "pages": [
-                          "data-api/evm-api/wallet-api/net-worth",
-                          "data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
-                          "data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
-                        ]
-                      },
-                      {
-                        "group": "Identity",
-                        "pages": [
-                          "data-api/evm-api/wallet-api/identity/resolve-address",
-                          "data-api/evm-api/wallet-api/identity/ens-lookup"
-                        ]
-                      }
+                      "data-api/evm-api/nft-api/endpoints/nft-metadata",
+                      "data-api/evm-api/nft-api/metadata-and-info/nft-metadata-batch",
+                      "data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
+                      "data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
+                      "data-api/evm-api/nft-api/metadata-and-info/collection-stats"
                     ]
                   },
                   {
-                    "group": "Token API",
-                    "tag": "New Features",
+                    "group": "Transfers",
                     "pages": [
-                      "data-api/evm-api/token-api/token-api-overview",
-                      {
-                        "group": "Metadata & Info",
-                        "tag": "New",
-                        "pages": [
-                          "data-api/evm-api/token-api/endpoints/token-metadata",
-                          "data-api/evm-api/token-api/endpoints/token-score",
-                          "data-api/evm-api/token-api/metadata-and-info/token-score-timeseries"
-                        ]
-                      },
-                      {
-                        "group": "Prices",
-                        "pages": [
-                          "data-api/evm-api/token-api/endpoints/token-price",
-                          "data-api/evm-api/token-api/prices/token-prices-batch",
-                          "data-api/evm-api/token-api/prices/ohlc"
-                        ]
-                      },
-                      {
-                        "group": "Transfers",
-                        "pages": [
-                          "data-api/evm-api/token-api/endpoints/token-transfers"
-                        ]
-                      },
-                      {
-                        "group": "Holders",
-                        "pages": [
-                          "data-api/evm-api/token-api/endpoints/token-holders",
-                          "data-api/evm-api/token-api/holders/token-holder-stats",
-                          "data-api/evm-api/token-api/holders/historical-token-holders"
-                        ]
-                      },
-                      {
-                        "group": "Swaps & Pairs",
-                        "pages": [
-                          "data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
-                          "data-api/evm-api/token-api/swaps-and-pairs/pair-swaps",
-                          "data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
-                          "data-api/evm-api/token-api/swaps-and-pairs/pair-stats"
-                        ]
-                      },
-                      {
-                        "group": "Market Metrics",
-                        "pages": [
-                          "universal-api/token-api/endpoints/token-analytics",
-                          "universal-api/token-api/endpoints/token-analytics-multi",
-                          "universal-api/token-api/endpoints/token-analytics-timeseries"
-                        ]
-                      },
-                      {
-                        "group": "Search & Discovery",
-                        "pages": [
-                          "universal-api/token-api/endpoints/token-search",
-                          "data-api/evm-api/token-api/search-and-discovery/filtered-tokens",
-                          "data-api/evm-api/token-api/search-and-discovery/token-categories"
-                        ]
-                      },
-                      {
-                        "group": "Advanced Signals",
-                        "pages": [
-                          "data-api/evm-api/token-api/advanced-signals/snipers",
-                          "data-api/evm-api/token-api/advanced-signals/top-traders"
-                        ]
-                      }
+                      "data-api/evm-api/nft-api/transfers/token-id-transfers",
+                      "data-api/evm-api/nft-api/transfers/collection-transfers"
                     ]
                   },
                   {
-                    "group": "NFT API",
+                    "group": "Ownership",
                     "pages": [
-                      "data-api/evm-api/nft-api/nft-api-overview",
-                      {
-                        "group": "Metadata & Info",
-                        "pages": [
-                          "data-api/evm-api/nft-api/endpoints/nft-metadata",
-                          "data-api/evm-api/nft-api/metadata-and-info/nft-metadata-batch",
-                          "data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
-                          "data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
-                          "data-api/evm-api/nft-api/metadata-and-info/collection-stats"
-                        ]
-                      },
-                      {
-                        "group": "Transfers",
-                        "pages": [
-                          "data-api/evm-api/nft-api/transfers/token-id-transfers",
-                          "data-api/evm-api/nft-api/transfers/collection-transfers"
-                        ]
-                      },
-                      {
-                        "group": "Ownership",
-                        "pages": [
-                          "data-api/evm-api/nft-api/ownership/owners-by-contract",
-                          "data-api/evm-api/nft-api/ownership/owners-by-token-id"
-                        ]
-                      },
-                      {
-                        "group": "Prices",
-                        "pages": [
-                          "data-api/evm-api/nft-api/floor-price-collection",
-                          "data-api/evm-api/nft-api/prices/floor",
-                          "data-api/evm-api/nft-api/historical-floor-price",
-                          "data-api/evm-api/nft-api/prices/sale-price-by-contract",
-                          "data-api/evm-api/nft-api/prices/sale-price-by-token-id"
-                        ]
-                      },
-                      {
-                        "group": "Trades",
-                        "pages": [
-                          "data-api/evm-api/nft-api/trades/collection-trades",
-                          "data-api/evm-api/nft-api/trades/trades-by-token-id"
-                        ]
-                      },
-                      {
-                        "group": "Traits & Rarity",
-                        "pages": [
-                          "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection",
-                          "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection-paginated",
-                          "data-api/evm-api/nft-api/traits-and-rarity/nfts-by-traits"
-                        ]
-                      },
-                      {
-                        "group": "Discovery",
-                        "pages": [
-                          "evm-api/nft-api/discovery/untitled-page",
-                          "data-api/evm-api/nft-api/discovery/nfts-by-volume"
-                        ]
-                      },
-                      {
-                        "group": "Utilities",
-                        "pages": [
-                          "data-api/evm-api/nft-api/utilities/resync-nft-metadata",
-                          "data-api/evm-api/nft-api/utilities/resync-nft-traits"
-                        ]
-                      }
+                      "data-api/evm-api/nft-api/ownership/owners-by-contract",
+                      "data-api/evm-api/nft-api/ownership/owners-by-token-id"
                     ]
                   },
                   {
-                    "group": "Price API",
+                    "group": "Prices",
                     "pages": [
-                      "v1-0/data-api/evm-api/price-api/price-api-overview",
-                      "data-api/evm-api/price-api/token-price",
-                      "data-api/evm-api/price-api/token-prices-batch",
-                      "data-api/evm-api/price-api/ohlc",
-                      "data-api/evm-api/price-api/collection-floor-price",
-                      "data-api/evm-api/price-api/token-id-floor-price",
-                      "data-api/evm-api/price-api/timeseries-floor-price",
-                      "data-api/evm-api/price-api/sale-prices-by-collection",
-                      "data-api/evm-api/price-api/sale-price-by-token-id"
+                      "data-api/evm-api/nft-api/floor-price-collection",
+                      "data-api/evm-api/nft-api/prices/floor",
+                      "data-api/evm-api/nft-api/historical-floor-price",
+                      "data-api/evm-api/nft-api/prices/sale-price-by-contract",
+                      "data-api/evm-api/nft-api/prices/sale-price-by-token-id"
                     ]
                   },
                   {
-                    "group": "DeFi API",
+                    "group": "Trades",
                     "pages": [
-                      "v1-0/data-api/evm-api/de-fi-api/de-fi-api-overview",
-                      "evm-api/defi-api/endpoints/wallet-protocols",
-                      "evm-api/defi-api/endpoints/wallet-positions",
-                      "evm-api/defi-api/endpoints/wallet-positions-detailed"
+                      "data-api/evm-api/nft-api/trades/collection-trades",
+                      "data-api/evm-api/nft-api/trades/trades-by-token-id"
                     ]
                   },
                   {
-                    "group": "Blockchain API",
+                    "group": "Traits & Rarity",
                     "pages": [
-                      "v1-0/data-api/evm-api/blockchain-api/blockchain-api-overview",
-                      "data-api/evm-api/blockchain-api/block-by-hash",
-                      "data-api/evm-api/blockchain-api/block-by-date",
-                      "data-api/evm-api/blockchain-api/latest-block",
-                      "data-api/evm-api/blockchain-api/transaction-by-hash",
-                      "data-api/evm-api/blockchain-api/transaction-by-hash-decoded",
-                      "data-api/evm-api/blockchain-api/address-transactions",
-                      "data-api/evm-api/blockchain-api/address-transactions-1"
+                      "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection",
+                      "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection-paginated",
+                      "data-api/evm-api/nft-api/traits-and-rarity/nfts-by-traits"
+                    ]
+                  },
+                  {
+                    "group": "Discovery",
+                    "pages": [
+                      "evm-api/nft-api/discovery/untitled-page",
+                      "data-api/evm-api/nft-api/discovery/nfts-by-volume"
+                    ]
+                  },
+                  {
+                    "group": "Utilities",
+                    "pages": [
+                      "data-api/evm-api/nft-api/utilities/resync-nft-metadata",
+                      "data-api/evm-api/nft-api/utilities/resync-nft-traits"
                     ]
                   }
                 ]
               },
               {
-                "group": "Solana API",
+                "group": "Price API",
                 "pages": [
-                  "data-api/solana-index",
+                  "v1-0/data-api/evm-api/price-api/price-api-overview",
+                  "data-api/evm-api/price-api/token-price",
+                  "data-api/evm-api/price-api/token-prices-batch",
+                  "data-api/evm-api/price-api/ohlc",
+                  "data-api/evm-api/price-api/collection-floor-price",
+                  "data-api/evm-api/price-api/token-id-floor-price",
+                  "data-api/evm-api/price-api/timeseries-floor-price",
+                  "data-api/evm-api/price-api/sale-prices-by-collection",
+                  "data-api/evm-api/price-api/sale-price-by-token-id"
+                ]
+              },
+              {
+                "group": "DeFi API",
+                "pages": [
+                  "v1-0/data-api/evm-api/de-fi-api/de-fi-api-overview",
+                  "evm-api/defi-api/endpoints/wallet-protocols",
+                  "evm-api/defi-api/endpoints/wallet-positions",
+                  "evm-api/defi-api/endpoints/wallet-positions-detailed"
+                ]
+              },
+              {
+                "group": "Blockchain API",
+                "pages": [
+                  "v1-0/data-api/evm-api/blockchain-api/blockchain-api-overview",
+                  "data-api/evm-api/blockchain-api/block-by-hash",
+                  "data-api/evm-api/blockchain-api/block-by-date",
+                  "data-api/evm-api/blockchain-api/latest-block",
+                  "data-api/evm-api/blockchain-api/transaction-by-hash",
+                  "data-api/evm-api/blockchain-api/transaction-by-hash-decoded",
+                  "data-api/evm-api/blockchain-api/address-transactions",
+                  "data-api/evm-api/blockchain-api/address-transactions-1"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Solana API",
+            "pages": [
+              "data-api/solana-index",
+              {
+                "group": "Wallet API",
+                "pages": [
+                  "data-api/solana-api/wallet-api/native-balance",
+                  "data-api/solana-api/wallet-api/portfolio",
+                  "data-api/solana-api/wallet-api/token-balances",
+                  "data-api/solana-api/wallet-api/nft-balances",
+                  "data-api/solana-api/wallet-api/wallet-swaps"
+                ]
+              },
+              {
+                "group": "Token API",
+                "tag": "New features",
+                "pages": [
                   {
-                    "group": "Wallet API",
-                    "pages": [
-                      "data-api/solana-api/wallet-api/native-balance",
-                      "data-api/solana-api/wallet-api/portfolio",
-                      "data-api/solana-api/wallet-api/token-balances",
-                      "data-api/solana-api/wallet-api/nft-balances",
-                      "data-api/solana-api/wallet-api/wallet-swaps"
-                    ]
-                  },
-                  {
-                    "group": "Token API",
+                    "group": "Metadata & Info",
                     "tag": "New features",
                     "pages": [
-                      {
-                        "group": "Metadata & Info",
-                        "tag": "New features",
-                        "pages": [
-                          "data-api/solana-api/token-api/token-metadata",
-                          "data-api/solana-api/token-api/token-score"
-                        ]
-                      },
-                      {
-                        "group": "Prices",
-                        "pages": [
-                          "data-api/solana-api/token-api/prices/token-p-rice",
-                          "data-api/solana-api/token-api/prices/token-price-batch",
-                          "data-api/solana-api/token-api/prices/ohlc"
-                        ]
-                      },
-                      {
-                        "group": "Holders",
-                        "pages": [
-                          "data-api/solana-api/token-api/holders/top-holders",
-                          "data-api/solana-api/token-api/holders/holder-metrics",
-                          "data-api/solana-api/token-api/holders/historical-holders"
-                        ]
-                      },
-                      {
-                        "group": "Swaps & Pairs",
-                        "pages": [
-                          "data-api/solana-api/token-api/swaps-and-pairs/token-swaps",
-                          "data-api/solana-api/token-api/swaps-and-pairs/pair-swaps",
-                          "data-api/solana-api/token-api/swaps-and-pairs/token-pairs",
-                          "data-api/solana-api/token-api/swaps-and-pairs/pair-stats"
-                        ]
-                      },
-                      {
-                        "group": "Market Metrics",
-                        "pages": [
-                          "data-api/solana-api/token-api/market-metrics/token-analytics",
-                          "data-api/solana-api/token-api/market-metrics/token-analytics-batch",
-                          "data-api/solana-api/token-api/market-metrics/token-analytics-timeseries"
-                        ]
-                      },
-                      {
-                        "group": "Search & Discovery",
-                        "pages": [
-                          "data-api/solana-api/token-api/search-and-discovery/token-search",
-                          "data-api/solana-api/token-api/search-and-discovery/filtered-tokens",
-                          "data-api/solana-api/token-api/search-and-discovery/pump-fun-new-tokens",
-                          "data-api/solana-api/token-api/search-and-discovery/pump-fund-bonding-tokens",
-                          "data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens"
-                        ]
-                      },
-                      {
-                        "group": "Advanced Signals",
-                        "pages": [
-                          "data-api/solana-api/token-api/advanced-signals/snipers"
-                        ]
-                      }
+                      "data-api/solana-api/token-api/token-metadata",
+                      "data-api/solana-api/token-api/token-score"
                     ]
                   },
                   {
-                    "group": "NFT API",
+                    "group": "Prices",
                     "pages": [
-                      "data-api/solana-api/nft-api/nft-metadata"
+                      "data-api/solana-api/token-api/prices/token-p-rice",
+                      "data-api/solana-api/token-api/prices/token-price-batch",
+                      "data-api/solana-api/token-api/prices/ohlc"
                     ]
                   },
                   {
-                    "group": "Price API",
+                    "group": "Holders",
                     "pages": [
-                      "data-api/solana-api/price-api/token-price",
-                      "v1-0/data-api/solana-api/price-api/token-prices-batch",
-                      "data-api/solana-api/price-api/ohlc"
+                      "data-api/solana-api/token-api/holders/top-holders",
+                      "data-api/solana-api/token-api/holders/holder-metrics",
+                      "data-api/solana-api/token-api/holders/historical-holders"
+                    ]
+                  },
+                  {
+                    "group": "Swaps & Pairs",
+                    "pages": [
+                      "data-api/solana-api/token-api/swaps-and-pairs/token-swaps",
+                      "data-api/solana-api/token-api/swaps-and-pairs/pair-swaps",
+                      "data-api/solana-api/token-api/swaps-and-pairs/token-pairs",
+                      "data-api/solana-api/token-api/swaps-and-pairs/pair-stats"
+                    ]
+                  },
+                  {
+                    "group": "Market Metrics",
+                    "pages": [
+                      "data-api/solana-api/token-api/market-metrics/token-analytics",
+                      "data-api/solana-api/token-api/market-metrics/token-analytics-batch",
+                      "data-api/solana-api/token-api/market-metrics/token-analytics-timeseries"
+                    ]
+                  },
+                  {
+                    "group": "Search & Discovery",
+                    "pages": [
+                      "data-api/solana-api/token-api/search-and-discovery/token-search",
+                      "data-api/solana-api/token-api/search-and-discovery/filtered-tokens",
+                      "data-api/solana-api/token-api/search-and-discovery/top-gainers",
+                      "data-api/solana-api/token-api/search-and-discovery/top-losers",
+                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-new-tokens",
+                      "data-api/solana-api/token-api/search-and-discovery/pump-fund-bonding-tokens",
+                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens"
+                    ]
+                  },
+                  {
+                    "group": "Advanced Signals",
+                    "pages": [
+                      "data-api/solana-api/token-api/advanced-signals/snipers"
                     ]
                   }
                 ]
               },
               {
-                "group": "Cortex API",
+                "group": "NFT API",
                 "pages": [
-                  "v1-0/data-api/cortex-api/overview",
-                  "v1-0/data-api/cortex-api/chat"
+                  "data-api/solana-api/nft-api/nft-metadata"
+                ]
+              },
+              {
+                "group": "Price API",
+                "pages": [
+                  "data-api/solana-api/price-api/token-price",
+                  "v1-0/data-api/solana-api/price-api/token-prices-batch",
+                  "data-api/solana-api/price-api/ohlc"
                 ]
               }
             ]
           },
           {
-            "tab": "Streams",
-            "groups": [
-              {
-                "group": "Introduction",
-                "pages": [
-                  "streams/index",
-                  "streams/pricing",
-                  "streams/supported-chains",
-                  {
-                    "group": "Quickstart",
-                    "pages": [
-                      "streams/quickstart/create-your-first-stream",
-                      "streams/quickstart/receive-your-first-webhook"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Streams Concepts",
-                "pages": [
-                  "streams/streams-concepts/stream-lifecycle-and-management",
-                  "streams/streams-concepts/parsed-data",
-                  "streams/streams-concepts/filters",
-                  "streams/streams-concepts/triggers",
-                  "streams/streams-concepts/re-org-handling",
-                  "streams/streams-concepts/rate-limits",
-                  "streams/streams-concepts/error-handling",
-                  "streams/streams-concepts/advanced-options"
-                ]
-              },
-              {
-                "group": "Webhooks",
-                "pages": [
-                  "streams/webhooks/webhook-delivery",
-                  "streams/webhooks/webhook-payloads",
-                  "streams/webhooks/confirmation-and-finality",
-                  "streams/webhooks/test-webhooks",
-                  "streams/webhooks/retries-and-replays"
-                ]
-              },
-              {
-                "group": "Security & Reliability",
-                "pages": [
-                  "streams/security-and-reliability/webhook-security",
-                  "streams/security-and-reliability/spam-detection",
-                  "streams/security-and-reliability/delivery-guarantees",
-                  "streams/security-and-reliability/ordering-and-idempotency"
-                ]
-              },
-              {
-                "group": "API Reference",
-                "pages": [
-                  {
-                    "group": "Streams",
-                    "pages": [
-                      "streams/api-reference/streams/create-streams",
-                      "streams/api-reference/streams/update-stream",
-                      "streams/api-reference/streams/delete-stream",
-                      "streams/api-reference/streams/get-stream-by-id",
-                      "streams/api-reference/streams/get-streams",
-                      "streams/api-reference/streams/duplicate-stream",
-                      "streams/api-reference/streams/update-stream-status",
-                      "v1-0/streams/api-reference/streams/get-stream-block-data",
-                      "v1-0/streams/api-reference/streams/get-block-data-to-webhook"
-                    ]
-                  },
-                  {
-                    "group": "Addresses",
-                    "pages": [
-                      "streams/api-reference/streams/get-addresses-by-stream",
-                      "streams/api-reference/streams/add-address-to-stream",
-                      "streams/api-reference/streams/replace-address-on-stream",
-                      "streams/api-reference/streams/delete-address-from-stream"
-                    ]
-                  },
-                  {
-                    "group": "History",
-                    "pages": [
-                      "streams/api-reference/history/get-history",
-                      "streams/api-reference/history/replay-history",
-                      "streams/api-reference/history/get-logs"
-                    ]
-                  },
-                  {
-                    "group": "Project",
-                    "pages": [
-                      "streams/api-reference/project/get-project-settings",
-                      "streams/api-reference/project/set-project-settings"
-                    ]
-                  },
-                  {
-                    "group": "Stats",
-                    "pages": [
-                      "streams/api-reference/stats/get-stats",
-                      "streams/api-reference/stats/get-stats-by-stream"
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "tab": "Datashare",
+            "group": "Cortex API",
             "pages": [
-              "datashare/index",
-              "datashare/early-access"
-            ]
-          },
-          {
-            "tab": "Data Indexer",
-            "pages": [
-              "data-indexer/index",
-              "data-indexer/early-access"
-            ]
-          },
-          {
-            "tab": "RPC Nodes",
-            "groups": [
-              {
-                "group": "Introduction",
-                "pages": [
-                  "nodes/index",
-                  "rpc-nodes/introduction/pricing",
-                  "rpc-nodes/introduction/supported-chains",
-                  {
-                    "group": "Resources",
-                    "pages": [
-                      "rpc-nodes/introduction/resources/json-rpc-overview",
-                      "rpc-nodes/introduction/resources/archive-requests",
-                      "rpc-nodes/introduction/resources/rpc-batch-requests",
-                      "rpc-nodes/introduction/resources/rpc-node-rate-limits"
-                    ]
-                  },
-                  {
-                    "group": "Quickstart",
-                    "pages": []
-                  }
-                ]
-              },
-              {
-                "group": "Ethereum RPC",
-                "pages": [
-                  "rpc-nodes/ethereum-rpc/overview",
-                  {
-                    "group": "Ethereum JSON-RPC API",
-                    "pages": [
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber",
-                      "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-chain-id",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-create-access-list",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-estimate-gas",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-fee-history",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-gas-price",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-balance",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-by-hash",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-by-number",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-transaction-count-by-hash",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-transaction-count-by-number",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-receipts",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-code",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-logs",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-proof",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-storage-at",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-by-hash",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-count",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-receipt",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-count-by-block-hash",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-count-by-block-number",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-max-priority-fee-per-gas",
-                      "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-send-raw-transaction"
-                    ]
-                  }
-                ]
-              },
-              {
-                "group": "Base RPC",
-                "pages": [
-                  "rpc-nodes/base-rpc/overview",
-                  {
-                    "group": "Base JSON-RPC API",
-                    "pages": [
-                      "rpc-nodes/base-json-rpc-api/eth-blockNumber",
-                      "rpc-nodes/base-json-rpc-api/eth-call",
-                      "rpc-nodes/base-json-rpc-api/eth-chain-id",
-                      "rpc-nodes/base-json-rpc-api/eth-create-access-list",
-                      "rpc-nodes/base-json-rpc-api/eth-estimate-gas",
-                      "rpc-nodes/base-json-rpc-api/eth-fee-history",
-                      "rpc-nodes/base-json-rpc-api/eth-gas-price",
-                      "rpc-nodes/base-json-rpc-api/eth-get-balance",
-                      "rpc-nodes/base-json-rpc-api/eth-get-block-by-hash",
-                      "rpc-nodes/base-json-rpc-api/eth-get-block-by-number",
-                      "rpc-nodes/base-json-rpc-api/eth-get-block-transaction-count-by-hash",
-                      "rpc-nodes/base-json-rpc-api/eth-get-block-transaction-count-by-number",
-                      "rpc-nodes/base-json-rpc-api/eth-get-block-receipts",
-                      "rpc-nodes/base-json-rpc-api/eth-get-code",
-                      "rpc-nodes/base-json-rpc-api/eth-get-logs",
-                      "rpc-nodes/base-json-rpc-api/eth-get-proof",
-                      "rpc-nodes/base-json-rpc-api/eth-get-storage-at",
-                      "rpc-nodes/base-json-rpc-api/eth-get-transaction-by-hash",
-                      "rpc-nodes/base-json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                      "rpc-nodes/base-json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                      "rpc-nodes/base-json-rpc-api/eth-get-transaction-count",
-                      "rpc-nodes/base-json-rpc-api/eth-get-transaction-receipt",
-                      "rpc-nodes/base-json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                      "rpc-nodes/base-json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                      "rpc-nodes/base-json-rpc-api/eth-get-uncle-count-by-block-hash",
-                      "rpc-nodes/base-json-rpc-api/eth-get-uncle-count-by-block-number",
-                      "rpc-nodes/base-json-rpc-api/eth-max-priority-fee-per-gas",
-                      "rpc-nodes/base-json-rpc-api/eth-send-raw-transaction"
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "tab": "Changelog",
-            "pages": [
-              "changelog",
-              "changelog/get-tokens-by-exchange-api"
+              "v1-0/data-api/cortex-api/overview",
+              "v1-0/data-api/cortex-api/chat"
             ]
           }
+        ]
+      },
+      {
+        "tab": "Streams",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "streams/index",
+              "streams/pricing",
+              "streams/supported-chains",
+              {
+                "group": "Quickstart",
+                "pages": [
+                  "streams/quickstart/create-your-first-stream",
+                  "streams/quickstart/receive-your-first-webhook"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Streams Concepts",
+            "pages": [
+              "streams/streams-concepts/stream-lifecycle-and-management",
+              "streams/streams-concepts/parsed-data",
+              "streams/streams-concepts/filters",
+              "streams/streams-concepts/triggers",
+              "streams/streams-concepts/re-org-handling",
+              "streams/streams-concepts/rate-limits",
+              "streams/streams-concepts/error-handling",
+              "streams/streams-concepts/advanced-options"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "streams/webhooks/webhook-delivery",
+              "streams/webhooks/webhook-payloads",
+              "streams/webhooks/confirmation-and-finality",
+              "streams/webhooks/test-webhooks",
+              "streams/webhooks/retries-and-replays"
+            ]
+          },
+          {
+            "group": "Security & Reliability",
+            "pages": [
+              "streams/security-and-reliability/webhook-security",
+              "streams/security-and-reliability/spam-detection",
+              "streams/security-and-reliability/delivery-guarantees",
+              "streams/security-and-reliability/ordering-and-idempotency"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              {
+                "group": "Streams",
+                "pages": [
+                  "streams/api-reference/streams/create-streams",
+                  "streams/api-reference/streams/update-stream",
+                  "streams/api-reference/streams/delete-stream",
+                  "streams/api-reference/streams/get-stream-by-id",
+                  "streams/api-reference/streams/get-streams",
+                  "streams/api-reference/streams/duplicate-stream",
+                  "streams/api-reference/streams/update-stream-status",
+                  "v1-0/streams/api-reference/streams/get-stream-block-data",
+                  "v1-0/streams/api-reference/streams/get-block-data-to-webhook"
+                ]
+              },
+              {
+                "group": "Addresses",
+                "pages": [
+                  "streams/api-reference/streams/get-addresses-by-stream",
+                  "streams/api-reference/streams/add-address-to-stream",
+                  "streams/api-reference/streams/replace-address-on-stream",
+                  "streams/api-reference/streams/delete-address-from-stream"
+                ]
+              },
+              {
+                "group": "History",
+                "pages": [
+                  "streams/api-reference/history/get-history",
+                  "streams/api-reference/history/replay-history",
+                  "streams/api-reference/history/get-logs"
+                ]
+              },
+              {
+                "group": "Project",
+                "pages": [
+                  "streams/api-reference/project/get-project-settings",
+                  "streams/api-reference/project/set-project-settings"
+                ]
+              },
+              {
+                "group": "Stats",
+                "pages": [
+                  "streams/api-reference/stats/get-stats",
+                  "streams/api-reference/stats/get-stats-by-stream"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Datashare",
+        "pages": [
+          "datashare/index",
+          "datashare/early-access"
+        ]
+      },
+      {
+        "tab": "Data Indexer",
+        "pages": [
+          "data-indexer/index",
+          "data-indexer/early-access"
+        ]
+      },
+      {
+        "tab": "RPC Nodes",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "nodes/index",
+              "rpc-nodes/introduction/pricing",
+              "rpc-nodes/introduction/supported-chains",
+              {
+                "group": "Resources",
+                "pages": [
+                  "rpc-nodes/introduction/resources/json-rpc-overview",
+                  "rpc-nodes/introduction/resources/archive-requests",
+                  "rpc-nodes/introduction/resources/rpc-batch-requests",
+                  "rpc-nodes/introduction/resources/rpc-node-rate-limits"
+                ]
+              },
+              {
+                "group": "Quickstart",
+                "pages": []
+              }
+            ]
+          },
+          {
+            "group": "Ethereum RPC",
+            "pages": [
+              "rpc-nodes/ethereum-rpc/overview",
+              {
+                "group": "Ethereum JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-blockNumber",
+                  "v1-0/rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-call",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-chain-id",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-fee-history",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-gas-price",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-balance",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-code",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-logs",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-proof",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/ethereum-rpc/ethereum-json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Base RPC",
+            "pages": [
+              "rpc-nodes/base-rpc/overview",
+              {
+                "group": "Base JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/base-json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/base-json-rpc-api/eth-call",
+                  "rpc-nodes/base-json-rpc-api/eth-chain-id",
+                  "rpc-nodes/base-json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/base-json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/base-json-rpc-api/eth-fee-history",
+                  "rpc-nodes/base-json-rpc-api/eth-gas-price",
+                  "rpc-nodes/base-json-rpc-api/eth-get-balance",
+                  "rpc-nodes/base-json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/base-json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/base-json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/base-json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/base-json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/base-json-rpc-api/eth-get-code",
+                  "rpc-nodes/base-json-rpc-api/eth-get-logs",
+                  "rpc-nodes/base-json-rpc-api/eth-get-proof",
+                  "rpc-nodes/base-json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/base-json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/base-json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/base-json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/base-json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/base-json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/base-json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/base-json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/base-json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/base-json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/base-json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/base-json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "pages": [
+          "changelog",
+          "changelog/get-tokens-by-exchange-api"
         ]
       }
     ]
