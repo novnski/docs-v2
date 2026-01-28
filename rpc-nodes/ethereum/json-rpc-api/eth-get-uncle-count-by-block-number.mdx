@@ -3,6 +3,36 @@ title: "eth_getUncleCountByBlockNumber"
 description: "Returns the number of uncles in a block from a block matching the given block number."
 ---
 
-import rpcMethod from '/snippets/rpc/eth-get-uncle-count-by-block-number.mdx'
+#### Path parameters
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
 
-<rpcMethod chain={eth}/>
+#### Request
+<ResponseField name="blockNumber" type="string" required>
+  Integer of a block number, or the string "earliest", "latest" or "pending"
+</ResponseField>
+
+#### Example request `params`
+```javascript
+[
+  "0x5BAE9E"
+]
+```
+<RequestExample>
+```shellscript curl
+curl https://site1.moralis-nodes.com/eth/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getUncleCountByBlockNumber", "params": ["0x5BAE9E"], "id": 1}'
+```
+</RequestExample>
+<ResponseExample>
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x0"
+}
+```
+</ResponseExample>

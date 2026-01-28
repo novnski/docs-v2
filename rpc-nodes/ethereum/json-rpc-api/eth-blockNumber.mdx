@@ -1,8 +1,32 @@
 ---
 title: "eth_blockNumber"
-description: "Returns the latest block number of the blockchain."
+description: "Returns the number of most recent block."
 ---
 
-import { RpcMethod } from '/snippets/rpc/eth-block-number.jsx'
-
-<RpcMethod chain="eth" />
+#### Path parameters
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+#### Request body
+No parameters required.
+#### Example request
+```javascript
+[]
+```
+<RequestExample>
+```shellscript curl
+curl https://site1.moralis-nodes.com/eth/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}'
+```
+</RequestExample>
+<ResponseExample>
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x4b7"
+}
+```
+</ResponseExample>
