@@ -193,7 +193,7 @@
                   {
                     "group": "Activity",
                     "pages": [
-                      "data-api/evm-api/wallet-api/endpoints/wallet-history.mdx",
+                      "data-api/evm-api/wallet-api/wallet-history.mdx",
                       "data-api/evm-api/wallet-api/token-transfers",
                       "data-api/evm-api/wallet-api/wallet-swaps",
                       "data-api/evm-api/wallet-api/nft-transfers",
@@ -404,9 +404,9 @@
                 "group": "DeFi API",
                 "pages": [
                   "data-api/evm-api/defi-api/index",
-                  "data-api/evm-api/defi-api/endpoints/wallet-protocols",
-                  "data-api/evm-api/defi-api/endpoints/wallet-positions",
-                  "data-api/evm-api/defi-api/endpoints/wallet-positions-detailed"
+                  "data-api/evm-api/defi-api/wallet-protocols",
+                  "data-api/evm-api/defi-api/wallet-positions",
+                  "data-api/evm-api/defi-api/wallet-positions-detailed"
                 ]
               },
               {
