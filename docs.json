@@ -157,6 +157,7 @@
                       "universal-api/token-api/endpoints/token-search",
                       "universal-api/token-api/endpoints/token-score",
                       "data-api/universal-api/token-api/token-score-timeseries",
+                      "data-api/universal-api/token-api/filtered-tokens",
                       "universal-api/token-api/endpoints/token-analytics",
                       "universal-api/token-api/endpoints/token-analytics-multi",
                       "universal-api/token-api/endpoints/token-analytics-timeseries"
@@ -302,7 +303,8 @@
                         "group": "Search & Discovery",
                         "pages": [
                           "universal-api/token-api/endpoints/token-search",
-                          "data-api/evm-api/token-api/search-and-discovery/filtered-tokens"
+                          "data-api/evm-api/token-api/search-and-discovery/filtered-tokens",
+                          "data-api/evm-api/token-api/search-and-discovery/token-categories"
                         ]
                       },
                       {
