@@ -185,28 +185,28 @@
           {
             "group": "EVM API",
             "pages": [
-              "data-api/evm-index",
+              "data-api/evm-api/evm-index",
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/wallet-api/index",
+                  "data-api/evm-api/wallet-api/index",
                   {
                     "group": "Activity",
                     "pages": [
-                      "data-api/wallet-api/endpoints/wallet-history",
-                      "data-api/wallet-api/endpoints/token-transfers",
-                      "data-api/wallet-api/endpoints/wallet-swaps",
-                      "data-api/wallet-api/endpoints/nft-transfers",
-                      "data-api/wallet-api/endpoints/nft-trades-by-wallet",
-                      "data-api/wallet-api/endpoints/wallet-transactions",
-                      "data-api/wallet-api/endpoints/decoded-transactions",
+                      "data-api/evm-api/wallet-api/wallet-history",
+                      "data-api/evm-api/wallet-api/token-transfers",
+                      "data-api/evm-api/wallet-api/wallet-swaps",
+                      "data-api/evm-api/wallet-api/nft-transfers",
+                      "data-api/evm-api/wallet-api/nft-trades-by-wallet",
+                      "data-api/evm-api/wallet-api/wallet-transactions",
+                      "data-api/evm-api/wallet-api/decoded-transactions",
                       "data-api/evm-api/wallet-api/activity/chain-activity"
                     ]
                   },
                   {
                     "group": "Tokens",
                     "pages": [
-                      "data-api/wallet-api/endpoints/token-balances",
+                      "data-api/evm-api/wallet-api/token-balances",
                       "data-api/evm-api/wallet-api/tokens/native-balance",
                       "data-api/evm-api/wallet-api/tokens/native-balances-batch",
                       "data-api/evm-api/wallet-api/approvals",
@@ -389,7 +389,7 @@
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/evm-api/price-api/price-api-overview",
+                  "data-api/evm-api/price-api/index",
                   "data-api/evm-api/price-api/token-price",
                   "data-api/evm-api/price-api/token-prices-batch",
                   "data-api/evm-api/price-api/ohlc",
@@ -403,16 +403,16 @@
               {
                 "group": "DeFi API",
                 "pages": [
-                  "data-api/evm-api/de-fi-api/de-fi-api-overview",
-                  "evm-api/defi-api/endpoints/wallet-protocols",
-                  "evm-api/defi-api/endpoints/wallet-positions",
-                  "evm-api/defi-api/endpoints/wallet-positions-detailed"
+                  "data-api/evm-api/defi-api/index",
+                  "data-api/evm-api/defi-api/endpoints/wallet-protocols",
+                  "data-api/evm-api/defi-api/endpoints/wallet-positions",
+                  "data-api/evm-api/defi-api/endpoints/wallet-positions-detailed"
                 ]
               },
               {
                 "group": "Blockchain API",
                 "pages": [
-                  "data-api/evm-api/blockchain-api/blockchain-api-overview",
+                  "data-api/evm-api/blockchain-api/index",
                   "data-api/evm-api/blockchain-api/block-by-hash",
                   "data-api/evm-api/blockchain-api/block-by-date",
                   "data-api/evm-api/blockchain-api/latest-block",
@@ -427,7 +427,7 @@
           {
             "group": "Solana API",
             "pages": [
-              "data-api/solana-index",
+              "data-api/solana-api/solana-index",
               {
                 "group": "Wallet API",
                 "pages": [
@@ -513,7 +513,7 @@
                 "group": "Price API",
                 "pages": [
                   "data-api/solana-api/price-api/token-price",
-                  "data-api/solana-api/price-api/token-prices-batch",
+                  "data-api/solana-api/token-api/prices/token-price-batch",
                   "data-api/solana-api/price-api/ohlc"
                 ]
               }
