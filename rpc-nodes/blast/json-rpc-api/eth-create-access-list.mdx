@@ -1,0 +1,97 @@
+---
+title: "eth_createAccessList"
+description: "Creates an access list that you can include in a transaction."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="from" type="string">
+  The address the transaction is sent from
+</ResponseField>
+
+<ResponseField name="to" type="string">
+  The address the transaction is directed to
+</ResponseField>
+
+<ResponseField name="gas" type="string">
+  Integer of the gas provided for the transaction execution
+</ResponseField>
+
+<ResponseField name="gasPrice" type="string">
+  Integer of the gasPrice used for each paid gas
+</ResponseField>
+
+<ResponseField name="maxPriorityFeePerGas" type="string">
+  Maximum fee per gas the sender is willing to pay to miners
+</ResponseField>
+
+<ResponseField name="maxFeePerGas" type="string">
+  Maximum total fee per gas the sender is willing to pay
+</ResponseField>
+
+<ResponseField name="value" type="string">
+  Integer of the value sent with this transaction
+</ResponseField>
+
+<ResponseField name="data" type="string">
+  Hash of the method signature and encoded parameters
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  {
+    "from": "0x8ba1f109551bd432803012645haca66c9834d7c6",
+    "to": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "gas": "0x76c0",
+    "gasPrice": "0x9184e72a000",
+    "value": "0x9184e72a",
+    "data": "0xa9059cbb0000000000000000000000008ba1f109551bd432803012645haca66c9834d7c60000000000000000000000000000000000000000000000000de0b6b3a7640000"
+  },
+  "latest"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/blast/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_createAccessList", "params": [{"from": "0x8ba1f109551bd432803012645haca66c9834d7c6", "to": "0x6b175474e89094c44da98b954eedeac495271d0f", "gas": "0x76c0", "gasPrice": "0x9184e72a000", "value": "0x9184e72a", "data": "0xa9059cbb0000000000000000000000008ba1f109551bd432803012645haca66c9834d7c60000000000000000000000000000000000000000000000000de0b6b3a7640000"}, "latest"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "accessList": [
+      {
+        "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+        "storageKeys": [
+          "0x0000000000000000000000000000000000000000000000000000000000000000"
+        ]
+      }
+    ],
+    "gasUsed": "0x7671"
+  }
+}
+```
+
+</ResponseExample>

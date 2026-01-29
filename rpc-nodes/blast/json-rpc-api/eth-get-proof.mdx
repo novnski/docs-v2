@@ -1,0 +1,77 @@
+---
+title: "eth_getProof"
+description: "Returns the account and storage values of the specified account including the Merkle-proof."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="address" type="string" required>
+  Address of the account or contract
+</ResponseField>
+
+<ResponseField name="storageKeys" type="array" required>
+  Array of storage-keys which should be proofed and included
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0x7F0d15C7FAae65896648C8273B6d7E43f58Fa842",
+  [
+    "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+  ],
+  "latest"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/blast/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getProof", "params": ["0x7F0d15C7FAae65896648C8273B6d7E43f58Fa842", ["0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"], "latest"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "address": "0x7F0d15C7FAae65896648C8273B6d7E43f58Fa842",
+    "accountProof": [
+      "0xf90211a090dcaf88c40c7bbc95a912cbdde67c175767b31173df9ee4b0d733bfdd511c43a0babe369f6b12092f49181ae04ca173fb68d1a5456f18d20fa32cba73954052bda0473ecf8a7e36a829e75039a3b055e51b8332cbf03324ab4af2066bbd6fbf0021fa0bbda34753d7aa6c38e603f360244e8f59611921d9e1f128372fec0d586d4f9e0a04e44caecff45c9891f74f6a2156735886eedf6f1a733628ebc802ec79d844648a0a5f3f2f7542148c973977c8a1e154c4300fec92f755f7846f1b734d3ab1d90e7a0e823850f50bf72baae9d1733a36a444ab65d0a6faaba404f0583ce0ca4dad92da0f7a00cbe7d4b30b11faea3ae61b7f1f2b315017e79a3de5ab2dc8bb46a59fdb37a09b3b8d0e0e4c1e3b2d3e8f7c6e5d4c3b2a1e0f9e8d7c6b5a4e3f2e1d0c9b8a7a0b1f8e8d7c6b5a4e3f2e1d0c9b8a7a6f5e4d3c2b1a0f9e8d7c6b5a4e3f2e1d0a0c9b8a7a6f5e4d3c2b1a0f9e8d7c6b5a4e3f2e1d0c9b8a7a6f5e4d3c2b1a0a0d7c6b5a4e3f2e1d0c9b8a7a6f5e4d3c2b1a0f9e8d7c6b5a4e3f2e1d0c9b8a7a08080"
+    ],
+    "balance": "0x0",
+    "codeHash": "0x5e61b0f7919ab4e6fc7cfa6f3f5f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f",
+    "nonce": "0x0",
+    "storageHash": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    "storageProof": [
+      {
+        "key": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+        "value": "0x1",
+        "proof": [
+          "0xf90211a090dcaf88c40c7bbc95a912cbdde67c175767b31173df9ee4b0d733bfdd511c43a0babe369f6b12092f49181ae04ca173fb68d1a5456f18d20fa32cba73954052bda0473ecf8a7e36a829e75039a3b055e51b8332cbf03324ab4af2066bbd6fbf0021fa0bbda34753d7aa6c38e603f360244e8f59611921d9e1f128372fec0d586d4f9e0a04e44caecff45c9891f74f6a2156735886eedf6f1a733628ebc802ec79d844648a0a5f3f2f7542148c973977c8a1e154c4300fec92f755f7846f1b734d3ab1d90e7a0e823850f50bf72baae9d1733a36a444ab65d0a6faaba404f0583ce0ca4dad92da0f7a00cbe7d4b30b11faea3ae61b7f1f2b315017e79a3de5ab2dc8bb46a59fdb37a09b3b8d0e0e4c1e3b2d3e8f7c6e5d4c3b2a1e0f9e8d7c6b5a4e3f2e1d0c9b8a7a0b1f8e8d7c6b5a4e3f2e1d0c9b8a7a6f5e4d3c2b1a0f9e8d7c6b5a4e3f2e1d0a0c9b8a7a6f5e4d3c2b1a0f9e8d7c6b5a4e3f2e1d0c9b8a7a6f5e4d3c2b1a0a0d7c6b5a4e3f2e1d0c9b8a7a6f5e4d3c2b1a0f9e8d7c6b5a4e3f2e1d0c9b8a7a08080"
+        ]
+      }
+    ]
+  }
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,91 @@
+---
+title: "eth_feeHistory"
+description: "Returns historical gas information for a range of blocks."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="blockCount" type="string" required>
+  Number of blocks in the requested range
+</ResponseField>
+
+<ResponseField name="newestBlock" type="string" required>
+  Highest number block of the requested range
+</ResponseField>
+
+<ResponseField name="rewardPercentiles" type="array">
+  Array of percentile values to sample from each block's effective priority fees per gas
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0x4",
+  "latest",
+  [25, 75]
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/zetachain/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_feeHistory", "params": ["0x4", "latest", [25, 75]], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "baseFeePerGas": [
+      "0x7",
+      "0x7",
+      "0x7",
+      "0x7",
+      "0x7"
+    ],
+    "gasUsedRatio": [
+      0.026089875,
+      0.406803,
+      0.010817,
+      0.5
+    ],
+	"baseFeePerBlobGas": [
+		"0x3319eb",
+		"0x350c54",
+		"0x364072",
+		"0x364072",
+		"0x32279d"
+	],
+	"blobGasUsedRatio": [
+		0.47619047619047616,
+		0.2857142857142857,
+		0,
+		0.3333333333333333
+	],
+    "oldestBlock": "0x11b9231",
+    "reward": [
+      ["0x4a817c800", "0x4a817c800"],
+      ["0x773593c0", "0x773593c0"],
+      ["0x0", "0x0"],
+      ["0x0", "0x0"]
+    ]
+  }
+}
+```
+
+</ResponseExample>
