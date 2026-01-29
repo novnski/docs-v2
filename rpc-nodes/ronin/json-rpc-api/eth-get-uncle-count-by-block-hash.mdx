@@ -1,0 +1,47 @@
+---
+title: "eth_getUncleCountByBlockHash"
+description: "Returns the number of uncles in a block from a block matching the given block hash."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="hash" type="string" required>
+  Hash of a block
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0x1d59ff54b1eb26b013ce3cb5fc9dab3705b415a67127a003c3e61eb445bb8df2"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/ronin/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getUncleCountByBlockHash", "params": ["0x1d59ff54b1eb26b013ce3cb5fc9dab3705b415a67127a003c3e61eb445bb8df2"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x1"
+}
+```
+
+</ResponseExample>

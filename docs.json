@@ -979,6 +979,84 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Gnosis RPC",
+            "pages": [
+              "rpc-nodes/gnosis/overview",
+              {
+                "group": "Gnosis JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/gnosis/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-call",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-code",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/gnosis/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Ronin RPC",
+            "pages": [
+              "rpc-nodes/ronin/overview",
+              {
+                "group": "Ronin JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/ronin/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/ronin/json-rpc-api/eth-call",
+                  "rpc-nodes/ronin/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/ronin/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/ronin/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/ronin/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/ronin/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-code",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/ronin/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/ronin/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
           }
         ]
       },

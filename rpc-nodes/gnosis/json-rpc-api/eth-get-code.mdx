@@ -1,0 +1,52 @@
+---
+title: "eth_getCode"
+description: "Returns code at a given address."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="address" type="string" required>
+  Address to get the code from
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+  "0x2"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/gnosis/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getCode", "params": ["0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b", "0x2"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x600160008035811a818181146012578301005b601b6001356025565b8060005260206000f25b600060078202905091905056"
+}
+```
+
+</ResponseExample>

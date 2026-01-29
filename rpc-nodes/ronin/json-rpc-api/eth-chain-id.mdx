@@ -1,0 +1,37 @@
+---
+title: "eth_chainId"
+description: "Returns the chain ID of the current connected node as described in EIP-695."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request body
+
+No parameters required.
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/ronin/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_chainId", "params": [], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x1"
+}
+```
+
+</ResponseExample>
