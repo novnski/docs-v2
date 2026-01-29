@@ -1,0 +1,53 @@
+---
+title: "Overview"
+description: "Explore zkSync JSON-RPC methods"
+---
+
+## Introduction
+
+zkSync is a Layer 2 scaling solution for Ethereum that uses zero-knowledge rollups to provide low-cost, high-throughput transactions while maintaining the security of the Ethereum network. It enables developers to build scalable decentralized applications (dApps) with faster transaction finality and lower fees. zkSync’s architecture is ideal for decentralized finance (DeFi), NFTs, and other applications requiring high-speed processing.
+
+## Supported Networks
+
+The zkSync RPC API is available for the following networks:
+
+1. **zkSync Mainnet**
+2. **zkSync Sepolia Testnet**
+
+## Network Details
+
+| **Network**        | **Chain ID** | **Path Parameter** |
+| :----------------- | :----------- | :----------------- |
+| **zkSync Mainnet** | 0x144 (324)  | `zksync`           |
+| **zkSync Sepolia** | 0x12c (300)  | `zksync-sepolia`   |
+
+## Supported RPC Methods
+
+- [eth_blockNumber](/rpc-nodes/zksync/json-rpc-api/eth-blockNumber)
+- [eth_call](/rpc-nodes/zksync/json-rpc-api/eth-call)
+- [eth_chainId](/rpc-nodes/zksync/json-rpc-api/eth-chain-id)
+- [eth_createAccessList](/rpc-nodes/zksync/json-rpc-api/eth-create-access-list)
+- [eth_estimateGas](/rpc-nodes/zksync/json-rpc-api/eth-estimate-gas)
+- [eth_feeHistory](/rpc-nodes/zksync/json-rpc-api/eth-fee-history)
+- [eth_gasPrice](/rpc-nodes/zksync/json-rpc-api/eth-gas-price)
+- [eth_getBalance](/rpc-nodes/zksync/json-rpc-api/eth-get-balance)
+- [eth_getBlockByHash](/rpc-nodes/zksync/json-rpc-api/eth-get-block-by-hash)
+- [eth_getBlockByNumber](/rpc-nodes/zksync/json-rpc-api/eth-get-block-by-number)
+- [eth_getBlockTransactionCountByHash](/rpc-nodes/zksync/json-rpc-api/eth-get-block-transaction-count-by-hash)
+- [eth_getBlockTransactionCountByNumber](/rpc-nodes/zksync/json-rpc-api/eth-get-block-transaction-count-by-number)
+- [eth_getBlockReceipts](/rpc-nodes/zksync/json-rpc-api/eth-get-block-receipts)
+- [eth_getCode](/rpc-nodes/zksync/json-rpc-api/eth-get-code)
+- [eth_getLogs](/streams/api-reference/history/get-logs)
+- [eth_getProof](/rpc-nodes/zksync/json-rpc-api/eth-get-proof)
+- [eth_getStorageAt](/rpc-nodes/zksync/json-rpc-api/eth-get-storage-at)
+- [eth_getTransactionByHash](/rpc-nodes/zksync/json-rpc-api/eth-get-transaction-by-hash)
+- [eth_getTransactionByBlockHashAndIndex](/rpc-nodes/zksync/json-rpc-api/eth-get-transaction-by-block-hash-and-index)
+- [eth_getTransactionByBlockNumberAndIndex](/rpc-nodes/zksync/json-rpc-api/eth-get-transaction-by-block-number-and-index)
+- [eth_getTransactionCount](/rpc-nodes/zksync/json-rpc-api/eth-get-transaction-count)
+- [eth_getTransactionReceipt](/rpc-nodes/zksync/json-rpc-api/eth-get-transaction-receipt)
+- [eth_getUncleByBlockHashAndIndex](/rpc-nodes/zksync/json-rpc-api/eth-get-uncle-by-block-hash-and-index)
+- [eth_getUncleByBlockNumberAndIndex](/rpc-nodes/zksync/json-rpc-api/eth-get-uncle-by-block-number-and-index)
+- [eth_getUncleCountByBlockHash](/rpc-nodes/zksync/json-rpc-api/eth-get-uncle-count-by-block-hash)
+- [eth_getUncleCountByBlockNumber](/rpc-nodes/zksync/json-rpc-api/eth-get-uncle-count-by-block-number)
+- [eth_maxPriorityFeePerGas](/rpc-nodes/zksync/json-rpc-api/eth-max-priority-fee-per-gas)
+- [eth_sendRawTransaction](/rpc-nodes/zksync/json-rpc-api/eth-send-raw-transaction)
