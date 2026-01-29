@@ -232,7 +232,7 @@
                     "group": "Net Worth & PnL",
                     "pages": [
                       "data-api/evm-api/wallet-api/net-worth",
-                      "data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary",
+                      "data-api/evm-api/wallet-api/net-worth-and-pn-l/wallet-pn-l-summary",
                       "data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
                     ]
                   },
@@ -373,7 +373,7 @@
                   {
                     "group": "Discovery",
                     "pages": [
-                      "evm-api/nft-api/discovery/untitled-page",
+                      "data-api/evm-api/nft-api/discovery/nfts-by-market-cap",
                       "data-api/evm-api/nft-api/discovery/nfts-by-volume"
                     ]
                   },
