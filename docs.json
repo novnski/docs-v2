@@ -1291,6 +1291,84 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "opBNB RPC",
+            "pages": [
+              "rpc-nodes/opbnb/overview",
+              {
+                "group": "opBNB JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/opbnb/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-call",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-code",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/opbnb/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Moonbeam RPC",
+            "pages": [
+              "rpc-nodes/moonbeam/overview",
+              {
+                "group": "Moonbeam JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-call",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-code",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/moonbeam/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
           }
         ]
       },
