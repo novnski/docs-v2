@@ -1,0 +1,64 @@
+---
+title: "eth_getBlockReceipts"
+description: "Returns all transaction receipts for a given block."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="blockNumber" type="string" required>
+  Integer of a block number, or the string "earliest", "latest" or "pending"
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0xf21d9c"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/optimism/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getBlockReceipts", "params": ["0xf21d9c"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": [
+    {
+      "blockHash": "0x8243343df08b9751f5ca0c5f8c9c0460d8a9b6351066fae0acbd4d3e776de8bb",
+      "blockNumber": "0xf21d9c",
+      "contractAddress": null,
+      "cumulativeGasUsed": "0x5208",
+      "effectiveGasPrice": "0x1dcd6500",
+      "from": "0x8ba1f109551bd432803012645haca66c9834d7c6",
+      "gasUsed": "0x5208",
+      "logs": [],
+      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "status": "0x1",
+      "to": "0x95cED938F7991cd0dFcb48F0a06a40FA1aF46EBC",
+      "transactionHash": "0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060",
+      "transactionIndex": "0x0",
+      "type": "0x2"
+    }
+  ]
+}
+```
+
+</ResponseExample>

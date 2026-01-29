@@ -1,0 +1,37 @@
+---
+title: "eth_maxPriorityFeePerGas"
+description: "Returns a suggestion for the max priority fee per gas for dynamic fee transactions in wei."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+No parameters required.
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/arbitrum/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_maxPriorityFeePerGas", "params": [], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x59682f00"
+}
+```
+
+</ResponseExample>

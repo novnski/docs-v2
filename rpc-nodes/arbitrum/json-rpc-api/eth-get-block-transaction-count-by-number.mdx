@@ -1,0 +1,47 @@
+---
+title: "eth_getBlockTransactionCountByNumber"
+description: "Returns the number of transactions in a block matching the given block number."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="blockNumber" type="string" required>
+  Integer of a block number, or the string "earliest", "latest" or "pending"
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0xe8"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/arbitrum/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getBlockTransactionCountByNumber", "params": ["0xe8"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x0"
+}
+```
+
+</ResponseExample>

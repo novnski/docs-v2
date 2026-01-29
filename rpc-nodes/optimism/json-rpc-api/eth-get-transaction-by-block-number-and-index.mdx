@@ -1,0 +1,67 @@
+---
+title: "eth_getTransactionByBlockNumberAndIndex"
+description: "Returns information about a transaction by block number and transaction index position."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="blockNumber" type="string" required>
+  A block number, or the string "earliest", "latest" or "pending"
+</ResponseField>
+
+<ResponseField name="index" type="string" required>
+  The transaction index position
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0x5BAE9E",
+  "0x0"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/optimism/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getTransactionByBlockNumberAndIndex", "params": ["0x5BAE9E", "0x0"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "blockHash": "0x1d59ff54b1eb26b013ce3cb5fc9dab3705b415a67127a003c3e61eb445bb8df2",
+    "blockNumber": "0x5BAE9E",
+    "from": "0xa7d9ddbe1f17865597fbd27ec712455208b6b76d",
+    "gas": "0xc350",
+    "gasPrice": "0x4a817c800",
+    "hash": "0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060",
+    "input": "0x68656c6c6f21",
+    "nonce": "0x15",
+    "to": "0xf02c1c8e6114b1dbe8937a39260b5b0a374432bb",
+    "transactionIndex": "0x0",
+    "value": "0xf3dbb76162000",
+    "v": "0x25",
+    "r": "0x1b5e176d927f8b73e1c20c2e8d6f80c5c5e0f2e5c5e0f2e5c5e0f2e5c5e0f2e5",
+    "s": "0x5e176d927f8b73e1c20c2e8d6f80c5c5e0f2e5c5e0f2e5c5e0f2e5c5e0f2e5c5"
+  }
+}
+```
+
+</ResponseExample>
