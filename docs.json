@@ -1213,6 +1213,84 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Mantle RPC",
+            "pages": [
+              "rpc-nodes/mantle/overview",
+              {
+                "group": "Mantle JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/mantle/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/mantle/json-rpc-api/eth-call",
+                  "rpc-nodes/mantle/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/mantle/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/mantle/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/mantle/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/mantle/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-code",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/mantle/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/mantle/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Polygon zkEVM RPC",
+            "pages": [
+              "rpc-nodes/polygon-zkevm/overview",
+              {
+                "group": "Polygon zkEVM JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-call",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-code",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
           }
         ]
       },
