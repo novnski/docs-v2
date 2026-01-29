@@ -286,6 +286,7 @@
                     "pages": [
                       "data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
                       "data-api/evm-api/token-api/swaps-and-pairs/pair-swaps",
+                      "data-api/evm-api/token-api/swaps-and-pairs/wallet-swaps",
                       "data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
                       "data-api/evm-api/token-api/swaps-and-pairs/pair-stats"
                     ]
@@ -471,6 +472,7 @@
                     "pages": [
                       "data-api/solana-api/token-api/swaps-and-pairs/token-swaps",
                       "data-api/solana-api/token-api/swaps-and-pairs/pair-swaps",
+                      "data-api/solana-api/token-api/swaps-and-pairs/wallet-swaps",
                       "data-api/solana-api/token-api/swaps-and-pairs/token-pairs",
                       "data-api/solana-api/token-api/swaps-and-pairs/pair-stats"
                     ]
@@ -492,7 +494,8 @@
                       "data-api/solana-api/token-api/search-and-discovery/top-losers",
                       "data-api/solana-api/token-api/search-and-discovery/pump-fun-new-tokens",
                       "data-api/solana-api/token-api/search-and-discovery/pump-fund-bonding-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens"
+                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens",
+                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-bonding-status"
                     ]
                   },
                   {
