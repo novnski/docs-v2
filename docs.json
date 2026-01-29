@@ -193,7 +193,7 @@
                   {
                     "group": "Activity",
                     "pages": [
-                      "data-api/evm-api/wallet-api/wallet-history.mdx",
+                      "data-api/evm-api/wallet-api/activity/wallet-history",
                       "data-api/evm-api/wallet-api/token-transfers",
                       "data-api/evm-api/wallet-api/wallet-swaps",
                       "data-api/evm-api/wallet-api/nft-transfers",
