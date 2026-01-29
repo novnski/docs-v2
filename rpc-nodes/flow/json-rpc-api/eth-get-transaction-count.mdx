@@ -1,0 +1,52 @@
+---
+title: "eth_getTransactionCount"
+description: "Returns the number of transactions sent from an address."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="address" type="string" required>
+  Address to get transaction count for
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  "0x407d73d8a49eeb85d32cf465507dd71d507100c1",
+  "latest"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/flow/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_getTransactionCount", "params": ["0x407d73d8a49eeb85d32cf465507dd71d507100c1", "latest"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x1"
+}
+```
+
+</ResponseExample>
