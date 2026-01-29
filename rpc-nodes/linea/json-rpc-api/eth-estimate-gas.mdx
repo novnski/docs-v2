@@ -1,0 +1,76 @@
+---
+title: "eth_estimateGas"
+description: "Generates and returns an estimate of how much gas is necessary to allow the transaction to complete."
+---
+
+#### Path parameters
+
+<ResponseField name="apiKey" type="string" required>
+  Your API key for authentication
+</ResponseField>
+
+#### Request
+
+<ResponseField name="from" type="string">
+  The address the transaction is sent from
+</ResponseField>
+
+<ResponseField name="to" type="string">
+  The address the transaction is directed to
+</ResponseField>
+
+<ResponseField name="gas" type="string">
+  Integer of the gas provided for the transaction execution
+</ResponseField>
+
+<ResponseField name="gasPrice" type="string">
+  Integer of the gasPrice used for each paid gas
+</ResponseField>
+
+<ResponseField name="value" type="string">
+  Integer of the value sent with this transaction
+</ResponseField>
+
+<ResponseField name="data" type="string">
+  Hash of the method signature and encoded parameters
+</ResponseField>
+
+<ResponseField name="tag" type="string">
+  Tag for the state ("latest", "earliest", "pending"). Defaults to "latest" if null
+</ResponseField>
+
+#### Example request `params`
+
+```javascript
+[
+  {
+    "from": "0x8D97689C9818892B700e27F316cc3E41e17fBeb9",
+    "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601",
+    "value": "0x186a0"
+  },
+  "latest"
+]
+```
+
+<RequestExample>
+
+```shellscript curl
+curl https://site1.moralis-nodes.com/linea/:apiKey \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc": "2.0", "method": "eth_estimateGas", "params": [{"from": "0x8D97689C9818892B700e27F316cc3E41e17fBeb9", "to": "0xd3CdA913deB6f67967B99D67aCDFa1712C293601", "value": "0x186a0"}, "latest"], "id": 1}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json JSON
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x5208"
+}
+```
+
+</ResponseExample>

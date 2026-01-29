@@ -1,6 +1,6 @@
 ---
-title: "eth_getBlockByNumber"
-description: "Returns information about a block by block number."
+title: "eth_getBlockByHash"
+description: "Returns information about a block by hash."
 ---
 
 #### Path parameters
@@ -11,8 +11,8 @@ description: "Returns information about a block by block number."
 
 #### Request
 
-<ResponseField name="blockNumber" type="string" required>
-  Integer of a block number, or the string "earliest", "latest" or "pending"
+<ResponseField name="hash" type="string" required>
+  Hash of a block
 </ResponseField>
 
 <ResponseField name="fullTransactionObjects" type="boolean" required>
@@ -23,18 +23,18 @@ description: "Returns information about a block by block number."
 
 ```javascript
 [
-  "0x1b4",
-  true
+  "0xd5f1812548be429cbdc6376b29611fc49e06f1359758c4ceaaa3b393e2239f9c",
+  false
 ]
 ```
 
 <RequestExample>
 
 ```shellscript curl
-curl https://site1.moralis-nodes.com/polygon/:apiKey \
+curl https://site1.moralis-nodes.com/linea/:apiKey \
   -X POST \
   -H "Content-Type: application/json" \
-  -d '{"jsonrpc": "2.0", "method": "eth_getBlockByNumber", "params": ["0x1b4", true], "id": 1}'
+  -d '{"jsonrpc": "2.0", "method": "eth_getBlockByHash", "params": ["0xd5f1812548be429cbdc6376b29611fc49e06f1359758c4ceaaa3b393e2239f9c", false], "id": 1}'
 ```
 
 </RequestExample>
