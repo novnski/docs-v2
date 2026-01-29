@@ -940,6 +940,45 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Avalanche RPC",
+            "pages": [
+              "rpc-nodes/avalanche/overview",
+              {
+                "group": "Avalanche JSON-RPC API",
+                "pages": [
+                  "rpc-nodes/avalanche/json-rpc-api/eth-blockNumber",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-call",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-chain-id",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-create-access-list",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-estimate-gas",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-fee-history",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-gas-price",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-balance",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-by-hash",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-by-number",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-receipts",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-code",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-logs",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-proof",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-storage-at",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-by-hash",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-count",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-receipt",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/avalanche/json-rpc-api/eth-send-raw-transaction"
+                ]
+              }
+            ]
           }
         ]
       },
