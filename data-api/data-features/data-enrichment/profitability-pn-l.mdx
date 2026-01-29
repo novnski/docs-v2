@@ -21,7 +21,7 @@ PnL data is designed for:
 
 PnL data is exposed through the following endpoints:
 
-- [Wallet PnL Summary](/data-api/evm-api/wallet-api/pn-l/wallet-pn-l-summary)\
+- [Wallet PnL Summary](/data-api/evm-api/wallet-api/net-worth-and-pn-l/wallet-pn-l-summary)\
   High-level profitability metrics for a wallet
 - [Wallet PnL Breakdown](/data-api/evm-api/wallet-api/pn-l/wallet-pn-l)\
   Token-by-token profitability details
@@ -42,7 +42,7 @@ Moralis currently supports **realized PnL only**.
 You can calculate unrealized PnL yourself by combining:
 
 - **Cost basis / realized trade data** from the [PnL endpoints](/data-api/evm-api/wallet-api/pn-l/wallet-pn-l)
-- **Real-time token balances + real-time prices** from the [Token Balances](/data-api/wallet-api/endpoints/token-balances) endpoint
+- **Real-time token balances + real-time prices** from the [Token Balances](/data-api/evm-api/wallet-api/token-balances) endpoint
 
 A common approach is:
 
@@ -168,7 +168,7 @@ This covers the vast majority of actively traded ERC20 tokens.
 
 ### Native Tokens (e.g. ETH)
 
-- **Native tokens _are supported_ for PnL**, **but only when traded against stablecoins**.
+- **_Native tokens are supported for PnL_**, **but only when traded against stablecoins**.
 - Trades between native tokens and stablecoins are used to establish realized PnL.
 
 Examples:

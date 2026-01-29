@@ -1,7 +1,6 @@
 ---
 title: "NFT Rarity"
-description: "Understand how Moralis calculates NFT rarity across collections using trait frequency analysis, rarity scores, rankings, and refreshable on-demand processing for ERC721 and ERC1155 NFTs.
-"
+description: "Understand how Moralis calculates NFT rarity across collections using trait frequency analysis, rarity scores, rankings, and refreshable on-demand processing for ERC721 and ERC1155 NFTs. "
 ---
 
 ## Overview
@@ -16,7 +15,7 @@ Related pages:
 
 - [NFT Metadata](/data-api/data-features/data-enrichment/nft-metadata)
 - [NFT Image Previews (CDN)](/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn)
-- [NFT API Overview](/data-api/nft-api/index)
+- [NFT API Overview](/data-api/evm-api/nft-api/index)
 
 ---
 
@@ -30,11 +29,11 @@ The rarity calculation process consists of two layers:
 
 For every trait across the collection, we compute:
 
-- **count**\
+- `count`\
   Number of NFTs that contain this trait
-- **percentage**\
+- `percentage`\
   Percentage of the collection that contains this trait
-- **rarity_label**\
+- `rarity_label`\
   Human-readable label based on trait frequency\
   _(e.g. “Top 1% trait”, “Top 10% trait”)_
 
@@ -46,13 +45,13 @@ This makes rarity explainable, not just numeric.
 
 For each NFT, we compute:
 
-- **rarity_score**\
+- `rarity_score`\
   Numerical score derived from the combined rarity of all its traits
-- **rarity_rank**\
+- `rarity_rank`\
   Rank of the NFT within the collection (1 = rarest)
-- **rarity_percentage**\
+- `rarity_percentage`\
   Relative rarity compared to the entire collection
-- **rarity_label**\
+- `rarity_label`\
   Human-readable summary (e.g. “Top 1% rarity”)
 
 These fields are returned directly in supported NFT endpoints.

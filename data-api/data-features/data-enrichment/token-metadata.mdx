@@ -9,7 +9,7 @@ This page explains what data comes from where, how to interpret key fields, and 
 
 Related pages:
 
-- [Token API Overview](/data-api/token-api/index)
+- [Token API Overview](/data-api/evm-api/token-api/token-api-overview)
 - [Token Scores](/data-api/data-features/token-scores)
 - [Verified Contracts](/data-api/data-features/safety-and-trust/verified-contracts)
 - [Spam Filtering](/data-api/resources/spam-filtering)
@@ -43,7 +43,7 @@ These values are enriched using trusted external sources and Moralis internal sy
 - `links` (website, twitter, telegram, etc.)
 - `security_score`
 - `possible_spam`
-- `verified_contract` 
+- `verified_contract`
 - `circulating_supply` (sourced from CoinGecko where available)
 - `market_cap`, `fully_diluted_valuation`
 - `address_label` (human-readable label)
@@ -124,7 +124,7 @@ See:
 ### Identity
 
 - `address_label`: Human-readable label (useful for UI)
-- `name`**, **`symbol`**, **`decimals`: Standard ERC-20 fields
+- `name`, `symbol`, `decimals`: Standard ERC-20 fields
 - `logo`: Offchain logo URL (may be missing for new/unknown tokens)
 
 Related:
@@ -135,7 +135,7 @@ Related:
 
 ### Supply & valuation
 
-- `total_supply`**/ ** `total_supply_formatted`: Onchain total supply
+- `total_supply`/  `total_supply_formatted`: Onchain total supply
 - `circulating_supply`: Offchain circulating supply (CoinGecko where available)
 - `market_cap`: Typically `price × circulating_supply`
 - `fully_diluted_valuation`**(FDV)** : Typically `price × total_supply`

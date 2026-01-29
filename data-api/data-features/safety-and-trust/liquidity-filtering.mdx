@@ -12,7 +12,7 @@ It ensures that prices are only derived from pools with sufficient onchain liqui
 Liquidity filtering is applied across:
 
 - [Token Prices](/data-api/evm-api/token-api/prices/token-prices-batch)
-- [Wallet Token Balances](/data-api/wallet-api/endpoints/token-balances) (with prices)
+- [Wallet Token Balances](/data-api/evm-api/wallet-api/token-balances) (with prices)
 - [Wallet Net Worth](/data-api/evm-api/wallet-api/net-worth)
 - Other price-dependent features
 
@@ -83,11 +83,11 @@ This is especially important for:
 
 When a pool fails liquidity filtering, behavior depends on the endpoint.
 
-- [Get Token Price](/evm-api/price-api/endpoints/token-price)\
+- [Get Token Price](/data-api/evm-api/token-api/endpoints/token-price)\
   Returns a `404` error indicating insufficient liquidity
 - [Get Multiple Token Prices](/data-api/evm-api/token-api/prices/token-prices-batch)\
   The token is omitted from the response
-- [Wallet Token Balances](/data-api/wallet-api/endpoints/token-balances) (with prices)\
+- [Wallet Token Balances](/data-api/evm-api/wallet-api/token-balances) (with prices)\
   Token price is returned as `null`
 - [Wallet Net Worth](/data-api/evm-api/wallet-api/net-worth)\
   Token is excluded from the net worth calculation
