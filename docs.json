@@ -637,6 +637,7 @@
         "tab": "Datashare",
         "pages": [
           "datashare/index",
+          "datashare/supported-chains",
           "datashare/early-access"
         ]
       },
