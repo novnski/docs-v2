@@ -60,6 +60,65 @@
               "get-started/pricing",
               "get-started/supported-chains"
             ]
+          },
+          {
+            "group": "Tutorials & Guides",
+            "pages": [
+              {
+                "group": "Data API Tutorials",
+                "pages": [
+                  {
+                    "group": "Wallets & Accounts",
+                    "pages": []
+                  },
+                  {
+                    "group": "Tokens & Markets",
+                    "pages": []
+                  },
+                  {
+                    "group": "NFTs",
+                    "pages": []
+                  },
+                  {
+                    "group": "DeFi",
+                    "pages": []
+                  },
+                  {
+                    "group": "Prices & Charts",
+                    "pages": []
+                  }
+                ]
+              },
+              {
+                "group": "Streams Tutorials",
+                "pages": [
+                  {
+                    "group": "Wallet Monitoring",
+                    "pages": []
+                  },
+                  {
+                    "group": "Token Monitoring",
+                    "pages": []
+                  },
+                  {
+                    "group": "NFT Monitoring",
+                    "pages": []
+                  },
+                  {
+                    "group": "Smart Contracts & Events",
+                    "pages": []
+                  }
+                ]
+              },
+              {
+                "group": "Migration Guides",
+                "pages": [
+                  "get-started/tutorials-and-guides/migration-guides/migrating-from-reservoir-to-moralis",
+                  "get-started/tutorials-and-guides/migration-guides/migrating-from-simple-hash-to-moralis",
+                  "get-started/tutorials-and-guides/migration-guides/migrating-from-ok-link-to-moralis"
+                ]
+              }
+            ]
           }
         ]
       },
