@@ -190,9 +190,9 @@
               {
                 "group": "Resources",
                 "pages": [
-                  "data-api/resources/response-codes",
                   "data-api/resources/rate-limits",
                   "data-api/resources/pagination",
+                  "data-api/resources/response-codes",
                   "data-api/introduction/resources/performance-and-reliability",
                   "data-api/introduction/resources/premium-endpoints"
                 ]
