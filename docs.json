@@ -263,6 +263,7 @@
                   "universal-api/token-api/endpoints/token-score",
                   "data-api/universal-api/token-api/token-score-timeseries",
                   "data-api/universal-api/token-api/filtered-tokens",
+                  "data-api/universal-api/token-api/trending-tokens",
                   "data-api/universal-api/token-api/top-gainers",
                   "data-api/universal-api/token-api/top-losers",
                   "universal-api/token-api/endpoints/token-analytics",
