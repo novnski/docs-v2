@@ -64,6 +64,7 @@
           {
             "group": "Tutorials & Guides",
             "pages": [
+              "get-started/tutorials-and-guides/overview",
               {
                 "group": "Data API Tutorials",
                 "pages": [
