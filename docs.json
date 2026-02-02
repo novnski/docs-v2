@@ -69,23 +69,48 @@
                 "pages": [
                   {
                     "group": "Wallets & Accounts",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-internal-transactions-for-a-wallet-address",
+                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-native-token-balances-for-eoas-and-smart-accounts",
+                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address",
+                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts",
+                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-build-a-token-approval-and-revoke-dashboard-revoke-cash-style"
+                    ]
                   },
                   {
                     "group": "Tokens & Markets",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet",
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-transfer-history-by-wallet-or-token",
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-metadata-by-address-or-symbol",
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data",
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-dex-pair-addresses-uniswap-pancake-swap-sushi-swap"
+                    ]
                   },
                   {
                     "group": "NFTs",
-                    "pages": []
-                  },
-                  {
-                    "group": "DeFi",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-all-nfts-owned-by-a-wallet-address",
+                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-collections-owned-by-a-wallet",
+                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-metadata-by-contract-and-token-id",
+                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-owners-and-ownership-details",
+                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-floor-prices"
+                    ]
                   },
                   {
                     "group": "Prices & Charts",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-the-price-of-an-erc-20-token",
+                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data",
+                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-build-crypto-price-charts-using-ohlc-data"
+                    ]
+                  },
+                  {
+                    "group": "Blocks & Transactions",
+                    "pages": [
+                      "get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-get-a-blockchain-transaction-by-hash",
+                      "get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-find-the-closest-block-by-unix-timestamp"
+                    ]
                   }
                 ]
               },
@@ -94,19 +119,31 @@
                 "pages": [
                   {
                     "group": "Wallet Monitoring",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/how-to-monitor-wallet-activity-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/how-to-monitor-ens-domain-registrations-in-real-time"
+                    ]
                   },
                   {
                     "group": "Token Monitoring",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-monitor-high-value-erc-20-transfers-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-track-erc-20-token-mints-and-burns-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-track-new-tokens-and-trading-pairs-in-real-time"
+                    ]
                   },
                   {
                     "group": "NFT Monitoring",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/how-to-track-nft-transfers-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/how-to-track-specific-nfts-or-nft-collections-in-real-time"
+                    ]
                   },
                   {
                     "group": "Smart Contracts & Events",
-                    "pages": []
+                    "pages": [
+                      "get-started/tutorials-and-guides/streams-tutorials/smart-contracts-and-events/how-to-track-smart-contract-events-in-real-time"
+                    ]
                   }
                 ]
               },
