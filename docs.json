@@ -273,6 +273,7 @@
               {
                 "group": "Market Metrics API",
                 "pages": [
+                  "data-api/universal-api/market-metrics-api/market-metrics-overview",
                   "universal-api/global-api/endpoints/trading-stats",
                   "universal-api/global-api/endpoints/trading-stats-category",
                   "universal-api/global-api/endpoints/trading-stats-timeseries",
@@ -282,6 +283,7 @@
               {
                 "group": "Entity API",
                 "pages": [
+                  "data-api/universal-api/entity-api/entity-api-overview",
                   "universal-api/entity-api/endpoints/entity-search",
                   "universal-api/entity-api/endpoints/entity-by-id",
                   "universal-api/entity-api/endpoints/entity-by-category",
