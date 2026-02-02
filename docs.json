@@ -760,7 +760,7 @@
                   "rpc-nodes/introduction/resources/json-rpc-overview",
                   "rpc-nodes/introduction/resources/archive-requests",
                   "rpc-nodes/introduction/resources/rpc-batch-requests",
-                  "rpc-nodes/introduction/resources/rpc-node-rate-limits"
+                  "rpc-nodes/introduction/resources/rpc-rate-limits"
                 ]
               },
               {
