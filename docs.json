@@ -765,7 +765,10 @@
               },
               {
                 "group": "Quickstart",
-                "pages": []
+                "pages": [
+                  "rpc-nodes/introduction/quickstart/get-your-api-key",
+                  "rpc-nodes/introduction/quickstart/make-your-first-request"
+                ]
               }
             ]
           },
@@ -1548,6 +1551,16 @@
                 ]
               }
             ]
+          }
+        ]
+      },
+      {
+        "tab": "Auth API",
+        "pages": [
+          "auth-api/overview",
+          {
+            "group": "API Reference",
+            "openapi": "/openapi-files/auth-api/auth.json"
           }
         ]
       },
