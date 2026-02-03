@@ -76,14 +76,14 @@
                       "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-native-token-balances-for-eoas-and-smart-accounts",
                       "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address",
                       "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-build-a-token-approval-and-revoke-dashboard-revoke-cash-style"
+                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-build-a-token-approval-and-revoke-dashboard-revoke-cash-style",
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet"
                     ]
                   },
                   {
                     "group": "Tokens & Markets",
                     "pages": [
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-build-a-dex-screener-clone",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet",
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-transfer-history-by-wallet-or-token",
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-metadata-by-address-or-symbol",
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data",
@@ -461,6 +461,14 @@
                       "data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
                       "data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
                       "data-api/evm-api/nft-api/metadata-and-info/collection-stats"
+                    ]
+                  },
+                  {
+                    "group": "NFTs & Collections",
+                    "pages": [
+                      "nfts-by-collection",
+                      "nfts-by-wallet",
+                      "nft-collections-by-wallet"
                     ]
                   },
                   {
