@@ -237,7 +237,6 @@
                 "group": "Prices",
                 "pages": [
                   "data-api/data-features/data-enrichment/token-prices",
-                  "data-api/data-features/safety-and-trust/liquidity-filtering",
                   "data-api/data-features/prices/sale-prices",
                   "data-api/data-features/prices/floor-prices"
                 ]
@@ -248,7 +247,8 @@
                 "pages": [
                   "data-api/data-features/safety-and-trust/verified-contracts",
                   "data-api/resources/spam-filtering",
-                  "data-api/data-features/token-scores"
+                  "data-api/data-features/token-scores",
+                  "data-api/data-features/safety-and-trust/liquidity-filtering"
                 ]
               },
               {
