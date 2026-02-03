@@ -68,6 +68,7 @@
               {
                 "group": "Data API Tutorials",
                 "pages": [
+                  "data-api-tutorials",
                   {
                     "group": "Wallets & Accounts",
                     "pages": [
@@ -120,6 +121,7 @@
               {
                 "group": "Streams Tutorials",
                 "pages": [
+                  "streams-tutorials",
                   {
                     "group": "Wallet Monitoring",
                     "pages": [
