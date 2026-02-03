@@ -170,6 +170,21 @@
                   "get-started/tutorials-and-guides/charts-and-widgets/embed-pump-fun-trading-view-chart",
                   "get-started/tutorials-and-guides/charts-and-widgets/ohlc-chart-configurator"
                 ]
+              },
+              {
+                "group": "Auth API Tutorials",
+                "pages": [
+                  "how-to-authenticate-users-with-web3-auth",
+                  "how-to-authenticate-users-with-wallet-connect",
+                  "how-to-authenticate-users-with-rainbow-kit",
+                  "how-to-authenticate-users-with-particle-network",
+                  "how-to-authenticate-users-with-meta-mask",
+                  "how-to-authenticate-users-with-meta-mask-using-python-and-django",
+                  "how-to-authenticate-users-with-meta-mask-using-angular",
+                  "how-to-authenticate-users-with-magic-link",
+                  "how-to-authenticate-users-with-coinbase-wallet",
+                  "how-to-authenticate-users-with-meta-mask-using-react"
+                ]
               }
             ]
           }
