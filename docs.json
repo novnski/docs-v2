@@ -44,14 +44,7 @@
             "group": "Getting Started",
             "pages": [
               "get-started/get-your-api-key",
-              {
-                "group": "Quickstart Guides",
-                "pages": [
-                  "data-api/quickstart",
-                  "streams/quickstart",
-                  "datashare/quickstart"
-                ]
-              }
+              "get-started/quickstart-guides"
             ]
           },
           {
