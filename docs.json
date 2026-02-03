@@ -232,7 +232,8 @@
                   "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
                   "data-api/data-features/data-enrichment/nft-rarity",
                   "data-api/data-features/data-enrichment/profitability-pn-l",
-                  "data-api/data-features/data-enrichment/token-metadata"
+                  "data-api/data-features/data-enrichment/token-metadata",
+                  "data-api/data-features/data-enrichment/solana-token-standards"
                 ]
               },
               {
