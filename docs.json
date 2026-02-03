@@ -175,6 +175,7 @@
               {
                 "group": "Auth API Tutorials",
                 "pages": [
+                  "how-to-authenticate-users-with-phantom-wallet",
                   "how-to-authenticate-users-with-web3-auth",
                   "how-to-authenticate-users-with-wallet-connect",
                   "how-to-authenticate-users-with-rainbow-kit",
