@@ -88,7 +88,8 @@
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-metadata-by-address-or-symbol",
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data",
                       "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-dex-pair-addresses-uniswap-pancake-swap-sushi-swap",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-tokens-swaps-and-prices"
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-tokens-swaps-and-prices",
+                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-new-bonding-and-graduated-tokens"
                     ]
                   },
                   {
