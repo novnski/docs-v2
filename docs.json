@@ -450,7 +450,7 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/evm-api/nft-api/nft-api-overview",
+                  "data-api/evm-api/nft-api/index",
                   {
                     "group": "Metadata & Info",
                     "pages": [
