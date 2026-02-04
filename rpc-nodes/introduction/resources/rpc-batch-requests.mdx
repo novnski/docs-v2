@@ -1,4 +1,82 @@
 ---
 title: 'RPC Batch Requests'
+description: 'Combine multiple RPC requests into a single API call for better performance'
 ---
 
+## What is Batching?
+
+Batching combines multiple RPC requests into a single HTTP call, reducing network overhead and improving performance when you need to make several related queries.
+
+## Benefits
+
+- **Reduced Latency** - Single round-trip instead of multiple
+- **Fewer Connections** - One HTTP request instead of many
+- **Simpler Code** - Handle related operations together
+
+## Request Format
+
+Send an array of JSON-RPC request objects:
+
+```json
+[
+  {
+    "jsonrpc": "2.0",
+    "method": "eth_blockNumber",
+    "params": [],
+    "id": 1
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "eth_getBalance",
+    "params": ["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],
+    "id": 2
+  },
+  {
+    "jsonrpc": "2.0",
+    "method": "eth_gasPrice",
+    "params": [],
+    "id": 3
+  }
+]
+```
+
+## Response Format
+
+Responses are returned as an array in the same order:
+
+```json
+[
+  {
+    "jsonrpc": "2.0",
+    "result": "0x10d4f",
+    "id": 1
+  },
+  {
+    "jsonrpc": "2.0",
+    "result": "0x1234567890abcdef",
+    "id": 2
+  },
+  {
+    "jsonrpc": "2.0",
+    "result": "0x3b9aca00",
+    "id": 3
+  }
+]
+```
+
+## Limits
+
+| Constraint | Value |
+|------------|-------|
+| Max requests per batch | 20 |
+
+## Important: Compute Units
+
+Batching does **not** reduce Compute Unit (CU) consumption. Each request in the batch uses the same CUs as individual requests. Batching optimizes network efficiency, not billing.
+
+## Best Practices
+
+- Use unique `id` values to match responses
+- Handle partial failures (some requests may succeed while others fail)
+- Group related operations together
+- Keep batches under the 20 request limit

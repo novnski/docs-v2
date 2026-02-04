@@ -1,4 +1,73 @@
 ---
 title: 'JSON-RPC Overview'
+description: 'Learn about JSON-RPC, the protocol used for blockchain communication'
 ---
 
+## What is JSON-RPC?
+
+JSON-RPC is a lightweight, remote procedure call (RPC) protocol that uses JSON to encode messages. It enables applications to invoke methods on remote systems as if they were local.
+
+## Key Characteristics
+
+- **Protocol-Agnostic** - Works over HTTP, WebSocket, and other transports
+- **Stateless** - Each request is independent
+- **Lightweight** - JSON formatting minimizes overhead while remaining human-readable
+
+## Request Structure
+
+A JSON-RPC request contains:
+
+| Field | Description |
+|-------|-------------|
+| `jsonrpc` | Protocol version (always "2.0") |
+| `method` | Name of the method to call |
+| `params` | Method parameters (array or object) |
+| `id` | Unique request identifier |
+
+### Example Request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "eth_getBalance",
+  "params": ["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"],
+  "id": 1
+}
+```
+
+## Response Structure
+
+| Field | Description |
+|-------|-------------|
+| `jsonrpc` | Protocol version |
+| `result` | Method result (if successful) |
+| `error` | Error object (if failed) |
+| `id` | Matching request identifier |
+
+### Example Response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": "0x1234567890abcdef",
+  "id": 1
+}
+```
+
+## Common Methods
+
+| Method | Description |
+|--------|-------------|
+| `eth_blockNumber` | Get the latest block number |
+| `eth_getBalance` | Get account balance |
+| `eth_getTransactionByHash` | Get transaction details |
+| `eth_sendRawTransaction` | Submit a signed transaction |
+| `eth_call` | Execute a read-only contract call |
+| `eth_getLogs` | Get event logs |
+
+## Use Cases
+
+- **Wallets** - Query balances and submit transactions
+- **dApps** - Interact with smart contracts
+- **Indexers** - Fetch and process blockchain data
+- **Trading Bots** - Monitor state and execute trades

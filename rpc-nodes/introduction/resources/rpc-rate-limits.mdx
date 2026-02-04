@@ -1,4 +1,54 @@
 ---
 title: 'RPC Rate Limits'
+description: 'Understand rate limits and Compute Units for Moralis RPC Nodes'
 ---
 
+## Overview
+
+Moralis uses Compute Units (CUs) to track API usage. Rate limits ensure fair usage and system stability across all users.
+
+## Rate Limits by Plan
+
+| Plan | CUs Included | API Throughput | Node Throughput | Nodes |
+|------|-------------|----------------|-----------------|-------|
+| Starter | 10M | 1,500 CU/s | 100 CU/s | 2 |
+| Pro | 100M | 1,500 CU/s | 100 CU/s | 5 |
+| Business | 350M | 3,000 CU/s | 300 CU/s | Unlimited |
+| Enterprise | Custom | Custom | Custom | Unlimited |
+
+All plans include archive request support.
+
+## Understanding Throughput
+
+- **API Throughput** - Maximum CUs per second across all your requests
+- **Node Throughput** - Maximum CUs per second per individual node
+- **Nodes** - Number of dedicated node endpoints available
+
+## Avoiding Rate Limits
+
+To stay within limits:
+
+1. Monitor your CU consumption in the dashboard
+2. Keep total CU/s below your plan's throughput
+3. Implement exponential backoff for retries
+4. Cache responses when possible
+5. Use batch requests to reduce HTTP overhead (not CU cost)
+
+## Rate Limit Response
+
+When rate limited, you'll receive an HTTP 429 response:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "error": {
+    "code": -32005,
+    "message": "Rate limit exceeded"
+  },
+  "id": 1
+}
+```
+
+## Need Higher Limits?
+
+Contact Moralis for Enterprise plans with custom limits tailored to your needs.

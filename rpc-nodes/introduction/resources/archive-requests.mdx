@@ -1,4 +1,63 @@
 ---
 title: 'Archive Requests'
+description: 'Understand the difference between full nodes and archive nodes for historical data access'
 ---
 
+## What Are Archive Requests?
+
+Archive requests are RPC calls that query historical blockchain state beyond what a standard full node retains. They allow you to access data from any point in the blockchain's history.
+
+## Full Nodes vs Archive Nodes
+
+| Feature | Full Node | Archive Node |
+|---------|-----------|--------------|
+| Recent State | Yes | Yes |
+| Historical State | Limited (~128 blocks) | Complete |
+| Storage Required | ~1 TB | ~15+ TB |
+| Query Any Block | No | Yes |
+
+## When You Need Archive Access
+
+You need an archive node when:
+
+- Querying balances at historical block numbers
+- Reading contract storage from past blocks
+- Analyzing historical state for analytics
+- Debugging past transactions with state context
+
+## Archive-Dependent Methods
+
+These methods require archive access when querying historical blocks:
+
+| Method | Archive Required When |
+|--------|----------------------|
+| `eth_getBalance` | Block parameter is not `latest` |
+| `eth_getCode` | Block parameter is not `latest` |
+| `eth_getStorageAt` | Block parameter is not `latest` |
+| `eth_call` | Block parameter is not `latest` |
+
+### Example
+
+```json
+// This requires archive access (historical block)
+{
+  "method": "eth_getBalance",
+  "params": ["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "0xF4240"]
+}
+
+// This works on full nodes (latest block)
+{
+  "method": "eth_getBalance",
+  "params": ["0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045", "latest"]
+}
+```
+
+## Archive Support on Moralis
+
+Moralis RPC Nodes include archive access on all plans. You can query any historical block without additional configuration.
+
+## Best Practices
+
+- Use `latest` when you don't need historical data
+- Cache historical queries when possible (they're immutable)
+- Be aware archive queries may have slightly higher latency
