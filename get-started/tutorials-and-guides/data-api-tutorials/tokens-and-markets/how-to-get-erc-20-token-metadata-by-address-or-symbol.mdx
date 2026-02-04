@@ -1,4 +1,112 @@
 ---
-title: 'How to Get ERC20 Token Metadata (by Address or Symbol)'
+title: 'How to Get ERC20 Token Metadata by Address or Symbol'
+description: 'Learn how to fetch detailed token metadata including name, symbol, decimals, and logo using the Moralis API.'
 ---
 
+## Introduction
+
+In this tutorial, you'll learn how to retrieve detailed metadata for any ERC20 token using the Moralis API. This includes the token name, symbol, decimals, logo, and more. This is useful for displaying token information in your application without needing to query the blockchain directly. We'll use the following Moralis API endpoint:
+
+- [Get Token Metadata](/data-api/evm-api/token-api/endpoints/token-metadata) - Fetch detailed metadata for ERC20 tokens
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-token-metadata && cd get-token-metadata
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const TOKEN_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'; // USDC
+
+async function getTokenMetadata() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/erc20/metadata?chain=eth&addresses=${TOKEN_ADDRESS}`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getTokenMetadata();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the token metadata:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+[
+  {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "address_label": "USD Coin",
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "decimals": "6",
+    "logo": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
+    "logo_hash": "a5d5d6eb25e2b5a8c26e7e47f7c6a2c8",
+    "thumbnail": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_thumb.png",
+    "total_supply": "26000000000000000",
+    "total_supply_formatted": "26000000000",
+    "block_number": "12345678",
+    "validated": true,
+    "created_at": "2018-09-10T00:00:00.000Z",
+    "possible_spam": false,
+    "verified_contract": true,
+    "categories": ["stablecoin"],
+    "links": {
+      "website": "https://www.circle.com/usdc",
+      "twitter": "https://twitter.com/circle"
+    }
+  }
+]
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `address` | The token's contract address |
+| `name` | The full name of the token |
+| `symbol` | The token's ticker symbol |
+| `decimals` | Number of decimal places the token uses |
+| `logo` | URL to the token's logo image |
+| `thumbnail` | URL to a smaller version of the logo |
+| `total_supply` | Total supply in the smallest unit |
+| `total_supply_formatted` | Human-readable total supply |
+| `possible_spam` | Whether the token is flagged as potential spam |
+| `verified_contract` | Whether the contract source code is verified |
+| `categories` | Token categories (e.g., stablecoin, meme) |
+| `links` | Official links (website, Twitter, etc.) |
+
+## Next Steps
+
+- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch wallet token balances
+- [Get Token Price](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-the-price-of-an-erc-20-token) - Get current token prices
+- [API Reference](/data-api/evm-api/token-api/endpoints/token-metadata) - Full API documentation

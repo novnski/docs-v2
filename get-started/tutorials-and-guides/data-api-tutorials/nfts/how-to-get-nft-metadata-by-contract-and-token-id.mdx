@@ -1,4 +1,121 @@
 ---
 title: 'How to Get NFT Metadata by Contract and Token ID'
+description: 'Learn how to fetch detailed metadata for a specific NFT using its contract address and token ID with the Moralis API.'
 ---
 
+## Introduction
+
+In this tutorial, you'll learn how to retrieve detailed metadata for a specific NFT using its contract address and token ID. This includes the name, description, image, attributes/traits, and ownership information. This is essential for building NFT detail pages, verification tools, or collection browsers. We'll use the following Moralis API endpoint:
+
+- [Get NFT Metadata](/data-api/evm-api/nft-api/nft-metadata) - Fetch detailed metadata for a specific NFT
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-nft-metadata && cd get-nft-metadata
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const NFT_ADDRESS = '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'; // BAYC
+const TOKEN_ID = '1234';
+
+async function getNFTMetadata() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/nft/${NFT_ADDRESS}/${TOKEN_ID}?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getNFTMetadata();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the NFT metadata:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "token_address": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+  "token_id": "1234",
+  "amount": "1",
+  "owner_of": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+  "token_hash": "abc123def456...",
+  "block_number_minted": "12346789",
+  "contract_type": "ERC721",
+  "name": "Bored Ape Yacht Club",
+  "symbol": "BAYC",
+  "token_uri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1234",
+  "metadata": {
+    "name": "Bored Ape #1234",
+    "description": "A unique Bored Ape NFT",
+    "image": "ipfs://QmRRPWG96cmgTn2qSzjwr2qvfNEuhunv6FNeMFGa9bx6mQ",
+    "attributes": [
+      { "trait_type": "Background", "value": "Aquamarine" },
+      { "trait_type": "Fur", "value": "Blue" },
+      { "trait_type": "Eyes", "value": "Bored" },
+      { "trait_type": "Mouth", "value": "Grin" },
+      { "trait_type": "Clothes", "value": "Sailor Shirt" }
+    ]
+  },
+  "last_token_uri_sync": "2024-01-15T10:30:00.000Z",
+  "last_metadata_sync": "2024-01-15T10:30:00.000Z",
+  "minter_address": "0x1234567890abcdef...",
+  "possible_spam": false,
+  "verified_collection": true,
+  "floor_price": 25.5,
+  "floor_price_usd": 45000
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `token_address` | The NFT collection contract address |
+| `token_id` | The unique token ID |
+| `owner_of` | Current owner's wallet address |
+| `contract_type` | Token standard (ERC721 or ERC1155) |
+| `name` | Collection name |
+| `symbol` | Collection symbol |
+| `metadata` | Raw metadata from token URI |
+| `minter_address` | Address that originally minted the NFT |
+| `possible_spam` | Whether flagged as spam |
+| `verified_collection` | Whether collection is verified |
+| `floor_price` | Current collection floor price |
+| `floor_price_usd` | Floor price in USD |
+
+## Next Steps
+
+- [Get All Wallet NFTs](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-all-nfts-owned-by-a-wallet-address) - Fetch all NFTs for a wallet
+- [Get NFT Floor Prices](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-floor-prices) - Get collection floor prices
+- [Get NFT Owners](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-owners-and-ownership-details) - Get ownership data
+- [API Reference](/data-api/evm-api/nft-api/nft-metadata) - Full API documentation

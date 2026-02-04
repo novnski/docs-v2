@@ -1,4 +1,118 @@
 ---
 title: 'How to Get Multi-Chain Activity for a Wallet Address'
+description: 'Learn how to detect which chains a wallet has been active on using the Moralis API.'
 ---
 
+## Introduction
+
+In this tutorial, you'll learn how to detect which blockchain networks a wallet address has activity on using the Moralis API. This is useful for building multi-chain portfolio views, determining which chains to query for a user's assets, or understanding a wallet's cross-chain behavior. We'll use the following Moralis API endpoint:
+
+- [Get Chain Activity](/data-api/evm-api/wallet-api/chain-activity) - Detect which chains a wallet has been active on
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-chain-activity && cd get-chain-activity
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const WALLET_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
+
+async function getChainActivity() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/wallets/${WALLET_ADDRESS}/chains?chains=eth,polygon,bsc,arbitrum,base`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getChainActivity();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to get the chain activity:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "address": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+  "active_chains": [
+    {
+      "chain": "eth",
+      "chain_id": "0x1",
+      "first_transaction": {
+        "block_number": "46147",
+        "block_timestamp": "2015-08-07T03:30:33.000Z",
+        "transaction_hash": "0x5c504ed432cb51138bcf09aa5e8a410dd4a1e204ef84bfed1be16dfba1b22060"
+      },
+      "last_transaction": {
+        "block_number": "19234567",
+        "block_timestamp": "2024-02-15T10:30:00.000Z",
+        "transaction_hash": "0x1ed85b3757a6d31d01a4d6677fc52fd3911d649a0af21d29f3e2c2f10c82e12c"
+      }
+    },
+    {
+      "chain": "polygon",
+      "chain_id": "0x89",
+      "first_transaction": {
+        "block_number": "15678900",
+        "block_timestamp": "2021-06-15T08:00:00.000Z",
+        "transaction_hash": "0x2bc7a8f12345678901234567890abcdef12345678901234567890abcdef1234"
+      },
+      "last_transaction": {
+        "block_number": "52345678",
+        "block_timestamp": "2024-02-14T15:45:00.000Z",
+        "transaction_hash": "0x3cd8b9e23456789012345678901abcdef23456789012345678901abcdef2345"
+      }
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `address` | The wallet address queried |
+| `active_chains` | Array of chains where the wallet has activity |
+| `chain` | Chain identifier (eth, polygon, arbitrum, etc.) |
+| `chain_id` | Hexadecimal chain ID |
+| `first_transaction` | Details of the wallet's first transaction on this chain |
+| `last_transaction` | Details of the wallet's most recent transaction on this chain |
+| `block_number` | Block number of the transaction |
+| `block_timestamp` | When the transaction was mined |
+| `transaction_hash` | Hash of the transaction |
+
+## Next Steps
+
+- [Get Wallet History](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts) - Get full transaction history
+- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch token balances
+- [API Reference](/data-api/evm-api/wallet-api/chain-activity) - Full API documentation

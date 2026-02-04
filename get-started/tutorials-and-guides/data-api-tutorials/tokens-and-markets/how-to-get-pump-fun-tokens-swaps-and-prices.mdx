@@ -1,4 +1,104 @@
 ---
 title: 'How to Get Pump.fun Tokens, Swaps and Prices'
+description: 'Learn how to fetch swap data and price information for Pump.fun tokens on Solana using the Moralis API.'
 ---
 
+## Introduction
+
+In this tutorial, you'll learn how to retrieve swap (trade) data and price information for Pump.fun tokens using the Moralis Solana API. This includes getting recent swaps, price history, and OHLC data for any token launched on Pump.fun. We'll use the following Moralis API endpoint:
+
+- [Get Token Swaps](/data-api/solana-api/token-api/swaps-and-pairs/token-swaps) - Fetch swap history and trading data for Solana tokens
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir pump-fun-swaps && cd pump-fun-swaps
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const TOKEN_ADDRESS = 'YOUR_PUMP_FUN_TOKEN_ADDRESS'; // Solana token mint address
+
+async function getTokenSwaps() {
+  const response = await fetch(
+    `https://solana-gateway.moralis.io/token/mainnet/${TOKEN_ADDRESS}/swaps`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getTokenSwaps();
+```
+
+Replace `YOUR_API_KEY` and `YOUR_PUMP_FUN_TOKEN_ADDRESS` with your actual values.
+
+## Step 3: Run the Script
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "result": [
+    {
+      "transactionHash": "5abc123...",
+      "blockTime": "2024-01-15T10:30:00.000Z",
+      "tokenIn": {
+        "address": "So11111111111111111111111111111111111111112",
+        "symbol": "SOL",
+        "amount": "1.5",
+        "amountUsd": 150.00
+      },
+      "tokenOut": {
+        "address": "ABC123...",
+        "symbol": "PUMP",
+        "amount": "1000000",
+        "amountUsd": 150.00
+      },
+      "walletAddress": "7abc...",
+      "exchange": "pumpfun",
+      "swapType": "buy"
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `transactionHash` | Solana transaction signature |
+| `blockTime` | When the swap occurred |
+| `tokenIn` | Token being sold (with amount and USD value) |
+| `tokenOut` | Token being bought (with amount and USD value) |
+| `walletAddress` | Wallet that made the swap |
+| `exchange` | DEX where swap occurred |
+| `swapType` | Type of trade (buy or sell) |
+
+## Next Steps
+
+- [Get Pump.fun New/Bonding/Graduated Tokens](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-new-bonding-and-graduated-tokens) - Discover tokens
+- [API Reference - Token Swaps](/data-api/solana-api/token-api/swaps-and-pairs/token-swaps) - Full API documentation
+- [API Reference - Token Price](/data-api/solana-api/price-api/token-price) - Price endpoint docs

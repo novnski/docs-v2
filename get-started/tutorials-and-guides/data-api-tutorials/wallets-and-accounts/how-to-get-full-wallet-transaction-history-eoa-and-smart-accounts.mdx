@@ -1,4 +1,121 @@
 ---
 title: 'How to Get Full Wallet Transaction History (EOA & Smart Accounts)'
+description: 'Learn how to fetch the complete transaction history for any wallet address using the Moralis API.'
 ---
 
+## Introduction
+
+In this tutorial, you'll learn how to retrieve the full transaction history for any wallet address using the Moralis API. This includes all transactions, token transfers, NFT transfers, and internal transactions in a single, unified timeline. This works for both externally owned accounts (EOAs) and smart contract wallets. We'll use the following Moralis API endpoint:
+
+- [Get Wallet History](/data-api/evm-api/wallet-api/wallet-history) - Fetch the complete transaction history for any wallet
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-wallet-history && cd get-wallet-history
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const WALLET_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'; // Vitalik's wallet
+
+async function getWalletHistory() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/wallets/${WALLET_ADDRESS}/history?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getWalletHistory();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the wallet history:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "page": 1,
+  "page_size": 100,
+  "cursor": "abc123...",
+  "result": [
+    {
+      "hash": "0x...",
+      "nonce": "123",
+      "transaction_index": "45",
+      "from_address": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "from_address_label": "Vitalik Buterin",
+      "to_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "to_address_label": null,
+      "value": "1000000000000000000",
+      "gas": "21000",
+      "gas_price": "50000000000",
+      "receipt_gas_used": "21000",
+      "receipt_status": "1",
+      "block_timestamp": "2024-01-15T10:30:00.000Z",
+      "block_number": "18500000",
+      "block_hash": "0x...",
+      "category": "send",
+      "summary": "Sent 1 ETH",
+      "possible_spam": false,
+      "method_label": null,
+      "native_transfers": [],
+      "erc20_transfers": [],
+      "nft_transfers": []
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `hash` | Transaction hash |
+| `from_address` | Sender's wallet address |
+| `from_address_label` | Known label for sender |
+| `to_address` | Recipient's wallet address |
+| `to_address_label` | Known label for recipient |
+| `value` | Native token amount in wei |
+| `receipt_status` | Transaction status (1 = success) |
+| `block_timestamp` | When the transaction was mined |
+| `category` | Type of transaction (send, receive, token send, etc.) |
+| `summary` | Human-readable transaction summary |
+| `erc20_transfers` | ERC20 token transfers in this transaction |
+| `nft_transfers` | NFT transfers in this transaction |
+| `native_transfers` | Native token transfers |
+
+## Next Steps
+
+- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch current balances
+- [Get Internal Transactions](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-internal-transactions-for-a-wallet-address) - Get internal calls
+- [Get Multi-Chain Activity](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address) - See cross-chain activity
+- [API Reference](/data-api/evm-api/wallet-api/wallet-history) - Full API documentation

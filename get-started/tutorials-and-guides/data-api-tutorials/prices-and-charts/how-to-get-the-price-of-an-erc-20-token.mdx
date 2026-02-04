@@ -1,4 +1,103 @@
 ---
 title: 'How to Get the Price of an ERC20 Token'
+description: 'Learn how to fetch the current price of any ERC20 token using the Moralis API.'
 ---
 
+## Introduction
+
+In this tutorial, you'll learn how to get the current USD price of any ERC20 token using the Moralis API. This is essential for building price trackers, trading interfaces, or portfolio applications that need real-time token pricing. We'll use the following Moralis API endpoint:
+
+- [Get Token Price](/data-api/evm-api/token-api/prices/token-price) - Fetch the current price of any ERC20 token
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-token-price && cd get-token-price
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const TOKEN_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'; // USDC
+
+async function getTokenPrice() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/erc20/${TOKEN_ADDRESS}/price?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getTokenPrice();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the token price:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "tokenName": "USD Coin",
+  "tokenSymbol": "USDC",
+  "tokenLogo": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
+  "tokenDecimals": "6",
+  "nativePrice": {
+    "value": "296177284127975",
+    "decimals": 18,
+    "name": "Ether",
+    "symbol": "ETH",
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+  },
+  "usdPrice": 0.9998,
+  "usdPriceFormatted": "0.9998",
+  "24hrPercentChange": "0.02",
+  "exchangeAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+  "exchangeName": "Uniswap v3"
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `tokenName` | The full name of the token |
+| `tokenSymbol` | The token's ticker symbol |
+| `tokenLogo` | URL to the token's logo image |
+| `tokenDecimals` | Number of decimal places the token uses |
+| `nativePrice` | Price in the chain's native token (ETH) |
+| `usdPrice` | Current price in USD |
+| `24hrPercentChange` | Price change percentage over 24 hours |
+| `exchangeAddress` | DEX address where the price was sourced |
+| `exchangeName` | Name of the DEX (e.g., Uniswap v3) |
+
+## Next Steps
+
+- [Get Historical Prices (OHLC)](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data) - Fetch OHLC candlestick data
+- [Build Price Charts](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-build-crypto-price-charts-using-ohlc-data) - Create interactive price charts
+- [API Reference](/data-api/evm-api/token-api/prices/token-price) - Full API documentation
