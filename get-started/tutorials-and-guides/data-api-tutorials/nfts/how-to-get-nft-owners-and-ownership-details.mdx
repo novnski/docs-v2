@@ -1,13 +1,13 @@
 ---
-title: 'How to Get NFT Owners and Ownership Details'
-description: 'Learn how to fetch ownership data for NFT collections and individual tokens using the Moralis API.'
+title: "How to Get NFT Owners and Ownership Details"
+description: "Learn how to fetch ownership data for NFT collections and individual tokens using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve ownership data for NFT collections using the Moralis API. This includes getting all unique owners of a collection, finding who owns a specific token, and analyzing ownership distribution. This is essential for building collection analytics, whale tracking, or ownership verification tools. We'll use the following Moralis API endpoint:
 
-- [Get NFT Owners](/data-api/evm-api/nft-api/nft-owners) - Fetch ownership data for NFT collections and individual tokens
+- [Get NFT Owners](/data-api/evm-api/nft-api/ownership/owners-by-contract) - Fetch ownership data for NFT collections and individual tokens
 
 ## Prerequisites
 
@@ -87,17 +87,17 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `token_id` | The unique token ID |
-| `owner_of` | Current owner's wallet address |
-| `amount` | Quantity owned (1 for ERC721) |
-| `block_number_minted` | Block when the NFT was minted |
-| `contract_type` | Token standard (ERC721 or ERC1155) |
+| Field                 | Description                        |
+| --------------------- | ---------------------------------- |
+| `token_id`            | The unique token ID                |
+| `owner_of`            | Current owner's wallet address     |
+| `amount`              | Quantity owned (1 for ERC721)      |
+| `block_number_minted` | Block when the NFT was minted      |
+| `contract_type`       | Token standard (ERC721 or ERC1155) |
 
 ## Next Steps
 
-- [Get All Wallet NFTs](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-all-nfts-owned-by-a-wallet-address) - Fetch NFTs for a wallet
-- [Get NFT Metadata](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-metadata-by-contract-and-token-id) - Get detailed NFT info
-- [Get NFT Floor Prices](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-floor-prices) - Get collection floor prices
-- [API Reference](/data-api/evm-api/nft-api/nft-owners) - Full API documentation
+- [Get NFT Metadata](/data-api/evm-api/nft-api/endpoints/nft-metadata) - Get detailed NFT metadata
+- [Get NFT Floor Prices](/data-api/evm-api/nft-api/floor-price-collection) - Fetch collection floor prices
+- [NFT Metadata](/data-api/data-features/data-enrichment/nft-metadata) - explore detailed metadata
+- [NFT Media Images (CDN)](/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn) - learn how we store NFT images

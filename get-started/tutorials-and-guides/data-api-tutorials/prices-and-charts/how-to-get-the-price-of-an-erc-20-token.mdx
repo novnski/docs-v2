@@ -1,13 +1,13 @@
 ---
-title: 'How to Get the Price of an ERC20 Token'
-description: 'Learn how to fetch the current price of any ERC20 token using the Moralis API.'
+title: "How to Get the Price of an ERC20 Token"
+description: "Learn how to fetch the current price of any ERC20 token using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to get the current USD price of any ERC20 token using the Moralis API. This is essential for building price trackers, trading interfaces, or portfolio applications that need real-time token pricing. We'll use the following Moralis API endpoint:
 
-- [Get Token Price](/data-api/evm-api/token-api/prices/token-price) - Fetch the current price of any ERC20 token
+- [Get Token Price](/data-api/evm-api/token-api/prices/token-prices-batch) - Fetch the current price of any ERC20 token
 
 ## Prerequisites
 
@@ -84,20 +84,20 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `tokenName` | The full name of the token |
-| `tokenSymbol` | The token's ticker symbol |
-| `tokenLogo` | URL to the token's logo image |
-| `tokenDecimals` | Number of decimal places the token uses |
-| `nativePrice` | Price in the chain's native token (ETH) |
-| `usdPrice` | Current price in USD |
-| `24hrPercentChange` | Price change percentage over 24 hours |
-| `exchangeAddress` | DEX address where the price was sourced |
-| `exchangeName` | Name of the DEX (e.g., Uniswap v3) |
+| Field               | Description                             |
+| ------------------- | --------------------------------------- |
+| `tokenName`         | The full name of the token              |
+| `tokenSymbol`       | The token's ticker symbol               |
+| `tokenLogo`         | URL to the token's logo image           |
+| `tokenDecimals`     | Number of decimal places the token uses |
+| `nativePrice`       | Price in the chain's native token (ETH) |
+| `usdPrice`          | Current price in USD                    |
+| `24hrPercentChange` | Price change percentage over 24 hours   |
+| `exchangeAddress`   | DEX address where the price was sourced |
+| `exchangeName`      | Name of the DEX (e.g., Uniswap v3)      |
 
 ## Next Steps
 
 - [Get Historical Prices (OHLC)](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data) - Fetch OHLC candlestick data
 - [Build Price Charts](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-build-crypto-price-charts-using-ohlc-data) - Create interactive price charts
-- [API Reference](/data-api/evm-api/token-api/prices/token-price) - Full API documentation
+- [API Reference](/data-api/evm-api/token-api/prices/token-prices-batch) - Full API documentation

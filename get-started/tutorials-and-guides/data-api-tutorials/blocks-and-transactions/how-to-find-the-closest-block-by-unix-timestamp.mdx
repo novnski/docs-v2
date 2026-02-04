@@ -1,13 +1,13 @@
 ---
-title: 'How to Find the Closest Block by Unix Timestamp'
-description: 'Learn how to find the block number closest to any given date or timestamp using the Moralis API.'
+title: "How to Find the Closest Block by Unix Timestamp"
+description: "Learn how to find the block number closest to any given date or timestamp using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to find the block number that was mined closest to a specific date or Unix timestamp. This is useful for querying historical blockchain data at specific points in time, such as getting token balances or prices at a particular date. We'll use the following Moralis API endpoint:
 
-- [Get Block by Date](/data-api/evm-api/block-api/date-to-block) - Find the block number closest to a given date or timestamp
+- [Get Block by Date](/data-api/evm-api/blockchain-api/block-by-date) - Find the block number closest to a given date or timestamp
 
 ## Prerequisites
 
@@ -75,16 +75,15 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `block` | The block number closest to the requested date |
-| `date` | ISO timestamp of when the block was mined |
-| `timestamp` | Unix timestamp of the block |
-| `block_timestamp` | Same as `date`, in ISO format |
-| `hash` | The block hash |
+| Field             | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `block`           | The block number closest to the requested date |
+| `date`            | ISO timestamp of when the block was mined      |
+| `timestamp`       | Unix timestamp of the block                    |
+| `block_timestamp` | Same as `date`, in ISO format                  |
+| `hash`            | The block hash                                 |
 
 ## Next Steps
 
 - [Get Transaction by Hash](/get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-get-a-blockchain-transaction-by-hash) - Fetch transaction details
 - [Get Wallet History](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts) - Get wallet transaction history
-- [API Reference](/data-api/evm-api/block-api/date-to-block) - Full API documentation

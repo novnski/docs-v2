@@ -1,13 +1,13 @@
 ---
-title: 'How to Get ERC20 Transfer History by Wallet or Token'
-description: 'Learn how to fetch ERC20 token transfer history for any wallet or token contract using the Moralis API.'
+title: "How to Get ERC20 Transfer History by Wallet or Token"
+description: "Learn how to fetch ERC20 token transfer history for any wallet or token contract using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve ERC20 token transfer history using the Moralis API. You can fetch transfers for a specific wallet address or for a specific token contract. This is essential for building transaction history pages, token analytics dashboards, or tracking token movements. We'll use the following Moralis API endpoint:
 
-- [Get Wallet Token Transfers](/data-api/evm-api/token-api/transfers/wallet-token-transfers) - Fetch ERC20 transfer history for a wallet or token
+- [Get Wallet Token Transfers](/data-api/evm-api/wallet-api/token-transfers) - Fetch ERC20 transfer history for a wallet or token
 
 ## Prerequisites
 
@@ -94,22 +94,22 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `token_name` | Name of the transferred token |
-| `token_symbol` | Symbol of the token |
-| `from_address` | Sender's wallet address |
-| `from_address_label` | Known label for sender (if available) |
-| `to_address` | Recipient's wallet address |
-| `to_address_label` | Known label for recipient (if available) |
-| `value` | Transfer amount in smallest unit |
-| `value_formatted` | Human-readable transfer amount |
-| `block_timestamp` | When the transfer occurred |
-| `transaction_hash` | Transaction hash of the transfer |
-| `possible_spam` | Whether the token is flagged as spam |
+| Field                | Description                              |
+| -------------------- | ---------------------------------------- |
+| `token_name`         | Name of the transferred token            |
+| `token_symbol`       | Symbol of the token                      |
+| `from_address`       | Sender's wallet address                  |
+| `from_address_label` | Known label for sender (if available)    |
+| `to_address`         | Recipient's wallet address               |
+| `to_address_label`   | Known label for recipient (if available) |
+| `value`              | Transfer amount in smallest unit         |
+| `value_formatted`    | Human-readable transfer amount           |
+| `block_timestamp`    | When the transfer occurred               |
+| `transaction_hash`   | Transaction hash of the transfer         |
+| `possible_spam`      | Whether the token is flagged as spam     |
 
 ## Next Steps
 
-- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch current token balances
-- [Get Wallet History](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts) - Get complete wallet activity
-- [API Reference](/data-api/evm-api/token-api/transfers/wallet-token-transfers) - Full API documentation
+- [Get Token Balances](/data-api/evm-api/wallet-api/token-balances) - Fetch current token balances
+- [Get Wallet History](/data-api/evm-api/wallet-api/activity/wallet-history) - Get complete wallet activity
+- [API Reference](/data-api/evm-api/wallet-api/index) - Full API documentation

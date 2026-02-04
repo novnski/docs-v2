@@ -1,13 +1,13 @@
 ---
-title: 'How to Get Multi-Chain Activity for a Wallet Address'
-description: 'Learn how to detect which chains a wallet has been active on using the Moralis API.'
+title: "How to Get Multi-Chain Activity for a Wallet Address"
+description: "Learn how to detect which chains a wallet has been active on using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to detect which blockchain networks a wallet address has activity on using the Moralis API. This is useful for building multi-chain portfolio views, determining which chains to query for a user's assets, or understanding a wallet's cross-chain behavior. We'll use the following Moralis API endpoint:
 
-- [Get Chain Activity](/data-api/evm-api/wallet-api/chain-activity) - Detect which chains a wallet has been active on
+- [Get Chain Activity](/data-api/evm-api/wallet-api/activity/chain-activity) - Detect which chains a wallet has been active on
 
 ## Prerequisites
 
@@ -99,20 +99,19 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `address` | The wallet address queried |
-| `active_chains` | Array of chains where the wallet has activity |
-| `chain` | Chain identifier (eth, polygon, arbitrum, etc.) |
-| `chain_id` | Hexadecimal chain ID |
-| `first_transaction` | Details of the wallet's first transaction on this chain |
-| `last_transaction` | Details of the wallet's most recent transaction on this chain |
-| `block_number` | Block number of the transaction |
-| `block_timestamp` | When the transaction was mined |
-| `transaction_hash` | Hash of the transaction |
+| Field               | Description                                                   |
+| ------------------- | ------------------------------------------------------------- |
+| `address`           | The wallet address queried                                    |
+| `active_chains`     | Array of chains where the wallet has activity                 |
+| `chain`             | Chain identifier (eth, polygon, arbitrum, etc.)               |
+| `chain_id`          | Hexadecimal chain ID                                          |
+| `first_transaction` | Details of the wallet's first transaction on this chain       |
+| `last_transaction`  | Details of the wallet's most recent transaction on this chain |
+| `block_number`      | Block number of the transaction                               |
+| `block_timestamp`   | When the transaction was mined                                |
+| `transaction_hash`  | Hash of the transaction                                       |
 
 ## Next Steps
 
-- [Get Wallet History](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts) - Get full transaction history
-- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch token balances
-- [API Reference](/data-api/evm-api/wallet-api/chain-activity) - Full API documentation
+- [Get Wallet History](/data-api/evm-api/wallet-api/activity/wallet-history) - Get full transaction history
+- [Get Token Balances](/data-api/evm-api/wallet-api/token-balances) - Fetch token balances

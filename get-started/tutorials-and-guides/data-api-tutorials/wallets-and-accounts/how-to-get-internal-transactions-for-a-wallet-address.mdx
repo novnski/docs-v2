@@ -1,13 +1,13 @@
 ---
-title: 'How to Get Internal Transactions for a Wallet Address'
-description: 'Learn how to fetch internal transactions (contract calls and ETH transfers between contracts) for any wallet using the Moralis API.'
+title: "How to Get Internal Transactions for a Wallet Address"
+description: "Learn how to fetch internal transactions (contract calls and ETH transfers between contracts) for any wallet using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve internal transactions for any wallet address using the Moralis API. Internal transactions are calls made between smart contracts during a transaction's execution, including ETH transfers from contracts. These are not visible in standard transaction lists but are important for tracking the complete flow of funds. We'll use the following Moralis API endpoint:
 
-- [Get Verbose Transactions](/data-api/evm-api/transaction-api/verbose-transactions) - Fetch transactions with internal calls and detailed execution data
+- [Get Decoded Transactions](/data-api/evm-api/wallet-api/decoded-transactions) - Fetch transactions with internal calls and detailed execution data
 
 ## Prerequisites
 
@@ -104,22 +104,21 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `hash` | Parent transaction hash |
-| `from_address` | Address that initiated the transaction |
-| `to_address` | Address the transaction was sent to |
-| `value` | ETH value transferred (in wei) |
-| `receipt_status` | Transaction status (1 = success, 0 = failed) |
-| `block_timestamp` | When the transaction was mined |
-| `internal_transactions` | Array of internal calls within this transaction |
-| `internal_transactions.type` | Type of internal call (CALL, CREATE, DELEGATECALL, etc.) |
-| `internal_transactions.from` | Address initiating the internal call |
-| `internal_transactions.to` | Address receiving the internal call |
-| `internal_transactions.value` | ETH value transferred internally (in wei) |
+| Field                         | Description                                              |
+| ----------------------------- | -------------------------------------------------------- |
+| `hash`                        | Parent transaction hash                                  |
+| `from_address`                | Address that initiated the transaction                   |
+| `to_address`                  | Address the transaction was sent to                      |
+| `value`                       | ETH value transferred (in wei)                           |
+| `receipt_status`              | Transaction status (1 = success, 0 = failed)             |
+| `block_timestamp`             | When the transaction was mined                           |
+| `internal_transactions`       | Array of internal calls within this transaction          |
+| `internal_transactions.type`  | Type of internal call (CALL, CREATE, DELEGATECALL, etc.) |
+| `internal_transactions.from`  | Address initiating the internal call                     |
+| `internal_transactions.to`    | Address receiving the internal call                      |
+| `internal_transactions.value` | ETH value transferred internally (in wei)                |
 
 ## Next Steps
 
-- [Get Wallet History](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts) - Get complete transaction history
-- [Get Transaction by Hash](/get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-get-a-blockchain-transaction-by-hash) - Get specific transaction details
-- [API Reference](/data-api/evm-api/transaction-api/verbose-transactions) - Full API documentation
+- [Get Wallet History](/data-api/evm-api/wallet-api/activity/wallet-history) - Get complete transaction history
+- [Get Transaction by Hash](/data-api/evm-api/blockchain-api/transaction-by-hash-decoded) - Get specific transaction details

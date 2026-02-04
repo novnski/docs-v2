@@ -1,13 +1,11 @@
 ---
-title: 'How to Get DEX Pair Addresses (Uniswap, PancakeSwap, SushiSwap)'
-description: 'Learn how to find liquidity pair addresses for any token pair on popular DEXs using the Moralis API.'
+title: "How to Get DEX Pair Addresses (Uniswap, PancakeSwap, SushiSwap)"
+description: "Learn how to find liquidity pair addresses for any token pair on popular DEXs using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to find DEX liquidity pair addresses for any two tokens using the Moralis API. This is essential for getting trading data, liquidity information, and price data for token pairs on decentralized exchanges like Uniswap, PancakeSwap, and SushiSwap. We'll use the following Moralis API endpoint:
-
-- [Get Pair Address](/data-api/evm-api/token-api/pairs/pair-address) - Find the liquidity pair address for any two tokens
 
 ## Prerequisites
 
@@ -89,18 +87,18 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `token0` | First token in the pair with metadata |
-| `token1` | Second token in the pair with metadata |
-| `pairAddress` | The liquidity pair contract address |
-| `exchange` | Name of the DEX (uniswapv2, uniswapv3, sushiswap, etc.) |
-| `exchangeAddress` | The DEX factory contract address |
-| `exchangeLogo` | URL to the exchange logo |
+| Field             | Description                                             |
+| ----------------- | ------------------------------------------------------- |
+| `token0`          | First token in the pair with metadata                   |
+| `token1`          | Second token in the pair with metadata                  |
+| `pairAddress`     | The liquidity pair contract address                     |
+| `exchange`        | Name of the DEX (uniswapv2, uniswapv3, sushiswap, etc.) |
+| `exchangeAddress` | The DEX factory contract address                        |
+| `exchangeLogo`    | URL to the exchange logo                                |
 
 ## Next Steps
 
 - [Get Token Pairs and Liquidity](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data) - Get liquidity data for pairs
 - [Get OHLC Data](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data) - Fetch price history
 - [Build a DEX Screener](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-build-a-dex-screener-clone) - Create a trading dashboard
-- [API Reference](/data-api/evm-api/token-api/pairs/pair-address) - Full API documentation
+- [API Reference](/data-api/evm-api/token-api/token-api-overview) - Full API documentation

@@ -1,13 +1,13 @@
 ---
-title: 'How to Get Native Token Balances for EOAs and Smart Accounts'
-description: 'Learn how to fetch native token balances (ETH, MATIC, BNB) for any wallet address using the Moralis API.'
+title: "How to Get Native Token Balances for EOAs and Smart Accounts"
+description: "Learn how to fetch native token balances (ETH, MATIC, BNB) for any wallet address using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve native token balances (like ETH, MATIC, or BNB) for any wallet address using the Moralis API. This works for both externally owned accounts (EOAs) and smart contract wallets like Safe or Argent. We'll use the following Moralis API endpoint:
 
-- [Get Native Balance](/data-api/evm-api/wallet-api/native-balance) - Fetch the native token balance for any wallet
+- [Get Native Balance](/data-api/evm-api/wallet-api/tokens/native-balance) - Fetch the native token balance for any wallet
 
 ## Prerequisites
 
@@ -69,8 +69,8 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
+| Field     | Description                                     |
+| --------- | ----------------------------------------------- |
 | `balance` | The native token balance in wei (smallest unit) |
 
 To convert to a human-readable format, divide by 10^18:
@@ -82,6 +82,5 @@ console.log(`Balance: ${balanceInEth} ETH`);
 
 ## Next Steps
 
-- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch ERC20 token balances
-- [Get Multi-Chain Activity](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address) - See activity across chains
-- [API Reference](/data-api/evm-api/wallet-api/native-balance) - Full API documentation
+- [Get Token Balances](/data-api/evm-api/wallet-api/token-balances) - Fetch ERC20 token balances
+- [Get Multi-Chain Activity](/data-api/evm-api/wallet-api/activity/chain-activity) - See activity across chains

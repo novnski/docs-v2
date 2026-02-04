@@ -1,13 +1,13 @@
 ---
-title: 'How to Get Full Wallet Transaction History (EOA & Smart Accounts)'
-description: 'Learn how to fetch the complete transaction history for any wallet address using the Moralis API.'
+title: "How to Get Full Wallet Transaction History (EOA & Smart Accounts)"
+description: "Learn how to fetch the complete transaction history for any wallet address using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve the full transaction history for any wallet address using the Moralis API. This includes all transactions, token transfers, NFT transfers, and internal transactions in a single, unified timeline. This works for both externally owned accounts (EOAs) and smart contract wallets. We'll use the following Moralis API endpoint:
 
-- [Get Wallet History](/data-api/evm-api/wallet-api/wallet-history) - Fetch the complete transaction history for any wallet
+- [Get Wallet History](/data-api/evm-api/wallet-api/activity/wallet-history) - Fetch the complete transaction history for any wallet
 
 ## Prerequisites
 
@@ -97,25 +97,24 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `hash` | Transaction hash |
-| `from_address` | Sender's wallet address |
-| `from_address_label` | Known label for sender |
-| `to_address` | Recipient's wallet address |
-| `to_address_label` | Known label for recipient |
-| `value` | Native token amount in wei |
-| `receipt_status` | Transaction status (1 = success) |
-| `block_timestamp` | When the transaction was mined |
-| `category` | Type of transaction (send, receive, token send, etc.) |
-| `summary` | Human-readable transaction summary |
-| `erc20_transfers` | ERC20 token transfers in this transaction |
-| `nft_transfers` | NFT transfers in this transaction |
-| `native_transfers` | Native token transfers |
+| Field                | Description                                           |
+| -------------------- | ----------------------------------------------------- |
+| `hash`               | Transaction hash                                      |
+| `from_address`       | Sender's wallet address                               |
+| `from_address_label` | Known label for sender                                |
+| `to_address`         | Recipient's wallet address                            |
+| `to_address_label`   | Known label for recipient                             |
+| `value`              | Native token amount in wei                            |
+| `receipt_status`     | Transaction status (1 = success)                      |
+| `block_timestamp`    | When the transaction was mined                        |
+| `category`           | Type of transaction (send, receive, token send, etc.) |
+| `summary`            | Human-readable transaction summary                    |
+| `erc20_transfers`    | ERC20 token transfers in this transaction             |
+| `nft_transfers`      | NFT transfers in this transaction                     |
+| `native_transfers`   | Native token transfers                                |
 
 ## Next Steps
 
-- [Get Token Balances](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet) - Fetch current balances
-- [Get Internal Transactions](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-internal-transactions-for-a-wallet-address) - Get internal calls
+- [Get Token Balances](/data-api/evm-api/wallet-api/token-balances) - Fetch current balances
+- [NFT Balances](/data-api/evm-api/wallet-api/nft-balances/nft-balances) - Fetch NFTs by wallet
 - [Get Multi-Chain Activity](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address) - See cross-chain activity
-- [API Reference](/data-api/evm-api/wallet-api/wallet-history) - Full API documentation

@@ -1,13 +1,13 @@
 ---
-title: 'How to Get NFT Collections Owned by a Wallet'
-description: 'Learn how to fetch a summary of NFT collections owned by any wallet address using the Moralis API.'
+title: "How to Get NFT Collections Owned by a Wallet"
+description: "Learn how to fetch a summary of NFT collections owned by any wallet address using the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve a summary of all NFT collections owned by a wallet address using the Moralis API. Instead of listing every individual NFT, this endpoint groups NFTs by collection and provides counts, making it perfect for portfolio overviews and collection summaries. We'll use the following Moralis API endpoint:
 
-- [Get Wallet NFT Collections](/data-api/evm-api/nft-api/wallet-nft-collections) - Fetch a summary of NFT collections owned by a wallet
+- [Get Wallet NFT Collections](/data-api/evm-api/wallet-api/nft-balances/nft-collections) - Fetch a summary of NFT collections owned by a wallet
 
 ## Prerequisites
 
@@ -99,22 +99,22 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `token_address` | Collection contract address |
-| `contract_type` | Token standard (ERC721 or ERC1155) |
-| `name` | Collection name |
-| `symbol` | Collection symbol |
-| `count` | Number of NFTs owned from this collection |
-| `collection_logo` | URL to collection logo |
-| `possible_spam` | Whether flagged as spam |
-| `verified_collection` | Whether collection is verified |
-| `floor_price` | Current floor price in ETH |
-| `floor_price_usd` | Floor price in USD |
+| Field                 | Description                               |
+| --------------------- | ----------------------------------------- |
+| `token_address`       | Collection contract address               |
+| `contract_type`       | Token standard (ERC721 or ERC1155)        |
+| `name`                | Collection name                           |
+| `symbol`              | Collection symbol                         |
+| `count`               | Number of NFTs owned from this collection |
+| `collection_logo`     | URL to collection logo                    |
+| `possible_spam`       | Whether flagged as spam                   |
+| `verified_collection` | Whether collection is verified            |
+| `floor_price`         | Current floor price in ETH                |
+| `floor_price_usd`     | Floor price in USD                        |
 
 ## Next Steps
 
-- [Get All Wallet NFTs](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-all-nfts-owned-by-a-wallet-address) - Fetch individual NFTs
-- [Get NFT Floor Prices](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-floor-prices) - Get collection floor prices
-- [Get NFT Metadata](/get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-metadata-by-contract-and-token-id) - Get detailed NFT info
-- [API Reference](/data-api/evm-api/nft-api/wallet-nft-collections) - Full API documentation
+- [Get NFT Metadata](/data-api/evm-api/nft-api/endpoints/nft-metadata) - Get detailed NFT metadata
+- [Get NFT Floor Prices](/data-api/evm-api/nft-api/floor-price-collection) - Fetch collection floor prices
+- [NFT Metadata](/data-api/data-features/data-enrichment/nft-metadata) - explore detailed metadata
+- [NFT Media Images (CDN)](/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn) - learn how we store NFT images

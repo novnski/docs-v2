@@ -1,13 +1,13 @@
 ---
-title: 'How to Get a Blockchain Transaction by Hash'
-description: 'Learn how to fetch detailed transaction data using a transaction hash with the Moralis API.'
+title: "How to Get a Blockchain Transaction by Hash"
+description: "Learn how to fetch detailed transaction data using a transaction hash with the Moralis API."
 ---
 
 ## Introduction
 
 In this tutorial, you'll learn how to retrieve detailed information about any blockchain transaction using its hash. This is essential for building transaction explorers, tracking payments, or verifying on-chain activity in your application. We'll use the following Moralis API endpoint:
 
-- [Get Transaction by Hash](/data-api/evm-api/transaction-api/transaction-by-hash) - Fetch detailed transaction data using a transaction hash
+- [Get Transaction by Hash](/data-api/evm-api/blockchain-api/transaction-by-hash) - Fetch detailed transaction data using a transaction hash
 
 ## Prerequisites
 
@@ -86,21 +86,20 @@ node index.js
 
 ## Understanding the Response
 
-| Field | Description |
-|-------|-------------|
-| `hash` | The transaction hash |
-| `from_address` | The sender's wallet address |
-| `to_address` | The recipient's wallet address |
-| `value` | Amount transferred in wei |
-| `gas` | Gas limit set for the transaction |
-| `gas_price` | Gas price in wei |
-| `receipt_status` | Transaction status (1 = success, 0 = failed) |
-| `block_timestamp` | When the transaction was mined |
-| `block_number` | Block number containing this transaction |
-| `transaction_fee` | Total fee paid in native token |
+| Field             | Description                                  |
+| ----------------- | -------------------------------------------- |
+| `hash`            | The transaction hash                         |
+| `from_address`    | The sender's wallet address                  |
+| `to_address`      | The recipient's wallet address               |
+| `value`           | Amount transferred in wei                    |
+| `gas`             | Gas limit set for the transaction            |
+| `gas_price`       | Gas price in wei                             |
+| `receipt_status`  | Transaction status (1 = success, 0 = failed) |
+| `block_timestamp` | When the transaction was mined               |
+| `block_number`    | Block number containing this transaction     |
+| `transaction_fee` | Total fee paid in native token               |
 
 ## Next Steps
 
 - [Get Wallet Transaction History](/get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts) - Fetch all transactions for a wallet
 - [Find Block by Timestamp](/get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-find-the-closest-block-by-unix-timestamp) - Find blocks at specific times
-- [API Reference](/data-api/evm-api/transaction-api/transaction-by-hash) - Full API documentation
