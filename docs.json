@@ -788,6 +788,8 @@
         "tab": "Data Indexer",
         "pages": [
           "data-indexer/index",
+          "data-indexer/features",
+          "data-indexer/how-it-works",
           "data-indexer/early-access"
         ]
       },
