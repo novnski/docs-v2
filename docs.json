@@ -160,17 +160,17 @@
               {
                 "group": "Auth API Tutorials",
                 "pages": [
-                  "how-to-authenticate-users-with-phantom-wallet",
-                  "how-to-authenticate-users-with-web3-auth",
-                  "how-to-authenticate-users-with-wallet-connect",
-                  "how-to-authenticate-users-with-rainbow-kit",
-                  "how-to-authenticate-users-with-particle-network",
-                  "how-to-authenticate-users-with-meta-mask",
-                  "how-to-authenticate-users-with-meta-mask-using-python-and-django",
-                  "how-to-authenticate-users-with-meta-mask-using-angular",
-                  "how-to-authenticate-users-with-magic-link",
-                  "how-to-authenticate-users-with-coinbase-wallet",
-                  "how-to-authenticate-users-with-meta-mask-using-react"
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-phantom-wallet",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-web3-auth",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-wallet-connect",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-rainbow-kit",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-particle-network",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-python-and-django",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-angular",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-magic-link",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-coinbase-wallet",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-react"
                 ]
               }
             ]
@@ -451,9 +451,9 @@
                   {
                     "group": "NFTs & Collections",
                     "pages": [
-                      "nfts-by-collection",
-                      "nfts-by-wallet",
-                      "nft-collections-by-wallet"
+                      "data-api/evm-api/nft-api/nfts-and-collections/nfts-by-collection",
+                      "data-api/evm-api/nft-api/nfts-and-collections/nfts-by-wallet",
+                      "data-api/evm-api/nft-api/nfts-and-collections/nft-collections-by-wallet"
                     ]
                   },
                   {
