@@ -1,23 +1,41 @@
 ---
-title: "Changelog"
+title: "Product updates"
+description: "New releases and improvements"
 ---
 
-import {HeroCard} from '/snippets/hero-card.mdx';
+<Update label="Feburary 4, 2026" tags={["New Feature"]}>
+    ## Historical Token Scores
 
-<Update label="May 15 2025" description="Data API" tags={["New Feature"]}>
-## Get Tokens by Exchange API
+    We've added the ability to track Token Scores over time with a new Historical Token Score endpoint.
 
-We're excited to announce our new Get Tokens by Exchange API endpoints\! This powerful addition to our Token API suite enables developers to track tokens at various lifecycle stages on decentralized exchanges, with tama.meme as our initial supported DEX.
+    The Historical Token Score endpoint lets you retrieve a token's score history across different timeframes, so you can see how a token's onchain quality has changed over time.
 
-### What's New?
-
-| Name                          | Description                                                           | API Reference                                                                                                 |
-| ----------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Get Newly Launched Tokens** | Retrieve a list of newly created tokens on a specific exchange        | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-new-tokens-by-exchange)       |
-| **Get Bonding Tokens**        | Access tokens currently in bonding curve phase on a specific exchange | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-bonding-tokens-by-exchange)   |
-| **Get Graduated Tokens**      | List tokens that have graduated from bonding curve to full trading    | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-graduated-tokens-by-exchange) |
-| **Get Token Bonding Status**  | Check the bonding curve status and progress for a specific token      | [Method Documentation](https://docs.moralis.com/web3-data-api/evm/reference/get-token-bonding-status)         |
-
-<HeroCard title="Read More" href="/changelog/get-tokens-by-exchange-api" />
 </Update>
 
+<Update label="December 16, 2025" tags={["New Feature"]}>
+    ## Token Scores
+
+    We've launched the Moralis Token Score - a unified 0–100 rating that summarizes a token's onchain quality in a single, easy-to-use metric.
+
+</Update>
+
+<Update label="November 24, 2025" tags={["New Chains"]}>
+    ## Monad EVM Live
+
+    We've added Monad EVM support to both the Data APIs and the Streams API, giving you access to this next-generation, EVM-compatible Layer-1 that delivers 10,000 TPS, 0.4-second block times, 800 ms finality, and near-zero gas fees.
+
+</Update>
+
+<Update label="October 16, 2025" tags={["New Chains"]}>
+    ## Sei EVM Live
+
+    We’ve added Sei EVM support to both the Data APIs and the Streams API, expanding your access to this high-performance Layer 1 chain built for speed and scalability.
+
+</Update>
+
+<Update label="September 30, 2025" tags={["New Chains"]}>
+    ## HyperEVM Live
+
+    We've added HyperEVM mainnet to the Moralis Streams API. You can now listen to real-time blockchain activity on HyperEVM - perfect for notifications, indexing, and on-chain automation.
+
+</Update>

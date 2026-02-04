@@ -22,12 +22,7 @@
     "format": "woff2"
   },
   "contextual": {
-    "options": [
-      "chatgpt",
-      "claude",
-      "copy",
-      "view"
-    ]
+    "options": ["chatgpt", "claude", "copy", "view"]
   },
   "navigation": {
     "tabs": [
@@ -36,9 +31,7 @@
         "pages": [
           {
             "group": "Introduction",
-            "pages": [
-              "index"
-            ]
+            "pages": ["index"]
           },
           {
             "group": "Getting Started",
@@ -49,10 +42,7 @@
           },
           {
             "group": "Pricing & Resources",
-            "pages": [
-              "get-started/pricing",
-              "get-started/supported-chains"
-            ]
+            "pages": ["get-started/pricing", "get-started/supported-chains"]
           },
           {
             "group": "Tutorials & Guides",
@@ -198,10 +188,7 @@
               "data-api/supported-chains",
               {
                 "group": "Quickstart",
-                "pages": [
-                  "data-api/get-your-api-key",
-                  "data-api/first-request"
-                ]
+                "pages": ["data-api/get-your-api-key", "data-api/first-request"]
               },
               {
                 "group": "Resources",
@@ -1614,10 +1601,7 @@
       },
       {
         "tab": "Changelog",
-        "pages": [
-          "changelog",
-          "changelog/get-tokens-by-exchange-api"
-        ]
+        "pages": ["changelog"]
       }
     ]
   },
