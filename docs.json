@@ -1613,8 +1613,16 @@
   "navbar": {
     "links": [
       {
-        "label": "Login",
+        "label": "Get API Key",
         "href": "https://admin.moralis.com/"
+      },
+      {
+        "label": "Enterprise",
+        "href": "https://moralis.com/enterprise/"
+      },
+      {
+        "label": "Status",
+        "href": "https://status.moralis.io/"
       }
     ],
     "primary": {
