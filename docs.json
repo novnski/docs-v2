@@ -304,59 +304,59 @@
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/evm-api/wallet-api/index",
+                  "data-api/evm/wallet/index",
                   {
                     "group": "Activity",
                     "pages": [
-                      "data-api/evm-api/wallet-api/activity/wallet-history",
-                      "data-api/evm-api/wallet-api/token-transfers",
-                      "data-api/evm-api/wallet-api/wallet-swaps",
-                      "data-api/evm-api/wallet-api/nft-transfers",
-                      "data-api/evm-api/wallet-api/nft-trades-by-wallet",
-                      "data-api/evm-api/wallet-api/wallet-transactions",
-                      "data-api/evm-api/wallet-api/decoded-transactions",
-                      "data-api/evm-api/wallet-api/activity/wallet-stats",
-                      "data-api/evm-api/wallet-api/activity/chain-activity"
+                      "data-api/evm/wallet/activity/wallet-history",
+                      "data-api/evm/wallet/token-transfers",
+                      "data-api/evm/wallet/wallet-swaps",
+                      "data-api/evm/wallet/nft-transfers",
+                      "data-api/evm/wallet/nft-trades-by-wallet",
+                      "data-api/evm/wallet/wallet-transactions",
+                      "data-api/evm/wallet/decoded-transactions",
+                      "data-api/evm/wallet/activity/wallet-stats",
+                      "data-api/evm/wallet/activity/chain-activity"
                     ]
                   },
                   {
                     "group": "Tokens",
                     "pages": [
-                      "data-api/evm-api/wallet-api/token-balances",
-                      "data-api/evm-api/wallet-api/tokens/native-balance",
-                      "data-api/evm-api/wallet-api/tokens/native-balances-batch",
-                      "data-api/evm-api/wallet-api/approvals",
-                      "data-api/evm-api/wallet-api/tokens/token-balances-legacy"
+                      "data-api/evm/wallet/token-balances",
+                      "data-api/evm/wallet/tokens/native-balance",
+                      "data-api/evm/wallet/tokens/native-balances-batch",
+                      "data-api/evm/wallet/approvals",
+                      "data-api/evm/wallet/tokens/token-balances-legacy"
                     ]
                   },
                   {
                     "group": "NFTs",
                     "pages": [
-                      "data-api/evm-api/wallet-api/nft-balances/nft-balances",
-                      "data-api/evm-api/wallet-api/nft-balances/nft-collections"
+                      "data-api/evm/wallet/nft-balances/nft-balances",
+                      "data-api/evm/wallet/nft-balances/nft-collections"
                     ]
                   },
                   {
                     "group": "DeFi Positions",
                     "pages": [
-                      "data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
-                      "data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
-                      "data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
+                      "data-api/evm/wallet/de-fi-positions/wallet-protocols",
+                      "data-api/evm/wallet/de-fi-positions/wallet-positions",
+                      "data-api/evm/wallet/de-fi-positions/detailed-positions"
                     ]
                   },
                   {
                     "group": "Net Worth & PnL",
                     "pages": [
-                      "data-api/evm-api/wallet-api/net-worth",
-                      "data-api/evm-api/wallet-api/net-worth-and-pn-l/wallet-pn-l-summary",
-                      "data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
+                      "data-api/evm/wallet/net-worth",
+                      "data-api/evm/wallet/net-worth-and-pn-l/wallet-pn-l-summary",
+                      "data-api/evm/wallet/pn-l/wallet-pn-l"
                     ]
                   },
                   {
                     "group": "Identity",
                     "pages": [
-                      "data-api/evm-api/wallet-api/identity/resolve-address",
-                      "data-api/evm-api/wallet-api/identity/ens-lookup"
+                      "data-api/evm/wallet/identity/resolve-address",
+                      "data-api/evm/wallet/identity/ens-lookup"
                     ]
                   }
                 ]
