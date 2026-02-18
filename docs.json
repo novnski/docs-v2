@@ -365,7 +365,7 @@
                 "group": "Token API",
                 "tag": "New Features",
                 "pages": [
-                  "data-api/evm/token/token-api-overview",
+                  "data-api/evm/token/index",
                   {
                     "group": "Metadata & Info",
                     "tag": "New",
