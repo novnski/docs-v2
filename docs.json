@@ -537,14 +537,14 @@
               {
                 "group": "Blockchain API",
                 "pages": [
-                  "data-api/evm-api/blockchain-api/index",
-                  "data-api/evm-api/blockchain-api/block-by-hash",
-                  "data-api/evm-api/blockchain-api/block-by-date",
-                  "data-api/evm-api/blockchain-api/latest-block",
-                  "data-api/evm-api/blockchain-api/transaction-by-hash",
-                  "data-api/evm-api/blockchain-api/transaction-by-hash-decoded",
-                  "data-api/evm-api/blockchain-api/address-transactions",
-                  "data-api/evm-api/blockchain-api/address-transactions-1"
+                  "data-api/evm/blockchain/index",
+                  "data-api/evm/blockchain/block-by-hash",
+                  "data-api/evm/blockchain/block-by-date",
+                  "data-api/evm/blockchain/latest-block",
+                  "data-api/evm/blockchain/transaction-by-hash",
+                  "data-api/evm/blockchain/transaction-by-hash-decoded",
+                  "data-api/evm/blockchain/address-transactions",
+                  "data-api/evm/blockchain/address-transactions-1"
                 ]
               }
             ]
