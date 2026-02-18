@@ -514,15 +514,15 @@
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/evm-api/price-api/index",
-                  "data-api/evm-api/price-api/token-price",
-                  "data-api/evm-api/price-api/token-prices-batch",
-                  "data-api/evm-api/price-api/ohlc",
-                  "data-api/evm-api/price-api/collection-floor-price",
-                  "data-api/evm-api/price-api/token-id-floor-price",
-                  "data-api/evm-api/price-api/timeseries-floor-price",
-                  "data-api/evm-api/price-api/sale-prices-by-collection",
-                  "data-api/evm-api/price-api/sale-price-by-token-id"
+                  "data-api/evm/price/index",
+                  "data-api/evm/price/token-price",
+                  "data-api/evm/price/token-prices-batch",
+                  "data-api/evm/price/ohlc",
+                  "data-api/evm/price/collection-floor-price",
+                  "data-api/evm/price/token-id-floor-price",
+                  "data-api/evm/price/timeseries-floor-price",
+                  "data-api/evm/price/sale-prices-by-collection",
+                  "data-api/evm/price/sale-price-by-token-id"
                 ]
               },
               {
