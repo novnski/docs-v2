@@ -365,46 +365,46 @@
                 "group": "Token API",
                 "tag": "New Features",
                 "pages": [
-                  "data-api/evm-api/token-api/token-api-overview",
+                  "data-api/evm/token/token-api-overview",
                   {
                     "group": "Metadata & Info",
                     "tag": "New",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-metadata",
-                      "data-api/evm-api/token-api/endpoints/token-score",
-                      "data-api/evm-api/token-api/metadata-and-info/token-score-timeseries"
+                      "data-api/evm/token/endpoints/token-metadata",
+                      "data-api/evm/token/endpoints/token-score",
+                      "data-api/evm/token/metadata-and-info/token-score-timeseries"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-price",
-                      "data-api/evm-api/token-api/prices/token-prices-batch",
-                      "data-api/evm-api/token-api/prices/ohlc"
+                      "data-api/evm/token/endpoints/token-price",
+                      "data-api/evm/token/prices/token-prices-batch",
+                      "data-api/evm/token/prices/ohlc"
                     ]
                   },
                   {
                     "group": "Transfers",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-transfers"
+                      "data-api/evm/token/endpoints/token-transfers"
                     ]
                   },
                   {
                     "group": "Holders",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-holders",
-                      "data-api/evm-api/token-api/holders/token-holder-stats",
-                      "data-api/evm-api/token-api/holders/historical-token-holders"
+                      "data-api/evm/token/endpoints/token-holders",
+                      "data-api/evm/token/holders/token-holder-stats",
+                      "data-api/evm/token/holders/historical-token-holders"
                     ]
                   },
                   {
                     "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
-                      "data-api/evm-api/token-api/swaps-and-pairs/pair-swaps",
-                      "data-api/evm-api/token-api/swaps-and-pairs/wallet-swaps",
-                      "data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
-                      "data-api/evm-api/token-api/swaps-and-pairs/pair-stats"
+                      "data-api/evm/token/swaps-and-pairs/token-swaps",
+                      "data-api/evm/token/swaps-and-pairs/pair-swaps",
+                      "data-api/evm/token/swaps-and-pairs/wallet-swaps",
+                      "data-api/evm/token/swaps-and-pairs/token-pairs",
+                      "data-api/evm/token/swaps-and-pairs/pair-stats"
                     ]
                   },
                   {
@@ -419,17 +419,17 @@
                     "group": "Search & Discovery",
                     "pages": [
                       "universal-api/token-api/endpoints/token-search",
-                      "data-api/evm-api/token-api/search-and-discovery/filtered-tokens",
-                      "data-api/evm-api/token-api/search-and-discovery/top-gainers",
-                      "data-api/evm-api/token-api/search-and-discovery/top-losers",
-                      "data-api/evm-api/token-api/search-and-discovery/token-categories"
+                      "data-api/evm/token/search-and-discovery/filtered-tokens",
+                      "data-api/evm/token/search-and-discovery/top-gainers",
+                      "data-api/evm/token/search-and-discovery/top-losers",
+                      "data-api/evm/token/search-and-discovery/token-categories"
                     ]
                   },
                   {
                     "group": "Advanced Signals",
                     "pages": [
-                      "data-api/evm-api/token-api/advanced-signals/snipers",
-                      "data-api/evm-api/token-api/advanced-signals/top-traders"
+                      "data-api/evm/token/advanced-signals/snipers",
+                      "data-api/evm/token/advanced-signals/top-traders"
                     ]
                   }
                 ]
