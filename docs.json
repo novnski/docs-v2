@@ -552,82 +552,82 @@
           {
             "group": "Solana API",
             "pages": [
-              "data-api/solana-api/solana-index",
+              "data-api/solana/solana-index",
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/solana-api/wallet-api/wallet-api-overview",
-                  "data-api/solana-api/wallet-api/native-balance",
-                  "data-api/solana-api/wallet-api/portfolio",
-                  "data-api/solana-api/wallet-api/token-balances",
-                  "data-api/solana-api/wallet-api/nft-balances",
-                  "data-api/solana-api/wallet-api/wallet-swaps"
+                  "data-api/solana/wallet-api/wallet-api-overview",
+                  "data-api/solana/wallet-api/native-balance",
+                  "data-api/solana/wallet-api/portfolio",
+                  "data-api/solana/wallet-api/token-balances",
+                  "data-api/solana/wallet-api/nft-balances",
+                  "data-api/solana/wallet-api/wallet-swaps"
                 ]
               },
               {
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
-                  "data-api/solana-api/token-api/token-api-overview",
+                  "data-api/solana/token-api/token-api-overview",
                   {
                     "group": "Metadata & Info",
                     "tag": "New features",
                     "pages": [
-                      "data-api/solana-api/token-api/token-metadata",
-                      "data-api/solana-api/token-api/token-score"
+                      "data-api/solana/token-api/token-metadata",
+                      "data-api/solana/token-api/token-score"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/solana-api/token-api/prices/token-p-rice",
-                      "data-api/solana-api/token-api/prices/token-price-batch",
-                      "data-api/solana-api/token-api/prices/ohlc"
+                      "data-api/solana/token-api/prices/token-p-rice",
+                      "data-api/solana/token-api/prices/token-price-batch",
+                      "data-api/solana/token-api/prices/ohlc"
                     ]
                   },
                   {
                     "group": "Holders",
                     "pages": [
-                      "data-api/solana-api/token-api/holders/top-holders",
-                      "data-api/solana-api/token-api/holders/holder-metrics",
-                      "data-api/solana-api/token-api/holders/historical-holders"
+                      "data-api/solana/token-api/holders/top-holders",
+                      "data-api/solana/token-api/holders/holder-metrics",
+                      "data-api/solana/token-api/holders/historical-holders"
                     ]
                   },
                   {
                     "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/solana-api/token-api/swaps-and-pairs/token-swaps",
-                      "data-api/solana-api/token-api/swaps-and-pairs/pair-swaps",
-                      "data-api/solana-api/token-api/swaps-and-pairs/wallet-swaps",
-                      "data-api/solana-api/token-api/swaps-and-pairs/token-pairs",
-                      "data-api/solana-api/token-api/swaps-and-pairs/pair-stats"
+                      "data-api/solana/token-api/swaps-and-pairs/token-swaps",
+                      "data-api/solana/token-api/swaps-and-pairs/pair-swaps",
+                      "data-api/solana/token-api/swaps-and-pairs/wallet-swaps",
+                      "data-api/solana/token-api/swaps-and-pairs/token-pairs",
+                      "data-api/solana/token-api/swaps-and-pairs/pair-stats"
                     ]
                   },
                   {
                     "group": "Market Metrics",
                     "pages": [
-                      "data-api/solana-api/token-api/market-metrics/token-analytics",
-                      "data-api/solana-api/token-api/market-metrics/token-analytics-batch",
-                      "data-api/solana-api/token-api/market-metrics/token-analytics-timeseries"
+                      "data-api/solana/token-api/market-metrics/token-analytics",
+                      "data-api/solana/token-api/market-metrics/token-analytics-batch",
+                      "data-api/solana/token-api/market-metrics/token-analytics-timeseries"
                     ]
                   },
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "data-api/solana-api/token-api/search-and-discovery/token-search",
-                      "data-api/solana-api/token-api/search-and-discovery/filtered-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/top-gainers",
-                      "data-api/solana-api/token-api/search-and-discovery/top-losers",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-new-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fund-bonding-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-bonding-status"
+                      "data-api/solana/token-api/search-and-discovery/token-search",
+                      "data-api/solana/token-api/search-and-discovery/filtered-tokens",
+                      "data-api/solana/token-api/search-and-discovery/top-gainers",
+                      "data-api/solana/token-api/search-and-discovery/top-losers",
+                      "data-api/solana/token-api/search-and-discovery/pump-fun-new-tokens",
+                      "data-api/solana/token-api/search-and-discovery/pump-fund-bonding-tokens",
+                      "data-api/solana/token-api/search-and-discovery/pump-fun-graduated-tokens",
+                      "data-api/solana/token-api/search-and-discovery/pump-fun-bonding-status"
                     ]
                   },
                   {
                     "group": "Advanced Signals",
                     "pages": [
-                      "data-api/solana-api/token-api/advanced-signals/snipers"
+                      "data-api/solana/token-api/advanced-signals/snipers"
                     ]
                   }
                 ]
@@ -635,17 +635,17 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/solana-api/nft-api/nft-api-overview",
-                  "data-api/solana-api/nft-api/nft-metadata"
+                  "data-api/solana/nft-api/nft-api-overview",
+                  "data-api/solana/nft-api/nft-metadata"
                 ]
               },
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/solana-api/price-api/price-api-overview",
-                  "data-api/solana-api/price-api/token-price",
-                  "data-api/solana-api/token-api/prices/token-price-batch",
-                  "data-api/solana-api/price-api/ohlc"
+                  "data-api/solana/price-api/price-api-overview",
+                  "data-api/solana/price-api/token-price",
+                  "data-api/solana/token-api/prices/token-price-batch",
+                  "data-api/solana/price-api/ohlc"
                 ]
               }
             ]
