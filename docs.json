@@ -300,7 +300,7 @@
           {
             "group": "EVM API",
             "pages": [
-              "data-api/evm-api/evm-index",
+              "data-api/evm/index",
               {
                 "group": "Wallet API",
                 "pages": [
