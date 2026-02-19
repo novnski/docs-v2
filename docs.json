@@ -635,8 +635,8 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/solana/nft-api/nft-api-overview",
-                  "data-api/solana/nft-api/nft-metadata"
+                  "data-api/solana/nft/nft-api-overview",
+                  "data-api/solana/nft/nft-metadata"
                 ]
               },
               {
