@@ -308,15 +308,15 @@
                   {
                     "group": "Activity",
                     "pages": [
-                      "data-api/evm/wallet/activity/wallet-history",
+                      "data-api/evm/wallet/wallet-history",
                       "data-api/evm/wallet/token-transfers",
                       "data-api/evm/wallet/wallet-swaps",
                       "data-api/evm/wallet/nft-transfers",
                       "data-api/evm/wallet/nft-trades-by-wallet",
                       "data-api/evm/wallet/wallet-transactions",
                       "data-api/evm/wallet/decoded-transactions",
-                      "data-api/evm/wallet/activity/wallet-stats",
-                      "data-api/evm/wallet/activity/chain-activity"
+                      "data-api/evm/wallet/wallet-stats",
+                      "data-api/evm/wallet/chain-activity"
                     ]
                   },
                   {
