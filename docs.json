@@ -332,24 +332,24 @@
                   {
                     "group": "NFTs",
                     "pages": [
-                      "data-api/evm/wallet/nft-balances/nft-balances",
-                      "data-api/evm/wallet/nft-balances/nft-collections"
+                      "data-api/evm/wallet/nft-balances",
+                      "data-api/evm/wallet/nft-collections"
                     ]
                   },
                   {
                     "group": "DeFi Positions",
                     "pages": [
-                      "data-api/evm/wallet/de-fi-positions/wallet-protocols",
-                      "data-api/evm/wallet/de-fi-positions/wallet-positions",
-                      "data-api/evm/wallet/de-fi-positions/detailed-positions"
+                      "data-api/evm/wallet/wallet-protocols",
+                      "data-api/evm/wallet/wallet-positions",
+                      "data-api/evm/wallet/detailed-positions"
                     ]
                   },
                   {
                     "group": "Net Worth & PnL",
                     "pages": [
                       "data-api/evm/wallet/net-worth",
-                      "data-api/evm/wallet/net-worth-and-pn-l/wallet-pn-l-summary",
-                      "data-api/evm/wallet/pn-l/wallet-pn-l"
+                      "data-api/evm/wallet/wallet-pn-l-summary",
+                      "data-api/evm/wallet/wallet-pn-l"
                     ]
                   },
                   {

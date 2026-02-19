@@ -21,9 +21,9 @@ PnL data is designed for:
 
 PnL data is exposed through the following endpoints:
 
-- [Wallet PnL Summary](/data-api/evm/wallet/net-worth-and-pn-l/wallet-pn-l-summary)\
+- [Wallet PnL Summary](/data-api/evm/wallet/wallet-pn-l-summary)\
   High-level profitability metrics for a wallet
-- [Wallet PnL Breakdown](/data-api/evm/wallet/pn-l/wallet-pn-l)\
+- [Wallet PnL Breakdown](/data-api/evm/wallet/wallet-pn-l)\
   Token-by-token profitability details
 - [Top Traders by Token](/data-api/evm/token/advanced-signals/top-traders)\
   Rankings of wallets by realized profit for a given token
@@ -41,7 +41,7 @@ Moralis currently supports **realized PnL only**.
 
 You can calculate unrealized PnL yourself by combining:
 
-- **Cost basis / realized trade data** from the [PnL endpoints](/data-api/evm/wallet/pn-l/wallet-pn-l)
+- **Cost basis / realized trade data** from the [PnL endpoints](/data-api/evm/wallet/wallet-pn-l)
 - **Real-time token balances + real-time prices** from the [Token Balances](/data-api/evm/wallet/token-balances) endpoint
 
 A common approach is:
