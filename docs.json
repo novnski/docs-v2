@@ -642,10 +642,10 @@
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/solana/price-api/price-api-overview",
-                  "data-api/solana/price-api/token-price",
+                  "data-api/solana/price/price-api-overview",
+                  "data-api/solana/price/token-price",
                   "data-api/solana/token/prices/token-price-batch",
-                  "data-api/solana/price-api/ohlc"
+                  "data-api/solana/price/ohlc"
                 ]
               }
             ]
