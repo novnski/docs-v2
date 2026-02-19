@@ -556,7 +556,7 @@
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/solana/wallet/wallet-api-overview",
+                  "data-api/solana/wallet/index",
                   "data-api/solana/wallet/native-balance",
                   "data-api/solana/wallet/portfolio",
                   "data-api/solana/wallet/token-balances",
