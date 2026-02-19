@@ -568,7 +568,7 @@
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
-                  "data-api/solana/token/token-api-overview",
+                  "data-api/solana/token/index",
                   {
                     "group": "Metadata & Info",
                     "tag": "New features",
