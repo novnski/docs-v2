@@ -323,10 +323,10 @@
                     "group": "Tokens",
                     "pages": [
                       "data-api/evm/wallet/token-balances",
-                      "data-api/evm/wallet/tokens/native-balance",
-                      "data-api/evm/wallet/tokens/native-balances-batch",
+                      "data-api/evm/wallet/native-balance",
+                      "data-api/evm/wallet/native-balances-batch",
                       "data-api/evm/wallet/approvals",
-                      "data-api/evm/wallet/tokens/token-balances-legacy"
+                      "data-api/evm/wallet/token-balances-legacy"
                     ]
                   },
                   {
@@ -635,14 +635,14 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/solana/nft/nft-api-overview",
+                  "data-api/solana/nft/index",
                   "data-api/solana/nft/nft-metadata"
                 ]
               },
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/solana/price/price-api-overview",
+                  "data-api/solana/price/index",
                   "data-api/solana/price/token-price",
                   "data-api/solana/token/prices/token-price-batch",
                   "data-api/solana/price/ohlc"
