@@ -355,8 +355,8 @@
                   {
                     "group": "Identity",
                     "pages": [
-                      "data-api/evm/wallet/identity/resolve-address",
-                      "data-api/evm/wallet/identity/ens-lookup"
+                      "data-api/evm/wallet/resolve-address",
+                      "data-api/evm/wallet/ens-lookup"
                     ]
                   }
                 ]
