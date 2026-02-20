@@ -923,8 +923,8 @@ universal-api/global-api/endpoints/trading-stats
 universal-api/global-api/endpoints/trading-stats-category
 universal-api/global-api/endpoints/trading-stats-category-timeseries
 universal-api/global-api/endpoints/trading-stats-timeseries
-universal-api/token/endpoints/token-analytics
-universal-api/token/endpoints/token-analytics-multi
-universal-api/token/endpoints/token-analytics-timeseries
-universal-api/token/endpoints/token-score
-universal-api/token/endpoints/token-search
+universal-api/token/token-analytics
+universal-api/token/token-analytics-multi
+universal-api/token/token-analytics-timeseries
+universal-api/token/token-score
+universal-api/token/token-search
