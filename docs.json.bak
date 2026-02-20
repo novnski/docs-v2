@@ -249,7 +249,7 @@
                 "group": "Integrations",
                 "pages": [
                   "data-api/data-features/integrations/supported-dexs",
-                  "data-api/data-features/integrations/defi-protocols",
+                  "data-api/data-features/integrations/de-fi-protocols",
                   "data-api/data-features/integrations/nft-marketplaces"
                 ]
               }
@@ -473,9 +473,9 @@
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/evm/nft/prices/collection-floor-price",
+                      "data-api/evm/nft/collection-floor-price",
                       "data-api/evm/nft/prices/floor",
-                      "data-api/evm/nft/prices/historical-floor-price",
+                      "data-api/evm/nft/historical-floor-price",
                       "data-api/evm/nft/prices/sale-price-by-contract",
                       "data-api/evm/nft/prices/sale-price-by-token-id"
                     ]
@@ -544,7 +544,7 @@
                   "data-api/evm/blockchain/transaction-by-hash",
                   "data-api/evm/blockchain/transaction-by-hash-decoded",
                   "data-api/evm/blockchain/address-transactions",
-                  "data-api/evm/blockchain/address-transactions-decoded"
+                  "data-api/evm/blockchain/address-transactions-1"
                 ]
               }
             ]
@@ -580,8 +580,8 @@
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/solana/token/prices/token-price",
-                      "data-api/solana/token/prices/token-prices-batch",
+                      "data-api/solana/token/prices/token-p-rice",
+                      "data-api/solana/token/prices/token-price-batch",
                       "data-api/solana/token/prices/ohlc"
                     ]
                   },
@@ -596,11 +596,11 @@
                   {
                     "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/solana/token/swaps/token-swaps",
-                      "data-api/solana/token/pairs/pair-swaps",
-                      "data-api/solana/token/swaps/wallet-swaps",
-                      "data-api/solana/token/pairs/token-pairs",
-                      "data-api/solana/token/pairs/pair-stats"
+                      "data-api/solana/token/swaps-and-pairs/token-swaps",
+                      "data-api/solana/token/swaps-and-pairs/pair-swaps",
+                      "data-api/solana/token/swaps-and-pairs/wallet-swaps",
+                      "data-api/solana/token/swaps-and-pairs/token-pairs",
+                      "data-api/solana/token/swaps-and-pairs/pair-stats"
                     ]
                   },
                   {
@@ -619,7 +619,7 @@
                       "data-api/solana/token/search-and-discovery/top-gainers",
                       "data-api/solana/token/search-and-discovery/top-losers",
                       "data-api/solana/token/search-and-discovery/pump-fun-new-tokens",
-                      "data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens",
+                      "data-api/solana/token/search-and-discovery/pump-fund-bonding-tokens",
                       "data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens",
                       "data-api/solana/token/search-and-discovery/pump-fun-bonding-status"
                     ]
@@ -644,7 +644,7 @@
                 "pages": [
                   "data-api/solana/price/index",
                   "data-api/solana/price/token-price",
-                  "data-api/solana/token/prices/token-prices-batch",
+                  "data-api/solana/token/prices/token-price-batch",
                   "data-api/solana/price/ohlc"
                 ]
               }
