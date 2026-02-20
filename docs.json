@@ -370,15 +370,15 @@
                     "group": "Metadata & Info",
                     "tag": "New",
                     "pages": [
-                      "data-api/evm/token/endpoints/token-metadata",
-                      "data-api/evm/token/endpoints/token-score",
+                      "data-api/evm/token/metadata/token-metadata",
+                      "data-api/evm/token/metadata/token-score",
                       "data-api/evm/token/metadata/token-score-timeseries"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/evm/token/endpoints/token-price",
+                      "data-api/evm/token/prices/token-price",
                       "data-api/evm/token/prices/token-prices-batch",
                       "data-api/evm/token/prices/ohlc"
                     ]
@@ -386,13 +386,13 @@
                   {
                     "group": "Transfers",
                     "pages": [
-                      "data-api/evm/token/endpoints/token-transfers"
+                      "data-api/evm/token/transfers/token-transfers"
                     ]
                   },
                   {
                     "group": "Holders",
                     "pages": [
-                      "data-api/evm/token/endpoints/token-holders",
+                      "data-api/evm/token/holders/token-holders",
                       "data-api/evm/token/holders/token-holder-stats",
                       "data-api/evm/token/holders/historical-token-holders"
                     ]
