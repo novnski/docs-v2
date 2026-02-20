@@ -372,7 +372,7 @@
                     "pages": [
                       "data-api/evm/token/endpoints/token-metadata",
                       "data-api/evm/token/endpoints/token-score",
-                      "data-api/evm/token/metadata-and-info/token-score-timeseries"
+                      "data-api/evm/token/metadata/token-score-timeseries"
                     ]
                   },
                   {
@@ -400,11 +400,11 @@
                   {
                     "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/evm/token/swaps-and-pairs/token-swaps",
-                      "data-api/evm/token/swaps-and-pairs/pair-swaps",
-                      "data-api/evm/token/swaps-and-pairs/wallet-swaps",
-                      "data-api/evm/token/swaps-and-pairs/token-pairs",
-                      "data-api/evm/token/swaps-and-pairs/pair-stats"
+                      "data-api/evm/token/swaps/token-swaps",
+                      "data-api/evm/token/swaps/pair-swaps",
+                      "data-api/evm/token/swaps/wallet-swaps",
+                      "data-api/evm/token/swaps/token-pairs",
+                      "data-api/evm/token/swaps/pair-stats"
                     ]
                   },
                   {
@@ -419,17 +419,17 @@
                     "group": "Search & Discovery",
                     "pages": [
                       "universal-api/token-api/endpoints/token-search",
-                      "data-api/evm/token/search-and-discovery/filtered-tokens",
-                      "data-api/evm/token/search-and-discovery/top-gainers",
-                      "data-api/evm/token/search-and-discovery/top-losers",
-                      "data-api/evm/token/search-and-discovery/token-categories"
+                      "data-api/evm/token/discovery/filtered-tokens",
+                      "data-api/evm/token/discovery/top-gainers",
+                      "data-api/evm/token/discovery/top-losers",
+                      "data-api/evm/token/discovery/token-categories"
                     ]
                   },
                   {
                     "group": "Advanced Signals",
                     "pages": [
-                      "data-api/evm/token/advanced-signals/snipers",
-                      "data-api/evm/token/advanced-signals/top-traders"
+                      "data-api/evm/token/signals/snipers",
+                      "data-api/evm/token/signals/top-traders"
                     ]
                   }
                 ]
