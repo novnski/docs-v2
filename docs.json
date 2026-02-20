@@ -215,7 +215,7 @@
                   "data-api/data-features/data-enrichment/nft-metadata",
                   "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
                   "data-api/data-features/data-enrichment/nft-rarity",
-                  "data-api/data-features/data-enrichment/profitability-pn-l",
+                  "data-api/data-features/data-enrichment/profitability-pnl",
                   "data-api/data-features/data-enrichment/token-metadata",
                   "data-api/data-features/data-enrichment/solana-token-standards"
                 ]
@@ -348,8 +348,8 @@
                     "group": "Net Worth & PnL",
                     "pages": [
                       "data-api/evm/wallet/net-worth",
-                      "data-api/evm/wallet/wallet-pn-l-summary",
-                      "data-api/evm/wallet/wallet-pn-l"
+                      "data-api/evm/wallet/wallet-pnl-summary",
+                      "data-api/evm/wallet/wallet-pnl"
                     ]
                   },
                   {
