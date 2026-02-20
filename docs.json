@@ -258,41 +258,41 @@
           {
             "group": "Universal API",
             "pages": [
-              "universal-api/index",
+              "data-api/universal/index",
               {
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
-                  "universal-api/token/search/token-search",
-                  "universal-api/token/score/token-score",
-                  "universal-api/token/score/token-score-timeseries",
-                  "universal-api/token/filtered-tokens",
-                  "universal-api/token/trending-tokens",
-                  "universal-api/token/top-gainers",
-                  "universal-api/token/top-losers",
-                  "universal-api/token/analytics/token-analytics",
-                  "universal-api/token/analytics/token-analytics-multi",
-                  "universal-api/token/analytics/token-analytics-timeseries"
+                  "data-api/universal/token/search/token-search",
+                  "data-api/universal/token/score/token-score",
+                  "data-api/universal/token/score/token-score-timeseries",
+                  "data-api/universal/token/filtered-tokens",
+                  "data-api/universal/token/trending-tokens",
+                  "data-api/universal/token/top-gainers",
+                  "data-api/universal/token/top-losers",
+                  "data-api/universal/token/analytics/token-analytics",
+                  "data-api/universal/token/analytics/token-analytics-multi",
+                  "data-api/universal/token/analytics/token-analytics-timeseries"
                 ]
               },
               {
                 "group": "Market Metrics API",
                 "pages": [
-                  "data-api/universal-api/market-metrics-api/market-metrics-overview",
-                  "universal-api/global-api/endpoints/trading-stats",
-                  "universal-api/global-api/endpoints/trading-stats-category",
-                  "universal-api/global-api/endpoints/trading-stats-timeseries",
-                  "universal-api/global-api/endpoints/trading-stats-category-timeseries"
+                  "data-api/data-api/universal/market-metrics-api/market-metrics-overview",
+                  "data-api/universal/global-api/endpoints/trading-stats",
+                  "data-api/universal/global-api/endpoints/trading-stats-category",
+                  "data-api/universal/global-api/endpoints/trading-stats-timeseries",
+                  "data-api/universal/global-api/endpoints/trading-stats-category-timeseries"
                 ]
               },
               {
                 "group": "Entity API",
                 "pages": [
-                  "data-api/universal-api/entity-api/entity-api-overview",
-                  "universal-api/entity-api/endpoints/entity-search",
-                  "universal-api/entity-api/endpoints/entity-by-id",
-                  "universal-api/entity-api/endpoints/entity-by-category",
-                  "universal-api/entity-api/endpoints/entity-categories"
+                  "data-api/data-api/universal/entity-api/entity-api-overview",
+                  "data-api/universal/entity-api/endpoints/entity-search",
+                  "data-api/universal/entity-api/endpoints/entity-by-id",
+                  "data-api/universal/entity-api/endpoints/entity-by-category",
+                  "data-api/universal/entity-api/endpoints/entity-categories"
                 ]
               }
             ]
@@ -410,15 +410,15 @@
                   {
                     "group": "Market Metrics",
                     "pages": [
-                      "universal-api/token/analytics/token-analytics",
-                      "universal-api/token/analytics/token-analytics-multi",
-                      "universal-api/token/analytics/token-analytics-timeseries"
+                      "data-api/universal/token/analytics/token-analytics",
+                      "data-api/universal/token/analytics/token-analytics-multi",
+                      "data-api/universal/token/analytics/token-analytics-timeseries"
                     ]
                   },
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "universal-api/token/search/token-search",
+                      "data-api/universal/token/search/token-search",
                       "data-api/evm/token/discovery/filtered-tokens",
                       "data-api/evm/token/discovery/top-gainers",
                       "data-api/evm/token/discovery/top-losers",
