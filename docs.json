@@ -47,7 +47,7 @@
           {
             "group": "Tutorials & Guides",
             "pages": [
-              "get-started/tutorials-and-guides/overview",
+              "get-started/tutorials/overview",
               {
                 "group": "Data API Tutorials",
                 "pages": [
@@ -145,16 +145,16 @@
               {
                 "group": "Migration Guides",
                 "pages": [
-                  "get-started/tutorials-and-guides/migration-guides/migrating-from-reservoir-to-moralis",
-                  "get-started/tutorials-and-guides/migration-guides/migrating-from-simple-hash-to-moralis",
-                  "get-started/tutorials-and-guides/migration-guides/migrating-from-ok-link-to-moralis"
+                  "get-started/tutorials/migration-guides/migrating-from-reservoir-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-simple-hash-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-ok-link-to-moralis"
                 ]
               },
               {
                 "group": "Charts & Widgets",
                 "pages": [
-                  "get-started/tutorials-and-guides/charts-and-widgets/embed-pump-fun-trading-view-chart",
-                  "get-started/tutorials-and-guides/charts-and-widgets/ohlc-chart-configurator"
+                  "get-started/tutorials/charts-and-widgets/embed-pump-fun-trading-view-chart",
+                  "get-started/tutorials/charts-and-widgets/ohlc-chart-configurator"
                 ]
               },
               {
