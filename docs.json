@@ -55,50 +55,50 @@
                   {
                     "group": "Wallets & Accounts",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-internal-transactions-for-a-wallet-address",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-native-token-balances-for-eoas-and-smart-accounts",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-build-a-token-approval-and-revoke-dashboard-revoke-cash-style",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet"
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-internal-transactions-for-a-wallet-address",
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-native-token-balances-for-eoas-and-smart-accounts",
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-multi-chain-activity-for-a-wallet-address",
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-full-wallet-transaction-history-eoa-and-smart-accounts",
+                      "get-started/tutorials/data-api/wallets-and-accounts/build-a-token-approval-and-revoke-dashboard-revoke-cash-style",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-erc-20-token-balances-for-a-wallet"
                     ]
                   },
                   {
                     "group": "Tokens & Markets",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-top-erc-20-tokens-by-market-cap",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-build-a-dex-screener-clone",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-transfer-history-by-wallet-or-token",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-metadata-by-address-or-symbol",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-dex-pair-addresses-uniswap-pancake-swap-sushi-swap",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-tokens-swaps-and-prices",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-new-bonding-and-graduated-tokens"
+                      "get-started/tutorials/data-api/tokens-and-markets/get-top-erc-20-tokens-by-market-cap",
+                      "get-started/tutorials/data-api/tokens-and-markets/build-a-dex-screener-clone",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-erc-20-transfer-history-by-wallet-or-token",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-erc-20-token-metadata-by-address-or-symbol",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-token-pairs-and-liquidity-data",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-dex-pair-addresses-uniswap-pancake-swap-sushi-swap",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-pump-fun-tokens-swaps-and-prices",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-pump-fun-new-bonding-and-graduated-tokens"
                     ]
                   },
                   {
                     "group": "NFTs",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-all-nfts-owned-by-a-wallet-address",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-collections-owned-by-a-wallet",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-metadata-by-contract-and-token-id",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-owners-and-ownership-details",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-floor-prices"
+                      "get-started/tutorials/data-api/nfts/get-all-nfts-owned-by-a-wallet-address",
+                      "get-started/tutorials/data-api/nfts/get-nft-collections-owned-by-a-wallet",
+                      "get-started/tutorials/data-api/nfts/get-nft-metadata-by-contract-and-token-id",
+                      "get-started/tutorials/data-api/nfts/get-nft-owners-and-ownership-details",
+                      "get-started/tutorials/data-api/nfts/get-nft-floor-prices"
                     ]
                   },
                   {
                     "group": "Prices & Charts",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-the-price-of-an-erc-20-token",
-                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data",
-                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-build-crypto-price-charts-using-ohlc-data"
+                      "get-started/tutorials/data-api/prices-and-charts/get-the-price-of-an-erc-20-token",
+                      "get-started/tutorials/data-api/prices-and-charts/get-historical-erc-20-token-prices-ohlc-data",
+                      "get-started/tutorials/data-api/prices-and-charts/build-crypto-price-charts-using-ohlc-data"
                     ]
                   },
                   {
                     "group": "Blocks & Transactions",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-get-a-blockchain-transaction-by-hash",
-                      "get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-find-the-closest-block-by-unix-timestamp"
+                      "get-started/tutorials/data-api/blocks-and-transactions/get-a-blockchain-transaction-by-hash",
+                      "get-started/tutorials/data-api/blocks-and-transactions/find-the-closest-block-by-unix-timestamp"
                     ]
                   }
                 ]
@@ -110,7 +110,7 @@
                   {
                     "group": "Wallet Monitoring",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/how-to-monitor-wallet-activity-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/monitor-wallet-activity-in-real-time",
                       "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/listen-to-all-addresses",
                       "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/monitor-multiple-addresses",
                       "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/get-native-balances",
@@ -121,23 +121,23 @@
                     "group": "Token Monitoring",
                     "pages": [
                       "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/track-specific-erc-20-token-transfers-from-a-list-of-wallets",
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-monitor-high-value-erc-20-transfers-in-real-time",
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-track-erc-20-token-mints-and-burns-in-real-time",
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-track-new-tokens-and-trading-pairs-in-real-time"
+                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/monitor-high-value-erc-20-transfers-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/track-erc-20-token-mints-and-burns-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/track-new-tokens-and-trading-pairs-in-real-time"
                     ]
                   },
                   {
                     "group": "NFT Monitoring",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/how-to-track-nft-transfers-in-real-time",
+                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/track-nft-transfers-in-real-time",
                       "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/monitoring-nft-transfers-from-specific-wallet-addresses",
-                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/how-to-track-specific-nfts-or-nft-collections-in-real-time"
+                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/track-specific-nfts-or-nft-collections-in-real-time"
                     ]
                   },
                   {
                     "group": "Smart Contracts & Events",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/smart-contracts-and-events/how-to-track-smart-contract-events-in-real-time"
+                      "get-started/tutorials-and-guides/streams-tutorials/smart-contracts-and-events/track-smart-contract-events-in-real-time"
                     ]
                   }
                 ]
@@ -160,17 +160,17 @@
               {
                 "group": "Auth API Tutorials",
                 "pages": [
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-phantom-wallet",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-web3-auth",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-wallet-connect",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-rainbow-kit",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-particle-network",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-python-and-django",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-angular",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-magic-link",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-coinbase-wallet",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-react"
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-phantom-wallet",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-web3-auth",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-wallet-connect",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-rainbow-kit",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-particle-network",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask-using-python-and-django",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask-using-angular",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-magic-link",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-coinbase-wallet",
+                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask-using-react"
                 ]
               }
             ]
