@@ -160,17 +160,17 @@
               {
                 "group": "Auth API Tutorials",
                 "pages": [
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-phantom-wallet",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-web3-auth",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-wallet-connect",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-rainbow-kit",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-particle-network",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask-using-python-and-django",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask-using-angular",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-magic-link",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-coinbase-wallet",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/authenticate-users-with-meta-mask-using-react"
+                  "get-started/tutorials/auth-api/authenticate-users-with-phantom-wallet",
+                  "get-started/tutorials/auth-api/authenticate-users-with-web3-auth",
+                  "get-started/tutorials/auth-api/authenticate-users-with-wallet-connect",
+                  "get-started/tutorials/auth-api/authenticate-users-with-rainbow-kit",
+                  "get-started/tutorials/auth-api/authenticate-users-with-particle-network",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask-using-python-and-django",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask-using-angular",
+                  "get-started/tutorials/auth-api/authenticate-users-with-magic-link",
+                  "get-started/tutorials/auth-api/authenticate-users-with-coinbase-wallet",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask-using-react"
                 ]
               }
             ]
