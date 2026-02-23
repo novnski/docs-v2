@@ -1,0 +1,120 @@
+---
+title: "How to Get NFT Collections Owned by a Wallet"
+description: "Learn how to fetch a summary of NFT collections owned by any wallet address using the Moralis API."
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to retrieve a summary of all NFT collections owned by a wallet address using the Moralis API. Instead of listing every individual NFT, this endpoint groups NFTs by collection and provides counts, making it perfect for portfolio overviews and collection summaries. We'll use the following Moralis API endpoint:
+
+- [Get Wallet NFT Collections](/data-api/evm/wallet/nft-collections) - Fetch a summary of NFT collections owned by a wallet
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-nft-collections && cd get-nft-collections
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const WALLET_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'; // Vitalik's wallet
+
+async function getNFTCollections() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/${WALLET_ADDRESS}/nft/collections?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getNFTCollections();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the collections:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "status": "SYNCED",
+  "page": 1,
+  "page_size": 100,
+  "cursor": null,
+  "result": [
+    {
+      "token_address": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+      "contract_type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC",
+      "count": 3,
+      "collection_logo": "https://...",
+      "collection_banner_image": "https://...",
+      "possible_spam": false,
+      "verified_collection": true,
+      "floor_price": 25.5,
+      "floor_price_usd": 89250.75
+    },
+    {
+      "token_address": "0x60e4d786628fea6478f785a6d7e704777c86a7c6",
+      "contract_type": "ERC721",
+      "name": "Mutant Ape Yacht Club",
+      "symbol": "MAYC",
+      "count": 2,
+      "collection_logo": "https://...",
+      "possible_spam": false,
+      "verified_collection": true,
+      "floor_price": 4.2,
+      "floor_price_usd": 14700.00
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field                 | Description                               |
+| --------------------- | ----------------------------------------- |
+| `token_address`       | Collection contract address               |
+| `contract_type`       | Token standard (ERC721 or ERC1155)        |
+| `name`                | Collection name                           |
+| `symbol`              | Collection symbol                         |
+| `count`               | Number of NFTs owned from this collection |
+| `collection_logo`     | URL to collection logo                    |
+| `possible_spam`       | Whether flagged as spam                   |
+| `verified_collection` | Whether collection is verified            |
+| `floor_price`         | Current floor price in ETH                |
+| `floor_price_usd`     | Floor price in USD                        |
+
+## Next Steps
+
+- [Get NFT Metadata](/data-api/evm/nft/metadata/nft-metadata) - Get detailed NFT metadata
+- [Get NFT Floor Prices](/data-api/evm/nft/collection-floor-price) - Fetch collection floor prices
+- [NFT Metadata](/data-api/data-features/data-enrichment/nft-metadata) - explore detailed metadata
+- [NFT Media Images (CDN)](/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn) - learn how we store NFT images

@@ -1,0 +1,115 @@
+---
+title: "How to Get ERC20 Transfer History by Wallet or Token"
+description: "Learn how to fetch ERC20 token transfer history for any wallet or token contract using the Moralis API."
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to retrieve ERC20 token transfer history using the Moralis API. You can fetch transfers for a specific wallet address or for a specific token contract. This is essential for building transaction history pages, token analytics dashboards, or tracking token movements. We'll use the following Moralis API endpoint:
+
+- [Get Wallet Token Transfers](/data-api/evm/wallet/token-transfers) - Fetch ERC20 transfer history for a wallet or token
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-token-transfers && cd get-token-transfers
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const WALLET_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'; // Vitalik's wallet
+
+async function getWalletTokenTransfers() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/${WALLET_ADDRESS}/erc20/transfers?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getWalletTokenTransfers();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the transfer history:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "page": 1,
+  "page_size": 100,
+  "cursor": null,
+  "result": [
+    {
+      "token_name": "USD Coin",
+      "token_symbol": "USDC",
+      "token_logo": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
+      "token_decimals": "6",
+      "from_address": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "from_address_label": "Vitalik Buterin",
+      "to_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "to_address_label": null,
+      "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+      "block_hash": "0x...",
+      "block_number": "18500000",
+      "block_timestamp": "2024-01-15T10:30:00.000Z",
+      "transaction_hash": "0x...",
+      "transaction_index": 45,
+      "log_index": 123,
+      "value": "1000000000",
+      "value_formatted": "1000",
+      "possible_spam": false,
+      "verified_contract": true
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field                | Description                              |
+| -------------------- | ---------------------------------------- |
+| `token_name`         | Name of the transferred token            |
+| `token_symbol`       | Symbol of the token                      |
+| `from_address`       | Sender's wallet address                  |
+| `from_address_label` | Known label for sender (if available)    |
+| `to_address`         | Recipient's wallet address               |
+| `to_address_label`   | Known label for recipient (if available) |
+| `value`              | Transfer amount in smallest unit         |
+| `value_formatted`    | Human-readable transfer amount           |
+| `block_timestamp`    | When the transfer occurred               |
+| `transaction_hash`   | Transaction hash of the transfer         |
+| `possible_spam`      | Whether the token is flagged as spam     |
+
+## Next Steps
+
+- [Get Token Balances](/data-api/evm/wallet/token-balances) - Fetch current token balances
+- [Get Wallet History](/data-api/evm/wallet/wallet-history) - Get complete wallet activity
+- [API Reference](/data-api/evm/wallet/index) - Full API documentation

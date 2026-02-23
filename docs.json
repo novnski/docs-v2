@@ -47,7 +47,7 @@
           {
             "group": "Tutorials & Guides",
             "pages": [
-              "get-started/tutorials-and-guides/overview",
+              "get-started/tutorials/overview",
               {
                 "group": "Data API Tutorials",
                 "pages": [
@@ -55,50 +55,50 @@
                   {
                     "group": "Wallets & Accounts",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-internal-transactions-for-a-wallet-address",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-native-token-balances-for-eoas-and-smart-accounts",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-multi-chain-activity-for-a-wallet-address",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-get-full-wallet-transaction-history-eoa-and-smart-accounts",
-                      "get-started/tutorials-and-guides/data-api-tutorials/wallets-and-accounts/how-to-build-a-token-approval-and-revoke-dashboard-revoke-cash-style",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-balances-for-a-wallet"
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-internal-transactions-for-a-wallet-address",
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-native-token-balances-for-eoas-and-smart-accounts",
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-multi-chain-activity-for-a-wallet-address",
+                      "get-started/tutorials/data-api/wallets-and-accounts/get-full-wallet-transaction-history-eoa-and-smart-accounts",
+                      "get-started/tutorials/data-api/wallets-and-accounts/build-a-token-approval-and-revoke-dashboard-revoke-cash-style",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-erc-20-token-balances-for-a-wallet"
                     ]
                   },
                   {
                     "group": "Tokens & Markets",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-top-erc-20-tokens-by-market-cap",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-build-a-dex-screener-clone",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-transfer-history-by-wallet-or-token",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-erc-20-token-metadata-by-address-or-symbol",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-dex-pair-addresses-uniswap-pancake-swap-sushi-swap",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-tokens-swaps-and-prices",
-                      "get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-new-bonding-and-graduated-tokens"
+                      "get-started/tutorials/data-api/tokens-and-markets/get-top-erc-20-tokens-by-market-cap",
+                      "get-started/tutorials/data-api/tokens-and-markets/build-a-dex-screener-clone",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-erc-20-transfer-history-by-wallet-or-token",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-erc-20-token-metadata-by-address-or-symbol",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-token-pairs-and-liquidity-data",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-dex-pair-addresses-uniswap-pancake-swap-sushi-swap",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-pump-fun-tokens-swaps-and-prices",
+                      "get-started/tutorials/data-api/tokens-and-markets/get-pump-fun-new-bonding-and-graduated-tokens"
                     ]
                   },
                   {
                     "group": "NFTs",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-all-nfts-owned-by-a-wallet-address",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-collections-owned-by-a-wallet",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-metadata-by-contract-and-token-id",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-owners-and-ownership-details",
-                      "get-started/tutorials-and-guides/data-api-tutorials/nfts/how-to-get-nft-floor-prices"
+                      "get-started/tutorials/data-api/nfts/get-all-nfts-owned-by-a-wallet-address",
+                      "get-started/tutorials/data-api/nfts/get-nft-collections-owned-by-a-wallet",
+                      "get-started/tutorials/data-api/nfts/get-nft-metadata-by-contract-and-token-id",
+                      "get-started/tutorials/data-api/nfts/get-nft-owners-and-ownership-details",
+                      "get-started/tutorials/data-api/nfts/get-nft-floor-prices"
                     ]
                   },
                   {
                     "group": "Prices & Charts",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-the-price-of-an-erc-20-token",
-                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data",
-                      "get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-build-crypto-price-charts-using-ohlc-data"
+                      "get-started/tutorials/data-api/prices-and-charts/get-the-price-of-an-erc-20-token",
+                      "get-started/tutorials/data-api/prices-and-charts/get-historical-erc-20-token-prices-ohlc-data",
+                      "get-started/tutorials/data-api/prices-and-charts/build-crypto-price-charts-using-ohlc-data"
                     ]
                   },
                   {
                     "group": "Blocks & Transactions",
                     "pages": [
-                      "get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-get-a-blockchain-transaction-by-hash",
-                      "get-started/tutorials-and-guides/data-api-tutorials/blocks-and-transactions/how-to-find-the-closest-block-by-unix-timestamp"
+                      "get-started/tutorials/data-api/blocks-and-transactions/get-a-blockchain-transaction-by-hash",
+                      "get-started/tutorials/data-api/blocks-and-transactions/find-the-closest-block-by-unix-timestamp"
                     ]
                   }
                 ]
@@ -110,34 +110,34 @@
                   {
                     "group": "Wallet Monitoring",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/how-to-monitor-wallet-activity-in-real-time",
-                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/listen-to-all-addresses",
-                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/monitor-multiple-addresses",
-                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/get-native-balances",
-                      "get-started/tutorials-and-guides/streams-tutorials/wallet-monitoring/monitor-high-value-ens-domain-registrations"
+                      "get-started/tutorials/streams/wallet-monitoring/monitor-wallet-activity-in-real-time",
+                      "get-started/tutorials/streams/wallet-monitoring/listen-to-all-addresses",
+                      "get-started/tutorials/streams/wallet-monitoring/monitor-multiple-addresses",
+                      "get-started/tutorials/streams/wallet-monitoring/get-native-balances",
+                      "get-started/tutorials/streams/wallet-monitoring/monitor-high-value-ens-domain-registrations"
                     ]
                   },
                   {
                     "group": "Token Monitoring",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/track-specific-erc-20-token-transfers-from-a-list-of-wallets",
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-monitor-high-value-erc-20-transfers-in-real-time",
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-track-erc-20-token-mints-and-burns-in-real-time",
-                      "get-started/tutorials-and-guides/streams-tutorials/token-monitoring/how-to-track-new-tokens-and-trading-pairs-in-real-time"
+                      "get-started/tutorials/streams/token-monitoring/track-specific-erc-20-token-transfers-from-a-list-of-wallets",
+                      "get-started/tutorials/streams/token-monitoring/monitor-high-value-erc-20-transfers-in-real-time",
+                      "get-started/tutorials/streams/token-monitoring/track-erc-20-token-mints-and-burns-in-real-time",
+                      "get-started/tutorials/streams/token-monitoring/track-new-tokens-and-trading-pairs-in-real-time"
                     ]
                   },
                   {
                     "group": "NFT Monitoring",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/how-to-track-nft-transfers-in-real-time",
-                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/monitoring-nft-transfers-from-specific-wallet-addresses",
-                      "get-started/tutorials-and-guides/streams-tutorials/nft-monitoring/how-to-track-specific-nfts-or-nft-collections-in-real-time"
+                      "get-started/tutorials/streams/nft-monitoring/track-nft-transfers-in-real-time",
+                      "get-started/tutorials/streams/nft-monitoring/monitoring-nft-transfers-from-specific-wallet-addresses",
+                      "get-started/tutorials/streams/nft-monitoring/track-specific-nfts-or-nft-collections-in-real-time"
                     ]
                   },
                   {
                     "group": "Smart Contracts & Events",
                     "pages": [
-                      "get-started/tutorials-and-guides/streams-tutorials/smart-contracts-and-events/how-to-track-smart-contract-events-in-real-time"
+                      "get-started/tutorials/streams/smart-contracts-and-events/track-smart-contract-events-in-real-time"
                     ]
                   }
                 ]
@@ -145,32 +145,32 @@
               {
                 "group": "Migration Guides",
                 "pages": [
-                  "get-started/tutorials-and-guides/migration-guides/migrating-from-reservoir-to-moralis",
-                  "get-started/tutorials-and-guides/migration-guides/migrating-from-simple-hash-to-moralis",
-                  "get-started/tutorials-and-guides/migration-guides/migrating-from-ok-link-to-moralis"
+                  "get-started/tutorials/migration-guides/migrating-from-reservoir-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-simple-hash-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-ok-link-to-moralis"
                 ]
               },
               {
                 "group": "Charts & Widgets",
                 "pages": [
-                  "get-started/tutorials-and-guides/charts-and-widgets/embed-pump-fun-trading-view-chart",
-                  "get-started/tutorials-and-guides/charts-and-widgets/ohlc-chart-configurator"
+                  "get-started/tutorials/charts-and-widgets/embed-pump-fun-trading-view-chart",
+                  "get-started/tutorials/charts-and-widgets/ohlc-chart-configurator"
                 ]
               },
               {
                 "group": "Auth API Tutorials",
                 "pages": [
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-phantom-wallet",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-web3-auth",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-wallet-connect",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-rainbow-kit",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-particle-network",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-python-and-django",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-angular",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-magic-link",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-coinbase-wallet",
-                  "get-started/tutorials-and-guides/auth-api-tutorials/how-to-authenticate-users-with-meta-mask-using-react"
+                  "get-started/tutorials/auth-api/authenticate-users-with-phantom-wallet",
+                  "get-started/tutorials/auth-api/authenticate-users-with-web3-auth",
+                  "get-started/tutorials/auth-api/authenticate-users-with-wallet-connect",
+                  "get-started/tutorials/auth-api/authenticate-users-with-rainbow-kit",
+                  "get-started/tutorials/auth-api/authenticate-users-with-particle-network",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask-using-python-and-django",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask-using-angular",
+                  "get-started/tutorials/auth-api/authenticate-users-with-magic-link",
+                  "get-started/tutorials/auth-api/authenticate-users-with-coinbase-wallet",
+                  "get-started/tutorials/auth-api/authenticate-users-with-meta-mask-using-react"
                 ]
               }
             ]
@@ -215,7 +215,7 @@
                   "data-api/data-features/data-enrichment/nft-metadata",
                   "data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn",
                   "data-api/data-features/data-enrichment/nft-rarity",
-                  "data-api/data-features/data-enrichment/profitability-pn-l",
+                  "data-api/data-features/data-enrichment/profitability-pnl",
                   "data-api/data-features/data-enrichment/token-metadata",
                   "data-api/data-features/data-enrichment/solana-token-standards"
                 ]
@@ -249,7 +249,7 @@
                 "group": "Integrations",
                 "pages": [
                   "data-api/data-features/integrations/supported-dexs",
-                  "data-api/data-features/integrations/de-fi-protocols",
+                  "data-api/data-features/integrations/defi-protocols",
                   "data-api/data-features/integrations/nft-marketplaces"
                 ]
               }
@@ -258,41 +258,41 @@
           {
             "group": "Universal API",
             "pages": [
-              "universal-api/index",
+              "data-api/universal/index",
               {
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
-                  "universal-api/token-api/endpoints/token-search",
-                  "universal-api/token-api/endpoints/token-score",
-                  "data-api/universal-api/token-api/token-score-timeseries",
-                  "data-api/universal-api/token-api/filtered-tokens",
-                  "data-api/universal-api/token-api/trending-tokens",
-                  "data-api/universal-api/token-api/top-gainers",
-                  "data-api/universal-api/token-api/top-losers",
-                  "universal-api/token-api/endpoints/token-analytics",
-                  "universal-api/token-api/endpoints/token-analytics-multi",
-                  "universal-api/token-api/endpoints/token-analytics-timeseries"
+                  "data-api/universal/token/search/token-search",
+                  "data-api/universal/token/score/token-score",
+                  "data-api/universal/token/score/token-score-timeseries",
+                  "data-api/universal/token/filtered-tokens",
+                  "data-api/universal/token/trending-tokens",
+                  "data-api/universal/token/top-gainers",
+                  "data-api/universal/token/top-losers",
+                  "data-api/universal/token/analytics/token-analytics",
+                  "data-api/universal/token/analytics/token-analytics-multi",
+                  "data-api/universal/token/analytics/token-analytics-timeseries"
                 ]
               },
               {
                 "group": "Market Metrics API",
                 "pages": [
-                  "data-api/universal-api/market-metrics-api/market-metrics-overview",
-                  "universal-api/global-api/endpoints/trading-stats",
-                  "universal-api/global-api/endpoints/trading-stats-category",
-                  "universal-api/global-api/endpoints/trading-stats-timeseries",
-                  "universal-api/global-api/endpoints/trading-stats-category-timeseries"
+                  "data-api/universal/market-metrics",
+                  "data-api/universal/global/endpoints/trading-stats",
+                  "data-api/universal/global/endpoints/trading-stats-category",
+                  "data-api/universal/global/endpoints/trading-stats-timeseries",
+                  "data-api/universal/global/endpoints/trading-stats-category-timeseries"
                 ]
               },
               {
                 "group": "Entity API",
                 "pages": [
-                  "data-api/universal-api/entity-api/entity-api-overview",
-                  "universal-api/entity-api/endpoints/entity-search",
-                  "universal-api/entity-api/endpoints/entity-by-id",
-                  "universal-api/entity-api/endpoints/entity-by-category",
-                  "universal-api/entity-api/endpoints/entity-categories"
+                  "data-api/universal/entity",
+                  "data-api/universal/entity/endpoints/entity-search",
+                  "data-api/universal/entity/endpoints/entity-by-id",
+                  "data-api/universal/entity/endpoints/entity-by-category",
+                  "data-api/universal/entity/endpoints/entity-categories"
                 ]
               }
             ]
@@ -300,63 +300,63 @@
           {
             "group": "EVM API",
             "pages": [
-              "data-api/evm-api/evm-index",
+              "data-api/evm/index",
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/evm-api/wallet-api/index",
+                  "data-api/evm/wallet/index",
                   {
                     "group": "Activity",
                     "pages": [
-                      "data-api/evm-api/wallet-api/activity/wallet-history",
-                      "data-api/evm-api/wallet-api/token-transfers",
-                      "data-api/evm-api/wallet-api/wallet-swaps",
-                      "data-api/evm-api/wallet-api/nft-transfers",
-                      "data-api/evm-api/wallet-api/nft-trades-by-wallet",
-                      "data-api/evm-api/wallet-api/wallet-transactions",
-                      "data-api/evm-api/wallet-api/decoded-transactions",
-                      "data-api/evm-api/wallet-api/activity/wallet-stats",
-                      "data-api/evm-api/wallet-api/activity/chain-activity"
+                      "data-api/evm/wallet/wallet-history",
+                      "data-api/evm/wallet/token-transfers",
+                      "data-api/evm/wallet/wallet-swaps",
+                      "data-api/evm/wallet/nft-transfers",
+                      "data-api/evm/wallet/nft-trades-by-wallet",
+                      "data-api/evm/wallet/wallet-transactions",
+                      "data-api/evm/wallet/decoded-transactions",
+                      "data-api/evm/wallet/wallet-stats",
+                      "data-api/evm/wallet/chain-activity"
                     ]
                   },
                   {
                     "group": "Tokens",
                     "pages": [
-                      "data-api/evm-api/wallet-api/token-balances",
-                      "data-api/evm-api/wallet-api/tokens/native-balance",
-                      "data-api/evm-api/wallet-api/tokens/native-balances-batch",
-                      "data-api/evm-api/wallet-api/approvals",
-                      "data-api/evm-api/wallet-api/tokens/token-balances-legacy"
+                      "data-api/evm/wallet/token-balances",
+                      "data-api/evm/wallet/native-balance",
+                      "data-api/evm/wallet/native-balances-batch",
+                      "data-api/evm/wallet/approvals",
+                      "data-api/evm/wallet/token-balances-legacy"
                     ]
                   },
                   {
                     "group": "NFTs",
                     "pages": [
-                      "data-api/evm-api/wallet-api/nft-balances/nft-balances",
-                      "data-api/evm-api/wallet-api/nft-balances/nft-collections"
+                      "data-api/evm/wallet/nft-balances",
+                      "data-api/evm/wallet/nft-collections"
                     ]
                   },
                   {
                     "group": "DeFi Positions",
                     "pages": [
-                      "data-api/evm-api/wallet-api/de-fi-positions/wallet-protocols",
-                      "data-api/evm-api/wallet-api/de-fi-positions/wallet-positions",
-                      "data-api/evm-api/wallet-api/de-fi-positions/detailed-positions"
+                      "data-api/evm/wallet/wallet-protocols",
+                      "data-api/evm/wallet/wallet-positions",
+                      "data-api/evm/wallet/detailed-positions"
                     ]
                   },
                   {
                     "group": "Net Worth & PnL",
                     "pages": [
-                      "data-api/evm-api/wallet-api/net-worth",
-                      "data-api/evm-api/wallet-api/net-worth-and-pn-l/wallet-pn-l-summary",
-                      "data-api/evm-api/wallet-api/pn-l/wallet-pn-l"
+                      "data-api/evm/wallet/net-worth",
+                      "data-api/evm/wallet/wallet-pnl-summary",
+                      "data-api/evm/wallet/wallet-pnl"
                     ]
                   },
                   {
                     "group": "Identity",
                     "pages": [
-                      "data-api/evm-api/wallet-api/identity/resolve-address",
-                      "data-api/evm-api/wallet-api/identity/ens-lookup"
+                      "data-api/evm/wallet/resolve-address",
+                      "data-api/evm/wallet/ens-lookup"
                     ]
                   }
                 ]
@@ -365,71 +365,71 @@
                 "group": "Token API",
                 "tag": "New Features",
                 "pages": [
-                  "data-api/evm-api/token-api/token-api-overview",
+                  "data-api/evm/token/index",
                   {
                     "group": "Metadata & Info",
                     "tag": "New",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-metadata",
-                      "data-api/evm-api/token-api/endpoints/token-score",
-                      "data-api/evm-api/token-api/metadata-and-info/token-score-timeseries"
+                      "data-api/evm/token/metadata/token-metadata",
+                      "data-api/evm/token/metadata/token-score",
+                      "data-api/evm/token/metadata/token-score-timeseries"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-price",
-                      "data-api/evm-api/token-api/prices/token-prices-batch",
-                      "data-api/evm-api/token-api/prices/ohlc"
+                      "data-api/evm/token/prices/token-price",
+                      "data-api/evm/token/prices/token-prices-batch",
+                      "data-api/evm/token/prices/ohlc"
                     ]
                   },
                   {
                     "group": "Transfers",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-transfers"
+                      "data-api/evm/token/transfers/token-transfers"
                     ]
                   },
                   {
                     "group": "Holders",
                     "pages": [
-                      "data-api/evm-api/token-api/endpoints/token-holders",
-                      "data-api/evm-api/token-api/holders/token-holder-stats",
-                      "data-api/evm-api/token-api/holders/historical-token-holders"
+                      "data-api/evm/token/holders/token-holders",
+                      "data-api/evm/token/holders/token-holder-stats",
+                      "data-api/evm/token/holders/historical-token-holders"
                     ]
                   },
                   {
                     "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/evm-api/token-api/swaps-and-pairs/token-swaps",
-                      "data-api/evm-api/token-api/swaps-and-pairs/pair-swaps",
-                      "data-api/evm-api/token-api/swaps-and-pairs/wallet-swaps",
-                      "data-api/evm-api/token-api/swaps-and-pairs/token-pairs",
-                      "data-api/evm-api/token-api/swaps-and-pairs/pair-stats"
+                      "data-api/evm/token/swaps/token-swaps",
+                      "data-api/evm/token/swaps/pair-swaps",
+                      "data-api/evm/token/swaps/wallet-swaps",
+                      "data-api/evm/token/swaps/token-pairs",
+                      "data-api/evm/token/swaps/pair-stats"
                     ]
                   },
                   {
                     "group": "Market Metrics",
                     "pages": [
-                      "universal-api/token-api/endpoints/token-analytics",
-                      "universal-api/token-api/endpoints/token-analytics-multi",
-                      "universal-api/token-api/endpoints/token-analytics-timeseries"
+                      "data-api/universal/token/analytics/token-analytics",
+                      "data-api/universal/token/analytics/token-analytics-multi",
+                      "data-api/universal/token/analytics/token-analytics-timeseries"
                     ]
                   },
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "universal-api/token-api/endpoints/token-search",
-                      "data-api/evm-api/token-api/search-and-discovery/filtered-tokens",
-                      "data-api/evm-api/token-api/search-and-discovery/top-gainers",
-                      "data-api/evm-api/token-api/search-and-discovery/top-losers",
-                      "data-api/evm-api/token-api/search-and-discovery/token-categories"
+                      "data-api/universal/token/search/token-search",
+                      "data-api/evm/token/discovery/filtered-tokens",
+                      "data-api/evm/token/discovery/top-gainers",
+                      "data-api/evm/token/discovery/top-losers",
+                      "data-api/evm/token/discovery/token-categories"
                     ]
                   },
                   {
                     "group": "Advanced Signals",
                     "pages": [
-                      "data-api/evm-api/token-api/advanced-signals/snipers",
-                      "data-api/evm-api/token-api/advanced-signals/top-traders"
+                      "data-api/evm/token/signals/snipers",
+                      "data-api/evm/token/signals/top-traders"
                     ]
                   }
                 ]
@@ -437,76 +437,76 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/evm-api/nft-api/index",
+                  "data-api/evm/nft/index",
                   {
                     "group": "Metadata & Info",
                     "pages": [
-                      "data-api/evm-api/nft-api/endpoints/nft-metadata",
-                      "data-api/evm-api/nft-api/metadata-and-info/nft-metadata-batch",
-                      "data-api/evm-api/nft-api/metadata-and-info/collection-metadata",
-                      "data-api/evm-api/nft-api/metadata-and-info/collection-metadata-1",
-                      "data-api/evm-api/nft-api/metadata-and-info/collection-stats"
+                      "data-api/evm/nft/metadata/nft-metadata",
+                      "data-api/evm/nft/metadata/nft-metadata-batch",
+                      "data-api/evm/nft/metadata/collection-metadata",
+                      "data-api/evm/nft/metadata/collection-metadata-batch",
+                      "data-api/evm/nft/metadata/collection-stats"
                     ]
                   },
                   {
                     "group": "NFTs & Collections",
                     "pages": [
-                      "data-api/evm-api/nft-api/nfts-and-collections/nfts-by-collection",
-                      "data-api/evm-api/nft-api/nfts-and-collections/nfts-by-wallet",
-                      "data-api/evm-api/nft-api/nfts-and-collections/nft-collections-by-wallet"
+                      "data-api/evm/nft/collections/nfts-by-collection",
+                      "data-api/evm/nft/collections/nfts-by-wallet",
+                      "data-api/evm/nft/collections/nft-collections-by-wallet"
                     ]
                   },
                   {
                     "group": "Transfers",
                     "pages": [
-                      "data-api/evm-api/nft-api/transfers/token-id-transfers",
-                      "data-api/evm-api/nft-api/transfers/collection-transfers"
+                      "data-api/evm/nft/transfers/token-id-transfers",
+                      "data-api/evm/nft/transfers/collection-transfers"
                     ]
                   },
                   {
                     "group": "Ownership",
                     "pages": [
-                      "data-api/evm-api/nft-api/ownership/owners-by-contract",
-                      "data-api/evm-api/nft-api/ownership/owners-by-token-id"
+                      "data-api/evm/nft/ownership/owners-by-contract",
+                      "data-api/evm/nft/ownership/owners-by-token-id"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/evm-api/nft-api/floor-price-collection",
-                      "data-api/evm-api/nft-api/prices/floor",
-                      "data-api/evm-api/nft-api/historical-floor-price",
-                      "data-api/evm-api/nft-api/prices/sale-price-by-contract",
-                      "data-api/evm-api/nft-api/prices/sale-price-by-token-id"
+                      "data-api/evm/nft/prices/collection-floor-price",
+                      "data-api/evm/nft/prices/floor",
+                      "data-api/evm/nft/prices/historical-floor-price",
+                      "data-api/evm/nft/prices/sale-price-by-contract",
+                      "data-api/evm/nft/prices/sale-price-by-token-id"
                     ]
                   },
                   {
                     "group": "Trades",
                     "pages": [
-                      "data-api/evm-api/nft-api/trades/collection-trades",
-                      "data-api/evm-api/nft-api/trades/trades-by-token-id"
+                      "data-api/evm/nft/trades/collection-trades",
+                      "data-api/evm/nft/trades/trades-by-token-id"
                     ]
                   },
                   {
                     "group": "Traits & Rarity",
                     "pages": [
-                      "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection",
-                      "data-api/evm-api/nft-api/traits-and-rarity/traits-by-collection-paginated",
-                      "data-api/evm-api/nft-api/traits-and-rarity/nfts-by-traits"
+                      "data-api/evm/nft/traits/traits-by-collection",
+                      "data-api/evm/nft/traits/traits-by-collection-paginated",
+                      "data-api/evm/nft/traits/nfts-by-traits"
                     ]
                   },
                   {
                     "group": "Discovery",
                     "pages": [
-                      "data-api/evm-api/nft-api/discovery/nfts-by-market-cap",
-                      "data-api/evm-api/nft-api/discovery/nfts-by-volume"
+                      "data-api/evm/nft/discovery/nfts-by-market-cap",
+                      "data-api/evm/nft/discovery/nfts-by-volume"
                     ]
                   },
                   {
                     "group": "Utilities",
                     "pages": [
-                      "data-api/evm-api/nft-api/utilities/resync-nft-metadata",
-                      "data-api/evm-api/nft-api/utilities/resync-nft-traits"
+                      "data-api/evm/nft/utilities/resync-nft-metadata",
+                      "data-api/evm/nft/utilities/resync-nft-traits"
                     ]
                   }
                 ]
@@ -514,37 +514,37 @@
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/evm-api/price-api/index",
-                  "data-api/evm-api/price-api/token-price",
-                  "data-api/evm-api/price-api/token-prices-batch",
-                  "data-api/evm-api/price-api/ohlc",
-                  "data-api/evm-api/price-api/collection-floor-price",
-                  "data-api/evm-api/price-api/token-id-floor-price",
-                  "data-api/evm-api/price-api/timeseries-floor-price",
-                  "data-api/evm-api/price-api/sale-prices-by-collection",
-                  "data-api/evm-api/price-api/sale-price-by-token-id"
+                  "data-api/evm/price/index",
+                  "data-api/evm/price/token-price",
+                  "data-api/evm/price/token-prices-batch",
+                  "data-api/evm/price/ohlc",
+                  "data-api/evm/price/collection-floor-price",
+                  "data-api/evm/price/token-id-floor-price",
+                  "data-api/evm/price/timeseries-floor-price",
+                  "data-api/evm/price/sale-prices-by-collection",
+                  "data-api/evm/price/sale-price-by-token-id"
                 ]
               },
               {
                 "group": "DeFi API",
                 "pages": [
-                  "data-api/evm-api/defi-api/index",
-                  "data-api/evm-api/defi-api/wallet-protocols",
-                  "data-api/evm-api/defi-api/wallet-positions",
-                  "data-api/evm-api/defi-api/wallet-positions-detailed"
+                  "data-api/evm/defi/index",
+                  "data-api/evm/defi/wallet-protocols",
+                  "data-api/evm/defi/wallet-positions",
+                  "data-api/evm/defi/wallet-positions-detailed"
                 ]
               },
               {
                 "group": "Blockchain API",
                 "pages": [
-                  "data-api/evm-api/blockchain-api/index",
-                  "data-api/evm-api/blockchain-api/block-by-hash",
-                  "data-api/evm-api/blockchain-api/block-by-date",
-                  "data-api/evm-api/blockchain-api/latest-block",
-                  "data-api/evm-api/blockchain-api/transaction-by-hash",
-                  "data-api/evm-api/blockchain-api/transaction-by-hash-decoded",
-                  "data-api/evm-api/blockchain-api/address-transactions",
-                  "data-api/evm-api/blockchain-api/address-transactions-1"
+                  "data-api/evm/blockchain/index",
+                  "data-api/evm/blockchain/block-by-hash",
+                  "data-api/evm/blockchain/block-by-date",
+                  "data-api/evm/blockchain/latest-block",
+                  "data-api/evm/blockchain/transaction-by-hash",
+                  "data-api/evm/blockchain/transaction-by-hash-decoded",
+                  "data-api/evm/blockchain/address-transactions",
+                  "data-api/evm/blockchain/address-transactions-decoded"
                 ]
               }
             ]
@@ -552,82 +552,82 @@
           {
             "group": "Solana API",
             "pages": [
-              "data-api/solana-api/solana-index",
+              "data-api/solana/solana-index",
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/solana-api/wallet-api/wallet-api-overview",
-                  "data-api/solana-api/wallet-api/native-balance",
-                  "data-api/solana-api/wallet-api/portfolio",
-                  "data-api/solana-api/wallet-api/token-balances",
-                  "data-api/solana-api/wallet-api/nft-balances",
-                  "data-api/solana-api/wallet-api/wallet-swaps"
+                  "data-api/solana/wallet/index",
+                  "data-api/solana/wallet/native-balance",
+                  "data-api/solana/wallet/portfolio",
+                  "data-api/solana/wallet/token-balances",
+                  "data-api/solana/wallet/nft-balances",
+                  "data-api/solana/wallet/wallet-swaps"
                 ]
               },
               {
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
-                  "data-api/solana-api/token-api/token-api-overview",
+                  "data-api/solana/token/index",
                   {
                     "group": "Metadata & Info",
                     "tag": "New features",
                     "pages": [
-                      "data-api/solana-api/token-api/token-metadata",
-                      "data-api/solana-api/token-api/token-score"
+                      "data-api/solana/token/token-metadata",
+                      "data-api/solana/token/token-score"
                     ]
                   },
                   {
                     "group": "Prices",
                     "pages": [
-                      "data-api/solana-api/token-api/prices/token-p-rice",
-                      "data-api/solana-api/token-api/prices/token-price-batch",
-                      "data-api/solana-api/token-api/prices/ohlc"
+                      "data-api/solana/token/prices/token-price",
+                      "data-api/solana/token/prices/token-prices-batch",
+                      "data-api/solana/token/prices/ohlc"
                     ]
                   },
                   {
                     "group": "Holders",
                     "pages": [
-                      "data-api/solana-api/token-api/holders/top-holders",
-                      "data-api/solana-api/token-api/holders/holder-metrics",
-                      "data-api/solana-api/token-api/holders/historical-holders"
+                      "data-api/solana/token/holders/top-holders",
+                      "data-api/solana/token/holders/holder-metrics",
+                      "data-api/solana/token/holders/historical-holders"
                     ]
                   },
                   {
                     "group": "Swaps & Pairs",
                     "pages": [
-                      "data-api/solana-api/token-api/swaps-and-pairs/token-swaps",
-                      "data-api/solana-api/token-api/swaps-and-pairs/pair-swaps",
-                      "data-api/solana-api/token-api/swaps-and-pairs/wallet-swaps",
-                      "data-api/solana-api/token-api/swaps-and-pairs/token-pairs",
-                      "data-api/solana-api/token-api/swaps-and-pairs/pair-stats"
+                      "data-api/solana/token/swaps/token-swaps",
+                      "data-api/solana/token/pairs/pair-swaps",
+                      "data-api/solana/token/swaps/wallet-swaps",
+                      "data-api/solana/token/pairs/token-pairs",
+                      "data-api/solana/token/pairs/pair-stats"
                     ]
                   },
                   {
                     "group": "Market Metrics",
                     "pages": [
-                      "data-api/solana-api/token-api/market-metrics/token-analytics",
-                      "data-api/solana-api/token-api/market-metrics/token-analytics-batch",
-                      "data-api/solana-api/token-api/market-metrics/token-analytics-timeseries"
+                      "data-api/solana/token/market-metrics/token-analytics",
+                      "data-api/solana/token/market-metrics/token-analytics-batch",
+                      "data-api/solana/token/market-metrics/token-analytics-timeseries"
                     ]
                   },
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "data-api/solana-api/token-api/search-and-discovery/token-search",
-                      "data-api/solana-api/token-api/search-and-discovery/filtered-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/top-gainers",
-                      "data-api/solana-api/token-api/search-and-discovery/top-losers",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-new-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fund-bonding-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-graduated-tokens",
-                      "data-api/solana-api/token-api/search-and-discovery/pump-fun-bonding-status"
+                      "data-api/solana/token/search-and-discovery/token-search",
+                      "data-api/solana/token/search-and-discovery/filtered-tokens",
+                      "data-api/solana/token/search-and-discovery/top-gainers",
+                      "data-api/solana/token/search-and-discovery/top-losers",
+                      "data-api/solana/token/search-and-discovery/pump-fun-new-tokens",
+                      "data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens",
+                      "data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens",
+                      "data-api/solana/token/search-and-discovery/pump-fun-bonding-status"
                     ]
                   },
                   {
                     "group": "Advanced Signals",
                     "pages": [
-                      "data-api/solana-api/token-api/advanced-signals/snipers"
+                      "data-api/solana/token/advanced-signals/snipers"
                     ]
                   }
                 ]
@@ -635,17 +635,17 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/solana-api/nft-api/nft-api-overview",
-                  "data-api/solana-api/nft-api/nft-metadata"
+                  "data-api/solana/nft/index",
+                  "data-api/solana/nft/nft-metadata"
                 ]
               },
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/solana-api/price-api/price-api-overview",
-                  "data-api/solana-api/price-api/token-price",
-                  "data-api/solana-api/token-api/prices/token-price-batch",
-                  "data-api/solana-api/price-api/ohlc"
+                  "data-api/solana/price/index",
+                  "data-api/solana/price/token-price",
+                  "data-api/solana/token/prices/token-prices-batch",
+                  "data-api/solana/price/ohlc"
                 ]
               }
             ]
@@ -814,34 +814,34 @@
               {
                 "group": "Ethereum JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/ethereum/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-call",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-code",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/ethereum/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/ethereum/eth-blockNumber",
+                  "rpc-nodes/ethereum/eth-call",
+                  "rpc-nodes/ethereum/eth-chain-id",
+                  "rpc-nodes/ethereum/eth-create-access-list",
+                  "rpc-nodes/ethereum/eth-estimate-gas",
+                  "rpc-nodes/ethereum/eth-fee-history",
+                  "rpc-nodes/ethereum/eth-gas-price",
+                  "rpc-nodes/ethereum/eth-get-balance",
+                  "rpc-nodes/ethereum/eth-get-block-by-hash",
+                  "rpc-nodes/ethereum/eth-get-block-by-number",
+                  "rpc-nodes/ethereum/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/ethereum/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/ethereum/eth-get-block-receipts",
+                  "rpc-nodes/ethereum/eth-get-code",
+                  "rpc-nodes/ethereum/eth-get-logs",
+                  "rpc-nodes/ethereum/eth-get-proof",
+                  "rpc-nodes/ethereum/eth-get-storage-at",
+                  "rpc-nodes/ethereum/eth-get-transaction-by-hash",
+                  "rpc-nodes/ethereum/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/ethereum/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/ethereum/eth-get-transaction-count",
+                  "rpc-nodes/ethereum/eth-get-transaction-receipt",
+                  "rpc-nodes/ethereum/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/ethereum/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/ethereum/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/ethereum/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/ethereum/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/ethereum/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -853,34 +853,34 @@
               {
                 "group": "Base JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/base/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/base/json-rpc-api/eth-call",
-                  "rpc-nodes/base/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/base/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/base/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/base/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/base/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/base/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/base/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/base/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/base/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/base/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/base/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/base/json-rpc-api/eth-get-code",
-                  "rpc-nodes/base/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/base/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/base/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/base/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/base/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/base/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/base/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/base/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/base/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/base/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/base/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/base/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/base/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/base/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/base/eth-blockNumber",
+                  "rpc-nodes/base/eth-call",
+                  "rpc-nodes/base/eth-chain-id",
+                  "rpc-nodes/base/eth-create-access-list",
+                  "rpc-nodes/base/eth-estimate-gas",
+                  "rpc-nodes/base/eth-fee-history",
+                  "rpc-nodes/base/eth-gas-price",
+                  "rpc-nodes/base/eth-get-balance",
+                  "rpc-nodes/base/eth-get-block-by-hash",
+                  "rpc-nodes/base/eth-get-block-by-number",
+                  "rpc-nodes/base/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/base/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/base/eth-get-block-receipts",
+                  "rpc-nodes/base/eth-get-code",
+                  "rpc-nodes/base/eth-get-logs",
+                  "rpc-nodes/base/eth-get-proof",
+                  "rpc-nodes/base/eth-get-storage-at",
+                  "rpc-nodes/base/eth-get-transaction-by-hash",
+                  "rpc-nodes/base/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/base/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/base/eth-get-transaction-count",
+                  "rpc-nodes/base/eth-get-transaction-receipt",
+                  "rpc-nodes/base/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/base/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/base/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/base/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/base/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/base/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -892,34 +892,34 @@
               {
                 "group": "Polygon JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/polygon/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/polygon/json-rpc-api/eth-call",
-                  "rpc-nodes/polygon/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/polygon/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/polygon/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/polygon/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/polygon/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-code",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/polygon/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/polygon/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/polygon/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/polygon/eth-blockNumber",
+                  "rpc-nodes/polygon/eth-call",
+                  "rpc-nodes/polygon/eth-chain-id",
+                  "rpc-nodes/polygon/eth-create-access-list",
+                  "rpc-nodes/polygon/eth-estimate-gas",
+                  "rpc-nodes/polygon/eth-fee-history",
+                  "rpc-nodes/polygon/eth-gas-price",
+                  "rpc-nodes/polygon/eth-get-balance",
+                  "rpc-nodes/polygon/eth-get-block-by-hash",
+                  "rpc-nodes/polygon/eth-get-block-by-number",
+                  "rpc-nodes/polygon/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/polygon/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/polygon/eth-get-block-receipts",
+                  "rpc-nodes/polygon/eth-get-code",
+                  "rpc-nodes/polygon/eth-get-logs",
+                  "rpc-nodes/polygon/eth-get-proof",
+                  "rpc-nodes/polygon/eth-get-storage-at",
+                  "rpc-nodes/polygon/eth-get-transaction-by-hash",
+                  "rpc-nodes/polygon/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/polygon/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/polygon/eth-get-transaction-count",
+                  "rpc-nodes/polygon/eth-get-transaction-receipt",
+                  "rpc-nodes/polygon/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/polygon/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/polygon/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/polygon/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/polygon/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/polygon/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -931,34 +931,34 @@
               {
                 "group": "BSC JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/bsc/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/bsc/json-rpc-api/eth-call",
-                  "rpc-nodes/bsc/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/bsc/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/bsc/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/bsc/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/bsc/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-code",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/bsc/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/bsc/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/bsc/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/bsc/eth-blockNumber",
+                  "rpc-nodes/bsc/eth-call",
+                  "rpc-nodes/bsc/eth-chain-id",
+                  "rpc-nodes/bsc/eth-create-access-list",
+                  "rpc-nodes/bsc/eth-estimate-gas",
+                  "rpc-nodes/bsc/eth-fee-history",
+                  "rpc-nodes/bsc/eth-gas-price",
+                  "rpc-nodes/bsc/eth-get-balance",
+                  "rpc-nodes/bsc/eth-get-block-by-hash",
+                  "rpc-nodes/bsc/eth-get-block-by-number",
+                  "rpc-nodes/bsc/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/bsc/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/bsc/eth-get-block-receipts",
+                  "rpc-nodes/bsc/eth-get-code",
+                  "rpc-nodes/bsc/eth-get-logs",
+                  "rpc-nodes/bsc/eth-get-proof",
+                  "rpc-nodes/bsc/eth-get-storage-at",
+                  "rpc-nodes/bsc/eth-get-transaction-by-hash",
+                  "rpc-nodes/bsc/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/bsc/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/bsc/eth-get-transaction-count",
+                  "rpc-nodes/bsc/eth-get-transaction-receipt",
+                  "rpc-nodes/bsc/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/bsc/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/bsc/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/bsc/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/bsc/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/bsc/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -970,34 +970,34 @@
               {
                 "group": "Arbitrum JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-call",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-code",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/arbitrum/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/arbitrum/eth-blockNumber",
+                  "rpc-nodes/arbitrum/eth-call",
+                  "rpc-nodes/arbitrum/eth-chain-id",
+                  "rpc-nodes/arbitrum/eth-create-access-list",
+                  "rpc-nodes/arbitrum/eth-estimate-gas",
+                  "rpc-nodes/arbitrum/eth-fee-history",
+                  "rpc-nodes/arbitrum/eth-gas-price",
+                  "rpc-nodes/arbitrum/eth-get-balance",
+                  "rpc-nodes/arbitrum/eth-get-block-by-hash",
+                  "rpc-nodes/arbitrum/eth-get-block-by-number",
+                  "rpc-nodes/arbitrum/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/arbitrum/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/arbitrum/eth-get-block-receipts",
+                  "rpc-nodes/arbitrum/eth-get-code",
+                  "rpc-nodes/arbitrum/eth-get-logs",
+                  "rpc-nodes/arbitrum/eth-get-proof",
+                  "rpc-nodes/arbitrum/eth-get-storage-at",
+                  "rpc-nodes/arbitrum/eth-get-transaction-by-hash",
+                  "rpc-nodes/arbitrum/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/arbitrum/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/arbitrum/eth-get-transaction-count",
+                  "rpc-nodes/arbitrum/eth-get-transaction-receipt",
+                  "rpc-nodes/arbitrum/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/arbitrum/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/arbitrum/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/arbitrum/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/arbitrum/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/arbitrum/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1009,34 +1009,34 @@
               {
                 "group": "Optimism JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/optimism/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/optimism/json-rpc-api/eth-call",
-                  "rpc-nodes/optimism/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/optimism/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/optimism/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/optimism/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/optimism/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-code",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/optimism/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/optimism/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/optimism/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/optimism/eth-blockNumber",
+                  "rpc-nodes/optimism/eth-call",
+                  "rpc-nodes/optimism/eth-chain-id",
+                  "rpc-nodes/optimism/eth-create-access-list",
+                  "rpc-nodes/optimism/eth-estimate-gas",
+                  "rpc-nodes/optimism/eth-fee-history",
+                  "rpc-nodes/optimism/eth-gas-price",
+                  "rpc-nodes/optimism/eth-get-balance",
+                  "rpc-nodes/optimism/eth-get-block-by-hash",
+                  "rpc-nodes/optimism/eth-get-block-by-number",
+                  "rpc-nodes/optimism/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/optimism/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/optimism/eth-get-block-receipts",
+                  "rpc-nodes/optimism/eth-get-code",
+                  "rpc-nodes/optimism/eth-get-logs",
+                  "rpc-nodes/optimism/eth-get-proof",
+                  "rpc-nodes/optimism/eth-get-storage-at",
+                  "rpc-nodes/optimism/eth-get-transaction-by-hash",
+                  "rpc-nodes/optimism/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/optimism/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/optimism/eth-get-transaction-count",
+                  "rpc-nodes/optimism/eth-get-transaction-receipt",
+                  "rpc-nodes/optimism/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/optimism/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/optimism/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/optimism/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/optimism/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/optimism/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1048,34 +1048,34 @@
               {
                 "group": "Avalanche JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/avalanche/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-call",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-code",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/avalanche/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/avalanche/eth-blockNumber",
+                  "rpc-nodes/avalanche/eth-call",
+                  "rpc-nodes/avalanche/eth-chain-id",
+                  "rpc-nodes/avalanche/eth-create-access-list",
+                  "rpc-nodes/avalanche/eth-estimate-gas",
+                  "rpc-nodes/avalanche/eth-fee-history",
+                  "rpc-nodes/avalanche/eth-gas-price",
+                  "rpc-nodes/avalanche/eth-get-balance",
+                  "rpc-nodes/avalanche/eth-get-block-by-hash",
+                  "rpc-nodes/avalanche/eth-get-block-by-number",
+                  "rpc-nodes/avalanche/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/avalanche/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/avalanche/eth-get-block-receipts",
+                  "rpc-nodes/avalanche/eth-get-code",
+                  "rpc-nodes/avalanche/eth-get-logs",
+                  "rpc-nodes/avalanche/eth-get-proof",
+                  "rpc-nodes/avalanche/eth-get-storage-at",
+                  "rpc-nodes/avalanche/eth-get-transaction-by-hash",
+                  "rpc-nodes/avalanche/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/avalanche/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/avalanche/eth-get-transaction-count",
+                  "rpc-nodes/avalanche/eth-get-transaction-receipt",
+                  "rpc-nodes/avalanche/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/avalanche/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/avalanche/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/avalanche/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/avalanche/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/avalanche/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1087,34 +1087,34 @@
               {
                 "group": "Linea JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/linea/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/linea/json-rpc-api/eth-call",
-                  "rpc-nodes/linea/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/linea/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/linea/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/linea/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/linea/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-code",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/linea/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/linea/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/linea/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/linea/eth-blockNumber",
+                  "rpc-nodes/linea/eth-call",
+                  "rpc-nodes/linea/eth-chain-id",
+                  "rpc-nodes/linea/eth-create-access-list",
+                  "rpc-nodes/linea/eth-estimate-gas",
+                  "rpc-nodes/linea/eth-fee-history",
+                  "rpc-nodes/linea/eth-gas-price",
+                  "rpc-nodes/linea/eth-get-balance",
+                  "rpc-nodes/linea/eth-get-block-by-hash",
+                  "rpc-nodes/linea/eth-get-block-by-number",
+                  "rpc-nodes/linea/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/linea/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/linea/eth-get-block-receipts",
+                  "rpc-nodes/linea/eth-get-code",
+                  "rpc-nodes/linea/eth-get-logs",
+                  "rpc-nodes/linea/eth-get-proof",
+                  "rpc-nodes/linea/eth-get-storage-at",
+                  "rpc-nodes/linea/eth-get-transaction-by-hash",
+                  "rpc-nodes/linea/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/linea/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/linea/eth-get-transaction-count",
+                  "rpc-nodes/linea/eth-get-transaction-receipt",
+                  "rpc-nodes/linea/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/linea/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/linea/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/linea/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/linea/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/linea/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1126,34 +1126,34 @@
               {
                 "group": "Gnosis JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/gnosis/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-call",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-code",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/gnosis/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/gnosis/eth-blockNumber",
+                  "rpc-nodes/gnosis/eth-call",
+                  "rpc-nodes/gnosis/eth-chain-id",
+                  "rpc-nodes/gnosis/eth-create-access-list",
+                  "rpc-nodes/gnosis/eth-estimate-gas",
+                  "rpc-nodes/gnosis/eth-fee-history",
+                  "rpc-nodes/gnosis/eth-gas-price",
+                  "rpc-nodes/gnosis/eth-get-balance",
+                  "rpc-nodes/gnosis/eth-get-block-by-hash",
+                  "rpc-nodes/gnosis/eth-get-block-by-number",
+                  "rpc-nodes/gnosis/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/gnosis/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/gnosis/eth-get-block-receipts",
+                  "rpc-nodes/gnosis/eth-get-code",
+                  "rpc-nodes/gnosis/eth-get-logs",
+                  "rpc-nodes/gnosis/eth-get-proof",
+                  "rpc-nodes/gnosis/eth-get-storage-at",
+                  "rpc-nodes/gnosis/eth-get-transaction-by-hash",
+                  "rpc-nodes/gnosis/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/gnosis/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/gnosis/eth-get-transaction-count",
+                  "rpc-nodes/gnosis/eth-get-transaction-receipt",
+                  "rpc-nodes/gnosis/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/gnosis/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/gnosis/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/gnosis/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/gnosis/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/gnosis/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1165,34 +1165,34 @@
               {
                 "group": "Ronin JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/ronin/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/ronin/json-rpc-api/eth-call",
-                  "rpc-nodes/ronin/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/ronin/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/ronin/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/ronin/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/ronin/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-code",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/ronin/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/ronin/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/ronin/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/ronin/eth-blockNumber",
+                  "rpc-nodes/ronin/eth-call",
+                  "rpc-nodes/ronin/eth-chain-id",
+                  "rpc-nodes/ronin/eth-create-access-list",
+                  "rpc-nodes/ronin/eth-estimate-gas",
+                  "rpc-nodes/ronin/eth-fee-history",
+                  "rpc-nodes/ronin/eth-gas-price",
+                  "rpc-nodes/ronin/eth-get-balance",
+                  "rpc-nodes/ronin/eth-get-block-by-hash",
+                  "rpc-nodes/ronin/eth-get-block-by-number",
+                  "rpc-nodes/ronin/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/ronin/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/ronin/eth-get-block-receipts",
+                  "rpc-nodes/ronin/eth-get-code",
+                  "rpc-nodes/ronin/eth-get-logs",
+                  "rpc-nodes/ronin/eth-get-proof",
+                  "rpc-nodes/ronin/eth-get-storage-at",
+                  "rpc-nodes/ronin/eth-get-transaction-by-hash",
+                  "rpc-nodes/ronin/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/ronin/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/ronin/eth-get-transaction-count",
+                  "rpc-nodes/ronin/eth-get-transaction-receipt",
+                  "rpc-nodes/ronin/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/ronin/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/ronin/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/ronin/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/ronin/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/ronin/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1204,34 +1204,34 @@
               {
                 "group": "Lisk JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/lisk/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/lisk/json-rpc-api/eth-call",
-                  "rpc-nodes/lisk/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/lisk/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/lisk/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/lisk/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/lisk/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-code",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/lisk/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/lisk/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/lisk/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/lisk/eth-blockNumber",
+                  "rpc-nodes/lisk/eth-call",
+                  "rpc-nodes/lisk/eth-chain-id",
+                  "rpc-nodes/lisk/eth-create-access-list",
+                  "rpc-nodes/lisk/eth-estimate-gas",
+                  "rpc-nodes/lisk/eth-fee-history",
+                  "rpc-nodes/lisk/eth-gas-price",
+                  "rpc-nodes/lisk/eth-get-balance",
+                  "rpc-nodes/lisk/eth-get-block-by-hash",
+                  "rpc-nodes/lisk/eth-get-block-by-number",
+                  "rpc-nodes/lisk/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/lisk/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/lisk/eth-get-block-receipts",
+                  "rpc-nodes/lisk/eth-get-code",
+                  "rpc-nodes/lisk/eth-get-logs",
+                  "rpc-nodes/lisk/eth-get-proof",
+                  "rpc-nodes/lisk/eth-get-storage-at",
+                  "rpc-nodes/lisk/eth-get-transaction-by-hash",
+                  "rpc-nodes/lisk/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/lisk/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/lisk/eth-get-transaction-count",
+                  "rpc-nodes/lisk/eth-get-transaction-receipt",
+                  "rpc-nodes/lisk/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/lisk/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/lisk/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/lisk/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/lisk/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/lisk/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1243,34 +1243,34 @@
               {
                 "group": "Flow JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/flow/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/flow/json-rpc-api/eth-call",
-                  "rpc-nodes/flow/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/flow/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/flow/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/flow/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/flow/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-code",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/flow/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/flow/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/flow/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/flow/eth-blockNumber",
+                  "rpc-nodes/flow/eth-call",
+                  "rpc-nodes/flow/eth-chain-id",
+                  "rpc-nodes/flow/eth-create-access-list",
+                  "rpc-nodes/flow/eth-estimate-gas",
+                  "rpc-nodes/flow/eth-fee-history",
+                  "rpc-nodes/flow/eth-gas-price",
+                  "rpc-nodes/flow/eth-get-balance",
+                  "rpc-nodes/flow/eth-get-block-by-hash",
+                  "rpc-nodes/flow/eth-get-block-by-number",
+                  "rpc-nodes/flow/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/flow/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/flow/eth-get-block-receipts",
+                  "rpc-nodes/flow/eth-get-code",
+                  "rpc-nodes/flow/eth-get-logs",
+                  "rpc-nodes/flow/eth-get-proof",
+                  "rpc-nodes/flow/eth-get-storage-at",
+                  "rpc-nodes/flow/eth-get-transaction-by-hash",
+                  "rpc-nodes/flow/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/flow/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/flow/eth-get-transaction-count",
+                  "rpc-nodes/flow/eth-get-transaction-receipt",
+                  "rpc-nodes/flow/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/flow/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/flow/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/flow/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/flow/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/flow/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1282,34 +1282,34 @@
               {
                 "group": "Pulsechain JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-call",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-code",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/pulsechain/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/pulsechain/eth-blockNumber",
+                  "rpc-nodes/pulsechain/eth-call",
+                  "rpc-nodes/pulsechain/eth-chain-id",
+                  "rpc-nodes/pulsechain/eth-create-access-list",
+                  "rpc-nodes/pulsechain/eth-estimate-gas",
+                  "rpc-nodes/pulsechain/eth-fee-history",
+                  "rpc-nodes/pulsechain/eth-gas-price",
+                  "rpc-nodes/pulsechain/eth-get-balance",
+                  "rpc-nodes/pulsechain/eth-get-block-by-hash",
+                  "rpc-nodes/pulsechain/eth-get-block-by-number",
+                  "rpc-nodes/pulsechain/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/pulsechain/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/pulsechain/eth-get-block-receipts",
+                  "rpc-nodes/pulsechain/eth-get-code",
+                  "rpc-nodes/pulsechain/eth-get-logs",
+                  "rpc-nodes/pulsechain/eth-get-proof",
+                  "rpc-nodes/pulsechain/eth-get-storage-at",
+                  "rpc-nodes/pulsechain/eth-get-transaction-by-hash",
+                  "rpc-nodes/pulsechain/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/pulsechain/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/pulsechain/eth-get-transaction-count",
+                  "rpc-nodes/pulsechain/eth-get-transaction-receipt",
+                  "rpc-nodes/pulsechain/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/pulsechain/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/pulsechain/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/pulsechain/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/pulsechain/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/pulsechain/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1321,34 +1321,34 @@
               {
                 "group": "zkSync JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/zksync/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/zksync/json-rpc-api/eth-call",
-                  "rpc-nodes/zksync/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/zksync/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/zksync/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/zksync/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/zksync/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-code",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/zksync/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/zksync/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/zksync/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/zksync/eth-blockNumber",
+                  "rpc-nodes/zksync/eth-call",
+                  "rpc-nodes/zksync/eth-chain-id",
+                  "rpc-nodes/zksync/eth-create-access-list",
+                  "rpc-nodes/zksync/eth-estimate-gas",
+                  "rpc-nodes/zksync/eth-fee-history",
+                  "rpc-nodes/zksync/eth-gas-price",
+                  "rpc-nodes/zksync/eth-get-balance",
+                  "rpc-nodes/zksync/eth-get-block-by-hash",
+                  "rpc-nodes/zksync/eth-get-block-by-number",
+                  "rpc-nodes/zksync/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/zksync/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/zksync/eth-get-block-receipts",
+                  "rpc-nodes/zksync/eth-get-code",
+                  "rpc-nodes/zksync/eth-get-logs",
+                  "rpc-nodes/zksync/eth-get-proof",
+                  "rpc-nodes/zksync/eth-get-storage-at",
+                  "rpc-nodes/zksync/eth-get-transaction-by-hash",
+                  "rpc-nodes/zksync/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/zksync/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/zksync/eth-get-transaction-count",
+                  "rpc-nodes/zksync/eth-get-transaction-receipt",
+                  "rpc-nodes/zksync/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/zksync/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/zksync/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/zksync/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/zksync/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/zksync/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1360,34 +1360,34 @@
               {
                 "group": "Mantle JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/mantle/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/mantle/json-rpc-api/eth-call",
-                  "rpc-nodes/mantle/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/mantle/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/mantle/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/mantle/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/mantle/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-code",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/mantle/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/mantle/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/mantle/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/mantle/eth-blockNumber",
+                  "rpc-nodes/mantle/eth-call",
+                  "rpc-nodes/mantle/eth-chain-id",
+                  "rpc-nodes/mantle/eth-create-access-list",
+                  "rpc-nodes/mantle/eth-estimate-gas",
+                  "rpc-nodes/mantle/eth-fee-history",
+                  "rpc-nodes/mantle/eth-gas-price",
+                  "rpc-nodes/mantle/eth-get-balance",
+                  "rpc-nodes/mantle/eth-get-block-by-hash",
+                  "rpc-nodes/mantle/eth-get-block-by-number",
+                  "rpc-nodes/mantle/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/mantle/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/mantle/eth-get-block-receipts",
+                  "rpc-nodes/mantle/eth-get-code",
+                  "rpc-nodes/mantle/eth-get-logs",
+                  "rpc-nodes/mantle/eth-get-proof",
+                  "rpc-nodes/mantle/eth-get-storage-at",
+                  "rpc-nodes/mantle/eth-get-transaction-by-hash",
+                  "rpc-nodes/mantle/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/mantle/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/mantle/eth-get-transaction-count",
+                  "rpc-nodes/mantle/eth-get-transaction-receipt",
+                  "rpc-nodes/mantle/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/mantle/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/mantle/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/mantle/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/mantle/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/mantle/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1399,34 +1399,34 @@
               {
                 "group": "Polygon zkEVM JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-call",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-code",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/polygon-zkevm/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/polygon-zkevm/eth-blockNumber",
+                  "rpc-nodes/polygon-zkevm/eth-call",
+                  "rpc-nodes/polygon-zkevm/eth-chain-id",
+                  "rpc-nodes/polygon-zkevm/eth-create-access-list",
+                  "rpc-nodes/polygon-zkevm/eth-estimate-gas",
+                  "rpc-nodes/polygon-zkevm/eth-fee-history",
+                  "rpc-nodes/polygon-zkevm/eth-gas-price",
+                  "rpc-nodes/polygon-zkevm/eth-get-balance",
+                  "rpc-nodes/polygon-zkevm/eth-get-block-by-hash",
+                  "rpc-nodes/polygon-zkevm/eth-get-block-by-number",
+                  "rpc-nodes/polygon-zkevm/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/polygon-zkevm/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/polygon-zkevm/eth-get-block-receipts",
+                  "rpc-nodes/polygon-zkevm/eth-get-code",
+                  "rpc-nodes/polygon-zkevm/eth-get-logs",
+                  "rpc-nodes/polygon-zkevm/eth-get-proof",
+                  "rpc-nodes/polygon-zkevm/eth-get-storage-at",
+                  "rpc-nodes/polygon-zkevm/eth-get-transaction-by-hash",
+                  "rpc-nodes/polygon-zkevm/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/polygon-zkevm/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/polygon-zkevm/eth-get-transaction-count",
+                  "rpc-nodes/polygon-zkevm/eth-get-transaction-receipt",
+                  "rpc-nodes/polygon-zkevm/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/polygon-zkevm/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/polygon-zkevm/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/polygon-zkevm/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/polygon-zkevm/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/polygon-zkevm/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1438,34 +1438,34 @@
               {
                 "group": "opBNB JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/opbnb/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-call",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-code",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/opbnb/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/opbnb/eth-blockNumber",
+                  "rpc-nodes/opbnb/eth-call",
+                  "rpc-nodes/opbnb/eth-chain-id",
+                  "rpc-nodes/opbnb/eth-create-access-list",
+                  "rpc-nodes/opbnb/eth-estimate-gas",
+                  "rpc-nodes/opbnb/eth-fee-history",
+                  "rpc-nodes/opbnb/eth-gas-price",
+                  "rpc-nodes/opbnb/eth-get-balance",
+                  "rpc-nodes/opbnb/eth-get-block-by-hash",
+                  "rpc-nodes/opbnb/eth-get-block-by-number",
+                  "rpc-nodes/opbnb/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/opbnb/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/opbnb/eth-get-block-receipts",
+                  "rpc-nodes/opbnb/eth-get-code",
+                  "rpc-nodes/opbnb/eth-get-logs",
+                  "rpc-nodes/opbnb/eth-get-proof",
+                  "rpc-nodes/opbnb/eth-get-storage-at",
+                  "rpc-nodes/opbnb/eth-get-transaction-by-hash",
+                  "rpc-nodes/opbnb/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/opbnb/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/opbnb/eth-get-transaction-count",
+                  "rpc-nodes/opbnb/eth-get-transaction-receipt",
+                  "rpc-nodes/opbnb/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/opbnb/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/opbnb/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/opbnb/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/opbnb/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/opbnb/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1477,34 +1477,34 @@
               {
                 "group": "Moonbeam JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-call",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-code",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/moonbeam/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/moonbeam/eth-blockNumber",
+                  "rpc-nodes/moonbeam/eth-call",
+                  "rpc-nodes/moonbeam/eth-chain-id",
+                  "rpc-nodes/moonbeam/eth-create-access-list",
+                  "rpc-nodes/moonbeam/eth-estimate-gas",
+                  "rpc-nodes/moonbeam/eth-fee-history",
+                  "rpc-nodes/moonbeam/eth-gas-price",
+                  "rpc-nodes/moonbeam/eth-get-balance",
+                  "rpc-nodes/moonbeam/eth-get-block-by-hash",
+                  "rpc-nodes/moonbeam/eth-get-block-by-number",
+                  "rpc-nodes/moonbeam/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/moonbeam/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/moonbeam/eth-get-block-receipts",
+                  "rpc-nodes/moonbeam/eth-get-code",
+                  "rpc-nodes/moonbeam/eth-get-logs",
+                  "rpc-nodes/moonbeam/eth-get-proof",
+                  "rpc-nodes/moonbeam/eth-get-storage-at",
+                  "rpc-nodes/moonbeam/eth-get-transaction-by-hash",
+                  "rpc-nodes/moonbeam/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/moonbeam/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/moonbeam/eth-get-transaction-count",
+                  "rpc-nodes/moonbeam/eth-get-transaction-receipt",
+                  "rpc-nodes/moonbeam/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/moonbeam/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/moonbeam/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/moonbeam/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/moonbeam/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/moonbeam/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1516,34 +1516,34 @@
               {
                 "group": "Blast JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/blast/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/blast/json-rpc-api/eth-call",
-                  "rpc-nodes/blast/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/blast/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/blast/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/blast/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/blast/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-code",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/blast/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/blast/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/blast/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/blast/eth-blockNumber",
+                  "rpc-nodes/blast/eth-call",
+                  "rpc-nodes/blast/eth-chain-id",
+                  "rpc-nodes/blast/eth-create-access-list",
+                  "rpc-nodes/blast/eth-estimate-gas",
+                  "rpc-nodes/blast/eth-fee-history",
+                  "rpc-nodes/blast/eth-gas-price",
+                  "rpc-nodes/blast/eth-get-balance",
+                  "rpc-nodes/blast/eth-get-block-by-hash",
+                  "rpc-nodes/blast/eth-get-block-by-number",
+                  "rpc-nodes/blast/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/blast/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/blast/eth-get-block-receipts",
+                  "rpc-nodes/blast/eth-get-code",
+                  "rpc-nodes/blast/eth-get-logs",
+                  "rpc-nodes/blast/eth-get-proof",
+                  "rpc-nodes/blast/eth-get-storage-at",
+                  "rpc-nodes/blast/eth-get-transaction-by-hash",
+                  "rpc-nodes/blast/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/blast/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/blast/eth-get-transaction-count",
+                  "rpc-nodes/blast/eth-get-transaction-receipt",
+                  "rpc-nodes/blast/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/blast/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/blast/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/blast/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/blast/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/blast/eth-send-raw-transaction"
                 ]
               }
             ]
@@ -1555,34 +1555,34 @@
               {
                 "group": "Zetachain JSON-RPC API",
                 "pages": [
-                  "rpc-nodes/zetachain/json-rpc-api/eth-blockNumber",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-call",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-chain-id",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-create-access-list",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-estimate-gas",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-fee-history",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-gas-price",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-balance",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-block-by-hash",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-block-by-number",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-block-receipts",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-code",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-logs",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-proof",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-storage-at",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-transaction-by-hash",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-transaction-count",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-transaction-receipt",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/zetachain/json-rpc-api/eth-send-raw-transaction"
+                  "rpc-nodes/zetachain/eth-blockNumber",
+                  "rpc-nodes/zetachain/eth-call",
+                  "rpc-nodes/zetachain/eth-chain-id",
+                  "rpc-nodes/zetachain/eth-create-access-list",
+                  "rpc-nodes/zetachain/eth-estimate-gas",
+                  "rpc-nodes/zetachain/eth-fee-history",
+                  "rpc-nodes/zetachain/eth-gas-price",
+                  "rpc-nodes/zetachain/eth-get-balance",
+                  "rpc-nodes/zetachain/eth-get-block-by-hash",
+                  "rpc-nodes/zetachain/eth-get-block-by-number",
+                  "rpc-nodes/zetachain/eth-get-block-transaction-count-by-hash",
+                  "rpc-nodes/zetachain/eth-get-block-transaction-count-by-number",
+                  "rpc-nodes/zetachain/eth-get-block-receipts",
+                  "rpc-nodes/zetachain/eth-get-code",
+                  "rpc-nodes/zetachain/eth-get-logs",
+                  "rpc-nodes/zetachain/eth-get-proof",
+                  "rpc-nodes/zetachain/eth-get-storage-at",
+                  "rpc-nodes/zetachain/eth-get-transaction-by-hash",
+                  "rpc-nodes/zetachain/eth-get-transaction-by-block-hash-and-index",
+                  "rpc-nodes/zetachain/eth-get-transaction-by-block-number-and-index",
+                  "rpc-nodes/zetachain/eth-get-transaction-count",
+                  "rpc-nodes/zetachain/eth-get-transaction-receipt",
+                  "rpc-nodes/zetachain/eth-get-uncle-by-block-hash-and-index",
+                  "rpc-nodes/zetachain/eth-get-uncle-by-block-number-and-index",
+                  "rpc-nodes/zetachain/eth-get-uncle-count-by-block-hash",
+                  "rpc-nodes/zetachain/eth-get-uncle-count-by-block-number",
+                  "rpc-nodes/zetachain/eth-max-priority-fee-per-gas",
+                  "rpc-nodes/zetachain/eth-send-raw-transaction"
                 ]
               }
             ]

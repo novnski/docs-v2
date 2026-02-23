@@ -1,0 +1,124 @@
+---
+title: 'How to Get Historical ERC20 Token Prices (OHLC Data)'
+description: 'Learn how to fetch historical OHLC (candlestick) price data for any ERC20 token using the Moralis API.'
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to retrieve historical OHLC (Open, High, Low, Close) price data for any ERC20 token using the Moralis API. This candlestick data is essential for building price charts, technical analysis tools, or trading interfaces. We'll use the following Moralis API endpoint:
+
+- [Get OHLCV Data](/data-api/evm/price/ohlc) - Fetch historical candlestick price data for token pairs
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-ohlc-data && cd get-ohlc-data
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+
+// WETH/USDC pair on Uniswap V3
+const PAIR_ADDRESS = '0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640';
+
+async function getOHLCData() {
+  // Required: specify date range for OHLC data
+  const fromDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days ago
+  const toDate = new Date().toISOString();
+
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/pairs/${PAIR_ADDRESS}/ohlcv?chain=eth&timeframe=1h&from_date=${fromDate}&to_date=${toDate}`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getOHLCData();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the OHLC data:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "pair_address": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+  "token0": {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "symbol": "USDC"
+  },
+  "token1": {
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "symbol": "WETH"
+  },
+  "result": [
+    {
+      "timestamp": "2024-01-15T10:00:00.000Z",
+      "open": 3450.25,
+      "high": 3475.50,
+      "low": 3445.00,
+      "close": 3468.75,
+      "volume": 15234567.89,
+      "trades": 1523
+    },
+    {
+      "timestamp": "2024-01-15T11:00:00.000Z",
+      "open": 3468.75,
+      "high": 3490.00,
+      "low": 3460.00,
+      "close": 3485.25,
+      "volume": 18456789.12,
+      "trades": 1847
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `pair_address` | The liquidity pair contract address |
+| `token0` | First token in the pair |
+| `token1` | Second token in the pair |
+| `timestamp` | The start time of the candle |
+| `open` | Opening price for the period |
+| `high` | Highest price during the period |
+| `low` | Lowest price during the period |
+| `close` | Closing price for the period |
+| `volume` | Trading volume in USD |
+| `trades` | Number of trades in the period |
+
+## Next Steps
+
+- [Build Price Charts](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-build-crypto-price-charts-using-ohlc-data) - Create interactive charts
+- [Get Token Price](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-the-price-of-an-erc-20-token) - Get current prices
+- [Get Token Pairs](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data) - Find trading pairs
+- [API Reference](/data-api/evm/price/ohlc) - Full API documentation

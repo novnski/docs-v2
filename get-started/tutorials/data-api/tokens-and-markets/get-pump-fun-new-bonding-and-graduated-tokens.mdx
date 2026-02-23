@@ -1,0 +1,109 @@
+---
+title: 'How to Get Pump.fun New, Bonding & Graduated Tokens'
+description: 'Learn how to fetch new, bonding, and graduated tokens from Pump.fun on Solana using the Moralis API.'
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to retrieve Pump.fun token data using the Moralis Solana API. Pump.fun is a popular token launchpad on Solana where new tokens go through bonding curve phases before graduating to DEXs. You'll learn how to fetch newly created tokens, tokens in bonding phase, and graduated tokens. We'll use the following Moralis API endpoint:
+
+- [Get Pump.fun New Tokens](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) - Fetch newly created tokens on Pump.fun
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir pump-fun-tokens && cd pump-fun-tokens
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+
+async function getNewPumpFunTokens() {
+  const response = await fetch(
+    'https://solana-gateway.moralis.io/token/mainnet/exchange/pumpfun/new',
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getNewPumpFunTokens();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "result": [
+    {
+      "tokenAddress": "ABC123...",
+      "name": "Example Token",
+      "symbol": "EXT",
+      "logo": "https://...",
+      "createdAt": "2024-01-15T10:30:00.000Z",
+      "marketCap": 15000,
+      "priceUsd": 0.000015,
+      "volume24h": 5000,
+      "holders": 150,
+      "bondingProgress": 5.5,
+      "isGraduated": false
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `tokenAddress` | The Solana token mint address |
+| `name` | Token name |
+| `symbol` | Token symbol |
+| `createdAt` | When the token was created |
+| `marketCap` | Current market cap in USD |
+| `priceUsd` | Current price in USD |
+| `volume24h` | 24-hour trading volume |
+| `holders` | Number of unique holders |
+| `bondingProgress` | Progress through bonding curve (0-100%) |
+| `isGraduated` | Whether token has graduated to DEX |
+
+## Understanding Pump.fun Token States
+
+| State | Description |
+|-------|-------------|
+| **New** | Recently created tokens (less than 24 hours old) |
+| **Bonding** | Tokens in bonding curve with 20%+ progress |
+| **Graduated** | Tokens that completed bonding and are on DEXs |
+
+## Next Steps
+
+- [Get Pump.fun Token Swaps and Prices](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-pump-fun-tokens-swaps-and-prices) - Get trading data
+- [API Reference - New Tokens](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) - Full API documentation
+- [API Reference - Bonding Tokens](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) - Bonding endpoint docs
+- [API Reference - Graduated Tokens](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) - Graduated endpoint docs

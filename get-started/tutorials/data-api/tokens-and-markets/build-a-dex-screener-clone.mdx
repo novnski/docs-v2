@@ -1,0 +1,127 @@
+---
+title: 'How to Build a DexScreener Clone'
+description: 'Learn how to build a DEX token screener dashboard using the Moralis API.'
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to build a DEX token screener similar to DexScreener using the Moralis API. The screener will display top tokens by volume with real-time prices, market cap, and price changes. We'll use the following Moralis API endpoint:
+
+- [Get Filtered Tokens](/data-api/evm/token/discovery/filtered-tokens) - Search and discover tokens by various metrics
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir dex-screener && cd dex-screener
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+
+async function getTopTokens() {
+  const response = await fetch(
+    'https://deep-index.moralis.io/api/v2.2/discovery/tokens',
+    {
+      method: 'POST',
+      headers: {
+        'X-API-Key': API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chains: ['eth'],
+        filters: [
+          { metric: 'marketCap', gt: 100000 },
+          { metric: 'volumeUsd', timeFrame: 'oneDay', gt: 10000 },
+          { metric: 'securityScore', gt: 70 }
+        ],
+        sortBy: {
+          metric: 'volumeUsd',
+          timeFrame: 'oneDay',
+          type: 'DESC'
+        },
+        limit: 20
+      }),
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getTopTokens();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to get the top tokens:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "result": [
+    {
+      "tokenAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+      "chain": "eth",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "logo": "https://cdn.moralis.io/eth/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
+      "priceUsd": "1.00",
+      "marketCap": "83000000000",
+      "volumeUsd": {
+        "oneDay": "25000000000"
+      },
+      "pricePercentChange": {
+        "oneDay": "0.01"
+      },
+      "securityScore": 85,
+      "holders": 4500000,
+      "createdAt": "2017-11-28T00:00:00.000Z"
+    }
+  ],
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+## Understanding the Response
+
+| Field | Description |
+|-------|-------------|
+| `tokenAddress` | Contract address of the token |
+| `chain` | Blockchain the token is on |
+| `name` | Token name |
+| `symbol` | Token ticker symbol |
+| `logo` | URL to token logo image |
+| `priceUsd` | Current price in USD |
+| `marketCap` | Total market capitalization |
+| `volumeUsd.oneDay` | 24-hour trading volume in USD |
+| `pricePercentChange.oneDay` | 24-hour price change percentage |
+| `securityScore` | Token security score (0-100) |
+| `holders` | Number of token holders |
+| `createdAt` | When the token was created |
+
+## Next Steps
+
+- [Get Token Price](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-the-price-of-an-erc-20-token) - Price data
+- [Get OHLC Data](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data) - Historical prices
+- [Get Token Pairs](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data) - Liquidity data
+- [API Reference](/data-api/evm/token/discovery/filtered-tokens) - Full API documentation

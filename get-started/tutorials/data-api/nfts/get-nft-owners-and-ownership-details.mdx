@@ -1,0 +1,103 @@
+---
+title: "How to Get NFT Owners and Ownership Details"
+description: "Learn how to fetch ownership data for NFT collections and individual tokens using the Moralis API."
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to retrieve ownership data for NFT collections using the Moralis API. This includes getting all unique owners of a collection, finding who owns a specific token, and analyzing ownership distribution. This is essential for building collection analytics, whale tracking, or ownership verification tools. We'll use the following Moralis API endpoint:
+
+- [Get NFT Owners](/data-api/evm/nft/ownership/owners-by-contract) - Fetch ownership data for NFT collections and individual tokens
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-nft-owners && cd get-nft-owners
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const NFT_ADDRESS = '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'; // BAYC
+
+async function getCollectionOwners() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/nft/${NFT_ADDRESS}/owners?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getCollectionOwners();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the owners:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "status": "SYNCED",
+  "page": 1,
+  "page_size": 100,
+  "cursor": "abc123...",
+  "result": [
+    {
+      "token_address": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+      "token_id": "1234",
+      "amount": "1",
+      "owner_of": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "token_hash": "...",
+      "block_number_minted": "12346789",
+      "contract_type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC",
+      "last_token_uri_sync": "2024-01-15T10:30:00.000Z",
+      "last_metadata_sync": "2024-01-15T10:30:00.000Z"
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field                 | Description                        |
+| --------------------- | ---------------------------------- |
+| `token_id`            | The unique token ID                |
+| `owner_of`            | Current owner's wallet address     |
+| `amount`              | Quantity owned (1 for ERC721)      |
+| `block_number_minted` | Block when the NFT was minted      |
+| `contract_type`       | Token standard (ERC721 or ERC1155) |
+
+## Next Steps
+
+- [Get NFT Metadata](/data-api/evm/nft/metadata/nft-metadata) - Get detailed NFT metadata
+- [Get NFT Floor Prices](/data-api/evm/nft/collection-floor-price) - Fetch collection floor prices
+- [NFT Metadata](/data-api/data-features/data-enrichment/nft-metadata) - explore detailed metadata
+- [NFT Media Images (CDN)](/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn) - learn how we store NFT images

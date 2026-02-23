@@ -1,0 +1,104 @@
+---
+title: "How to Get DEX Pair Addresses (Uniswap, PancakeSwap, SushiSwap)"
+description: "Learn how to find liquidity pair addresses for any token pair on popular DEXs using the Moralis API."
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to find DEX liquidity pair addresses for any two tokens using the Moralis API. This is essential for getting trading data, liquidity information, and price data for token pairs on decentralized exchanges like Uniswap, PancakeSwap, and SushiSwap. We'll use the following Moralis API endpoint:
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-pair-address && cd get-pair-address
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+
+// Token addresses
+const WETH = '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
+const USDC = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
+
+async function getPairAddress() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/${WETH}/${USDC}/pairAddress?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getPairAddress();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to find the pair address:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "token0": {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "decimals": 6,
+    "logo": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png"
+  },
+  "token1": {
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "name": "Wrapped Ether",
+    "symbol": "WETH",
+    "decimals": 18,
+    "logo": "https://cdn.moralis.io/eth/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png"
+  },
+  "pairAddress": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+  "exchange": "uniswapv3",
+  "exchangeAddress": "0x1f98431c8ad98523631ae4a59f267346ea31f984",
+  "exchangeLogo": "https://cdn.moralis.io/eth/0x1f98431c8ad98523631ae4a59f267346ea31f984.png"
+}
+```
+
+## Understanding the Response
+
+| Field             | Description                                             |
+| ----------------- | ------------------------------------------------------- |
+| `token0`          | First token in the pair with metadata                   |
+| `token1`          | Second token in the pair with metadata                  |
+| `pairAddress`     | The liquidity pair contract address                     |
+| `exchange`        | Name of the DEX (uniswapv2, uniswapv3, sushiswap, etc.) |
+| `exchangeAddress` | The DEX factory contract address                        |
+| `exchangeLogo`    | URL to the exchange logo                                |
+
+## Next Steps
+
+- [Get Token Pairs and Liquidity](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-get-token-pairs-and-liquidity-data) - Get liquidity data for pairs
+- [Get OHLC Data](/get-started/tutorials-and-guides/data-api-tutorials/prices-and-charts/how-to-get-historical-erc-20-token-prices-ohlc-data) - Fetch price history
+- [Build a DEX Screener](/get-started/tutorials-and-guides/data-api-tutorials/tokens-and-markets/how-to-build-a-dex-screener-clone) - Create a trading dashboard
+- [API Reference](/data-api/evm/token/token-api-overview) - Full API documentation

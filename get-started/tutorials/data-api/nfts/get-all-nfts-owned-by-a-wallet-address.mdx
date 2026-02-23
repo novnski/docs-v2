@@ -1,0 +1,121 @@
+---
+title: "How to Get All NFTs Owned by a Wallet Address"
+description: "Learn how to fetch all NFTs (ERC721 and ERC1155) owned by any wallet address using the Moralis API."
+---
+
+## Introduction
+
+In this tutorial, you'll learn how to retrieve all NFTs owned by a wallet address using the Moralis API. This works for both ERC721 and ERC1155 tokens and includes metadata, images, and collection information. This is essential for building NFT galleries, portfolio trackers, or wallet applications. We'll use the following Moralis API endpoint:
+
+- [Get Wallet NFTs](/data-api/evm/wallet/nft-balances) - Fetch all NFTs owned by a wallet address
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set Up Your Project
+
+Create a new directory for your project and initialize it:
+
+```bash
+mkdir get-nft-balances && cd get-nft-balances
+npm init -y
+```
+
+## Step 2: Create the Script
+
+Create a file called `index.js` and add the following code:
+
+```javascript
+// index.js
+const API_KEY = 'YOUR_API_KEY';
+const WALLET_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'; // Vitalik's wallet
+
+async function getNFTs() {
+  const response = await fetch(
+    `https://deep-index.moralis.io/api/v2.2/${WALLET_ADDRESS}/nft?chain=eth`,
+    {
+      headers: {
+        'X-API-Key': API_KEY,
+      },
+    }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getNFTs();
+```
+
+Replace `YOUR_API_KEY` with your actual Moralis API key.
+
+## Step 3: Run the Script
+
+Execute the script to fetch the NFTs:
+
+```bash
+node index.js
+```
+
+## Example Response
+
+```json
+{
+  "status": "SYNCED",
+  "page": 1,
+  "page_size": 100,
+  "cursor": null,
+  "result": [
+    {
+      "token_address": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+      "token_id": "1234",
+      "amount": "1",
+      "owner_of": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "token_hash": "abc123...",
+      "contract_type": "ERC721",
+      "name": "Bored Ape Yacht Club",
+      "symbol": "BAYC",
+      "token_uri": "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/1234",
+      "metadata": {
+        "name": "Bored Ape #1234",
+        "image": "ipfs://QmRRPWG96cmgTn2qSzjwr2qvfNEuhunv6FNeMFGa9bx6mQ",
+        "attributes": [
+          { "trait_type": "Background", "value": "Aquamarine" },
+          { "trait_type": "Fur", "value": "Blue" }
+        ]
+      },
+      "last_token_uri_sync": "2024-01-15T10:30:00.000Z",
+      "last_metadata_sync": "2024-01-15T10:30:00.000Z",
+      "possible_spam": false,
+      "verified_collection": true,
+      "floor_price": 25.5,
+      "floor_price_usd": 45000
+    }
+  ]
+}
+```
+
+## Understanding the Response
+
+| Field                 | Description                               |
+| --------------------- | ----------------------------------------- |
+| `token_address`       | The NFT collection contract address       |
+| `token_id`            | The unique token ID within the collection |
+| `amount`              | Quantity owned (relevant for ERC1155)     |
+| `contract_type`       | Token standard (ERC721 or ERC1155)        |
+| `name`                | Collection name                           |
+| `symbol`              | Collection symbol                         |
+| `metadata`            | NFT metadata (name, image, attributes)    |
+| `possible_spam`       | Whether the NFT is flagged as spam        |
+| `verified_collection` | Whether the collection is verified        |
+| `floor_price`         | Current floor price in native token       |
+| `floor_price_usd`     | Floor price in USD                        |
+
+## Next Steps
+
+- [Get NFT Metadata](/data-api/evm/nft/metadata/nft-metadata) - Get detailed NFT metadata
+- [Get NFT Floor Prices](/data-api/evm/nft/collection-floor-price) - Fetch collection floor prices
+- [NFT Metadata](/data-api/data-features/data-enrichment/nft-metadata) - explore detailed metadata
+- [NFT Media Images (CDN)](/data-api/data-features/data-enrichment/nft-metadata/image-previews-cdn) - learn how we store NFT images
