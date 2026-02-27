@@ -14,23 +14,23 @@ These endpoints support both EVM and Solana chains.
 
 ### Token Discovery & Analytics
 
-| Method                                                                                       | CU Cost |
-| -------------------------------------------------------------------------------------------- | ------- |
+| Method                                                                              | CU Cost |
+| ----------------------------------------------------------------------------------- | ------- |
 | [searchTokens](/data-api/universal/token/token-search)                              | 150     |
 | [getTokenScore](/data-api/universal/token/token-score)                              | 100     |
-| [getHistoricalTokenScore](/data-api/universal/token/token-score-timeseries)          | 150     |
+| [getHistoricalTokenScore](/data-api/universal/token/token-score-timeseries)         | 150     |
 | [getTokenAnalytics](/data-api/universal/token/token-analytics)                      | 80      |
 | [getMultipleTokenAnalytics](/data-api/universal/token/token-analytics-multi)        | 150     |
 | [getTimeSeriesTokenAnalytics](/data-api/universal/token/token-analytics-timeseries) | 200     |
-| [getFilteredTokens](/data-api/universal/token/filtered-tokens)                       | 250     |
-| [getTopGainersTokens](/data-api/universal/token/top-gainers)                         | 250     |
-| [getTopLosersTokens](/data-api/universal/token/top-losers)                           | 250     |
-| [getTrendingTokens](/data-api/universal/token/trending-tokens)                       | 150     |
+| [getFilteredTokens](/data-api/universal/token/filtered-tokens)                      | 250     |
+| [getTopGainersTokens](/data-api/universal/token/top-gainers)                        | 250     |
+| [getTopLosersTokens](/data-api/universal/token/top-losers)                          | 250     |
+| [getTrendingTokens](/data-api/universal/token/trending-tokens)                      | 150     |
 
 ### Entity API
 
-| Method                                                                          | CU Cost |
-| ------------------------------------------------------------------------------- | ------- |
+| Method                                                                               | CU Cost |
+| ------------------------------------------------------------------------------------ | ------- |
 | [searchEntities](/data-api/universal/entity-api/endpoints/entity-search)             | 50      |
 | [getEntity](/data-api/universal/entity-api/endpoints/entity-by-id)                   | 50      |
 | [getEntitiesByCategory](/data-api/universal/entity-api/endpoints/entity-by-category) | 50      |
@@ -38,8 +38,8 @@ These endpoints support both EVM and Solana chains.
 
 ### Volume & Market Data
 
-| Method                                                                                                 | CU Cost |
-| ------------------------------------------------------------------------------------------------------ | ------- |
+| Method                                                                                                  | CU Cost |
+| ------------------------------------------------------------------------------------------------------- | ------- |
 | [getVolumeStatsByChain](/data-api/universal/global/endpoints/trading-stats)                             | 150     |
 | [getVolumeStatsByCategory](/data-api/universal/global/endpoints/trading-stats-category)                 | 150     |
 | [getTimeSeriesVolume](/data-api/universal/global/endpoints/trading-stats-timeseries)                    | 150     |
@@ -51,90 +51,90 @@ These endpoints support both EVM and Solana chains.
 
 ### Wallet API
 
-| Method                                                                                               | CU Cost |
-| ---------------------------------------------------------------------------------------------------- | ------- |
-| [getWalletHistory](/data-api/evm/wallet/wallet-history)                             | 150     |
-| [getWalletStats](/data-api/evm/wallet/wallet-stats)                                 | 50      |
-| [getWalletActiveChains](/data-api/evm/wallet/chain-activity)                        | 50      |
-| [getWalletTokenBalancesPrice](/data-api/evm/wallet/token-balances)                           | 100     |
-| [getWalletTokenBalances](/data-api/evm/wallet/token-balances-legacy)                  | 100     |
-| [getNativeBalance](/data-api/evm/wallet/native-balance)                               | 100     |
-| [getNativeBalancesForAddresses](/data-api/evm/wallet/native-balances-batch)           | 10      |
-| [getWalletNFTs](/data-api/evm/wallet/nft-balances)                              | 50      |
-| [getWalletNFTCollections](/data-api/evm/wallet/nft-collections)                 | 50      |
-| [getWalletNFTTransfers](/data-api/evm/wallet/nft-transfers)                                  | 20      |
-| [getNFTTradesByWallet](/data-api/evm/wallet/nft-trades-by-wallet)                            | 40      |
-| [getWalletTokenTransfers](/data-api/evm/wallet/token-transfers)                              | 50      |
-| [getWalletTransactions](/data-api/evm/wallet/wallet-transactions)                            | 30      |
-| [getWalletTransactionsVerbose](/data-api/evm/wallet/decoded-transactions)                    | 50      |
-| [getWalletApprovals](/data-api/evm/wallet/approvals)                                         | 100     |
-| [getWalletNetWorth](/data-api/evm/wallet/net-worth)                                          | 250     |
-| [getWalletProfitability](/data-api/evm/wallet/wallet-pnl)                              | 50      |
-| [getWalletProfitabilitySummary](/data-api/evm/wallet/wallet-pnl-summary) | 30      |
-| [getDefiSummary](/data-api/evm/wallet/wallet-protocols)                      | 50      |
-| [getDefiPositionsSummary](/data-api/evm/wallet/wallet-positions)             | 50      |
-| [getDefiPositionsByProtocol](/data-api/evm/wallet/detailed-positions)        | 15      |
-| [getSwapsByWalletAddress](/data-api/evm/wallet/wallet-swaps)                                 | 50      |
-| [resolveENSDomain](/data-api/evm/wallet/ens-lookup)                                 | 10      |
-| [resolveAddress](/data-api/evm/wallet/resolve-address)                              | 10      |
+| Method                                                                      | CU Cost |
+| --------------------------------------------------------------------------- | ------- |
+| [getWalletHistory](/data-api/evm/wallet/wallet-history)                     | 150     |
+| [getWalletStats](/data-api/evm/wallet/wallet-stats)                         | 50      |
+| [getWalletActiveChains](/data-api/evm/wallet/chain-activity)                | 50      |
+| [getWalletTokenBalancesPrice](/data-api/evm/wallet/token-balances)          | 100     |
+| [getWalletTokenBalances](/data-api/evm/wallet/token-balances-legacy)        | 100     |
+| [getNativeBalance](/data-api/evm/wallet/native-balance)                     | 100     |
+| [getNativeBalancesForAddresses](/data-api/evm/wallet/native-balances-batch) | 10      |
+| [getWalletNFTs](/data-api/evm/wallet/nft-balances)                          | 50      |
+| [getWalletNFTCollections](/data-api/evm/wallet/nft-collections)             | 50      |
+| [getWalletNFTTransfers](/data-api/evm/wallet/nft-transfers)                 | 20      |
+| [getNFTTradesByWallet](/data-api/evm/wallet/nft-trades-by-wallet)           | 40      |
+| [getWalletTokenTransfers](/data-api/evm/wallet/token-transfers)             | 50      |
+| [getWalletTransactions](/data-api/evm/wallet/wallet-transactions)           | 30      |
+| [getWalletTransactionsVerbose](/data-api/evm/wallet/decoded-transactions)   | 50      |
+| [getWalletApprovals](/data-api/evm/wallet/approvals)                        | 100     |
+| [getWalletNetWorth](/data-api/evm/wallet/net-worth)                         | 250     |
+| [getWalletProfitability](/data-api/evm/wallet/wallet-pnl)                   | 50      |
+| [getWalletProfitabilitySummary](/data-api/evm/wallet/wallet-pnl-summary)    | 30      |
+| [getDefiSummary](/data-api/evm/wallet/wallet-protocols)                     | 50      |
+| [getDefiPositionsSummary](/data-api/evm/wallet/wallet-positions)            | 50      |
+| [getDefiPositionsByProtocol](/data-api/evm/wallet/detailed-positions)       | 15      |
+| [getSwapsByWalletAddress](/data-api/evm/wallet/wallet-swaps)                | 50      |
+| [resolveENSDomain](/data-api/evm/wallet/ens-lookup)                         | 10      |
+| [resolveAddress](/data-api/evm/wallet/resolve-address)                      | 10      |
 
 ### Token API
 
-| Method                                                                                          | CU Cost |
-| ----------------------------------------------------------------------------------------------- | ------- |
-| [getTokenMetadata](/data-api/evm/token/metadata/token-metadata)                        | 10      |
-| [getTokenPrice](/data-api/evm/token/prices/token-price)                              | 50      |
-| [getMultipleTokenPrices](/data-api/evm/token/prices/token-prices-batch)                 | 100     |
-| [getPairCandlesticks](/data-api/evm/token/prices/ohlc)                                  | 150     |
-| [getTokenScore](/data-api/evm/token/metadata/token-score)                              | 100     |
-| [getHistoricalTokenScore](/data-api/evm/token/metadata/token-score-timeseries) | 150     |
-| [getTokenHolders](/data-api/evm/token/holders/token-holders)                          | 50      |
-| [getHistoricalTokenHolders](/data-api/evm/token/holders/historical-token-holders)       | 50      |
-| [getTokenStats](/data-api/evm/token/holders/token-holder-stats)                         | 50      |
-| [getTokenTransfers](/data-api/evm/token/transfers/token-transfers)                      | 50      |
-| [getTokenPairs](/data-api/evm/token/swaps/token-pairs)                        | 50      |
-| [getSwapsByTokenAddress](/data-api/evm/token/swaps/token-swaps)               | 50      |
-| [getSwapsByPairAddress](/data-api/evm/token/swaps/pair-swaps)                 | 50      |
-| [getPairStats](/data-api/evm/token/swaps/pair-stats)                          | 100     |
-| [getSnipersByPairAddress](/data-api/evm/token/signals/snipers)                 | 50      |
-| [getTopProfitableWalletPerToken](/data-api/evm/token/signals/top-traders)      | 50      |
-| [getTokenCategories](/data-api/evm/token/discovery/token-categories)         | 10      |
-| [getFilteredTokens](/data-api/evm/token/discovery/filtered-tokens)           | 250     |
-| [getTopGainersTokens](/data-api/evm/token/discovery/top-gainers)             | 250     |
-| [getTopLosersTokens](/data-api/evm/token/discovery/top-losers)               | 250     |
+| Method                                                                            | CU Cost |
+| --------------------------------------------------------------------------------- | ------- |
+| [getTokenMetadata](/data-api/evm/token/metadata/token-metadata)                   | 10      |
+| [getTokenPrice](/data-api/evm/token/prices/token-price)                           | 50      |
+| [getMultipleTokenPrices](/data-api/evm/token/prices/token-prices-batch)           | 100     |
+| [getPairCandlesticks](/data-api/evm/token/prices/ohlc)                            | 150     |
+| [getTokenScore](/data-api/evm/token/metadata/token-score)                         | 100     |
+| [getHistoricalTokenScore](/data-api/evm/token/metadata/token-score-timeseries)    | 150     |
+| [getTokenHolders](/data-api/evm/token/holders/token-holders)                      | 50      |
+| [getHistoricalTokenHolders](/data-api/evm/token/holders/historical-token-holders) | 50      |
+| [getTokenStats](/data-api/evm/token/holders/token-holder-stats)                   | 50      |
+| [getTokenTransfers](/data-api/evm/token/transfers/token-transfers)                | 50      |
+| [getTokenPairs](/data-api/evm/token/swaps/token-pairs)                            | 50      |
+| [getSwapsByTokenAddress](/data-api/evm/token/swaps/token-swaps)                   | 50      |
+| [getSwapsByPairAddress](/data-api/evm/token/swaps/pair-swaps)                     | 50      |
+| [getPairStats](/data-api/evm/token/swaps/pair-stats)                              | 100     |
+| [getSnipersByPairAddress](/data-api/evm/token/signals/snipers)                    | 50      |
+| [getTopProfitableWalletPerToken](/data-api/evm/token/signals/top-traders)         | 50      |
+| [getTokenCategories](/data-api/evm/token/discovery/token-categories)              | 10      |
+| [getFilteredTokens](/data-api/evm/token/discovery/filtered-tokens)                | 250     |
+| [getTopGainersTokens](/data-api/evm/token/discovery/top-gainers)                  | 250     |
+| [getTopLosersTokens](/data-api/evm/token/discovery/top-losers)                    | 250     |
 
 ### NFT API
 
-| Method                                                                                                         | CU Cost |
-| -------------------------------------------------------------------------------------------------------------- | ------- |
-| [getNFTMetadata](/data-api/evm/nft/metadata/nft-metadata)                                             | 20      |
-| [getMultipleNFTs](/data-api/evm/nft/metadata/nft-metadata-batch)                              | 150     |
-| [getNFTContractMetadata](/data-api/evm/nft/metadata/collection-metadata)                      | 50      |
-| [getNFTBulkContractMetadata](/data-api/evm/nft/metadata/collection-metadata-batch)                | 5       |
-| [getNFTCollectionStats](/data-api/evm/nft/metadata/collection-stats)                          | 50      |
-| [getNFTFloorPriceByToken](/data-api/evm/nft/prices/floor)                                              | 30      |
-| [getNFTFloorPriceByContract](/data-api/evm/nft/collection-floor-price)                                 | 30      |
-| [getNFTHistoricalFloorPriceByContract](/data-api/evm/nft/historical-floor-price)                       | 50      |
-| [getNFTSalePrices](/data-api/evm/nft/prices/sale-price-by-token-id)                                    | 30      |
-| [getNFTContractSalePrices](/data-api/evm/nft/prices/sale-price-by-contract)                            | 1       |
-| [getNFTTrades](/data-api/evm/nft/trades/collection-trades)                                             | 40      |
-| [getNFTTradesByToken](/data-api/evm/nft/trades/trades-by-token-id)                                     | 40      |
-| [getNFTOwners](/data-api/evm/nft/ownership/owners-by-contract)                                         | 50      |
-| [getNFTTokenIdOwners](/data-api/evm/nft/ownership/owners-by-token-id)                                  | 50      |
-| [getNFTContractTransfers](/data-api/evm/nft/transfers/collection-transfers)                            | 50      |
-| [getNFTTransfers](/data-api/evm/nft/transfers/token-id-transfers)                                      | 20      |
+| Method                                                                                      | CU Cost |
+| ------------------------------------------------------------------------------------------- | ------- |
+| [getNFTMetadata](/data-api/evm/nft/metadata/nft-metadata)                                   | 20      |
+| [getMultipleNFTs](/data-api/evm/nft/metadata/nft-metadata-batch)                            | 150     |
+| [getNFTContractMetadata](/data-api/evm/nft/metadata/collection-metadata)                    | 50      |
+| [getNFTBulkContractMetadata](/data-api/evm/nft/metadata/collection-metadata-batch)          | 5       |
+| [getNFTCollectionStats](/data-api/evm/nft/metadata/collection-stats)                        | 50      |
+| [getNFTFloorPriceByToken](/data-api/evm/nft/prices/floor)                                   | 30      |
+| [getNFTFloorPriceByContract](/data-api/evm/nft/collection-floor-price)                      | 30      |
+| [getNFTHistoricalFloorPriceByContract](/data-api/evm/nft/historical-floor-price)            | 50      |
+| [getNFTSalePrices](/data-api/evm/nft/prices/sale-price-by-token-id)                         | 30      |
+| [getNFTContractSalePrices](/data-api/evm/nft/prices/sale-price-by-contract)                 | 1       |
+| [getNFTTrades](/data-api/evm/nft/trades/collection-trades)                                  | 40      |
+| [getNFTTradesByToken](/data-api/evm/nft/trades/trades-by-token-id)                          | 40      |
+| [getNFTOwners](/data-api/evm/nft/ownership/owners-by-contract)                              | 50      |
+| [getNFTTokenIdOwners](/data-api/evm/nft/ownership/owners-by-token-id)                       | 50      |
+| [getNFTContractTransfers](/data-api/evm/nft/transfers/collection-transfers)                 | 50      |
+| [getNFTTransfers](/data-api/evm/nft/transfers/token-id-transfers)                           | 20      |
 | [getNFTTraitsByCollection](/data-api/evm/nft/traits/traits-by-collection)                   | 50      |
 | [getNFTTraitsByCollectionPaginate](/data-api/evm/nft/traits/traits-by-collection-paginated) | 50      |
 | [getNFTByContractTraits](/data-api/evm/nft/traits/nfts-by-traits)                           | 50      |
-| [getTopNFTCollectionsByMarketCap](/data-api/evm/nft/discovery/nfts-by-market-cap)                      | 200     |
-| [getHottestNFTCollectionsByTradingVolume](/data-api/evm/nft/discovery/nfts-by-volume)                  | 200     |
-| [reSyncMetadata](/data-api/evm/nft/utilities/resync-nft-metadata)                                      | 50      |
-| [resyncNFTRarity](/data-api/evm/nft/utilities/resync-nft-traits)                                       | 10      |
+| [getTopNFTCollectionsByMarketCap](/data-api/evm/nft/discovery/nfts-by-market-cap)           | 200     |
+| [getHottestNFTCollectionsByTradingVolume](/data-api/evm/nft/discovery/nfts-by-volume)       | 200     |
+| [reSyncMetadata](/data-api/evm/nft/utilities/resync-nft-metadata)                           | 50      |
+| [resyncNFTRarity](/data-api/evm/nft/utilities/resync-nft-traits)                            | 10      |
 
 ### Price API
 
-| Method                                                                                     | CU Cost |
-| ------------------------------------------------------------------------------------------ | ------- |
+| Method                                                                             | CU Cost |
+| ---------------------------------------------------------------------------------- | ------- |
 | [getTokenPrice](/data-api/evm/price/token-price)                                   | 50      |
 | [getMultipleTokenPrices](/data-api/evm/price/token-prices-batch)                   | 100     |
 | [getPairCandlesticks](/data-api/evm/price/ohlc)                                    | 150     |
@@ -146,16 +146,16 @@ These endpoints support both EVM and Solana chains.
 
 ### DeFi API
 
-| Method                                                                             | CU Cost |
-| ---------------------------------------------------------------------------------- | ------- |
+| Method                                                                     | CU Cost |
+| -------------------------------------------------------------------------- | ------- |
 | [getDefiSummary](/data-api/evm/defi/wallet-protocols)                      | 50      |
 | [getDefiPositionsSummary](/data-api/evm/defi/wallet-positions)             | 50      |
 | [getDefiPositionsByProtocol](/data-api/evm/defi/wallet-positions-detailed) | 15      |
 
 ### Blockchain API
 
-| Method                                                                                  | CU Cost |
-| --------------------------------------------------------------------------------------- | ------- |
+| Method                                                                          | CU Cost |
+| ------------------------------------------------------------------------------- | ------- |
 | [getWalletTransactions](/data-api/evm/blockchain/address-transactions)          | 30      |
 | [getWalletTransactionsVerbose](/data-api/evm/blockchain/address-transactions-1) | 50      |
 | [getDateToBlock](/data-api/evm/blockchain/block-by-date)                        | 1       |
@@ -170,8 +170,8 @@ These endpoints support both EVM and Solana chains.
 
 ### Wallet API
 
-| Method                                                                  | CU Cost |
-| ----------------------------------------------------------------------- | ------- |
+| Method                                                          | CU Cost |
+| --------------------------------------------------------------- | ------- |
 | [balance](/data-api/solana/wallet/native-balance)               | 10      |
 | [getSPL](/data-api/solana/wallet/token-balances)                | 10      |
 | [getNFTs](/data-api/solana/wallet/nft-balances)                 | 10      |
@@ -180,36 +180,37 @@ These endpoints support both EVM and Solana chains.
 
 ### Token API
 
-| Method                                                                                                        | CU Cost |
-| ------------------------------------------------------------------------------------------------------------- | ------- |
+| Method                                                                                                | CU Cost |
+| ----------------------------------------------------------------------------------------------------- | ------- |
 | [getTokenMetadata](/data-api/solana/token/token-metadata)                                             | 10      |
-| [getTokenPrice](/data-api/solana/token/prices/token-price)                                           | 50      |
+| [getMultipleTokenMetadata](/data-api/solana/token/token-metadata-batch)                                                                              | 100     |
+| [getTokenPrice](/data-api/solana/token/prices/token-price)                                            | 50      |
 | [getMultipleTokenPrices](/data-api/solana/token/prices/token-price-batch)                             | 100     |
 | [getCandleSticks](/data-api/solana/token/prices/ohlc)                                                 | 150     |
 | [getTopHolders](/data-api/solana/token/holders/top-holders)                                           | 50      |
 | [getHistoricalTokenHolders](/data-api/solana/token/holders/historical-holders)                        | 50      |
 | [getTokenHolders](/data-api/solana/token/holders/holder-metrics)                                      | 50      |
-| [getTokenPairs](/data-api/solana/token/pairs/token-pairs)                                   | 50      |
-| [getSwapsByTokenAddress](/data-api/solana/token/swaps/token-swaps)                          | 50      |
-| [getSwapsByPairAddress](/data-api/solana/token/pairs/pair-swaps)                            | 50      |
-| [getPairStats](/data-api/solana/token/pairs/pair-stats)                                     | 100     |
+| [getTokenPairs](/data-api/solana/token/pairs/token-pairs)                                             | 50      |
+| [getSwapsByTokenAddress](/data-api/solana/token/swaps/token-swaps)                                    | 50      |
+| [getSwapsByPairAddress](/data-api/solana/token/pairs/pair-swaps)                                      | 50      |
+| [getPairStats](/data-api/solana/token/pairs/pair-stats)                                               | 100     |
 | [getAggregatedTokenPairStats](/data-api/solana/token/market-metrics/token-analytics)                  | 80      |
 | [getSnipersByPairAddress](/data-api/solana/token/advanced-signals/snipers)                            | 50      |
 | [getNewTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens)             | 1       |
 | [getGraduatedTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) | 1       |
-| [getBondingTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens)    | 1       |
+| [getBondingTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens)     | 1       |
 | [getTokenBondingStatus](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status)          | 1       |
 
 ### NFT API
 
-| Method                                                      | CU Cost |
-| ----------------------------------------------------------- | ------- |
+| Method                                              | CU Cost |
+| --------------------------------------------------- | ------- |
 | [getNFTMetadata](/data-api/solana/nft/nft-metadata) | 20      |
 
 ### Price API
 
-| Method                                                                      | CU Cost |
-| --------------------------------------------------------------------------- | ------- |
+| Method                                                              | CU Cost |
+| ------------------------------------------------------------------- | ------- |
 | [getTokenPrice](/data-api/solana/price/token-price)                 | 50      |
 | [getMultipleTokenPrices](/data-api/solana/price/token-prices-batch) | 100     |
 | [getCandleSticks](/data-api/solana/price/ohlc)                      | 150     |
