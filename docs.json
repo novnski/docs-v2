@@ -618,13 +618,6 @@
             ]
           },
           {
-            "group": "Cortex API",
-            "pages": [
-              "data-api/cortex-api/overview",
-              "data-api/cortex-api/chat"
-            ]
-          },
-          {
             "group": "Universal API",
             "pages": [
               "data-api/universal/index",
@@ -664,6 +657,13 @@
                   "data-api/universal/entity/endpoints/entity-categories"
                 ]
               }
+            ]
+          },
+          {
+            "group": "Cortex API",
+            "pages": [
+              "data-api/cortex-api/overview",
+              "data-api/cortex-api/chat"
             ]
           }
         ]
