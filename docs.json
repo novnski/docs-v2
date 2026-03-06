@@ -46,7 +46,8 @@
             "group": "Pricing & Resources",
             "pages": [
               "get-started/pricing",
-              "get-started/supported-chains"
+              "get-started/supported-chains",
+              "get-started/global-api-reference"
             ]
           },
           {
