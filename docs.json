@@ -46,8 +46,7 @@
             "group": "Pricing & Resources",
             "pages": [
               "get-started/pricing",
-              "get-started/supported-chains",
-              "get-started/global-api-reference"
+              "get-started/supported-chains"
             ]
           },
           {
@@ -208,7 +207,8 @@
                   "data-api/introduction/resources/performance-and-reliability",
                   "data-api/introduction/resources/premium-endpoints"
                 ]
-              }
+              },
+              "get-started/global-api-reference"
             ]
           },
           {
