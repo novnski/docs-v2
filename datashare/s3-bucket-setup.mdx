@@ -11,7 +11,7 @@ What is Amazon S3?
 **Account Setup**
 
 1. Login into the AWS console / create an Amazon S3 Cloud Objective Storage account here with your IAM user ID or Root User Email: https://aws.amazon.com/s3/
-   - Note: AWS may require you to have a 2 Factor Authentication method when creating an account. You can download Google Auth or similar to satisfy this account creation requirement 
+   - Note: AWS may require you to have a 2 Factor Authentication method when creating an account. You can download Google Auth or similar to satisfy this account creation requirement
 
 **Creating an S3 Storage Bucket**
 
@@ -21,38 +21,30 @@ What is Amazon S3?
    <Frame>
      ![Screenshot 2026 03 09 At 12 19 45 PM](/images/Screenshot2026-03-09at12.19.45PM.png)
    </Frame>
-
-
 4. When configuring the storage bucket follow these setup steps below:
 
-- General configuration = General Purpose 
+- General configuration = General Purpose
 - Bucket name = anything you want, example: "moralis-datashare-bucket"
 
 <Frame>
   ![Screenshot 2026 03 09 At 12 28 20 PM](/images/Screenshot2026-03-09at12.28.20PM.png)
 </Frame>
 
-5. Objective Ownership = ACLs disabled (recommended)
+ 5. Objective Ownership = ACLs disabled (recommended)
 
-   <Frame>
-     ![Screenshot 2026 03 09 At 12 32 21 PM](/images/Screenshot2026-03-09at12.32.21PM.png)
-   </Frame>
+    <Frame>
+      ![Screenshot 2026 03 09 At 12 32 21 PM](/images/Screenshot2026-03-09at12.32.21PM.png)
+    </Frame>
+ 6. Block Public Access settings for this bucket = True
 
+    <Frame>
+      ![Screenshot 2026 03 09 At 12 36 59 PM](/images/Screenshot2026-03-09at12.36.59PM.png)
+    </Frame>
+ 7. Bucket Versioning = Disabled
 
-6. Block Public Access settings for this bucket = True
-
-   <Frame>
-     ![Screenshot 2026 03 09 At 12 36 59 PM](/images/Screenshot2026-03-09at12.36.59PM.png)
-   </Frame>
-
-
-7. Bucket Versioning = Disabled 
-
-   <Frame>
-     ![Screenshot 2026 03 09 At 12 40 08 PM](/images/Screenshot2026-03-09at12.40.08PM.png)
-   </Frame>
-
-
+    <Frame>
+      ![Screenshot 2026 03 09 At 12 40 08 PM](/images/Screenshot2026-03-09at12.40.08PM.png)
+    </Frame>
  8. Tags are optional. Skip or include tags.
  9. Default encryption = Keep SSE-S3 selected and Enable Bucket Key
 
@@ -80,7 +72,7 @@ What is Amazon S3?
       ![Screenshot 2026 03 09 At 1 21 43 PM](/images/Screenshot2026-03-09at1.21.43PM.png)
     </Frame>
 14. Set the user name, example = "moralis-datashare-bucket-user"
-    - Leave unchecked "Provide user access to the AWS Management Console" 
+    - Leave unchecked "Provide user access to the AWS Management Console"
     - Click Next
 
       <Frame>
@@ -117,8 +109,6 @@ What is Amazon S3?
       <Frame>
         ![Screenshot 2026 03 09 At 1 42 55 PM](/images/Screenshot2026-03-09at1.42.55PM.png)
       </Frame>
-
-
     - Select "Third-party service" — since Moralis Datashare is an external service that will write to your S3 bucket. Then click "Next".
 
       <Frame>
@@ -131,7 +121,7 @@ What is Amazon S3?
         ![Screenshot 2026 03 09 At 1 47 40 PM](/images/Screenshot2026-03-09at1.47.40PM.png)
       </Frame>
 
-**Moralis Datashare Dashboard - Configuration** 
+**Moralis Datashare Dashboard - Configuration**
 
 19. Navigate to the Moralis Datashare Dashboard by clicking on the Create Export button. https://moralis.com/
 
@@ -176,13 +166,13 @@ What is Amazon S3?
   ![Screenshot 2026 03 09 At 2 09 12 PM](/images/Screenshot2026-03-09at2.09.12PM-2.png)
 </Frame>
 
-25. Click "Estimate" to view the required GB for your export. 
+25. Click "Estimate" to view the required GB for your export.
 
     <Frame>
       ![Screenshot 2026 03 09 At 2 10 46 PM](/images/Screenshot2026-03-09at2.10.46PM.png)
     </Frame>
 
-**Complete - You can now export Bulk Blockchain Data with Moralis Datashare!**
+**Complete - You can now export Bulk Blockchain Data with Moralis Datashare!** 
 
 <Frame>
   ![You Did It](/images/youdidit-1.webp)
