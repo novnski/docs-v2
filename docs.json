@@ -778,7 +778,8 @@
           "datashare/supported-data",
           "datashare/export-options",
           "datashare/supported-chains",
-          "datashare/early-access"
+          "datashare/early-access",
+          "datashare/s3-bucket-setup"
         ]
       },
       {

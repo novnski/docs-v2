@@ -1,0 +1,189 @@
+---
+title: "S3 Bucket Setup"
+---
+
+This is a comprehensive step-by-step walkthrough on how to set up an AWS S3 bucket for your Datashare exports.
+
+What is Amazon S3?
+
+- https://www.youtube.com/watch?v=ecv-19sYL3w
+
+**Account Setup**
+
+1. Login into the AWS console / create an Amazon S3 Cloud Objective Storage account here with your IAM user ID or Root User Email: https://aws.amazon.com/s3/
+   - Note: AWS may require you to have a 2 Factor Authentication method when creating an account. You can download Google Auth or similar to satisfy this account creation requirement 
+
+**Creating an S3 Storage Bucket**
+
+2. After you have successfully signed into your account, naviagete to Amazon S3
+3. Click the Create bucket button:
+
+   <Frame>
+     ![Screenshot 2026 03 09 At 12 19 45 PM](/images/Screenshot2026-03-09at12.19.45PM.png)
+   </Frame>
+
+
+4. When configuring the storage bucket follow these setup steps below:
+
+- General configuration = General Purpose 
+- Bucket name = anything you want, example: "moralis-datashare-bucket"
+
+<Frame>
+  ![Screenshot 2026 03 09 At 12 28 20 PM](/images/Screenshot2026-03-09at12.28.20PM.png)
+</Frame>
+
+5. Objective Ownership = ACLs disabled (recommended)
+
+   <Frame>
+     ![Screenshot 2026 03 09 At 12 32 21 PM](/images/Screenshot2026-03-09at12.32.21PM.png)
+   </Frame>
+
+
+6. Block Public Access settings for this bucket = True
+
+   <Frame>
+     ![Screenshot 2026 03 09 At 12 36 59 PM](/images/Screenshot2026-03-09at12.36.59PM.png)
+   </Frame>
+
+
+7. Bucket Versioning = Disabled 
+
+   <Frame>
+     ![Screenshot 2026 03 09 At 12 40 08 PM](/images/Screenshot2026-03-09at12.40.08PM.png)
+   </Frame>
+
+
+ 8. Tags are optional. Skip or include tags.
+ 9. Default encryption = Keep SSE-S3 selected and Enable Bucket Key
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 12 42 18 PM](/images/Screenshot2026-03-09at12.42.18PM.png)
+    </Frame>
+10. Click Create Bucket
+
+**Create a Bucket Policy with IAM user**
+
+11. In the Searchbar type "IAM" and select "IAM Manage access to AWS resources"
+    - You will be brought to the IAM Dashboard if you are logged in.
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 09 53 PM](/images/Screenshot2026-03-09at1.09.53PM.png)
+    </Frame>
+12. On the left sidebar under Access Management, click "Users"
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 20 55 PM](/images/Screenshot2026-03-09at1.20.55PM.png)
+    </Frame>
+13. Click the "Create user" button.
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 21 43 PM](/images/Screenshot2026-03-09at1.21.43PM.png)
+    </Frame>
+14. Set the user name, example = "moralis-datashare-bucket-user"
+    - Leave unchecked "Provide user access to the AWS Management Console" 
+    - Click Next
+
+      <Frame>
+        ![Screenshot 2026 03 09 At 1 24 09 PM](/images/Screenshot2026-03-09at1.24.09PM.png)
+      </Frame>
+15. Click "Attach policies directly". This is the best approach for a single-purpose user.
+16. In the Seachbar type "S3Full" and click Next.
+
+    <Frame>
+      <Frame>
+        ![Screenshot 2026 03 09 At 1 29 20 PM](/images/Screenshot2026-03-09at1.29.20PM.png)
+      </Frame>
+    </Frame>
+17. Click "Create user".
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 30 02 PM](/images/Screenshot2026-03-09at1.30.02PM.png)
+
+      <Frame>
+        ![Screenshot 2026 03 09 At 1 31 02 PM](/images/Screenshot2026-03-09at1.31.02PM-1.png)
+      </Frame>
+    </Frame>
+
+**Access Keys**
+
+18. Next, you need to create Access Keys for this IAM user.
+    - Click on your username, example: "moralis-datashare-bucket-user" then go to the "Security credentials" tab.
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 41 50 PM](/images/Screenshot2026-03-09at1.41.50PM.png)
+    </Frame>
+    - Scroll down on this page, you'll see an "Access keys" section with a "Create access key" button. Click that.
+
+      <Frame>
+        ![Screenshot 2026 03 09 At 1 42 55 PM](/images/Screenshot2026-03-09at1.42.55PM.png)
+      </Frame>
+
+
+    - Select "Third-party service" — since Moralis Datashare is an external service that will write to your S3 bucket. Then click "Next".
+
+      <Frame>
+        ![Screenshot 2026 03 09 At 1 44 15 PM](/images/Screenshot2026-03-09at1.44.15PM.png)
+      </Frame>
+    - Set description tab, example: "Moralis Datashare S3 export" then click Create access key.
+    - You're key has been created.
+
+      <Frame>
+        ![Screenshot 2026 03 09 At 1 47 40 PM](/images/Screenshot2026-03-09at1.47.40PM.png)
+      </Frame>
+
+**Moralis Datashare Dashboard - Configuration** 
+
+19. Navigate to the Moralis Datashare Dashboard by clicking on the Create Export button. https://moralis.com/
+
+<Frame>
+  ![Screenshot 2026 03 09 At 1 50 01 PM](/images/Screenshot2026-03-09at1.50.01PM-2.png)
+</Frame>
+
+20. Select the chain and data types that you want to fetch bulk blockchain data for.
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 58 08 PM](/images/Screenshot2026-03-09at1.58.08PM.png)
+    </Frame>
+21. Set your date range
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 1 59 30 PM](/images/Screenshot2026-03-09at1.59.30PM.png)
+    </Frame>
+22. Add a Wallet or Token Address
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 2 02 46 PM](/images/Screenshot2026-03-09at2.02.46PM.png)
+    </Frame>
+23. Set a Destination and Output format
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 2 03 38 PM](/images/Screenshot2026-03-09at2.03.38PM.png)
+    </Frame>
+
+- Add new S3 compadible storage destination for the export - input your S3 Keys here.
+
+  <Frame>
+    ![Screenshot 2026 03 09 At 2 04 24 PM](/images/Screenshot2026-03-09at2.04.24PM.png)
+  </Frame>
+
+<Frame>
+  ![Screenshot 2026 03 09 At 2 07 50 PM](/images/Screenshot2026-03-09at2.07.50PM.png)
+</Frame>
+
+24. Select Destination.
+
+<Frame>
+  ![Screenshot 2026 03 09 At 2 09 12 PM](/images/Screenshot2026-03-09at2.09.12PM-2.png)
+</Frame>
+
+25. Click "Estimate" to view the required GB for your export. 
+
+    <Frame>
+      ![Screenshot 2026 03 09 At 2 10 46 PM](/images/Screenshot2026-03-09at2.10.46PM.png)
+    </Frame>
+
+**Complete - You can now export Bulk Blockchain Data with Moralis Datashare!**
+
+<Frame>
+  ![You Did It](/images/youdidit-1.webp)
+</Frame>
