@@ -16,12 +16,12 @@ These endpoints support both EVM and Solana chains.
 
 | Method                                                                              | CU Cost |
 | ----------------------------------------------------------------------------------- | ------- |
-| [searchTokens](/data-api/universal/token/token-search)                              | 150     |
-| [getTokenScore](/data-api/universal/token/token-score)                              | 100     |
-| [getHistoricalTokenScore](/data-api/universal/token/token-score-timeseries)         | 150     |
-| [getTokenAnalytics](/data-api/universal/token/token-analytics)                      | 80      |
-| [getMultipleTokenAnalytics](/data-api/universal/token/token-analytics-multi)        | 150     |
-| [getTimeSeriesTokenAnalytics](/data-api/universal/token/token-analytics-timeseries) | 200     |
+| [searchTokens](/data-api/universal/token/search/token-search)                              | 150     |
+| [getTokenScore](/data-api/universal/token/score/token-score)                              | 100     |
+| [getHistoricalTokenScore](/data-api/universal/token/score/token-score-timeseries)         | 150     |
+| [getTokenAnalytics](/data-api/universal/token/analytics/token-analytics)                      | 80      |
+| [getMultipleTokenAnalytics](/data-api/universal/token/analytics/token-analytics-multi)        | 150     |
+| [getTimeSeriesTokenAnalytics](/data-api/universal/token/analytics/token-analytics-timeseries) | 200     |
 | [getFilteredTokens](/data-api/universal/token/filtered-tokens)                      | 250     |
 | [getTopGainersTokens](/data-api/universal/token/top-gainers)                        | 250     |
 | [getTopLosersTokens](/data-api/universal/token/top-losers)                          | 250     |
@@ -31,10 +31,10 @@ These endpoints support both EVM and Solana chains.
 
 | Method                                                                               | CU Cost |
 | ------------------------------------------------------------------------------------ | ------- |
-| [searchEntities](/data-api/universal/entity-api/endpoints/entity-search)             | 50      |
-| [getEntity](/data-api/universal/entity-api/endpoints/entity-by-id)                   | 50      |
-| [getEntitiesByCategory](/data-api/universal/entity-api/endpoints/entity-by-category) | 50      |
-| [getEntityCategories](/data-api/universal/entity-api/endpoints/entity-categories)    | 10      |
+| [searchEntities](/data-api/universal/entity/endpoints/entity-search)             | 50      |
+| [getEntity](/data-api/universal/entity/endpoints/entity-by-id)                   | 50      |
+| [getEntitiesByCategory](/data-api/universal/entity/endpoints/entity-by-category) | 50      |
+| [getEntityCategories](/data-api/universal/entity/endpoints/entity-categories)    | 10      |
 
 ### Volume & Market Data
 
@@ -113,8 +113,8 @@ These endpoints support both EVM and Solana chains.
 | [getNFTBulkContractMetadata](/data-api/evm/nft/metadata/collection-metadata-batch)          | 5       |
 | [getNFTCollectionStats](/data-api/evm/nft/metadata/collection-stats)                        | 50      |
 | [getNFTFloorPriceByToken](/data-api/evm/nft/prices/floor)                                   | 30      |
-| [getNFTFloorPriceByContract](/data-api/evm/nft/collection-floor-price)                      | 30      |
-| [getNFTHistoricalFloorPriceByContract](/data-api/evm/nft/historical-floor-price)            | 50      |
+| [getNFTFloorPriceByContract](/data-api/evm/nft/prices/collection-floor-price)                      | 30      |
+| [getNFTHistoricalFloorPriceByContract](/data-api/evm/nft/prices/historical-floor-price)            | 50      |
 | [getNFTSalePrices](/data-api/evm/nft/prices/sale-price-by-token-id)                         | 30      |
 | [getNFTContractSalePrices](/data-api/evm/nft/prices/sale-price-by-contract)                 | 1       |
 | [getNFTTrades](/data-api/evm/nft/trades/collection-trades)                                  | 40      |
@@ -157,7 +157,7 @@ These endpoints support both EVM and Solana chains.
 | Method                                                                          | CU Cost |
 | ------------------------------------------------------------------------------- | ------- |
 | [getWalletTransactions](/data-api/evm/blockchain/address-transactions)          | 30      |
-| [getWalletTransactionsVerbose](/data-api/evm/blockchain/address-transactions-1) | 50      |
+| [getWalletTransactionsVerbose](/data-api/evm/blockchain/address-transactions) | 50      |
 | [getDateToBlock](/data-api/evm/blockchain/block-by-date)                        | 1       |
 | [getBlock](/data-api/evm/blockchain/block-by-hash)                              | 100     |
 | [getLatestBlockNumber](/data-api/evm/blockchain/latest-block)                   | 10      |
@@ -187,7 +187,7 @@ These endpoints support both EVM and Solana chains.
 | [getTokenScore](/data-api/solana/token/token-score)                         | 100     |
 | [getHistoricalTokenScore](/data-api/solana/token/token-score-timeseries)    | 150     |
 | [getTokenPrice](/data-api/solana/token/prices/token-price)                                            | 50      |
-| [getMultipleTokenPrices](/data-api/solana/token/prices/token-price-batch)                             | 100     |
+| [getMultipleTokenPrices](/data-api/solana/token/prices/token-prices-batch)                             | 100     |
 | [getCandleSticks](/data-api/solana/token/prices/ohlc)                                                 | 150     |
 | [getTopHolders](/data-api/solana/token/holders/top-holders)                                           | 50      |
 | [getHistoricalTokenHolders](/data-api/solana/token/holders/historical-holders)                        | 50      |
