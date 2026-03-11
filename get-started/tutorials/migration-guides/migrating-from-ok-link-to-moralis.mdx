@@ -68,9 +68,9 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent     | Documentation                                                                    |
 | ------ | ---------------------- | -------------------------------------------------------------------------------- |
-| Solana | Get Sol Portfolio      | [Documentation](/data-api/solana/reference/get-sol-portfolio) |
-| Solana | Get Wallet NFTs        | [Documentation](/data-api/solana/reference/get-wallet-nfts)  |
-| Solana | Get Native SOL Balance | [Documentation](/data-api/solana/reference/sol-balance)      |
+| Solana | Get Sol Portfolio      | [Documentation](/data-api/solana/wallet/portfolio) |
+| Solana | Get Wallet NFTs        | [Documentation](/data-api/solana/wallet/nft-balances)  |
+| Solana | Get Native SOL Balance | [Documentation](/data-api/solana/wallet/native-balance)      |
 
 **Notes**: Moralis provides comprehensive asset balance data including SOL tokens, SPL tokens, and NFTs in a single API call or through dedicated endpoints for each asset type.
 
@@ -80,7 +80,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent     | Documentation                                                               |
 | ------ | ---------------------- | --------------------------------------------------------------------------- |
-| Solana | Get Native SOL Balance | [Documentation](/data-api/solana/reference/sol-balance) |
+| Solana | Get Native SOL Balance | [Documentation](/data-api/solana/wallet/native-balance) |
 
 **Notes**: This endpoint provides the native SOL balance for a given wallet address.
 
@@ -90,7 +90,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent | Documentation                                                          |
 | ------ | ------------------ | ---------------------------------------------------------------------- |
-| Solana | Get SPL Token Info | [Documentation](/data-api/solana/reference/get-spl) |
+| Solana | Get SPL Token Info | [Documentation](/data-api/solana/wallet/token-balances) |
 
 **Notes**: This endpoint returns detailed information about SPL tokens, including balances, metadata, and more.
 
@@ -100,7 +100,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent           | Documentation                                                                       |
 | ------ | ---------------------------- | ----------------------------------------------------------------------------------- |
-| Solana | Get Wallet Swap Transactions | [Documentation](/data-api/solana/reference/get-wallet-swap-txs) |
+| Solana | Get Wallet Swap Transactions | [Documentation](/data-api/solana/wallet/wallet-swaps) |
 
 **Notes**: This endpoint provides swap transaction history for a wallet on Solana.
 
@@ -112,7 +112,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent          | Documentation                                                                                  |
 | ----- | --------------------------- | ---------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Collection Metadata | [Documentation](/data-api/evm/reference/get-metadata-for-nft-contract) |
+| EVM   | Get NFT Collection Metadata | [Documentation](/data-api/evm/nft/metadata/collection-metadata) |
 
 **Notes**: This endpoint returns comprehensive metadata about an NFT collection, including name, symbol, token standard, and more.
 
@@ -122,7 +122,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent   | Documentation                                                                  |
 | ----- | -------------------- | ------------------------------------------------------------------------------ |
-| EVM   | Get NFTs by Contract | [Documentation](/data-api/evm/reference/get-contract-nfts) |
+| EVM   | Get NFTs by Contract | [Documentation](/data-api/evm/nft/collections/nfts-by-collection) |
 
 **Notes**: This endpoint retrieves all NFTs within a specific contract with pagination support for large collections.
 
@@ -132,7 +132,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent         | Documentation                                                            |
 | ----- | -------------------------- | ------------------------------------------------------------------------ |
-| EVM   | Get NFT Owners by Contract | [Documentation](/data-api/evm/reference/get-nft-owners) |
+| EVM   | Get NFT Owners by Contract | [Documentation](/data-api/evm/nft/ownership/owners-by-contract) |
 
 **Notes**: This endpoint retrieves the complete list of owners for a specific NFT collection.
 
@@ -142,7 +142,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent              | Documentation                                                                                    |
 | ----- | ------------------------------- | ------------------------------------------------------------------------------------------------ |
-| EVM   | Get NFT Floor Price by Contract | [Documentation](/data-api/evm/reference/get-nft-floor-price-by-contract) |
+| EVM   | Get NFT Floor Price by Contract | [Documentation](/data-api/evm/nft/prices/collection-floor-price) |
 
 **Notes**: This endpoint provides floor price data from major marketplaces for a specific NFT collection.
 
@@ -152,8 +152,8 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent   | Documentation                                                                      |
 | ------ | -------------------- | ---------------------------------------------------------------------------------- |
-| EVM    | Get NFT Metadata     | [Documentation](/data-api/evm/reference/get-nft-metadata)        |
-| Solana | Get SOL NFT Metadata | [Documentation](/data-api/solana/reference/get-sol-nft-metadata) |
+| EVM    | Get NFT Metadata     | [Documentation](/data-api/evm/nft/metadata/nft-metadata)        |
+| Solana | Get SOL NFT Metadata | [Documentation](/data-api/solana/nft/nft-metadata) |
 
 **Notes**: These endpoints provide comprehensive metadata for individual NFTs, including attributes, images, and other on-chain data.
 
@@ -163,7 +163,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent         | Documentation                                                                      |
 | ----- | -------------------------- | ---------------------------------------------------------------------------------- |
-| EVM   | Get NFT Owners by Token ID | [Documentation](/data-api/evm/reference/get-nft-token-id-owners) |
+| EVM   | Get NFT Owners by Token ID | [Documentation](/data-api/evm/nft/ownership/owners-by-token-id) |
 
 **Notes**: This endpoint retrieves owner information for a specific NFT token ID within a collection.
 
@@ -173,8 +173,8 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent         | Documentation                                                                            |
 | ----- | -------------------------- | ---------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Contract Transfers | [Documentation](/data-api/evm/reference/get-nft-contract-transfers) |
-| EVM   | Get NFT Trades             | [Documentation](/data-api/evm/reference/get-nft-trades)             |
+| EVM   | Get NFT Contract Transfers | [Documentation](/data-api/evm/nft/transfers/collection-transfers) |
+| EVM   | Get NFT Trades             | [Documentation](/data-api/evm/nft/trades/collection-trades)             |
 
 **Notes**: These endpoints provide comprehensive transfer and trade history for NFTs, including marketplace sales and P2P transfers.
 
@@ -184,8 +184,8 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent | Documentation                                                                |
 | ------ | ------------------ | ---------------------------------------------------------------------------- |
-| EVM    | Get Wallet NFTs    | [Documentation](/data-api/evm/reference/get-wallet-nfts)    |
-| Solana | Get SOL NFTs       | [Documentation](/data-api/solana/reference/get-sol-nfts) |
+| EVM    | Get Wallet NFTs    | [Documentation](/data-api/evm/nft/collections/nfts-by-wallet)    |
+| Solana | Get SOL NFTs       | [Documentation](/data-api/solana/wallet/nft-balances) |
 
 **Notes**: These endpoints retrieve all NFTs held by a specific wallet address with rich metadata.
 
@@ -197,7 +197,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent  | Documentation                                                                      |
 | ----- | ------------------- | ---------------------------------------------------------------------------------- |
-| EVM   | Get Filtered Tokens | [Documentation](/data-api/evm/reference/get-filtered-tokens) |
+| EVM   | Get Filtered Tokens | [Documentation](/data-api/evm/token/discovery/filtered-tokens) |
 
 **Notes**: This endpoint allows retrieving tokens with various filtering options.
 
@@ -207,10 +207,10 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent        | Documentation                                                                                        |
 | ------ | ------------------------- | ---------------------------------------------------------------------------------------------------- |
-| EVM    | Get Multiple Token Prices | [Documentation](/data-api/evm/reference/get-multiple-token-prices)                   |
-| EVM    | Get OHLCV by Pair Address | [Documentation](/data-api/evm/reference/get-ohlcv-by-pair-address)                   |
-| Solana | Get Multiple Token Prices | [Documentation](/data-api/solana/reference/price/get-multiple-token-prices) |
-| Solana | Get OHLCV by Pair Address | [Documentation](/data-api/solana/reference/price/get-ohlcv-by-pair-address) |
+| EVM    | Get Multiple Token Prices | [Documentation](/data-api/evm/token/prices/token-prices-batch)                   |
+| EVM    | Get OHLCV by Pair Address | [Documentation](/data-api/evm/token/prices/ohlc)                   |
+| Solana | Get Multiple Token Prices | [Documentation](/data-api/solana/token/prices/token-prices-batch) |
+| Solana | Get OHLCV by Pair Address | [Documentation](/data-api/solana/token/prices/ohlc) |
 
 **Notes**: These endpoints provide price history data for tokens across different timeframes.
 
@@ -220,10 +220,10 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent        | Documentation                                                                                        |
 | ------ | ------------------------- | ---------------------------------------------------------------------------------------------------- |
-| EVM    | Get Multiple Token Prices | [Documentation](/data-api/evm/reference/get-multiple-token-prices)                   |
-| EVM    | Get OHLCV by Pair Address | [Documentation](/data-api/evm/reference/get-ohlcv-by-pair-address)                   |
-| Solana | Get Multiple Token Prices | [Documentation](/data-api/solana/reference/price/get-multiple-token-prices) |
-| Solana | Get OHLCV by Pair Address | [Documentation](/data-api/solana/reference/price/get-ohlcv-by-pair-address) |
+| EVM    | Get Multiple Token Prices | [Documentation](/data-api/evm/token/prices/token-prices-batch)                   |
+| EVM    | Get OHLCV by Pair Address | [Documentation](/data-api/evm/token/prices/ohlc)                   |
+| Solana | Get Multiple Token Prices | [Documentation](/data-api/solana/token/prices/token-prices-batch) |
+| Solana | Get OHLCV by Pair Address | [Documentation](/data-api/solana/token/prices/ohlc) |
 
 **Notes**: These endpoints support batch requests for fetching current prices of multiple tokens in a single API call.
 
@@ -233,10 +233,10 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent  | Documentation                                                                            |
 | ------ | ------------------- | ---------------------------------------------------------------------------------------- |
-| EVM    | Get Token Metadata  | [Documentation](/data-api/evm/reference/get-token-metadata)         |
-| EVM    | Get Token Analytics | [Documentation](/data-api/evm/reference/get-token-analytics)       |
-| Solana | Get Token Metadata  | [Documentation](/data-api/solana/reference/get-token-metadata)   |
-| Solana | Get Token Analytics | [Documentation](/data-api/solana/reference/get-token-analytics) |
+| EVM    | Get Token Metadata  | [Documentation](/data-api/evm/token/metadata/token-metadata)         |
+| EVM    | Get Token Analytics | [Documentation](/data-api/evm/token/metadata/token-score)       |
+| Solana | Get Token Metadata  | [Documentation](/data-api/solana/token/token-metadata)   |
+| Solana | Get Token Analytics | [Documentation](/data-api/solana/token/market-metrics/token-analytics) |
 
 **Notes**: These endpoints provide comprehensive token metadata including marketcap, supply information, and other analytics.
 
@@ -246,8 +246,8 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain  | Moralis Equivalent         | Documentation                                                                                      |
 | ------ | -------------------------- | -------------------------------------------------------------------------------------------------- |
-| EVM    | Get Token Pairs            | [Documentation](/data-api/evm/reference/get-token-pairs)                             |
-| Solana | Get Token Pairs by Address | [Documentation](/data-api/solana/reference/get-token-pairs-by-address) |
+| EVM    | Get Token Pairs            | [Documentation](/data-api/evm/token/swaps/token-pairs)                             |
+| Solana | Get Token Pairs by Address | [Documentation](/data-api/solana/token/pairs/token-pairs) |
 
 **Notes**: These endpoints provide information about liquidity pairs for specific tokens across various DEXes.
 
@@ -257,8 +257,8 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Chain | Moralis Equivalent      | Documentation                                                                          |
 | ----- | ----------------------- | -------------------------------------------------------------------------------------- |
-| EVM   | Get Transaction         | [Documentation](/data-api/evm/reference/get-transaction)                 |
-| EVM   | Get Decoded Transaction | [Documentation](/data-api/evm/reference/get-decoded-transaction) |
+| EVM   | Get Transaction         | [Documentation](/data-api/evm/blockchain/transaction-by-hash)                 |
+| EVM   | Get Decoded Transaction | [Documentation](/data-api/evm/blockchain/transaction-by-hash-decoded) |
 
 **Notes**: These endpoints retrieve detailed transaction data, including decoded information for enhanced readability.
 
@@ -270,7 +270,7 @@ Make use of the table below to quickly find the Moralis equivalent for each OKLi
 
 | Service  | Moralis Equivalent | Documentation                    |
 | -------- | ------------------ | -------------------------------- |
-| Webhooks | Streams API        | [Documentation](/streams/evm) |
+| Webhooks | Streams API        | [Documentation](/streams) |
 
 **Notes**: Moralis Streams API provides powerful real-time blockchain data capabilities, including filters, webhooks, and managed infrastructure.
 
@@ -292,30 +292,30 @@ Moralis offers many additional endpoints and features not available in OKLink. H
 
 | Feature              | Endpoint                                                                | Documentation                                                                                         |
 | -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Wallet History**   | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-history)   |
-| **Wallet Approvals** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/approvals` | [Documentation](/data-api/evm/reference/get-wallet-token-approvals)      |
-| **Wallet Net Worth** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-net-worth) |
+| **Wallet History**   | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/wallet/wallet-history)   |
+| **Wallet Approvals** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/approvals` | [Documentation](/data-api/evm/wallet/approvals)      |
+| **Wallet Net Worth** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/wallet/net-worth) |
 
 ### Token Analytics
 
 | Feature                      | Endpoint                                                                             | Documentation                                                                                      |
 | ---------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| **Token Holder Stats**       | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/reference/get-token-holder-stats)       |
-| **Historical Token Holders** | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/reference/get-historical-token-holders) |
+| **Token Holder Stats**       | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/token/holders/token-holder-stats)       |
+| **Historical Token Holders** | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/token/holders/historical-token-holders) |
 
 ### Token Search & Discovery
 
 | Feature             | Endpoint                                                     | Documentation                                                                             |
 | ------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| **Search Tokens**   | `GET https://deep-index.moralis.io/api/v2.2/tokens/search`   | [Documentation](/data-api/evm/reference/search-tokens)       |
-| **Trending Tokens** | `GET https://deep-index.moralis.io/api/v2.2/tokens/trending` | [Documentation](/data-api/evm/reference/get-trending-tokens) |
+| **Search Tokens**   | `GET https://deep-index.moralis.io/api/v2.2/tokens/search`   | [Documentation](/data-api/universal/token/search/token-search)       |
+| **Trending Tokens** | `GET https://deep-index.moralis.io/api/v2.2/tokens/trending` | [Documentation](/data-api/universal/token/trending-tokens) |
 
 ### DEX and Pair Analytics
 
 | Feature                         | Endpoint                                                                | Documentation                                                                                         |
 | ------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Pair Stats**                  | `GET https://deep-index.moralis.io/api/v2.2/pairs/:address/stats`       | [Documentation](/data-api/evm/reference/get-token-pair-stats)            |
-| **Aggregated Token Pair Stats** | `GET https://deep-index.moralis.io/api/v2.2/:token_address/pairs/stats` | [Documentation](/data-api/evm/reference/get-aggregated-token-pair-stats) |
+| **Pair Stats**                  | `GET https://deep-index.moralis.io/api/v2.2/pairs/:address/stats`       | [Documentation](/data-api/evm/token/swaps/pair-stats)            |
+| **Aggregated Token Pair Stats** | `GET https://deep-index.moralis.io/api/v2.2/:token_address/pairs/stats` | [Documentation](/data-api/evm/token/swaps/pair-stats) |
 
 ## Getting Started with Moralis
 

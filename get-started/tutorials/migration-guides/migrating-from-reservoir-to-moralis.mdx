@@ -131,7 +131,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Rese
 
 | Feature          | Moralis Equivalent | Moralis URL                   | Documentation                    |
 | ---------------- | ------------------ | ----------------------------- | -------------------------------- |
-| Real-time Events | Streams API        | N/A - Setup through dashboard | [Documentation](/streams/evm) |
+| Real-time Events | Streams API        | N/A - Setup through dashboard | [Documentation](/streams) |
 
 **Notes**: Moralis Streams API provides powerful real-time blockchain data capabilities, including filters, webhooks, and managed infrastructure.
 
@@ -143,30 +143,30 @@ Moralis offers many additional endpoints and features not available in Reservoir
 
 | Feature              | Endpoint                                                                | Documentation                                                                                         |
 | -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Wallet History**   | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-history)   |
-| **Wallet Approvals** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/approvals` | [Documentation](/data-api/evm/reference/get-wallet-token-approvals)      |
-| **Wallet Net Worth** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-net-worth) |
+| **Wallet History**   | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/wallet/wallet-history)   |
+| **Wallet Approvals** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/approvals` | [Documentation](/data-api/evm/wallet/approvals)      |
+| **Wallet Net Worth** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/wallet/net-worth) |
 
 ### Token Analytics
 
 | Feature                      | Endpoint                                                                             | Documentation                                                                                      |
 | ---------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| **Token Holder Stats**       | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/reference/get-token-holder-stats)       |
-| **Historical Token Holders** | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/reference/get-historical-token-holders) |
+| **Token Holder Stats**       | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/token/holders/token-holder-stats)       |
+| **Historical Token Holders** | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/token/holders/historical-token-holders) |
 
 ### Token Search & Discovery
 
 | Feature             | Endpoint                                                     | Documentation                                                                             |
 | ------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| **Search Tokens**   | `GET https://deep-index.moralis.io/api/v2.2/tokens/search`   | [Documentation](/data-api/evm/reference/search-tokens)       |
-| **Trending Tokens** | `GET https://deep-index.moralis.io/api/v2.2/tokens/trending` | [Documentation](/data-api/evm/reference/get-trending-tokens) |
+| **Search Tokens**   | `GET https://deep-index.moralis.io/api/v2.2/tokens/search`   | [Documentation](/data-api/universal/token/search/token-search)       |
+| **Trending Tokens** | `GET https://deep-index.moralis.io/api/v2.2/tokens/trending` | [Documentation](/data-api/universal/token/trending-tokens) |
 
 ### DEX and Pair Analytics
 
 | Feature                         | Endpoint                                                                | Documentation                                                                                         |
 | ------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Pair Stats**                  | `GET https://deep-index.moralis.io/api/v2.2/pairs/:address/stats`       | [Documentation](/data-api/evm/reference/get-token-pair-stats)            |
-| **Aggregated Token Pair Stats** | `GET https://deep-index.moralis.io/api/v2.2/:token_address/pairs/stats` | [Documentation](/data-api/evm/reference/get-aggregated-token-pair-stats) |
+| **Pair Stats**                  | `GET https://deep-index.moralis.io/api/v2.2/pairs/:address/stats`       | [Documentation](/data-api/evm/token/swaps/pair-stats)            |
+| **Aggregated Token Pair Stats** | `GET https://deep-index.moralis.io/api/v2.2/:token_address/pairs/stats` | [Documentation](/data-api/evm/token/swaps/pair-stats) |
 
 ### NFT Advanced Capabilities
 

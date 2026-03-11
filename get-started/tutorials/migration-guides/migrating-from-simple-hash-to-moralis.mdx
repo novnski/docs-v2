@@ -64,9 +64,9 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent        | Moralis URL                                                       | Documentation                                                                                         |
 | ------ | ------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| EVM    | Get Token Price           | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price`     | [Documentation](/data-api/evm/reference/price/get-token-price)           |
-| EVM    | Get Multiple Token Prices | `https://deep-index.moralis.io/api/v2.2/erc20/prices`             | [Documentation](/data-api/evm/reference/price/get-multiple-token-prices) |
-| Solana | Get Token Price           | `https://solana-gateway.moralis.io/token/:network/:address/price` | [Documentation](/data-api/solana/reference/get-sol-token-price)          |
+| EVM    | Get Token Price           | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price`     | [Documentation](/data-api/evm/token/prices/token-price)           |
+| EVM    | Get Multiple Token Prices | `https://deep-index.moralis.io/api/v2.2/erc20/prices`             | [Documentation](/data-api/evm/token/prices/token-prices-batch) |
+| Solana | Get Token Price           | `https://solana-gateway.moralis.io/token/:network/:address/price` | [Documentation](/data-api/solana/token/prices/token-price)          |
 
 **Notes**: Moralis also supports historical price lookups by block number and returns additional metadata like links.
 
@@ -76,9 +76,9 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent   | Moralis URL                                                             | Documentation                                                                                                    |
 | ------ | -------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| EVM    | Get Token Balances   | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-token-balances-price) |
-| Solana | Get Wallet Portfolio | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/reference/get-native-and-spl-balances)             |
-| Solana | Get Token Balances   | `https://solana-gateway.moralis.io/account/:network/:address/tokens`    | [Documentation](/data-api/solana/reference/get-spl-token-balances)                  |
+| EVM    | Get Token Balances   | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/wallet/token-balances) |
+| Solana | Get Wallet Portfolio | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/wallet/portfolio)             |
+| Solana | Get Token Balances   | `https://solana-gateway.moralis.io/account/:network/:address/tokens`    | [Documentation](/data-api/solana/wallet/token-balances)                  |
 
 ### Token Top Holders
 
@@ -86,7 +86,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent       | Moralis URL                                                          | Documentation                                                                           |
 | ------ | ------------------------ | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| EVM    | Get Token Holders        | `https://deep-index.moralis.io/api/v2.2/erc20/:token_address/owners` | [Documentation](/data-api/evm/reference/get-token-holders) |
+| EVM    | Get Token Holders        | `https://deep-index.moralis.io/api/v2.2/erc20/:token_address/owners` | [Documentation](/data-api/evm/token/holders/token-holders) |
 | Solana | Coming Soon (March 2025) | -                                                                    | -                                                                                       |
 
 **Notes**: Moralis provides additional endpoints including ERC20 Token Holder Stats and ERC20 Token Holders Timeseries.
@@ -97,8 +97,8 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent  | Moralis URL                                                               | Documentation                                                                                     |
 | ------ | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| EVM    | Get Swaps by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/swaps`           | [Documentation](/data-api/evm/reference/get-swaps-by-wallet-address) |
-| Solana | Get Swaps by Wallet | `https://solana-gateway.moralis.io/account/:network/:walletAddress/swaps` | [Documentation](/data-api/solana/reference/get-wallet-swap-txs)      |
+| EVM    | Get Swaps by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/swaps`           | [Documentation](/data-api/evm/wallet/wallet-swaps) |
+| Solana | Get Swaps by Wallet | `https://solana-gateway.moralis.io/account/:network/:walletAddress/swaps` | [Documentation](/data-api/solana/wallet/wallet-swaps)      |
 
 **Notes**: Moralis offers additional related endpoints including ERC20 token transfers by wallet and the comprehensive wallet history API.
 
@@ -108,8 +108,8 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent         | Moralis URL                                                            | Documentation                                                                                       |
 | ------ | -------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| EVM    | Get Swaps by Token Address | `https://deep-index.moralis.io/api/v2.2/erc20/:address/swaps`          | [Documentation](/data-api/evm/reference/get-swaps-by-token-address)    |
-| Solana | Get Swaps by Token Address | `https://solana-gateway.moralis.io/token/:network/:tokenAddress/swaps` | [Documentation](/data-api/solana/reference/get-swaps-by-token-address) |
+| EVM    | Get Swaps by Token Address | `https://deep-index.moralis.io/api/v2.2/erc20/:address/swaps`          | [Documentation](/data-api/evm/token/swaps/token-swaps)    |
+| Solana | Get Swaps by Token Address | `https://solana-gateway.moralis.io/token/:network/:tokenAddress/swaps` | [Documentation](/data-api/solana/token/swaps/token-swaps) |
 
 **Notes**: Moralis provides additional related endpoints including ERC20 token transfers by contract, swaps by pair address, and Solana swaps by pair address.
 
@@ -119,8 +119,8 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent        | Moralis URL                                                   | Documentation                                                                                         |
 | ----- | ------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| EVM   | Get Token Price           | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price` | [Documentation](/data-api/evm/reference/price/get-token-price)           |
-| EVM   | Get Multiple Token Prices | `https://deep-index.moralis.io/api/v2.2/erc20/prices`         | [Documentation](/data-api/evm/reference/price/get-multiple-token-prices) |
+| EVM   | Get Token Price           | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price` | [Documentation](/data-api/evm/token/prices/token-price)           |
+| EVM   | Get Multiple Token Prices | `https://deep-index.moralis.io/api/v2.2/erc20/prices`         | [Documentation](/data-api/evm/token/prices/token-prices-batch) |
 
 ### Historical Token OHLC
 
@@ -128,8 +128,8 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent        | Moralis URL                                                                 | Documentation                                                                                      |
 | ------ | ------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| EVM    | Get OHLCV by Pair Address | `https://deep-index.moralis.io/api/v2.2/pairs/:address/ohlcv`               | [Documentation](/data-api/evm/reference/get-ohlcv-by-pair-address)    |
-| Solana | Get OHLCV by Pair Address | `https://solana-gateway.moralis.io/token/:network/pairs/:pairAddress/ohlcv` | [Documentation](/data-api/solana/reference/get-ohlcv-by-pair-address) |
+| EVM    | Get OHLCV by Pair Address | `https://deep-index.moralis.io/api/v2.2/pairs/:address/ohlcv`               | [Documentation](/data-api/evm/token/prices/ohlc)    |
+| Solana | Get OHLCV by Pair Address | `https://solana-gateway.moralis.io/token/:network/pairs/:pairAddress/ohlcv` | [Documentation](/data-api/solana/token/prices/ohlc) |
 
 ### Native Token Balances by Wallet(s)
 
@@ -137,9 +137,9 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent                          | Moralis URL                                                           | Documentation                                                                                                    |
 | ------ | ------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| EVM    | Get Native Balance by Wallet                | `https://deep-index.moralis.io/api/v2.2/:address/balance`             | [Documentation](/data-api/evm/reference/get-native-balance)                         |
-| EVM    | Get Native Balance for Multiple Wallets     | `https://deep-index.moralis.io/api/v2.2/wallets/balances`             | [Documentation](/data-api/evm/reference/get-native-balances-for-addresses)          |
-| EVM    | Get Native & ERC20 Token Balances by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`      | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-token-balances-price) |
+| EVM    | Get Native Balance by Wallet                | `https://deep-index.moralis.io/api/v2.2/:address/balance`             | [Documentation](/data-api/evm/wallet/native-balance)                         |
+| EVM    | Get Native Balance for Multiple Wallets     | `https://deep-index.moralis.io/api/v2.2/wallets/balances`             | [Documentation](/data-api/evm/wallet/native-balances-batch)          |
+| EVM    | Get Native & ERC20 Token Balances by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`      | [Documentation](/data-api/evm/wallet/token-balances) |
 | Solana | Get Native Token Balance by Wallet          | `https://solana-gateway.moralis.io/account/:network/:address/balance` | [Documentation](/data-api/solana/reference/native-sol-balance)                      |
 
 ## NFT API
@@ -151,7 +151,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 | Chain  | Moralis Equivalent | Moralis URL                                                        | Documentation                                                                                 |
 | ------ | ------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
 | EVM    | Get NFT Metadata   | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id`    | [Documentation](/data-api/evm/reference/get-nft-metadata)        |
-| Solana | Get NFT Metadata   | `https://solana-gateway.moralis.io/nft/:network/:address/metadata` | [Documentation](/data-api/solana/reference/get-sol-nft-metadata) |
+| Solana | Get NFT Metadata   | `https://solana-gateway.moralis.io/nft/:network/:address/metadata` | [Documentation](/data-api/solana/nft/nft-metadata) |
 
 ### NFTs by Contract
 
@@ -159,7 +159,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent   | Moralis URL                                           | Documentation                                                                           |
 | ----- | -------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| EVM   | Get NFTs by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address` | [Documentation](/data-api/evm/reference/get-contract-nfts) |
+| EVM   | Get NFTs by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address` | [Documentation](/data-api/evm/nft/collections/nfts-by-collection) |
 
 ### NFTs by Wallet(s)
 
@@ -167,8 +167,8 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain  | Moralis Equivalent | Moralis URL                                                       | Documentation                                                                            |
 | ------ | ------------------ | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| EVM    | Get NFTs by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/reference/get-wallet-nfts)    |
-| Solana | Get NFTs by Wallet | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/reference/get-wallet-nfts) |
+| EVM    | Get NFTs by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/nft/collections/nfts-by-wallet)    |
+| Solana | Get NFTs by Wallet | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/wallet/nft-balances) |
 
 ### Sales & Transfers by Wallet(s)
 
@@ -176,7 +176,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent       | Moralis URL                                                           | Documentation                                                                                  |
 | ----- | ------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Trades by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/nfts/trades` | [Documentation](/data-api/evm/reference/get-nft-trades-by-wallet) |
+| EVM   | Get NFT Trades by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/nfts/trades` | [Documentation](/data-api/evm/wallet/nft-trades-by-wallet) |
 
 **Notes**: Moralis offers additional related endpoints including NFT transfers by wallet and comprehensive wallet history.
 
@@ -186,7 +186,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent      | Moralis URL                                                            | Documentation                                                                                 |
 | ----- | ----------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Trades by Token | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/trades` | [Documentation](/data-api/evm/reference/get-nft-trades-by-token) |
+| EVM   | Get NFT Trades by Token | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/trades` | [Documentation](/data-api/evm/nft/trades/trades-by-token-id) |
 
 ### Sales & Transfers by Contract
 
@@ -194,7 +194,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent         | Moralis URL                                                  | Documentation                                                                        |
 | ----- | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| EVM   | Get NFT Trades by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address/trades` | [Documentation](/data-api/evm/reference/get-nft-trades) |
+| EVM   | Get NFT Trades by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address/trades` | [Documentation](/data-api/evm/nft/trades/collection-trades) |
 
 ### Owners by NFT
 
@@ -202,7 +202,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent         | Moralis URL                                                            | Documentation                                                                                 |
 | ----- | -------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Owners by Token ID | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/owners` | [Documentation](/data-api/evm/reference/get-nft-token-id-owners) |
+| EVM   | Get NFT Owners by Token ID | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/owners` | [Documentation](/data-api/evm/nft/ownership/owners-by-token-id) |
 
 ### Owners by Contract
 
@@ -210,7 +210,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent         | Moralis URL                                                  | Documentation                                                                        |
 | ----- | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
-| EVM   | Get NFT Owners by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address/owners` | [Documentation](/data-api/evm/reference/get-nft-owners) |
+| EVM   | Get NFT Owners by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address/owners` | [Documentation](/data-api/evm/nft/ownership/owners-by-contract) |
 
 ### Ownership Summary by Wallet(s)
 
@@ -218,7 +218,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent            | Moralis URL                                                       | Documentation                                                                                    |
 | ----- | ----------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| EVM   | Get NFT Collections by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft/collections` | [Documentation](/data-api/evm/reference/get-wallet-nft-collections) |
+| EVM   | Get NFT Collections by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft/collections` | [Documentation](/data-api/evm/nft/collections/nft-collections-by-wallet) |
 
 **Notes**: Moralis supports filtering by token address(es).
 
@@ -228,7 +228,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent            | Moralis URL                                                       | Documentation                                                                                    |
 | ----- | ----------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| EVM   | Get NFT Collections by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft/collections` | [Documentation](/data-api/evm/reference/get-wallet-nft-collections) |
+| EVM   | Get NFT Collections by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft/collections` | [Documentation](/data-api/evm/nft/collections/nft-collections-by-wallet) |
 
 ### Collections by Contract
 
@@ -236,7 +236,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent          | Moralis URL                                                    | Documentation                                                                                   |
 | ----- | --------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Collection Metadata | `https://deep-index.moralis.io/api/v2.2/nft/:address/metadata` | [Documentation](/data-api/evm/reference/get-nft-contract-metadata) |
+| EVM   | Get NFT Collection Metadata | `https://deep-index.moralis.io/api/v2.2/nft/:address/metadata` | [Documentation](/data-api/evm/nft/metadata/collection-metadata) |
 
 ### Collection Historical Floor Prices
 
@@ -244,7 +244,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent                         | Moralis URL                                                                  | Documentation                                                                                                    |
 | ----- | ------------------------------------------ | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Historical Floor Price by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address/floor-price/historical` | [Documentation](/data-api/evm/reference/get-nft-historical-floor-price-by-contract) |
+| EVM   | Get NFT Historical Floor Price by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address/floor-price/historical` | [Documentation](/data-api/evm/nft/prices/historical-floor-price) |
 
 **Notes**: Floor prices are supported on Ethereum & Base. Moralis also offers additional endpoints for NFT Floor Price by Contract, NFT Floor Price by Token ID, Sale Prices by Contract, and Sale Prices by Token ID.
 
@@ -252,7 +252,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent | Moralis URL                                                          | Documentation                                                                            |
 | ----- | ------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| EVM   | Get NFTs by Traits | `https://deep-index.moralis.io/api/v2.2/nft/:address/nfts-by-traits` | [Documentation](/data-api/evm/reference/get-nfts-by-traits) |
+| EVM   | Get NFTs by Traits | `https://deep-index.moralis.io/api/v2.2/nft/:address/nfts-by-traits` | [Documentation](/data-api/evm/nft/traits/nfts-by-traits) |
 
 ### Top Collections
 
@@ -260,7 +260,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent                    | Moralis URL                                                               | Documentation                                                                                               |
 | ----- | ------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| EVM   | Get Top NFT Collections by Market Cap | `https://deep-index.moralis.io/api/v2.2/market-data/nfts/top-collections` | [Documentation](/data-api/evm/reference/get-top-nft-collections-by-market-cap) |
+| EVM   | Get Top NFT Collections by Market Cap | `https://deep-index.moralis.io/api/v2.2/market-data/nfts/top-collections` | [Documentation](/data-api/evm/nft/discovery/nfts-by-market-cap) |
 
 **Notes**: Currently only supports Ethereum.
 
@@ -270,7 +270,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent                        | Moralis URL                                                                   | Documentation                                                                                                   |
 | ----- | ----------------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| EVM   | Get Top NFT Collections by Trading Volume | `https://deep-index.moralis.io/api/v2.2/market-data/nfts/hottest-collections` | [Documentation](/data-api/evm/reference/get-top-nft-collections-by-trading-volume) |
+| EVM   | Get Top NFT Collections by Trading Volume | `https://deep-index.moralis.io/api/v2.2/market-data/nfts/hottest-collections` | [Documentation](/data-api/evm/nft/discovery/nfts-by-volume) |
 
 **Notes**: Currently only supports Ethereum.
 
@@ -280,7 +280,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent           | Moralis URL                                                  | Documentation                                                                                      |
 | ----- | ---------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| EVM   | Get NFT Traits by Collection | `https://deep-index.moralis.io/api/v2.2/nft/:address/traits` | [Documentation](/data-api/evm/reference/get-nft-traits-by-collection) |
+| EVM   | Get NFT Traits by Collection | `https://deep-index.moralis.io/api/v2.2/nft/:address/traits` | [Documentation](/data-api/evm/nft/traits/traits-by-collection) |
 
 **Notes**: Moralis also offers an endpoint to get NFTs by traits.
 
@@ -290,7 +290,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent  | Moralis URL                                                         | Documentation                                                                                         |
 | ----- | ------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| EVM   | Get Wallet Networth | `https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-net-worth) |
+| EVM   | Get Wallet Networth | `https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/wallet/net-worth) |
 
 **Notes**: Currently calculates based on fungibles.
 
@@ -318,7 +318,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent | Moralis URL                                                  | Documentation                                                                                       |
 | ----- | ------------------ | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| EVM   | Resolve ENS Domain | `https://deep-index.moralis.io/api/v2.2/resolve/ens/:domain` | [Documentation](/data-api/evm/reference/wallet-api/resolve-ens-domain) |
+| EVM   | Resolve ENS Domain | `https://deep-index.moralis.io/api/v2.2/resolve/ens/:domain` | [Documentation](/data-api/evm/wallet/ens-lookup) |
 
 **Notes**: Moralis offers additional endpoints for resolving Unstoppable Domains and other resolution services.
 
@@ -328,7 +328,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Chain | Moralis Equivalent | Moralis URL                                                       | Documentation                                                                                    |
 | ----- | ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| EVM   | Resolve Address    | `https://deep-index.moralis.io/api/v2.2/resolve/:address/reverse` | [Documentation](/data-api/evm/reference/wallet-api/resolve-address) |
+| EVM   | Resolve Address    | `https://deep-index.moralis.io/api/v2.2/resolve/:address/reverse` | [Documentation](/data-api/evm/wallet/resolve-address) |
 
 **Notes**: Moralis provides additional endpoints for getting Unstoppable Domain by Address and Address by Unstoppable Domain.
 
@@ -338,7 +338,7 @@ Make use of the table below to quickly find the Moralis equivalent for each Simp
 
 | Feature          | Moralis Equivalent | Moralis URL                   | Documentation                                             |
 | ---------------- | ------------------ | ----------------------------- | --------------------------------------------------------- |
-| Real-time Events | Streams API        | N/A - Setup through dashboard | [Documentation](/streams/evm) |
+| Real-time Events | Streams API        | N/A - Setup through dashboard | [Documentation](/streams) |
 
 **Notes**: Moralis Streams API provides powerful real-time blockchain data capabilities, including filters, webhooks, and managed infrastructure. Unlike SimpleHash, Moralis offers comprehensive support for real-time blockchain events tracking.
 
@@ -350,30 +350,30 @@ Moralis offers many additional endpoints and features not available in SimpleHas
 
 | Feature              | Endpoint                                                                | Documentation                                                                                         |
 | -------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Wallet History**   | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-history)   |
-| **Wallet Approvals** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/approvals` | [Documentation](/data-api/evm/reference/get-wallet-token-approvals)      |
-| **Wallet Net Worth** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/reference/wallet-api/get-wallet-net-worth) |
+| **Wallet History**   | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/wallet/wallet-history)   |
+| **Wallet Approvals** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/approvals` | [Documentation](/data-api/evm/wallet/approvals)      |
+| **Wallet Net Worth** | `GET https://deep-index.moralis.io/api/v2.2/wallets/:address/net-worth` | [Documentation](/data-api/evm/wallet/net-worth) |
 
 ### Token Analytics
 
 | Feature                      | Endpoint                                                                             | Documentation                                                                                      |
 | ---------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| **Token Holder Stats**       | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/reference/get-token-holder-stats)       |
-| **Historical Token Holders** | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/reference/get-historical-token-holders) |
+| **Token Holder Stats**       | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/token/holders/token-holder-stats)       |
+| **Historical Token Holders** | `GET https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/token/holders/historical-token-holders) |
 
 ### Token Search & Discovery
 
 | Feature             | Endpoint                                                     | Documentation                                                                             |
 | ------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| **Search Tokens**   | `GET https://deep-index.moralis.io/api/v2.2/tokens/search`   | [Documentation](/data-api/evm/reference/search-tokens)       |
-| **Trending Tokens** | `GET https://deep-index.moralis.io/api/v2.2/tokens/trending` | [Documentation](/data-api/evm/reference/get-trending-tokens) |
+| **Search Tokens**   | `GET https://deep-index.moralis.io/api/v2.2/tokens/search`   | [Documentation](/data-api/universal/token/search/token-search)       |
+| **Trending Tokens** | `GET https://deep-index.moralis.io/api/v2.2/tokens/trending` | [Documentation](/data-api/universal/token/trending-tokens) |
 
 ### DEX and Pair Analytics
 
 | Feature                         | Endpoint                                                                | Documentation                                                                                         |
 | ------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **Pair Stats**                  | `GET https://deep-index.moralis.io/api/v2.2/pairs/:address/stats`       | [Documentation](/data-api/evm/reference/get-token-pair-stats)            |
-| **Aggregated Token Pair Stats** | `GET https://deep-index.moralis.io/api/v2.2/:token_address/pairs/stats` | [Documentation](/data-api/evm/reference/get-aggregated-token-pair-stats) |
+| **Pair Stats**                  | `GET https://deep-index.moralis.io/api/v2.2/pairs/:address/stats`       | [Documentation](/data-api/evm/token/swaps/pair-stats)            |
+| **Aggregated Token Pair Stats** | `GET https://deep-index.moralis.io/api/v2.2/:token_address/pairs/stats` | [Documentation](/data-api/evm/token/swaps/pair-stats) |
 
 ### NFT Advanced Capabilities
 
