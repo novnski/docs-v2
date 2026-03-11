@@ -188,7 +188,7 @@
           {
             "group": "Introduction",
             "pages": [
-              "data-api/index",
+              "data-api/overview",
               "data-api/pricing",
               "data-api/supported-chains",
               {
@@ -267,11 +267,11 @@
           {
             "group": "EVM API",
             "pages": [
-              "data-api/evm/index",
+              "data-api/evm/overview",
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/evm/wallet/index",
+                  "data-api/evm/wallet/overview",
                   {
                     "group": "Activity",
                     "pages": [
@@ -404,7 +404,7 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/evm/nft/index",
+                  "data-api/evm/nft/overview",
                   {
                     "group": "Metadata & Info",
                     "pages": [
@@ -481,7 +481,7 @@
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/evm/price/index",
+                  "data-api/evm/price/overview",
                   "data-api/evm/price/token-price",
                   "data-api/evm/price/token-prices-batch",
                   "data-api/evm/price/ohlc",
@@ -495,7 +495,7 @@
               {
                 "group": "DeFi API",
                 "pages": [
-                  "data-api/evm/defi/index",
+                  "data-api/evm/defi/overview",
                   "data-api/evm/defi/wallet-protocols",
                   "data-api/evm/defi/wallet-positions",
                   "data-api/evm/defi/wallet-positions-detailed"
@@ -504,7 +504,7 @@
               {
                 "group": "Blockchain API",
                 "pages": [
-                  "data-api/evm/blockchain/index",
+                  "data-api/evm/blockchain/overview",
                   "data-api/evm/blockchain/block-by-hash",
                   "data-api/evm/blockchain/block-by-date",
                   "data-api/evm/blockchain/latest-block",
@@ -523,7 +523,7 @@
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-api/solana/wallet/index",
+                  "data-api/solana/wallet/overview",
                   "data-api/solana/wallet/native-balance",
                   "data-api/solana/wallet/portfolio",
                   "data-api/solana/wallet/token-balances",
@@ -535,7 +535,7 @@
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
-                  "data-api/solana/token/index",
+                  "data-api/solana/token/overview",
                   {
                     "group": "Metadata & Info",
                     "tag": "New features",
@@ -603,14 +603,14 @@
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-api/solana/nft/index",
+                  "data-api/solana/nft/overview",
                   "data-api/solana/nft/nft-metadata"
                 ]
               },
               {
                 "group": "Price API",
                 "pages": [
-                  "data-api/solana/price/index",
+                  "data-api/solana/price/overview",
                   "data-api/solana/price/token-price",
                   "data-api/solana/token/prices/token-prices-batch",
                   "data-api/solana/price/ohlc"
@@ -621,7 +621,7 @@
           {
             "group": "Universal API",
             "pages": [
-              "data-api/universal/index",
+              "data-api/universal/overview",
               {
                 "group": "Token API",
                 "tag": "New features",
@@ -675,7 +675,7 @@
           {
             "group": "Introduction",
             "pages": [
-              "streams/index",
+              "streams/overview",
               "streams/pricing",
               "streams/supported-chains",
               {
@@ -774,7 +774,7 @@
       {
         "tab": "Datashare",
         "pages": [
-          "datashare/index",
+          "datashare/overview",
           "datashare/supported-data",
           "datashare/export-options",
           "datashare/supported-chains",
@@ -785,7 +785,7 @@
       {
         "tab": "Data Indexer",
         "pages": [
-          "data-indexer/index",
+          "data-indexer/overview",
           "data-indexer/features",
           "data-indexer/how-it-works",
           "data-indexer/early-access"
@@ -797,7 +797,7 @@
           {
             "group": "Introduction",
             "pages": [
-              "rpc-nodes/index",
+              "rpc-nodes/overview",
               "rpc-nodes/pricing",
               "rpc-nodes/supported-chains",
               {
@@ -1640,6 +1640,27 @@
       "href": "https://admin.moralis.com/register"
     }
   },
+  "redirects": [
+    { "source": "/data-api/index", "destination": "/data-api/overview" },
+    { "source": "/data-api/evm/index", "destination": "/data-api/evm/overview" },
+    { "source": "/data-api/evm/wallet/index", "destination": "/data-api/evm/wallet/overview" },
+    { "source": "/data-api/evm/token/index", "destination": "/data-api/evm/token/overview" },
+    { "source": "/data-api/evm/nft/index", "destination": "/data-api/evm/nft/overview" },
+    { "source": "/data-api/evm/price/index", "destination": "/data-api/evm/price/overview" },
+    { "source": "/data-api/evm/defi/index", "destination": "/data-api/evm/defi/overview" },
+    { "source": "/data-api/evm/blockchain/index", "destination": "/data-api/evm/blockchain/overview" },
+    { "source": "/data-api/solana/wallet/index", "destination": "/data-api/solana/wallet/overview" },
+    { "source": "/data-api/solana/token/index", "destination": "/data-api/solana/token/overview" },
+    { "source": "/data-api/solana/nft/index", "destination": "/data-api/solana/nft/overview" },
+    { "source": "/data-api/solana/price/index", "destination": "/data-api/solana/price/overview" },
+    { "source": "/data-api/universal/index", "destination": "/data-api/universal/overview" },
+    { "source": "/streams/index", "destination": "/streams/overview" },
+    { "source": "/datashare/index", "destination": "/datashare/overview" },
+    { "source": "/data-indexer/index", "destination": "/data-indexer/overview" },
+    { "source": "/rpc-nodes/index", "destination": "/rpc-nodes/overview" },
+    { "source": "/data-api/universal/entity/index", "destination": "/data-api/universal/entity/overview" },
+    { "source": "/data-api/universal/market-metrics/index", "destination": "/data-api/universal/market-metrics/overview" }
+  ],
   "footer": {
     "socials": {
       "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
