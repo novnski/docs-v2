@@ -1,4 +1,693 @@
 ---
 title: 'OHLC Chart Configurator'
+description: 'Learn how to build interactive cryptocurrency candlestick charts using Chart.js or TradingView Lightweight Charts with the Moralis OHLCV API.'
 ---
 
+## Overview
+
+This tutorial covers two approaches to building crypto candlestick charts with the Moralis OHLCV API:
+
+1. **Chart.js** — A popular, flexible charting library with a custom candlestick plugin
+2. **TradingView Lightweight Charts** — A professional-grade charting library built for financial data
+
+Both approaches use React and fetch OHLCV data from the Moralis API.
+
+---
+
+## Option 1: Building with Chart.js
+
+### Prerequisites
+
+- Node.js installed
+- Basic understanding of React
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+### Step 1: Project Setup
+
+Create a new React project and install dependencies:
+
+```bash
+npx create-react-app chartjs-crypto
+cd chartjs-crypto
+npm install chart.js react-chartjs-2 axios react-spinners
+```
+
+Create a `.env` file in your project root:
+
+```
+REACT_APP_MORALIS_API_KEY=YOUR_API_KEY
+```
+
+### Step 2: Setup Chart.js Components
+
+Create `src/components/CandlestickChart.js`:
+
+```javascript
+import React from "react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import "chart.js/auto";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const CandlestickChart = ({ candlestickData }) => {
+  const formatData = () => {
+    const labels = candlestickData.map((data) =>
+      new Date(data.time * 1000).toLocaleDateString()
+    );
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: "High",
+          data: candlestickData.map((data) => data.high),
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+          fill: false,
+        },
+        {
+          label: "Low",
+          data: candlestickData.map((data) => data.low),
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+          fill: false,
+        },
+        {
+          label: "Open",
+          data: candlestickData.map((data) => data.open),
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+          fill: false,
+        },
+        {
+          label: "Close",
+          data: candlestickData.map((data) => data.close),
+          borderColor: "rgba(255, 206, 86, 1)",
+          borderWidth: 1,
+          fill: false,
+        },
+      ],
+    };
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { position: "top" },
+      title: { display: true, text: "Cryptocurrency Price Chart" },
+      tooltip: { mode: "index", intersect: false },
+    },
+    scales: {
+      y: { type: "linear", display: true, position: "left" },
+    },
+    interaction: { mode: "index", intersect: false },
+  };
+
+  return (
+    <div className="chart-container">
+      <Line options={options} data={formatData()} />
+    </div>
+  );
+};
+
+export default CandlestickChart;
+```
+
+### Step 3: Create Custom Candlestick Plugin
+
+Create `src/plugins/candlestickPlugin.js`:
+
+```javascript
+const candlestickPlugin = {
+  id: "candlestick",
+  beforeDatasetsDraw(chart, args, options) {
+    const {
+      ctx,
+      data,
+      scales: { x, y },
+    } = chart;
+
+    ctx.strokeStyle = options.borderColor || "rgba(0, 0, 0, 0.8)";
+    ctx.lineWidth = options.borderWidth || 1;
+
+    const candleWidth = x.getPixelForValue(1) - x.getPixelForValue(0);
+
+    data.datasets[0].data.forEach((point, i) => {
+      const open = y.getPixelForValue(data.datasets[2].data[i]);
+      const close = y.getPixelForValue(data.datasets[3].data[i]);
+      const high = y.getPixelForValue(point);
+      const low = y.getPixelForValue(data.datasets[1].data[i]);
+      const x1 = x.getPixelForValue(i);
+
+      // Draw the wicks
+      ctx.beginPath();
+      ctx.moveTo(x1, high);
+      ctx.lineTo(x1, Math.min(open, close));
+      ctx.moveTo(x1, Math.max(open, close));
+      ctx.lineTo(x1, low);
+      ctx.stroke();
+
+      // Draw the candle body
+      ctx.fillStyle = close > open ? "#26a69a" : "#ef5350";
+      ctx.fillRect(
+        x1 - candleWidth / 3,
+        Math.min(open, close),
+        (candleWidth * 2) / 3,
+        Math.abs(close - open)
+      );
+    });
+  },
+};
+
+export default candlestickPlugin;
+```
+
+### Step 4: Update Chart Component with Plugin
+
+Update your CandlestickChart to use the custom plugin:
+
+```javascript
+import candlestickPlugin from "../plugins/candlestickPlugin";
+
+const CandlestickChart = ({ candlestickData }) => {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      candlestick: {
+        borderColor: "rgba(0, 0, 0, 0.8)",
+        borderWidth: 1,
+      },
+    },
+    scales: {
+      y: { type: "linear", position: "left" },
+    },
+  };
+
+  const formatData = () => {
+    const labels = candlestickData.map((data) =>
+      new Date(data.time * 1000).toLocaleDateString()
+    );
+
+    return {
+      labels,
+      datasets: [
+        { data: candlestickData.map((data) => data.high), yAxisID: "y" },
+        { data: candlestickData.map((data) => data.low), yAxisID: "y" },
+        { data: candlestickData.map((data) => data.open), yAxisID: "y" },
+        { data: candlestickData.map((data) => data.close), yAxisID: "y" },
+      ],
+    };
+  };
+
+  return (
+    <div className="chart-container">
+      <Line
+        options={options}
+        data={formatData()}
+        plugins={[candlestickPlugin]}
+      />
+    </div>
+  );
+};
+```
+
+### Step 5: Implement Main App Component
+
+Update `App.js`:
+
+```javascript
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import CandlestickChart from "./components/CandlestickChart";
+import ClipLoader from "react-spinners/ClipLoader";
+import "./styles.css";
+
+const App = () => {
+  const [candlestickData, setCandlestickData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchOHLCVData = async () => {
+    setLoading(true);
+    try {
+      const apiKey = process.env.REACT_APP_MORALIS_API_KEY;
+      const currentTime = Math.floor(Date.now() / 1000);
+      const fromDate = currentTime - 30 * 24 * 60 * 60;
+
+      const response = await axios.get(
+        `https://deep-index.moralis.io/api/v2.2/pairs/0xa478c2975ab1ea89e8196811f51a7b7ade33eb11/ohlcv`,
+        {
+          params: {
+            chain: "eth",
+            timeframe: "1d",
+            currency: "usd",
+            fromDate,
+            toDate: currentTime,
+            limit: 1000,
+          },
+          headers: { "X-API-Key": apiKey },
+        }
+      );
+
+      const formattedData = response.data.result.map((item) => ({
+        time: Math.floor(new Date(item.timestamp).getTime() / 1000),
+        open: item.open,
+        high: item.high,
+        low: item.low,
+        close: item.close,
+      }));
+
+      setCandlestickData(formattedData);
+    } catch (error) {
+      console.error("Error fetching OHLCV data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOHLCVData();
+  }, []);
+
+  return (
+    <div className="app-container">
+      <h1>Crypto Candlestick Chart</h1>
+      {loading ? (
+        <div className="loading-spinner">
+          <ClipLoader color="#2196f3" size={50} />
+        </div>
+      ) : (
+        candlestickData.length > 0 && (
+          <CandlestickChart candlestickData={candlestickData} />
+        )
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+### Step 6: Add Styling
+
+Create `src/styles.css`:
+
+```css
+.app-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: 500px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+h1 {
+  text-align: center;
+  color: #1a237e;
+  margin-bottom: 2rem;
+}
+```
+
+Run with `npm start`.
+
+---
+
+## Option 2: Building with TradingView Lightweight Charts
+
+### Step 1: Project Setup
+
+```bash
+npx create-react-app crypto-charts
+cd crypto-charts
+npm install lightweight-charts axios react-spinners
+```
+
+Create a `.env` file:
+
+```
+REACT_APP_MORALIS_API_KEY=YOUR_API_KEY
+```
+
+### Step 2: Create Components
+
+**ChainSelector** (`src/components/ChainSelector.js`):
+
+```javascript
+import React from "react";
+
+const chains = [
+  { id: "eth", name: "Ethereum", icon: "🔷" },
+  { id: "bsc", name: "BSC", icon: "💛" },
+  { id: "polygon", name: "Polygon", icon: "💜" },
+  { id: "arbitrum", name: "Arbitrum", icon: "🔵" },
+];
+
+const ChainSelector = ({ onSelect }) => (
+  <select onChange={(e) => onSelect(e.target.value)} defaultValue="">
+    <option value="" disabled>Select a Chain</option>
+    {chains.map((chain) => (
+      <option key={chain.id} value={chain.id}>
+        {chain.icon} {chain.name}
+      </option>
+    ))}
+  </select>
+);
+
+export default ChainSelector;
+```
+
+**TokenInput** (`src/components/TokenInput.js`):
+
+```javascript
+import React, { useState } from "react";
+import axios from "axios";
+
+const TokenInput = ({ chain, onPairsFetched, onReset }) => {
+  const [tokenAddress, setTokenAddress] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const fetchPairs = async () => {
+    const apiKey = process.env.REACT_APP_MORALIS_API_KEY;
+    const url = `https://deep-index.moralis.io/api/v2.2/erc20/${tokenAddress}/pairs?chain=${chain}`;
+
+    setLoading(true);
+    try {
+      const response = await axios.get(url, {
+        headers: { "X-API-Key": apiKey, accept: "application/json" },
+      });
+
+      const sortedPairs = response.data.pairs
+        .map((pair) => ({
+          ...pair,
+          liquidity: pair.liquidity_usd || pair.liquidityUsd || 0,
+        }))
+        .sort((a, b) => b.liquidity - a.liquidity);
+
+      onPairsFetched(sortedPairs);
+    } catch (error) {
+      console.error("Error fetching token pairs:", error);
+      onPairsFetched([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Enter Token Address"
+        value={tokenAddress}
+        onChange={(e) => {
+          setTokenAddress(e.target.value);
+          onReset();
+        }}
+      />
+      <button onClick={fetchPairs} disabled={!tokenAddress || !chain}>
+        Fetch Pairs
+      </button>
+      {loading && <div>Loading pairs...</div>}
+    </div>
+  );
+};
+
+export default TokenInput;
+```
+
+### Step 3: Implement the Chart Component
+
+Create `src/components/CandlestickChart.js`:
+
+```javascript
+import React, { useEffect, useRef } from "react";
+import { createChart } from "lightweight-charts";
+
+const CandlestickChart = ({ candlestickData }) => {
+  const chartContainerRef = useRef();
+  const chartRef = useRef();
+
+  useEffect(() => {
+    if (!chartRef.current) {
+      const chart = createChart(chartContainerRef.current, {
+        width: chartContainerRef.current.offsetWidth || 800,
+        height: 400,
+        layout: {
+          backgroundColor: "#ffffff",
+          textColor: "#333",
+        },
+        grid: {
+          vertLines: { color: "#f0f3fa" },
+          horzLines: { color: "#f0f3fa" },
+        },
+        timeScale: {
+          timeVisible: true,
+          borderVisible: true,
+        },
+      });
+
+      const candlestickSeries = chart.addCandlestickSeries({
+        upColor: "#4caf50",
+        downColor: "#f44336",
+        borderVisible: false,
+        wickUpColor: "#4caf50",
+        wickDownColor: "#f44336",
+      });
+
+      chartRef.current = { chart, candlestickSeries };
+    }
+
+    if (candlestickData.length > 0) {
+      chartRef.current.candlestickSeries.setData(candlestickData);
+    }
+
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.chart.remove();
+        chartRef.current = null;
+      }
+    };
+  }, [candlestickData]);
+
+  return (
+    <div
+      ref={chartContainerRef}
+      style={{ position: "relative", height: "400px" }}
+    />
+  );
+};
+
+export default CandlestickChart;
+```
+
+### Step 4: Implement Main App
+
+Update `App.js`:
+
+```javascript
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ChainSelector from "./components/ChainSelector";
+import TokenInput from "./components/TokenInput";
+import CandlestickChart from "./components/CandlestickChart";
+import ClipLoader from "react-spinners/ClipLoader";
+import "./styles.css";
+
+const App = () => {
+  const [chain, setChain] = useState("");
+  const [pairs, setPairs] = useState([]);
+  const [selectedPair, setSelectedPair] = useState("");
+  const [candlestickData, setCandlestickData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchCandlestickData = async (pairAddress) => {
+    if (!pairAddress) return;
+
+    setLoading(true);
+    try {
+      const apiKey = process.env.REACT_APP_MORALIS_API_KEY;
+      const currentTime = Math.floor(Date.now() / 1000);
+      const fromDate = currentTime - 30 * 24 * 60 * 60;
+
+      const response = await axios.get(
+        `https://deep-index.moralis.io/api/v2.2/pairs/${pairAddress}/ohlcv`,
+        {
+          params: {
+            chain,
+            timeframe: "1d",
+            currency: "usd",
+            fromDate,
+            toDate: currentTime,
+            limit: 1000,
+          },
+          headers: { "X-API-Key": apiKey },
+        }
+      );
+
+      const formattedData = response.data.result.map((item) => ({
+        time: Math.floor(new Date(item.timestamp).getTime() / 1000),
+        open: item.open,
+        high: item.high,
+        low: item.low,
+        close: item.close,
+      }));
+
+      setCandlestickData(formattedData);
+    } catch (error) {
+      console.error("Error fetching candlestick data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedPair) {
+      fetchCandlestickData(selectedPair);
+    }
+  }, [selectedPair]);
+
+  return (
+    <div className="app-container">
+      <h1>Crypto Trading Charts</h1>
+
+      <div className="controls-container">
+        <ChainSelector onSelect={setChain} />
+        <TokenInput
+          chain={chain}
+          onPairsFetched={setPairs}
+          onReset={() => {
+            setPairs([]);
+            setSelectedPair("");
+            setCandlestickData([]);
+          }}
+        />
+        {pairs.length > 0 && (
+          <select
+            value={selectedPair}
+            onChange={(e) => setSelectedPair(e.target.value)}
+          >
+            {pairs.map((pair) => (
+              <option key={pair.pairAddress} value={pair.pairAddress}>
+                {pair.pairLabel} (${Math.round(pair.liquidity).toLocaleString()})
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      {loading ? (
+        <div className="loading-spinner">
+          <ClipLoader color="#2196f3" size={50} />
+        </div>
+      ) : (
+        candlestickData.length > 0 && (
+          <CandlestickChart candlestickData={candlestickData} />
+        )
+      )}
+    </div>
+  );
+};
+
+export default App;
+```
+
+### Step 5: Add Styling
+
+Create `src/styles.css`:
+
+```css
+.app-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto 2rem auto;
+}
+
+select, input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+button {
+  background: #2196f3;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.chart-container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+```
+
+### Using the Application
+
+1. Select a blockchain network from the dropdown
+2. Enter a token address (e.g., USDT, WETH)
+3. Click "Fetch Pairs" to get available trading pairs
+4. Select a trading pair to view its price chart
+5. The chart will display OHLCV data for the last 30 days

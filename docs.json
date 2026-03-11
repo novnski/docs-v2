@@ -1640,6 +1640,25 @@
       "href": "https://admin.moralis.com/register"
     }
   },
+  "redirects": [
+    { "source": "/data-api/index", "destination": "/data-api" },
+    { "source": "/data-api/evm/index", "destination": "/data-api/evm" },
+    { "source": "/data-api/evm/wallet/index", "destination": "/data-api/evm/wallet" },
+    { "source": "/data-api/evm/token/index", "destination": "/data-api/evm/token" },
+    { "source": "/data-api/evm/nft/index", "destination": "/data-api/evm/nft" },
+    { "source": "/data-api/evm/price/index", "destination": "/data-api/evm/price" },
+    { "source": "/data-api/evm/defi/index", "destination": "/data-api/evm/defi" },
+    { "source": "/data-api/evm/blockchain/index", "destination": "/data-api/evm/blockchain" },
+    { "source": "/data-api/solana/wallet/index", "destination": "/data-api/solana/wallet" },
+    { "source": "/data-api/solana/token/index", "destination": "/data-api/solana/token" },
+    { "source": "/data-api/solana/nft/index", "destination": "/data-api/solana/nft" },
+    { "source": "/data-api/solana/price/index", "destination": "/data-api/solana/price" },
+    { "source": "/data-api/universal/index", "destination": "/data-api/universal" },
+    { "source": "/streams/index", "destination": "/streams" },
+    { "source": "/datashare/index", "destination": "/datashare" },
+    { "source": "/data-indexer/index", "destination": "/data-indexer" },
+    { "source": "/rpc-nodes/index", "destination": "/rpc-nodes" }
+  ],
   "footer": {
     "socials": {
       "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",

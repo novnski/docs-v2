@@ -1,4 +1,326 @@
 ---
 title: 'How to Monitor Wallet Activity in Real Time'
+description: 'Learn how to monitor wallet transactions in real time using the Moralis Streams API, including setting up webhook listeners for on-chain activity.'
 ---
 
+The [Streams API](https://moralis.io/streams/) enables you to stream real-time blockchain data to your application through webhooks. This tutorial focuses on monitoring wallet transactions as they happen on-chain.
+
+Common use cases include:
+
+- Web3 alerts (e.g. whale alerts monitoring)
+- Real-time transaction and crypto wallet notifications
+- Monitoring wallet balances
+
+## Prerequisites
+
+- A [Moralis account](https://admin.moralis.io) with an API key
+- Node.js or Python installed
+- A webhook URL (you can use [https://webhook.site](https://webhook.site) for testing)
+
+## Step 1: Install the Moralis SDK
+
+Install the Moralis SDK for your preferred language:
+
+```bash npm
+npm install moralis @moralisweb3/common-evm-utils
+```
+
+```bash yarn
+yarn add moralis @moralisweb3/common-evm-utils
+```
+
+```bash pip
+pip install moralis
+```
+
+## Step 2: Create a Stream to Monitor Wallet Transactions
+
+Once you have your API key and webhook URL, set up a stream to monitor on-chain wallet transactions. In this example, we will monitor the address `0x68b3f12d6e8d85a8d3dbbc15bba9dc5103b888a4`.
+
+**JavaScript:**
+
+```javascript index.js
+const Moralis = require("moralis").default;
+const { EvmChain } = require("@moralisweb3/common-evm-utils");
+
+const runApp = async () => {
+  await Moralis.start({
+    apiKey: "YOUR_API_KEY",
+  });
+
+  const stream = {
+    chains: [EvmChain.ETHEREUM, EvmChain.POLYGON],
+    description: "monitor Bobs wallet",
+    tag: "bob",
+    webhookUrl: "https://YOUR_WEBHOOK_URL",
+    includeNativeTxs: true,
+  };
+
+  const newStream = await Moralis.Streams.add(stream);
+  const { id } = newStream.toJSON();
+
+  // Now we attach bobs address to the stream
+  const address = "0x68b3f12d6e8d85a8d3dbbc15bba9dc5103b888a4";
+
+  await Moralis.Streams.addAddress({ address, id });
+};
+
+runApp();
+```
+
+**TypeScript:**
+
+```typescript index.ts
+import Moralis from "moralis";
+import { EvmChain } from "@moralisweb3/common-evm-utils";
+
+const runApp = async () => {
+  await Moralis.start({
+    apiKey: "YOUR_API_KEY",
+  });
+
+  const stream = {
+    chains: [EvmChain.ETHEREUM, EvmChain.POLYGON],
+    description: "monitor Bobs wallet",
+    tag: "bob",
+    webhookUrl: "https://YOUR_WEBHOOK_URL",
+    includeNativeTxs: true,
+  };
+
+  const newStream = await Moralis.Streams.add(stream);
+  const { id } = newStream.toJSON();
+
+  // Now we attach bobs address to the stream
+  const address = "0x68b3f12d6e8d85a8d3dbbc15bba9dc5103b888a4";
+
+  await Moralis.Streams.addAddress({ address, id });
+};
+
+runApp();
+```
+
+**Python:**
+
+```python index.py
+from moralis import streams
+
+api_key = "YOUR_API_KEY"
+
+create_stream_body = {
+  "description": "monitor Bobs wallet",
+  "tag": "bob",
+  "webhook_url": "https://YOUR_WEBHOOK_URL",
+  "include_native_txs": True,
+  "chain_ids": [
+    "0x1",
+    "0x89"
+  ]
+}
+
+result = streams.evm_streams.create_stream(
+  api_key=api_key,
+  body=create_stream_body,
+)
+
+add_address_body = {
+  "address": "0x68b3f12d6e8d85a8d3dbbc15bba9dc5103b888a4"
+}
+
+params = {
+  "id": result.id
+}
+
+# Now we attach bobs address to the stream
+streams.evm_streams.add_address_to_stream(
+  api_key=api_key,
+  body=add_address_body,
+  params=params,
+)
+```
+
+Once the code has been added, run the script to create the stream. This will be reflected on your Moralis Dashboard as well. From here, you will receive new real-time responses on your attached webhook for any new transactions occurring on either Ethereum or Polygon.
+
+## Step 3: Listen to Smart Contract Events
+
+In addition to monitoring wallet transactions in real-time, you can use Streams to listen to smart contract events whenever they are emitted on the blockchain.
+
+For example, to listen to all ERC20 transfers for [USDT](https://etherscan.io/token/0xdac17f958d2ee523a2206206994597c13d831ec7):
+
+**JavaScript:**
+
+```javascript index.js
+const Moralis = require("moralis").default;
+const { EvmChain } = require("@moralisweb3/common-evm-utils");
+
+const ERC20_transfer_ABI = [
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "from", type: "address" },
+      { indexed: true, name: "to", type: "address" },
+      { indexed: false, name: "value", type: "uint256" },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+];
+
+const runApp = async () => {
+  await Moralis.start({
+    apiKey: "YOUR_API_KEY",
+  });
+
+  const stream = {
+    chains: [EvmChain.ETHEREUM],
+    description: "monitor USDT transfers",
+    tag: "USDT",
+    webhookUrl: "https://YOUR_WEBHOOK_URL",
+    abi: ERC20_transfer_ABI,
+    includeContractLogs: true,
+    topic0: ["Transfer(address,address,uint256)"],
+  };
+
+  const newStream = await Moralis.Streams.add(stream);
+  const { id } = newStream.toJSON();
+
+  // Now we attach USDT address to the stream
+  const address = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+
+  await Moralis.Streams.addAddress({ address, id });
+};
+
+runApp();
+```
+
+**Python:**
+
+```python index.py
+from moralis import streams
+
+api_key = "YOUR_API_KEY"
+
+ERC20_transfer_ABI = [{
+  "anonymous": False,
+  "inputs": [
+    { "indexed": True, "name": "from", "type": "address" },
+    { "indexed": True, "name": "to", "type": "address" },
+    { "indexed": False, "name": "value", "type": "uint256" },
+  ],
+  "name": "Transfer",
+  "type": "event",
+}]
+
+create_stream_body = {
+  "description": "monitor USDT transfers",
+  "tag": "USDT",
+  "webhook_url": "https://YOUR_WEBHOOK_URL",
+  "include_contract_logs": True,
+  "chain_ids": [
+    "0x1"
+  ],
+  "abi": ERC20_transfer_ABI,
+  "topic0": ["Transfer(address,address,uint256)"]
+}
+
+result = streams.evm_streams.create_stream(
+  api_key=api_key,
+  body=create_stream_body,
+)
+
+add_address_body = {
+  "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+}
+
+params = {
+  "id": result.id
+}
+
+# Now we attach USDT address to the stream
+streams.evm_streams.add_address_to_stream(
+  api_key=api_key,
+  body=add_address_body,
+  params=params,
+)
+```
+
+## Step 4: Add Filters for Specific Use Cases
+
+For listening to smart contracts, you can add the [Filters feature](/streams/evm/streams-configuration/filter-streams) to filter out results that only fulfill certain criteria. This is useful for specific use cases such as whale monitoring.
+
+For example, to monitor all USDT transactions on Ethereum over $1M:
+
+**JavaScript:**
+
+```javascript index.js
+const filter_ERC20 = {
+  "and": [
+    { "eq": ["from", "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5"] },
+    { "gt": ["value", "1000000000"] }, // Example of USDT (6 Decimals)
+  ],
+};
+
+const runApp = async () => {
+  const stream = {
+    // same parameters as prior
+    advancedOptions: [
+      {
+        topic0: "Transfer(address,address,uint256)",
+        filter: filter_ERC20
+      },
+    ]
+  };
+
+  const newStream = await Moralis.Streams.add(stream);
+  const { id } = newStream.toJSON();
+
+  // Now we attach USDT address to the stream
+  const address = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+
+  await Moralis.Streams.addAddress({ address, id });
+};
+
+runApp();
+```
+
+**Python:**
+
+```python index.py
+filter_ERC20 = {
+  "and": [
+    { "eq": ["from", "0x283af0b28c62c092c9727f1ee09c02ca627eb7f5"] },
+    { "gt": ["value", "1000000000"] },  # Example of USDT (6 Decimals)
+  ],
+}
+
+create_stream_body = {
+  # same parameters as prior
+  "advanced_options": [
+    {
+      "topic0": "Transfer(address,address,uint256)",
+      "filter": filter_ERC20
+    }
+  ]
+}
+
+result = streams.evm_streams.create_stream(
+  api_key=api_key,
+  body=create_stream_body,
+)
+
+add_address_body = {
+  "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+}
+
+params = {
+  "id": result.id
+}
+
+# Now we attach USDT address to the stream
+streams.evm_streams.add_address_to_stream(
+  api_key=api_key,
+  body=add_address_body,
+  params=params,
+)
+```
+
+Once modified, you will only receive USDT transfers on Ethereum over $1M in real-time on your webhooks.
