@@ -35,6 +35,16 @@ Visit the individual pricing pages to see how CUs apply to each product:
 - [Datashare Pricing](#)
 - [Nodes Pricing](/rpc-nodes/pricing)
 
+## Dynamic Endpoints
+
+Some API endpoints have **dynamic CU costs** that scale based on the scope of the request. Instead of a fixed cost per call, these endpoints charge a base CU amount multiplied by a variable factor such as the number of chains, wallets, or addresses involved.
+
+For example:
+- An endpoint costing **50 CUs per chain** that queries 3 chains will consume **150 CUs** total.
+- An endpoint costing **250 CUs per chain** that queries 5 chains will consume **1,250 CUs** total.
+
+Dynamic endpoints are clearly marked on their respective documentation pages. You can find CU costs for all endpoints on the individual product pricing pages listed above.
+
 ## CU Throughput (CU/s)
 
 CUs are also used to enforce **rate limits**, measured in **CUs per second (CU/s)**.
