@@ -1,4 +1,58 @@
 ---
 title: "Pricing"
+description: "Understand how Streams API usage is calculated using records and compute units, and learn how to optimize your costs."
 ---
 
+## Records
+
+Records are the fundamental unit for calculating Streams API usage. A **record** is one of the following:
+
+- A transaction (`txs`)
+- A log event (`logs`)
+- An internal transaction (`txsInternal`)
+
+The total record count for a webhook equals the sum of all three: **txs + logs + txsInternal**.
+
+## Charging Structure
+
+Each record costs **10 Compute Units (CUs)**. The `x-records-charged` header in webhook responses shows the exact record count for that delivery.
+
+<Info>Only webhooks with `confirmed: true` incur charges. Unconfirmed webhooks (`confirmed: false`) have `x-records-charged: 0` and are free.</Info>
+
+For each transaction, you receive two webhooks:
+1. **Unconfirmed** — Sent when the transaction is included in a block (free).
+2. **Confirmed** — Sent once the block is considered final (charged).
+
+## Records by Transaction Type
+
+The number of records charged varies depending on transaction complexity:
+
+| Transaction Type | Records Charged |
+|---|---|
+| Native transfer | 1 record |
+| ERC20 transfer | 2 records |
+| Single NFT transfer (ERC721) | 11 records |
+| Batch NFT transfer (ERC1155) | 2 records |
+| ERC721 minting (100 tokens) | 100 records |
+
+## Decoded Logs Are Free
+
+Moralis automatically decodes standardized contract events at **no additional cost**. These do **not** count as records:
+
+- `erc20Transfers`
+- `erc20Approvals`
+- `nftTransfers`
+
+## Monitoring Your Usage
+
+Use the `/status` endpoint ([Get Stats](/streams/api-reference/stats/get-stats)) to track your consumption. It provides:
+
+- `totalLogsProcessed`
+- `totalTxsProcessed`
+- `totalTxsInternalProcessed`
+
+Sum these values to determine total records consumed during your billing period.
+
+## Plan Limits
+
+For details on CU allocations, throughput limits, and plan comparisons, visit the [Moralis Pricing Page](https://moralis.io/pricing).

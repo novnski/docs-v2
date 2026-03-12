@@ -1,4 +1,36 @@
 ---
-title: 'Get Your API Key'
+title: "Get Your API Key"
+description: "Set up your Moralis RPC node and get your unique Node URL to start interacting with the blockchain."
 ---
 
+Moralis simplifies the process of accessing blockchain data from nodes across various blockchains. This guide walks you through the steps to set up your Moralis RPC node.
+
+## Step 1: Create a Moralis Account
+
+Sign up for a free account at the [Moralis Dashboard](https://admin.moralis.com/).
+
+## Step 2: Create a New Node
+
+After signing up, generate your unique **Node URL**:
+
+1. Log in to the [Moralis Dashboard](https://admin.moralis.com/).
+2. From the sidebar, click on the **Nodes** tab.
+3. Click **Create a New Node**.
+4. Select the blockchain network you want to connect to (e.g., Ethereum, BNB Chain, Polygon) and choose **mainnet** or **testnet**.
+5. Click **Create Node** to generate your node.
+
+## Step 3: Copy Your Node URL
+
+Once your node is created, you will be provided with two URLs — one for **Site 1** and another for **Site 2**. Both URLs include your **Node API Key**.
+
+Copy one of these URLs. This is your unique **Node URL**, which you will use to interact with the blockchain in your application.
+
+<Warning>Keep your Node URL safe — it contains your API key, which is essential for connecting to the blockchain. Do not expose it in client-side code or public repositories.</Warning>
+
+## Next Steps
+
+You are now ready to start making RPC calls using your node.
+
+- [Make Your First Request](/rpc-nodes/introduction/quickstart/make-your-first-request) — Learn how to make your first JSON-RPC call.
+- [Supported Chains](/rpc-nodes/supported-chains) — See which blockchains are available.
+- [Pricing](/rpc-nodes/pricing) — Understand compute unit costs and rate limits.

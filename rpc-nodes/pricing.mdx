@@ -1,4 +1,81 @@
 ---
 title: "Pricing"
+description: "Understand compute unit costs, rate limits, and plan tiers for Moralis RPC Nodes."
 ---
 
+All [Moralis plans](https://moralis.io/pricing) include generous monthly limits on the number of requests you can make. Some requests are more computationally expensive than others, so heavier requests are assigned higher **Compute Unit (CU) weights**.
+
+## What is a Compute Unit (CU)?
+
+A **Compute Unit** is a measure of computational load assigned to each RPC request. Each method has a **CU Weight** that is deducted from your total available CUs. Archive requests (queries to historical data) often have a higher **Archive CU Weight**.
+
+## Plan Tiers
+
+|                              | Starter    | Pro         | Business    | Enterprise |
+|------------------------------|------------|-------------|-------------|------------|
+| CUs Included                 | 10,000,000 | 100,000,000 | 350,000,000 | Custom     |
+| API Throughput (CUs/second)  | 1,500      | 1,500       | 3,000       | Custom     |
+| Node Throughput (CUs/second) | 100        | 100         | 300         | Custom     |
+| Number of Nodes              | 2          | 5           | Unlimited   | Unlimited  |
+| Archive Requests             | Yes        | Yes         | Yes         | Yes        |
+
+## Standard RPC Method Costs
+
+| RPC Method                                | CU Weight | Archive CU Weight |
+|-------------------------------------------|-----------|-------------------|
+| `eth_blockNumber`                         | 3         | 3                 |
+| `eth_call`                                | 3         | 12                |
+| `eth_chainId`                             | 3         | 3                 |
+| `eth_createAccessList`                    | 3         | 3                 |
+| `eth_estimateGas`                         | 5         | 5                 |
+| `eth_feeHistory`                          | 3         | 3                 |
+| `eth_gasPrice`                            | 3         | 3                 |
+| `eth_getBalance`                          | 3         | 12                |
+| `eth_getBlockByHash`                      | 12        | 12                |
+| `eth_getBlockByNumber`                    | 3         | 12                |
+| `eth_getBlockTransactionCountByHash`      | 12        | 12                |
+| `eth_getBlockTransactionCountByNumber`    | 3         | 12                |
+| `eth_getBlockReceipts`                    | 3         | 12                |
+| `eth_getCode`                             | 3         | 12                |
+| `eth_getLogs`                             | 12        | 12                |
+| `eth_getProof`                            | 3         | 12                |
+| `eth_getStorageAt`                        | 3         | 12                |
+| `eth_getTransactionByHash`               | 12        | 12                |
+| `eth_getTransactionByBlockHashAndIndex`   | 12        | 12                |
+| `eth_getTransactionByBlockNumberAndIndex` | 3         | 12                |
+| `eth_getTransactionCount`                 | 2         | 8                 |
+| `eth_getTransactionReceipt`              | 8         | 8                 |
+| `eth_getUncleByBlockHashAndIndex`         | 8         | 8                 |
+| `eth_getUncleByBlockNumberAndIndex`       | 2         | 8                 |
+| `eth_getUncleCountByBlockHash`            | 8         | 8                 |
+| `eth_getUncleCountByBlockNumber`          | 2         | 8                 |
+| `eth_maxPriorityFeePerGas`               | 2         | 2                 |
+| `eth_sendRawTransaction`                 | 3         | 3                 |
+
+## Extended RPC Method Costs
+
+Moralis provides extended RPC methods that offer advanced data retrieval. These are more computationally intensive and have higher CU weights.
+
+| Method                       | Description                                | CU Weight |
+|------------------------------|--------------------------------------------|-----------|
+| `eth_getTransactions`        | Get native transactions by wallet address  | 15        |
+| `eth_getDecodedTransactions` | Get decoded wallet history                 | 30        |
+| `eth_getTokenBalances`       | Get ERC20 token balances by wallet         | 25        |
+| `eth_getTokenPrice`          | Get ERC20 token price by token address     | 25        |
+| `eth_getTokenMetadata`       | Get ERC20 token metadata by token address  | 8         |
+| `eth_getNFTBalances`         | Get NFTs by wallet address                 | 20        |
+| `eth_getNFTCollections`      | Get NFT collections by wallet address      | 20        |
+
+## Archive Nodes
+
+Archive nodes store historical blockchain data beyond the most recent blocks. Because of the additional computational and storage resources required, querying archive nodes comes with a higher CU cost. If your use case involves accessing deep historical data, be mindful of the increased cost shown in the **Archive CU Weight** column above.
+
+## Optimizing CU Usage
+
+- **Limit block range** — The default block range for queries is 100 blocks. Requesting larger ranges or querying archive data increases CU consumption.
+- **Monitor usage** — Track your CU usage in the [Moralis Dashboard](https://admin.moralis.com/) to avoid hitting rate limits.
+- **Use batch requests** — Combine multiple requests into a single API call. Note that batching does not reduce total CU cost, but it reduces HTTP overhead. Maximum batch size is 20 requests per call. See [Batch Requests](/rpc-nodes/introduction/resources/rpc-batch-requests) for details.
+
+## Need Higher Limits?
+
+If your use case requires more CUs than your current plan offers, consider upgrading or reaching out to the Moralis team for custom solutions at [moralis.io/pricing](https://moralis.io/pricing).

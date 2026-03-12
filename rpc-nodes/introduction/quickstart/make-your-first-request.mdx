@@ -1,4 +1,129 @@
 ---
-title: 'Make Your First Request'
+title: "Make Your First Request"
+description: "Learn how to make your first JSON-RPC call using your Moralis Node URL to interact with the blockchain."
 ---
 
+In this guide, you will make your first JSON-RPC call using your Moralis Node URL. We'll use `ethers.js` to query the Ethereum blockchain, but you can use any JSON-RPC compatible library.
+
+## Prerequisites
+
+- **Node.js** installed on your machine.
+- A **Moralis Node URL**. If you haven't created one yet, see [Get Your API Key](/rpc-nodes/introduction/quickstart/get-your-api-key).
+
+## Step 1: Install Dependencies
+
+Create a new project and install the required packages:
+
+```bash
+mkdir my-rpc-project
+cd my-rpc-project
+npm init -y
+npm install ethers dotenv
+```
+
+## Step 2: Set Up Environment Variables
+
+Create a `.env` file in your project root and add your Moralis Node URL:
+
+```bash
+MORALIS_NODE_URL=YOUR_URL_FROM_DASHBOARD
+```
+
+## Step 3: Write the Code
+
+Create a file called `index.js`:
+
+<Tabs>
+  <Tab title="ethers.js">
+```javascript
+require("dotenv").config();
+const { ethers } = require("ethers");
+
+async function main() {
+  const provider = new ethers.JsonRpcProvider(process.env.MORALIS_NODE_URL);
+
+  // Get the latest block number
+  const blockNumber = await provider.getBlockNumber();
+  console.log("Latest block:", blockNumber);
+
+  // Get the balance of an address
+  const balance = await provider.getBalance(
+    "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+  );
+  console.log("Balance:", ethers.formatEther(balance), "ETH");
+}
+
+main();
+```
+  </Tab>
+  <Tab title="curl">
+```bash
+curl -X POST YOUR_MORALIS_NODE_URL \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "eth_blockNumber",
+    "params": [],
+    "id": 1
+  }'
+```
+  </Tab>
+  <Tab title="Python">
+```python
+import os
+import json
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
+node_url = os.getenv("MORALIS_NODE_URL")
+
+payload = {
+    "jsonrpc": "2.0",
+    "method": "eth_blockNumber",
+    "params": [],
+    "id": 1,
+}
+
+response = requests.post(node_url, json=payload)
+result = response.json()
+print("Latest block:", int(result["result"], 16))
+```
+  </Tab>
+</Tabs>
+
+## Step 4: Run the Script
+
+```bash
+node index.js
+```
+
+You should see output like:
+
+```
+Latest block: 19234567
+Balance: 1.234 ETH
+```
+
+## Using Extended RPC Methods
+
+Moralis provides extended RPC methods that offer richer data beyond standard JSON-RPC. These methods map to Moralis API endpoints:
+
+| Method | Description |
+|---|---|
+| `eth_getTransactions` | Get native transactions by wallet address |
+| `eth_getDecodedTransactions` | Get decoded wallet history |
+| `eth_getTokenBalances` | Get ERC20 token balances by wallet |
+| `eth_getTokenPrice` | Get ERC20 token price |
+| `eth_getTokenMetadata` | Get ERC20 token metadata |
+| `eth_getNFTBalances` | Get NFTs by wallet address |
+| `eth_getNFTCollections` | Get NFT collections by wallet |
+
+<Info>Extended RPC methods have higher compute unit costs than standard methods. See [Pricing](/rpc-nodes/pricing) for details.</Info>
+
+## Next Steps
+
+- [Pricing](/rpc-nodes/pricing) — Understand compute unit costs for each RPC method.
+- [Batch Requests](/rpc-nodes/introduction/resources/rpc-batch-requests) — Combine multiple requests into a single API call.
+- [Rate Limits](/rpc-nodes/introduction/resources/rpc-rate-limits) — Learn about throughput limits per plan.
