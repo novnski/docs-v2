@@ -1,6 +1,6 @@
 ---
 title: "Solana Token Standards"
-description: "Understand the Solana token standards supported by Moralis, including the SPL Token Program, Token-2022, and Metaplex metadata standard."
+description: "Understand the Solana token standards supported by Moralis, including the SPL Token Program and Metaplex metadata standard."
 ---
 
 Solana uses a different token model than EVM chains. Instead of each token deploying its own smart contract, all tokens are managed by shared **token programs**. Moralis supports the major Solana token standards and enriches API responses with decoded metadata.
@@ -18,20 +18,6 @@ Key characteristics:
 - Each holder has an **associated token account** (ATA) linked to their wallet
 - Token metadata (name, symbol, logo) is stored offchain via the **Metaplex** standard
 
-### Token-2022 (Token Extensions Program)
-
-**Token-2022** is the next-generation token program on Solana, introducing built-in extensions such as:
-
-- **Transfer fees** — Enforce fees on every token transfer
-- **Confidential transfers** — Hide transfer amounts using zero-knowledge proofs
-- **Transfer hooks** — Execute custom logic on each transfer
-- **Non-transferable tokens** — Soulbound tokens
-- **Interest-bearing tokens** — Tokens that accrue interest over time
-- **Permanent delegate** — A delegate that can never be revoked
-
-Moralis supports Token-2022 tokens across its Solana API endpoints.
-
----
 
 ## Metaplex Metadata Standard
 
