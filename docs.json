@@ -1666,7 +1666,8 @@
     { "source": "/data-indexer/index", "destination": "/data-indexer/overview" },
     { "source": "/rpc-nodes/index", "destination": "/rpc-nodes/overview" },
     { "source": "/data-api/universal/entity/index", "destination": "/data-api/universal/entity/overview" },
-    { "source": "/data-api/universal/market-metrics/index", "destination": "/data-api/universal/market-metrics/overview" }
+    { "source": "/data-api/universal/market-metrics/index", "destination": "/data-api/universal/market-metrics/overview" },
+    { "source": "/reference/weights-and-rate-limits", "destination": "/data-api/pricing" }
   ],
   "footer": {
     "socials": {
