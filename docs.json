@@ -148,6 +148,13 @@
                 ]
               },
               {
+                "group": "Datashare Tutorials",
+                "pages": [
+                  "datashare/s3-bucket-setup",
+                  "get-started/tutorials/datashare/export-bulk-blockchain-data"
+                ]
+              },
+              {
                 "group": "Migration Guides",
                 "pages": [
                   "get-started/tutorials/migration-guides/migrating-from-reservoir-to-moralis",
@@ -782,11 +789,16 @@
         "tab": "Datashare",
         "pages": [
           "datashare/overview",
+          "datashare/quickstart",
           "datashare/supported-data",
           "datashare/export-options",
+          "datashare/filters-and-scoping",
+          "datashare/credits-and-pricing",
           "datashare/supported-chains",
           "datashare/early-access",
-          "datashare/s3-bucket-setup"
+          "datashare/s3-bucket-setup",
+          "datashare/troubleshooting",
+          "get-started/tutorials/datashare/export-bulk-blockchain-data"
         ]
       },
       {

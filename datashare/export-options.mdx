@@ -36,6 +36,22 @@ All export destinations use S3-compatible credentials and endpoints. When settin
 
 ---
 
+### Output Formats
+
+Choose an output format based on your analytics tooling and use case.
+
+| Format | Best For | Notes |
+| --- | --- | --- |
+| **Parquet** | Athena, Spark, DuckDB, BigQuery | Columnar, highly compressed (5–10x). Recommended for analytics workloads. |
+| **CSV** | Excel, general compatibility | Larger files than Parquet. Compresses well with gzip. |
+| **JSON** | Debugging, human inspection | Largest output format. Useful for spot-checking data. |
+
+<Note>
+Export size estimates are based on **uncompressed** data size. Parquet typically achieves 5–10x compression, and CSV with gzip also compresses significantly. Credits are calculated on uncompressed volume regardless of the format you choose.
+</Note>
+
+---
+
 ### Getting Started
 
 To request access to Datashare and configure your export destination, see the [Early Access](/datashare/early-access) page.
