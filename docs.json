@@ -277,10 +277,12 @@
               "data-api/evm/overview",
               {
                 "group": "Wallet API",
+                "tag": "New Features",
                 "pages": [
                   "data-api/evm/wallet/overview",
                   {
                     "group": "Activity",
+                    "tag": "New Features",
                     "pages": [
                       "data-api/evm/wallet/wallet-history",
                       "data-api/evm/wallet/token-transfers",
@@ -289,6 +291,7 @@
                       "data-api/evm/wallet/nft-trades-by-wallet",
                       "data-api/evm/wallet/wallet-transactions",
                       "data-api/evm/wallet/decoded-transactions",
+                      "data-api/evm/wallet/wallet-insights",
                       "data-api/evm/wallet/wallet-stats",
                       "data-api/evm/wallet/chain-activity"
                     ]
