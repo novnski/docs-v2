@@ -4,10 +4,10 @@ openapi: "/openapi-files/data-api/api.json GET /wallets/{address}/insight"
 tag: "New"
 ---
 
-import CuBannerDynamic from "/snippets/cu-banner-dynamic.mdx";
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 import { SupportedChains } from "/snippets/supported-chains.jsx";
 
-<CuBannerDynamic CUs={20} unit="chain" />
+<EndpointMeta cus={20} cusUnit="chain" />
 
 <SupportedChains
   chains={[

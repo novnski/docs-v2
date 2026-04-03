@@ -4,6 +4,6 @@ openapi: "/openapi-files/data-api/api.json GET /tokens/{tokenAddress}/analytics"
 description: "Retrieve detailed trading analytics for a specific token, including buy volume, sell volume, buyers, sellers, transactions, liquidity and FDV trends over time."
 ---
 
-import CuBanner from '/snippets/cu-banner.mdx'
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
-<CuBanner CUs={80}/>
+<EndpointMeta cus={80} mainnetOnly />

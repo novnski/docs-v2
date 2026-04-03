@@ -3,6 +3,9 @@ title: "Wallet PnL Breakdown"
 openapi: "/openapi-files/data-api/api.json GET /wallets/{address}/profitability"
 ---
 
-import CuBanner from '/snippets/cu-banner.mdx'
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+import { SupportedChains } from '/snippets/supported-chains.jsx'
 
-<CuBanner CUs={50}/>
+<EndpointMeta cus={50} mainnetOnly />
+
+<SupportedChains chains={["ethereum", "base", "polygon"]} />

@@ -4,6 +4,6 @@ openapi: "/openapi-files/data-api/solana-api.json GET /token/{network}/{address}
 description: "Returns the bonding progress for the specified token. For Pump.fun, only tokens with a graduation of 20% or higher are returned, sorted by graduation in descending order. Currently, only Pump.fun is supported."
 ---
 
-import CuBanner from '/snippets/cu-banner.mdx'
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
-<CuBanner CUs={1}/>
+<EndpointMeta cus={1} />

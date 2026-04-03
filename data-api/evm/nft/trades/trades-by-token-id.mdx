@@ -4,6 +4,6 @@ sidebarTitle: "Trades by Token ID"
 openapi: "/openapi-files/data-api/api.json GET /nft/{address}/{token_id}/trades"
 ---
 
-import CuBanner from '/snippets/cu-banner.mdx'
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
-<CuBanner CUs={40}/>
+<EndpointMeta cus={40} mainnetOnly />

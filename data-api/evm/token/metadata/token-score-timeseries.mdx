@@ -4,8 +4,6 @@ openapi: "/openapi-files/data-api/api.json GET /tokens/{tokenAddress}/score/hist
 tag: "New"
 ---
 
-import CuBanner from '/snippets/cu-banner.mdx'
-import ProBanner from '/snippets/premium-pro.mdx'
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
-<ProBanner/>
-<CuBanner CUs={150}/>
+<EndpointMeta premium cus={150} mainnetOnly />
