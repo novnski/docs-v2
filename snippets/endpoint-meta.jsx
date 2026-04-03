@@ -26,7 +26,7 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
       label: isDynamic ? "Dynamic cost" : "Endpoint cost",
       text: isDynamic ? (
         <>
-          {cus} CUs per {cusUnit}. Total cost scales with request size.{" "}
+          {cus} CUs per {cusUnit}.{" "}
           <a href="/get-started/pricing#dynamic-endpoints">Learn more</a>.
         </>
       ) : (
