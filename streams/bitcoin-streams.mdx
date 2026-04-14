@@ -1,0 +1,142 @@
+---
+title: "Bitcoin Streams"
+sidebarTitle: "Bitcoin Streams"
+description: "Stream real-time Bitcoin transaction data directly to your application with webhooks, no node infrastructure, no polling, no missed blocks."
+---
+
+## Overview
+
+**Bitcoin Streams** extends Moralis Streams to the Bitcoin network, delivering real-time transaction data via webhooks. Moralis indexes Bitcoin automatically and pushes structured payloads to your endpoint whenever transactions match your criteria.
+
+Webhooks typically arrive within seconds of a block being mined — no node, no polling, no missed blocks.
+
+---
+
+## Key Features
+
+- **Real-time delivery** — end-to-end latency is typically under 10 seconds after a block is mined
+- **Dual-phase notifications** — matched transactions trigger two webhook deliveries: once when the transaction enters the mempool (unconfirmed) and again upon on-chain confirmation
+- **All address formats supported** — P2PKH (legacy, `1...`), P2SH (SegWit-wrapped, `3...`), and Bech32 native SegWit (`bc1q...`)
+- **Flexible monitoring** — watch specific addresses or enable firehose mode with `allAddresses` to receive every Bitcoin transaction
+- **Automatic retries** — Moralis retries webhook delivery until it receives an HTTP 200 response
+
+---
+
+## How It Works
+
+1. A new Bitcoin block is produced
+2. Moralis evaluates every transaction against your registered addresses
+3. Matching transactions fire a webhook in the **mempool** phase (unconfirmed)
+4. When the block confirms, a second webhook is delivered marking the transaction as confirmed
+5. Your service upserts on `txid` to reconcile the two-phase lifecycle
+
+---
+
+## Webhook Payload Structure
+
+Each Bitcoin webhook payload contains:
+
+- **Block metadata** — hash, height, timestamp, difficulty, merkle root, transaction count
+- **Transaction details** — `txid`, input/output counts, locktime, version, block reference
+- **Outputs (`vout`)** — value in BTC (not satoshis), script type, recipient address
+- **Inputs (`vin`)** — structural fields only; `address` and `value` fields remain `null`
+- **Confirmation status** — boolean flag distinguishing mempool from confirmed deliveries
+
+<Note>
+Output values are represented as **BTC decimals** (e.g. `3.13258866`). To convert to satoshis, multiply by `1e8`:
+
+```js
+const satoshis = Math.round(btc * 1e8);
+```
+</Note>
+
+---
+
+## Configuration Parameters
+
+When creating a Bitcoin stream you specify:
+
+| Parameter | Description |
+| --- | --- |
+| `webhookUrl` | Public HTTPS endpoint that will receive payloads (required) |
+| `network` | Must be `["mainnet"]` as an array |
+| `includeInputs` | Include input structure in the payload |
+| `includeOutputs` | Include output structure in the payload |
+| `allAddresses` | Firehose mode — deliver every Bitcoin transaction |
+| `description` | Human-readable stream description |
+| `tag` | Identifier for routing / filtering on your side |
+
+---
+
+## API Endpoints
+
+All Bitcoin Streams endpoints require the `x-api-key` header.
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `PUT` | `/streams/bitcoin` | Create a stream with a webhook URL and configuration |
+| `POST` | `/streams/bitcoin/{streamId}/address` | Add an address to monitor (one per request) |
+| `GET` | `/streams/bitcoin?limit=100` | List existing Bitcoin streams |
+| `DELETE` | `/streams/bitcoin/{streamId}` | Remove a stream |
+| `POST` | `/streams/bitcoin/bitcoin_mainnet/block-to-webhook/{blockNumber}/{streamId}` | Replay a historical block for backfilling |
+
+---
+
+## Limitations
+
+<Warning>
+Bitcoin Streams has a few behaviors that differ from EVM Streams — plan your consumer around them.
+</Warning>
+
+- **Input data is not populated.** Even with `includeInputs: true`, input `address` and `value` fields return `null`. You can reliably detect **inbound** transfers to watched addresses, not outflows.
+- **`isCoinbase` is always `false`.** The `isCoinbase` field does not reliably identify coinbase transactions. Detect coinbase transactions using a heuristic: the transaction contains an `OP_RETURN` output **and** has exactly one input.
+- **Values are BTC decimals.** Output values are not denominated in satoshis. Convert with `Math.round(btc * 1e8)` before feeding integer-based ledger systems.
+- **Mainnet only.** The `network` parameter must be `["mainnet"]`.
+
+---
+
+## Processing Patterns
+
+### Deduplication
+
+Each matched transaction is delivered **twice** (mempool + confirmation). Use the transaction id (`txid`) as your natural deduplication key and upsert on the second delivery to flip the confirmation flag.
+
+### Coinbase detection
+
+Since `isCoinbase` is unreliable, detect coinbase transactions like this:
+
+```js
+const isCoinbase =
+  tx.vin.length === 1 &&
+  tx.vout.some((out) => out.scriptPubKey?.type === "nulldata"); // OP_RETURN
+```
+
+### Value conversion
+
+Store both BTC and satoshi values so downstream services can pick whichever representation fits:
+
+```js
+const btc = vout.value;
+const satoshis = Math.round(btc * 1e8);
+```
+
+---
+
+## Common Use Cases
+
+- **Exchange deposits** — monitor hot wallet addresses, mark deposits as `pending` on the mempool delivery and `confirmed` on the block delivery
+- **Cold wallet surveillance** — alert on any inbound transfer to an offline storage address
+- **Mining pool revenue** — watch payout addresses for both standard payments and coinbase block rewards
+- **Treasury monitoring** — real-time accounting for corporate or DAO-held BTC addresses
+
+---
+
+## Setup Checklist
+
+1. Generate an API key from [admin.moralis.com](https://admin.moralis.com)
+2. Deploy a publicly accessible HTTPS webhook endpoint
+3. Create the stream via `PUT /streams/bitcoin`
+4. Register each watched address individually via `POST /streams/bitcoin/{streamId}/address`
+5. Implement the verification handler — respond to the empty-body test `POST` with HTTP `200`
+6. Build upsert logic keyed on `txid` to handle the mempool → confirmed transition
+7. Always return HTTP `200` from your handler, even when your own processing errors — Moralis retries on non-200 responses

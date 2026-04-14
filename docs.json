@@ -695,6 +695,7 @@
               "streams/overview",
               "streams/pricing",
               "streams/supported-chains",
+              "streams/bitcoin-streams",
               {
                 "group": "Quickstart",
                 "pages": [
