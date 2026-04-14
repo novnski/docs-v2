@@ -75,10 +75,10 @@ All Bitcoin Streams endpoints require the `x-api-key` header.
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | `PUT` | `/streams/bitcoin` | Create a stream with a webhook URL and configuration |
-| `POST` | `/streams/bitcoin/{streamId}/address` | Add an address to monitor (one per request) |
+| `POST` | `/streams/bitcoin/:streamId/address` | Add an address to monitor (one per request) |
 | `GET` | `/streams/bitcoin?limit=100` | List existing Bitcoin streams |
-| `DELETE` | `/streams/bitcoin/{streamId}` | Remove a stream |
-| `POST` | `/streams/bitcoin/bitcoin_mainnet/block-to-webhook/{blockNumber}/{streamId}` | Replay a historical block for backfilling |
+| `DELETE` | `/streams/bitcoin/:streamId` | Remove a stream |
+| `POST` | `/streams/bitcoin/bitcoin_mainnet/block-to-webhook/:blockNumber/:streamId` | Replay a historical block for backfilling |
 
 ---
 
