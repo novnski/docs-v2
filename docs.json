@@ -695,7 +695,6 @@
               "streams/overview",
               "streams/pricing",
               "streams/supported-chains",
-              "streams/bitcoin-streams",
               {
                 "group": "Quickstart",
                 "pages": [
@@ -715,7 +714,8 @@
               "streams/streams-concepts/re-org-handling",
               "streams/streams-concepts/rate-limits",
               "streams/streams-concepts/error-handling",
-              "streams/streams-concepts/advanced-options"
+              "streams/streams-concepts/advanced-options",
+              "streams/security-and-reliability/ordering-and-idempotency"
             ]
           },
           {
@@ -733,12 +733,11 @@
             "pages": [
               "streams/security-and-reliability/webhook-security",
               "streams/security-and-reliability/spam-detection",
-              "streams/security-and-reliability/delivery-guarantees",
-              "streams/security-and-reliability/ordering-and-idempotency"
+              "streams/security-and-reliability/delivery-guarantees"
             ]
           },
           {
-            "group": "API Reference",
+            "group": "EVM Streams API",
             "pages": [
               {
                 "group": "Streams",
@@ -786,23 +785,49 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Bitcoin Streams API",
+            "pages": [
+              "streams/bitcoin-streams"
+            ]
           }
         ]
       },
       {
         "tab": "Datashare",
         "pages": [
-          "datashare/overview",
-          "datashare/quickstart",
-          "datashare/supported-data",
-          "datashare/export-options",
-          "datashare/filters-and-scoping",
-          "datashare/credits-and-pricing",
-          "datashare/supported-chains",
-          "datashare/early-access",
-          "datashare/s3-bucket-setup",
-          "datashare/troubleshooting",
-          "get-started/tutorials/datashare/export-bulk-blockchain-data"
+          {
+            "group": "Introduction",
+            "pages": [
+              "datashare/overview",
+              "datashare/supported-data",
+              "datashare/supported-chains",
+              "datashare/credits-and-pricing"
+            ]
+          },
+          {
+            "group": "Getting Started",
+            "pages": [
+              "datashare/quickstart",
+              "datashare/s3-bucket-setup",
+              "datashare/early-access"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "datashare/export-options",
+              "datashare/filters-and-scoping"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "get-started/tutorials/datashare/export-bulk-blockchain-data"
+            ]
+          },
+          "datashare/troubleshooting"
         ]
       },
       {
