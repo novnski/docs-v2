@@ -11,14 +11,16 @@ We've significantly expanded the DeFi API (EVM) with broader protocol coverage a
 **What's new:**
 
 - **5,000+ DeFi protocols** supported, covering 96% of the entire EVM DeFi market
-- **Multichain queries:** fetch positions from a single chain, multiple chains, or all EVM chains in one API call via the universal endpoint at `api.moralis.com`
+- **Multichain queries:** fetch positions from a single chain, multiple chains, or all EVM chains in one API call
 - **Protocols include:** Uniswap V2/V3, Aave V2/V3, Lido, Curve, Compound, MakerDAO, Pendle, Convex, Yearn, GMX, Aerodrome, Velodrome, SushiSwap, PancakeSwap, Eigenlayer, Etherfi, Rocket Pool, Spark, Morpho, and thousands more
 
 **Main endpoints:**
 
-- `getDefiSummary` — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
-- `getDefiPositionsSummary` — all positions with token types, values, and reward tokens
-- `getDefiPositionsByProtocol` — detailed per-protocol breakdown with position-level detail
+- [`getDefiSummary`](/data-api/evm/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
+- [`getDefiPositionsSummary`](/data-api/evm/defi/wallet-positions) — all positions with token types, values, and reward tokens
+- [`getDefiPositionsByProtocol`](/data-api/evm/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
+
+**Usecases:** portfolio trackers, DeFi dashboards, tax and accounting tools, and risk monitoring. Anywhere you need a unified view of a wallet's DeFi exposure without wiring each protocol in manually.
 
 Solana DeFi support is coming soon.
 
