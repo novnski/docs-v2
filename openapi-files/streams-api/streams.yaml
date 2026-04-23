@@ -9,21 +9,23 @@ components:
     UUID:
       type: string
       format: uuid
-      description: |-
-        Stringified UUIDv4.
-        See [RFC 4112](https://tools.ietf.org/html/rfc4122)
+      description: 'Stringified UUIDv4.
+
+        See [RFC 4112](https://tools.ietf.org/html/rfc4122)'
       pattern: '[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
     StreamsStatus:
-      description: |-
-        The stream status:
+      description: 'The stream status:
+
         [active] The Stream is healthy and processing blocks
+
         [paused] The Stream is paused and is not processing blocks
-        [error] The Stream has encountered an error and is not processing blocks
+
+        [error] The Stream has encountered an error and is not processing blocks'
       enum:
-        - active
-        - paused
-        - error
-        - terminated
+      - active
+      - paused
+      - error
+      - terminated
       type: string
       example: {}
     getNativeBalances:
@@ -35,15 +37,15 @@ components:
         type:
           type: string
           enum:
-            - tx
-            - log
-            - erc20transfer
-            - erc20approval
-            - nfttransfer
-            - internalTx
+          - tx
+          - log
+          - erc20transfer
+          - erc20approval
+          - nfttransfer
+          - internalTx
       required:
-        - selectors
-        - type
+      - selectors
+      - type
       type: object
       additionalProperties: false
     AbiInput:
@@ -61,8 +63,8 @@ components:
         internalType:
           type: string
       required:
-        - name
-        - type
+      - name
+      - type
       type: object
       additionalProperties: false
     AbiOutput:
@@ -78,8 +80,8 @@ components:
         internalType:
           type: string
       required:
-        - name
-        - type
+      - name
+      - type
       type: object
       additionalProperties: false
     AbiItem:
@@ -109,7 +111,7 @@ components:
           type: number
           format: double
       required:
-        - type
+      - type
       type: object
       additionalProperties: false
       example: {}
@@ -119,19 +121,19 @@ components:
         type:
           type: string
           enum:
-            - tx
-            - log
-            - erc20transfer
-            - erc20approval
-            - nfttransfer
+          - tx
+          - log
+          - erc20transfer
+          - erc20approval
+          - nfttransfer
         contractAddress:
           type: string
         inputs:
           items:
             anyOf:
-              - type: string
-              - items: {}
-                type: array
+            - type: string
+            - items: {}
+              type: array
           type: array
         functionAbi:
           $ref: '#/components/schemas/AbiItem'
@@ -140,9 +142,9 @@ components:
         callFrom:
           type: string
       required:
-        - type
-        - contractAddress
-        - functionAbi
+      - type
+      - contractAddress
+      - functionAbi
       type: object
       additionalProperties: false
     StreamsModel:
@@ -155,7 +157,8 @@ components:
           description: A description for this stream
         tag:
           type: string
-          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the specific stream if multiple streams are present
+          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the
+            specific stream if multiple streams are present
         topic0:
           items:
             type: string
@@ -167,13 +170,13 @@ components:
           description: Include events for all addresses (only applied when abi and topic0 is provided)
         includeNativeTxs:
           type: boolean
-          description: "Include or not native transactions defaults to false"
+          description: Include or not native transactions defaults to false
         includeContractLogs:
           type: boolean
-          description: "Include or not logs of contract interactions defaults to false"
+          description: Include or not logs of contract interactions defaults to false
         includeInternalTxs:
           type: boolean
-          description: "Include or not include internal transactions defaults to false"
+          description: Include or not include internal transactions defaults to false
         includeAllTxLogs:
           type: boolean
           description: Include all logs if atleast one value in tx or log matches stream config
@@ -221,14 +224,14 @@ components:
           format: double
           description: Amount of Addresses.
       required:
-        - webhookUrl
-        - description
-        - chainIds
-        - id
-        - status
-        - statusMessage
-        - updatedAt
-        - amountOfAddresses
+      - webhookUrl
+      - description
+      - chainIds
+      - id
+      - status
+      - statusMessage
+      - updatedAt
+      - amountOfAddresses
       type: object
       additionalProperties: false
     StreamsResponse:
@@ -246,8 +249,8 @@ components:
           format: double
           description: Total count of streams on the project
       required:
-        - result
-        - total
+      - result
+      - total
       type: object
       additionalProperties: false
     StreamsModelCreate:
@@ -260,7 +263,8 @@ components:
           description: A description for this stream
         tag:
           type: string
-          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the specific stream if multiple streams are present
+          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the
+            specific stream if multiple streams are present
         topic0:
           items:
             type: string
@@ -272,13 +276,13 @@ components:
           description: Include events for all addresses (only applied when abi and topic0 is provided)
         includeNativeTxs:
           type: boolean
-          description: "Include or not native transactions defaults to false"
+          description: Include or not native transactions defaults to false
         includeContractLogs:
           type: boolean
-          description: "Include or not logs of contract interactions defaults to false"
+          description: Include or not logs of contract interactions defaults to false
         includeInternalTxs:
           type: boolean
-          description: "Include or not include internal transactions defaults to false"
+          description: Include or not include internal transactions defaults to false
         includeAllTxLogs:
           type: boolean
           description: Include all logs if atleast one value in tx or log matches stream config
@@ -309,9 +313,9 @@ components:
           nullable: true
           description: triggers
       required:
-        - webhookUrl
-        - description
-        - chainIds
+      - webhookUrl
+      - description
+      - chainIds
       type: object
       additionalProperties: false
     Partial_StreamsModelCreate_:
@@ -324,7 +328,8 @@ components:
           description: A description for this stream
         tag:
           type: string
-          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the specific stream if multiple streams are present
+          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the
+            specific stream if multiple streams are present
         topic0:
           items:
             type: string
@@ -335,13 +340,13 @@ components:
           description: Include events for all addresses (only applied when abi and topic0 is provided)
         includeNativeTxs:
           type: boolean
-          description: "Include or not native transactions defaults to false"
+          description: Include or not native transactions defaults to false
         includeContractLogs:
           type: boolean
-          description: "Include or not logs of contract interactions defaults to false"
+          description: Include or not logs of contract interactions defaults to false
         includeInternalTxs:
           type: boolean
-          description: "Include or not include internal transactions defaults to false"
+          description: Include or not include internal transactions defaults to false
         includeAllTxLogs:
           type: boolean
           description: Include all logs if atleast one value in tx or log matches stream config
@@ -376,7 +381,7 @@ components:
           $ref: '#/components/schemas/StreamsStatus'
           description: The status of the stream.
       required:
-        - status
+      - status
       type: object
       additionalProperties: false
     Addresses:
@@ -385,7 +390,7 @@ components:
           type: string
           description: Address
       required:
-        - address
+      - address
       type: object
       additionalProperties: false
     AddressesResponse:
@@ -403,8 +408,8 @@ components:
           format: double
           description: Total count of streams on the project
       required:
-        - result
-        - total
+      - result
+      - total
       type: object
       additionalProperties: false
     AddressResponse:
@@ -414,40 +419,40 @@ components:
           description: The streamId
         address:
           anyOf:
-            - type: string
-            - items:
-                type: string
-              type: array
+          - type: string
+          - items:
+              type: string
+            type: array
           description: Address
       required:
-        - streamId
-        - address
+      - streamId
+      - address
       type: object
       additionalProperties: false
     AddressesAdd:
       properties:
         address:
           anyOf:
-            - type: string
-            - items:
-                type: string
-              type: array
+          - type: string
+          - items:
+              type: string
+            type: array
           description: The address or a list of addresses to be added to the Stream.
       required:
-        - address
+      - address
       type: object
       additionalProperties: false
     AddressesRemove:
       properties:
         address:
           anyOf:
-            - type: string
-            - items:
-                type: string
-              type: array
+          - type: string
+          - items:
+              type: string
+            type: array
           description: The address or a list of addresses to be removed from the Stream.
       required:
-        - address
+      - address
       type: object
       additionalProperties: false
     Block:
@@ -459,9 +464,9 @@ components:
         timestamp:
           type: string
       required:
-        - number
-        - hash
-        - timestamp
+      - number
+      - hash
+      - timestamp
       type: object
       additionalProperties: false
     TriggerOutput:
@@ -470,8 +475,8 @@ components:
         name:
           type: string
       required:
-        - value
-        - name
+      - value
+      - name
       type: object
     Log:
       properties:
@@ -505,14 +510,14 @@ components:
           type: array
           nullable: true
       required:
-        - logIndex
-        - transactionHash
-        - address
-        - data
-        - topic0
-        - topic1
-        - topic2
-        - topic3
+      - logIndex
+      - transactionHash
+      - address
+      - data
+      - topic0
+      - topic1
+      - topic2
+      - topic3
       type: object
       additionalProperties: false
     Transaction:
@@ -577,25 +582,28 @@ components:
             type: string
           type: array
           nullable: true
+        transactionFee:
+          type: string
+          nullable: true
       required:
-        - hash
-        - gas
-        - gasPrice
-        - nonce
-        - input
-        - transactionIndex
-        - fromAddress
-        - toAddress
-        - value
-        - type
-        - v
-        - r
-        - s
-        - receiptCumulativeGasUsed
-        - receiptGasUsed
-        - receiptContractAddress
-        - receiptRoot
-        - receiptStatus
+      - hash
+      - gas
+      - gasPrice
+      - nonce
+      - input
+      - transactionIndex
+      - fromAddress
+      - toAddress
+      - value
+      - type
+      - v
+      - r
+      - s
+      - receiptCumulativeGasUsed
+      - receiptGasUsed
+      - receiptContractAddress
+      - receiptRoot
+      - receiptStatus
       type: object
       additionalProperties: false
     InternalTransaction:
@@ -620,11 +628,11 @@ components:
           type: array
           nullable: true
       required:
-        - from
-        - to
-        - value
-        - transactionHash
-        - gas
+      - from
+      - to
+      - value
+      - transactionHash
+      - gas
       type: object
       additionalProperties: false
     IERC20Transfer:
@@ -666,16 +674,16 @@ components:
             $ref: '#/components/schemas/TriggerOutput'
           type: array
       required:
-        - transactionHash
-        - contract
-        - logIndex
-        - from
-        - to
-        - value
-        - tokenDecimals
-        - tokenName
-        - tokenSymbol
-        - possibleSpam
+      - transactionHash
+      - contract
+      - logIndex
+      - from
+      - to
+      - value
+      - tokenDecimals
+      - tokenName
+      - tokenSymbol
+      - possibleSpam
       type: object
       additionalProperties: false
     IERC20Approval:
@@ -717,16 +725,16 @@ components:
             $ref: '#/components/schemas/TriggerOutput'
           type: array
       required:
-        - transactionHash
-        - contract
-        - logIndex
-        - owner
-        - spender
-        - value
-        - tokenDecimals
-        - tokenName
-        - tokenSymbol
-        - possibleSpam
+      - transactionHash
+      - contract
+      - logIndex
+      - owner
+      - spender
+      - value
+      - tokenDecimals
+      - tokenName
+      - tokenSymbol
+      - possibleSpam
       type: object
       additionalProperties: false
     INFTTransfer:
@@ -765,18 +773,18 @@ components:
         amount:
           type: string
       required:
-        - transactionHash
-        - contract
-        - logIndex
-        - tokenContractType
-        - tokenName
-        - tokenSymbol
-        - possibleSpam
-        - operator
-        - from
-        - to
-        - tokenId
-        - amount
+      - transactionHash
+      - contract
+      - logIndex
+      - tokenContractType
+      - tokenName
+      - tokenSymbol
+      - possibleSpam
+      - operator
+      - from
+      - to
+      - tokenId
+      - amount
       type: object
       additionalProperties: false
     INativeBalance:
@@ -788,9 +796,9 @@ components:
         balanceWithDecimals:
           type: string
       required:
-        - address
-        - balance
-        - balanceWithDecimals
+      - address
+      - balance
+      - balanceWithDecimals
       type: object
       additionalProperties: false
     INFTApprovalERC721:
@@ -818,15 +826,15 @@ components:
         tokenSymbol:
           type: string
       required:
-        - transactionHash
-        - contract
-        - logIndex
-        - owner
-        - approved
-        - tokenId
-        - tokenContractType
-        - tokenName
-        - tokenSymbol
+      - transactionHash
+      - contract
+      - logIndex
+      - owner
+      - approved
+      - tokenId
+      - tokenContractType
+      - tokenName
+      - tokenSymbol
       type: object
       additionalProperties: false
     INFTApprovalERC1155:
@@ -854,15 +862,15 @@ components:
         tokenSymbol:
           type: string
       required:
-        - transactionHash
-        - contract
-        - logIndex
-        - account
-        - operator
-        - approved
-        - tokenContractType
-        - tokenName
-        - tokenSymbol
+      - transactionHash
+      - contract
+      - logIndex
+      - account
+      - operator
+      - approved
+      - tokenContractType
+      - tokenName
+      - tokenSymbol
       type: object
       additionalProperties: false
     IOldNFTApproval:
@@ -876,8 +884,8 @@ components:
             $ref: '#/components/schemas/INFTApprovalERC1155'
           type: array
       required:
-        - ERC721
-        - ERC1155
+      - ERC721
+      - ERC1155
       type: object
       additionalProperties: false
     INFTApproval:
@@ -910,17 +918,17 @@ components:
           type: string
           nullable: true
       required:
-        - transactionHash
-        - contract
-        - logIndex
-        - tokenContractType
-        - tokenName
-        - tokenSymbol
-        - possibleSpam
-        - account
-        - operator
-        - approvedAll
-        - tokenId
+      - transactionHash
+      - contract
+      - logIndex
+      - tokenContractType
+      - tokenName
+      - tokenSymbol
+      - possibleSpam
+      - account
+      - operator
+      - approvedAll
+      - tokenId
       type: object
       additionalProperties: false
     IWebhook:
@@ -978,29 +986,30 @@ components:
             $ref: '#/components/schemas/INFTApproval'
           type: array
       required:
-        - block
-        - chainId
-        - logs
-        - txs
-        - txsInternal
-        - abi
-        - retries
-        - confirmed
-        - tag
-        - streamId
-        - erc20Transfers
-        - erc20Approvals
-        - nftTransfers
-        - nativeBalances
-        - nftApprovals
-        - nftTokenApprovals
+      - block
+      - chainId
+      - logs
+      - txs
+      - txsInternal
+      - abi
+      - retries
+      - confirmed
+      - tag
+      - streamId
+      - erc20Transfers
+      - erc20Approvals
+      - nftTransfers
+      - nativeBalances
+      - nftApprovals
+      - nftTokenApprovals
       type: object
       additionalProperties: false
     StreamBlockDataByNumber:
       properties:
         tag:
           type: string
-          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the specific stream if multiple streams are present
+          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the
+            specific stream if multiple streams are present
         topic0:
           items:
             type: string
@@ -1012,13 +1021,13 @@ components:
           description: Include events for all addresses (only applied when abi and topic0 is provided)
         includeNativeTxs:
           type: boolean
-          description: "Include or not native transactions defaults to false"
+          description: Include or not native transactions defaults to false
         includeContractLogs:
           type: boolean
-          description: "Include or not logs of contract interactions defaults to false"
+          description: Include or not logs of contract interactions defaults to false
         includeInternalTxs:
           type: boolean
-          description: "Include or not include internal transactions defaults to false"
+          description: Include or not include internal transactions defaults to false
         includeAllTxLogs:
           type: boolean
           description: Include all logs if atleast one value in tx or log matches stream config
@@ -1060,12 +1069,12 @@ components:
           type: string
           description: The stream id
       required:
-        - totalWebhooksDelivered
-        - totalWebhooksFailed
-        - totalLogsProcessed
-        - totalTxsProcessed
-        - totalTxsInternalProcessed
-        - streamId
+      - totalWebhooksDelivered
+      - totalWebhooksFailed
+      - totalLogsProcessed
+      - totalTxsProcessed
+      - totalTxsInternalProcessed
+      - streamId
       type: object
       additionalProperties: false
     UsageStatsModel:
@@ -1104,19 +1113,19 @@ components:
           format: date-time
           description: The date since this stats were last updated
       required:
-        - totalWebhooksDelivered
-        - totalWebhooksFailed
-        - totalLogsProcessed
-        - totalTxsProcessed
-        - totalTxsInternalProcessed
+      - totalWebhooksDelivered
+      - totalWebhooksFailed
+      - totalLogsProcessed
+      - totalTxsProcessed
+      - totalTxsInternalProcessed
       type: object
       additionalProperties: false
     SettingsRegion:
       enum:
-        - us-east-1
-        - us-west-2
-        - eu-central-1
-        - ap-southeast-1
+      - us-east-1
+      - us-west-2
+      - eu-central-1
+      - ap-southeast-1
       type: string
     SettingsModel:
       properties:
@@ -1160,227 +1169,16 @@ components:
         streamId:
           type: string
       required:
-        - block
-        - chainId
-        - logs
-        - txs
-        - txsInternal
-        - abi
-        - retries
-        - confirmed
-        - tag
-        - streamId
-      type: object
-      additionalProperties: false
-    AptosBlock:
-      properties:
-        lastVersion:
-          type: string
-        firstVersion:
-          type: string
-        hash:
-          type: string
-        timestamp:
-          type: string
-        number:
-          type: string
-      required:
-        - lastVersion
-        - firstVersion
-        - hash
-        - timestamp
-        - number
-      type: object
-    AptosCoin:
-      properties:
-        symbol:
-          type: string
-        decimals:
-          type: number
-          format: double
-        name:
-          type: string
-      required:
-        - symbol
-        - decimals
-        - name
-      type: object
-    AptosCoinDeposit:
-      properties:
-        txHash:
-          type: string
-        sequenceNumber:
-          type: string
-        valueWithDecimals:
-          type: string
-        coin:
-          $ref: '#/components/schemas/AptosCoin'
-        address:
-          type: string
-        value:
-          type: string
-      required:
-        - txHash
-        - sequenceNumber
-        - valueWithDecimals
-        - coin
-        - address
-        - value
-      type: object
-    AptosCoinTransfer:
-      properties:
-        txHash:
-          type: string
-        transaction:
-          type: string
-        valueWithDecimals:
-          type: number
-          format: double
-        from:
-          type: string
-        value:
-          type: string
-        to:
-          type: string
-        coin:
-          $ref: '#/components/schemas/AptosCoin'
-      required:
-        - txHash
-        - transaction
-        - valueWithDecimals
-        - from
-        - value
-        - to
-        - coin
-      type: object
-    AptosCoinWithdrawal:
-      properties:
-        txHash:
-          type: string
-        sequenceNumber:
-          type: string
-        valueWithDecimals:
-          type: string
-        coin:
-          $ref: '#/components/schemas/AptosCoin'
-        address:
-          type: string
-        value:
-          type: string
-      required:
-        - txHash
-        - sequenceNumber
-        - valueWithDecimals
-        - coin
-        - address
-        - value
-      type: object
-    AptosTransaction:
-      properties:
-        gasUnitPrice:
-          type: string
-        type:
-          type: string
-        gasUsed:
-          type: string
-        eventChangeHash:
-          type: string
-        stateChangeHash:
-          type: string
-        gasLimit:
-          type: string
-        sender:
-          type: string
-        success:
-          type: boolean
-        hash:
-          type: string
-      required:
-        - gasUnitPrice
-        - type
-        - gasUsed
-        - eventChangeHash
-        - stateChangeHash
-        - gasLimit
-        - sender
-        - success
-        - hash
-      type: object
-    AptosWebhook:
-      properties:
-        block:
-          $ref: '#/components/schemas/AptosBlock'
-        changes:
-          items:
-            properties:
-              txHash:
-                type: string
-            additionalProperties: {}
-            required:
-              - txHash
-            type: object
-          type: array
-        coinDeposits:
-          items:
-            $ref: '#/components/schemas/AptosCoinDeposit'
-          type: array
-        coinTransfers:
-          items:
-            $ref: '#/components/schemas/AptosCoinTransfer'
-          type: array
-        coinWithdrawals:
-          items:
-            $ref: '#/components/schemas/AptosCoinWithdrawal'
-          type: array
-        events:
-          items:
-            properties:
-              txHash:
-                type: string
-            additionalProperties: {}
-            required:
-              - txHash
-            type: object
-          type: array
-        network:
-          type: string
-          enum:
-            - mainnet
-            - testnet
-        payloads:
-          items:
-            properties:
-              txHash:
-                type: string
-            additionalProperties: {}
-            required:
-              - txHash
-            type: object
-          type: array
-        retries:
-          type: number
-          format: double
-        streamId:
-          type: string
-        tag:
-          type: string
-        transactions:
-          items:
-            $ref: '#/components/schemas/AptosTransaction'
-          type: array
-      required:
-        - block
-        - changes
-        - coinDeposits
-        - coinTransfers
-        - coinWithdrawals
-        - events
-        - network
-        - payloads
-        - retries
-        - streamId
-        - tag
-        - transactions
+      - block
+      - chainId
+      - logs
+      - txs
+      - txsInternal
+      - abi
+      - retries
+      - confirmed
+      - tag
+      - streamId
       type: object
       additionalProperties: false
     ITinyPayload:
@@ -1398,11 +1196,11 @@ components:
           type: number
           format: double
       required:
-        - chainId
-        - confirmed
-        - block
-        - records
-        - retries
+      - chainId
+      - confirmed
+      - block
+      - records
+      - retries
       type: object
       additionalProperties: false
     HistoryModel:
@@ -1413,9 +1211,7 @@ components:
           type: string
           format: date-time
         payload:
-          anyOf:
-            - $ref: '#/components/schemas/IWebhookUnParsed'
-            - $ref: '#/components/schemas/AptosWebhook'
+          $ref: '#/components/schemas/IWebhookUnParsed'
         tinyPayload:
           $ref: '#/components/schemas/ITinyPayload'
         errorMessage:
@@ -1427,12 +1223,12 @@ components:
         tag:
           type: string
       required:
-        - id
-        - date
-        - tinyPayload
-        - errorMessage
-        - webhookUrl
-        - streamId
+      - id
+      - date
+      - tinyPayload
+      - errorMessage
+      - webhookUrl
+      - streamId
       type: object
       additionalProperties: false
     HistoryResponse:
@@ -1447,8 +1243,8 @@ components:
           type: number
           format: double
       required:
-        - result
-        - total
+      - result
+      - total
       type: object
       additionalProperties: false
     IWebhookDeliveryLogsModel:
@@ -1469,8 +1265,8 @@ components:
         deliveryStatus:
           type: string
           enum:
-            - failed
-            - success
+          - failed
+          - success
         blockNumber:
           type: number
           format: double
@@ -1479,22 +1275,23 @@ components:
         type:
           type: string
           enum:
-            - evm
-            - aptos
+          - evm
+          - aptos
+          - bitcoin
         createdAt:
           type: string
           format: date-time
       required:
-        - id
-        - streamId
-        - chain
-        - webhookUrl
-        - retries
-        - deliveryStatus
-        - blockNumber
-        - errorMessage
-        - type
-        - createdAt
+      - id
+      - streamId
+      - chain
+      - webhookUrl
+      - retries
+      - deliveryStatus
+      - blockNumber
+      - errorMessage
+      - type
+      - createdAt
       type: object
       additionalProperties: false
     IWebhookDeliveryLogsResponse:
@@ -1509,18 +1306,382 @@ components:
           type: number
           format: double
       required:
-        - result
-        - total
+      - result
+      - total
       type: object
       additionalProperties: false
-    AptosNetwork:
+    CreateJobResponse:
+      properties:
+        id:
+          type: string
+        message:
+          type: string
+        totalJobs:
+          type: number
+          format: double
+        totalBlocks:
+          type: number
+          format: double
+      required:
+      - id
+      - message
+      - totalJobs
+      - totalBlocks
+      type: object
+      additionalProperties: false
+    CreateJobRequest:
+      properties:
+        chainId:
+          type: string
+        streamId:
+          type: string
+        fromTimestamp:
+          type: number
+          format: double
+        toTimestamp:
+          type: number
+          format: double
+        addresses:
+          items:
+            type: string
+          type: array
+      required:
+      - chainId
+      - streamId
+      - fromTimestamp
+      - toTimestamp
+      type: object
+      additionalProperties: false
+    HistoricalJobAttributes:
+      properties:
+        id:
+          type: string
+        streamId:
+          type: string
+        chainId:
+          type: string
+        fromTimestamp:
+          type: number
+          format: double
+        toTimestamp:
+          type: number
+          format: double
+        jobs:
+          type: number
+          format: double
+        jobsCompleted:
+          type: number
+          format: double
+        totalBlocks:
+          type: number
+          format: double
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+      - streamId
+      - chainId
+      - fromTimestamp
+      - toTimestamp
+      - jobs
+      - jobsCompleted
+      - totalBlocks
+      - status
+      type: object
+      additionalProperties: false
+    SolanaNetwork:
       items:
         type: string
         enum:
-          - mainnet
-          - testnet
+        - mainnet
+        - devnet
       type: array
-    AptosStreamType:
+    SolanaStreamType:
+      properties:
+        id:
+          type: string
+        allAddresses:
+          type: boolean
+        description:
+          type: string
+        isErrorSince:
+          type: string
+          format: date-time
+          nullable: true
+        network:
+          $ref: '#/components/schemas/SolanaNetwork'
+        programIds:
+          items:
+            type: string
+          type: array
+        mintAddresses:
+          items:
+            type: string
+          type: array
+        status:
+          $ref: '#/components/schemas/StreamsStatus'
+        statusMessage:
+          type: string
+        tag:
+          type: string
+        webhookUrl:
+          type: string
+        amountOfAddresses:
+          type: number
+          format: double
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - allAddresses
+      - description
+      - isErrorSince
+      - network
+      - programIds
+      - mintAddresses
+      - status
+      - statusMessage
+      - tag
+      - webhookUrl
+      - amountOfAddresses
+      - updatedAt
+      type: object
+      additionalProperties: false
+    SolanaCreateStreamType:
+      properties:
+        webhookUrl:
+          type: string
+          description: Webhook URL where moralis will send the POST request.
+        tag:
+          type: string
+          description: A user-provided tag that will be send along the webhook
+        mintAddresses:
+          items:
+            type: string
+          type: array
+          description: Solana token mint addresses to filter transactions by
+        programIds:
+          items:
+            type: string
+          type: array
+          description: Solana program IDs to filter transactions by
+        network:
+          $ref: '#/components/schemas/SolanaNetwork'
+          description: The network to listen to
+        description:
+          type: string
+          description: A description for this stream
+        allAddresses:
+          type: boolean
+          description: Include events for all addresses
+      required:
+      - webhookUrl
+      - tag
+      - network
+      - description
+      type: object
+    Partial_SolanaCreateStreamType_:
+      properties:
+        allAddresses:
+          type: boolean
+          description: Include events for all addresses
+        description:
+          type: string
+          description: A description for this stream
+        network:
+          $ref: '#/components/schemas/SolanaNetwork'
+          description: The network to listen to
+        programIds:
+          items:
+            type: string
+          type: array
+          description: Solana program IDs to filter transactions by
+        mintAddresses:
+          items:
+            type: string
+          type: array
+          description: Solana token mint addresses to filter transactions by
+        tag:
+          type: string
+          description: A user-provided tag that will be send along the webhook
+        webhookUrl:
+          type: string
+          description: Webhook URL where moralis will send the POST request.
+      type: object
+      description: Make all properties in T optional
+    Pick_SolanaStreamType.status-or-statusMessage_:
+      properties:
+        status:
+          $ref: '#/components/schemas/StreamsStatus'
+        statusMessage:
+          type: string
+      required:
+      - status
+      - statusMessage
+      type: object
+      description: From T, pick a set of properties whose keys are in the union K
+    SolanaBlockInfo:
+      properties:
+        previousBlockHash:
+          type: string
+        parentSlot:
+          type: string
+        blockTime:
+          type: number
+          format: double
+          nullable: true
+        blockHeight:
+          type: string
+          nullable: true
+        blockHash:
+          type: string
+        slot:
+          type: string
+      required:
+      - previousBlockHash
+      - parentSlot
+      - blockTime
+      - blockHeight
+      - blockHash
+      - slot
+      type: object
+    SolanaInstructionWebhook:
+      properties:
+        accounts:
+          items:
+            type: string
+          type: array
+          nullable: true
+        data:
+          type: string
+          nullable: true
+        programId:
+          type: string
+      required:
+      - accounts
+      - data
+      - programId
+      type: object
+    SolanaTransactionWebhook:
+      properties:
+        postTokenBalances:
+          items: {}
+          type: array
+          nullable: true
+        preTokenBalances:
+          items: {}
+          type: array
+          nullable: true
+        innerInstructions:
+          items: {}
+          type: array
+          nullable: true
+        instructions:
+          items:
+            $ref: '#/components/schemas/SolanaInstructionWebhook'
+          type: array
+        accountKeys:
+          items:
+            type: string
+          type: array
+        err:
+          nullable: true
+        fee:
+          type: string
+        blockTime:
+          type: number
+          format: double
+          nullable: true
+        slot:
+          type: string
+        signature:
+          type: string
+      required:
+      - postTokenBalances
+      - preTokenBalances
+      - innerInstructions
+      - instructions
+      - accountKeys
+      - err
+      - fee
+      - blockTime
+      - slot
+      - signature
+      type: object
+    SolanaWebhook:
+      properties:
+        block:
+          $ref: '#/components/schemas/SolanaBlockInfo'
+        chainId:
+          type: string
+        network:
+          type: string
+          enum:
+          - mainnet
+          - devnet
+        retries:
+          type: number
+          format: double
+        streamId:
+          type: string
+        tag:
+          type: string
+        transactions:
+          items:
+            $ref: '#/components/schemas/SolanaTransactionWebhook'
+          type: array
+        confirmed:
+          type: boolean
+      required:
+      - block
+      - chainId
+      - network
+      - retries
+      - streamId
+      - tag
+      - transactions
+      - confirmed
+      type: object
+      additionalProperties: false
+    SolanaBlockDataByNumber:
+      properties:
+        tag:
+          type: string
+          description: A user-provided tag that will be send along the webhook
+        allAddresses:
+          type: boolean
+          description: Include events for all addresses
+        addresses:
+          items:
+            type: string
+          type: array
+          description: Solana addresses to filter by
+        programIds:
+          items:
+            type: string
+          type: array
+          description: Solana program IDs to filter by
+        mintAddresses:
+          items:
+            type: string
+          type: array
+          description: Solana token mint addresses to filter by
+      type: object
+      additionalProperties: false
+    BitcoinNetwork:
+      items:
+        type: string
+        enum:
+        - mainnet
+        - testnet
+      type: array
+    BitcoinStreamType:
       properties:
         id:
           type: string
@@ -1530,30 +1691,20 @@ components:
           type: boolean
         description:
           type: string
-        includeChanges:
+        includeInputs:
           type: boolean
-        includeEvents:
-          type: boolean
-        includePayload:
+        includeOutputs:
           type: boolean
         isErrorSince:
           type: string
           format: date-time
           nullable: true
         network:
-          $ref: '#/components/schemas/AptosNetwork'
+          $ref: '#/components/schemas/BitcoinNetwork'
         status:
           $ref: '#/components/schemas/StreamsStatus'
         statusMessage:
           type: string
-        events:
-          items:
-            type: string
-          type: array
-        functions:
-          items:
-            type: string
-          type: array
         tag:
           type: string
         webhookUrl:
@@ -1561,55 +1712,43 @@ components:
         amountOfAddresses:
           type: number
           format: double
+        updatedAt:
+          type: string
+          format: date-time
       required:
-        - id
-        - allAddresses
-        - demo
-        - description
-        - includeChanges
-        - includeEvents
-        - includePayload
-        - isErrorSince
-        - network
-        - status
-        - statusMessage
-        - events
-        - functions
-        - tag
-        - webhookUrl
-        - amountOfAddresses
+      - id
+      - allAddresses
+      - demo
+      - description
+      - includeInputs
+      - includeOutputs
+      - isErrorSince
+      - network
+      - status
+      - statusMessage
+      - tag
+      - webhookUrl
+      - amountOfAddresses
+      - updatedAt
       type: object
       additionalProperties: false
-    AptosCreateStreamType:
+    BitcoinCreateStreamType:
       properties:
         webhookUrl:
           type: string
           description: Webhook URL where moralis will send the POST request.
         tag:
           type: string
-          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the specific stream if multiple streams are present
-        functions:
-          items:
-            type: string
-          type: array
-          description: 'An Array of events in string-signature format ex: [''0x1::aptos_account::transfer'']'
-        events:
-          items:
-            type: string
-          type: array
-          description: 'An Array of events in string-signature format ex: [''0x1::coin::WithdrawEvent'']'
+          description: A user-provided tag that will be send along the webhook
         network:
-          $ref: '#/components/schemas/AptosNetwork'
+          $ref: '#/components/schemas/BitcoinNetwork'
           description: The network to listen to
-        includePayload:
+        includeOutputs:
           type: boolean
-          description: "Include or not payload for every transaction in webhook defaults to false"
-        includeEvents:
+          description: Include or not output details in webhook defaults to true
+        includeInputs:
           type: boolean
-          description: "Include or not events in webhook defaults to false"
-        includeChanges:
-          type: boolean
-          description: "Include or not raw changes for every transaction in webhook defaults to false"
+          description: Include or not input details in webhook defaults to true
         description:
           type: string
           description: A description for this stream
@@ -1618,65 +1757,298 @@ components:
           description: Indicator if it is a demo stream
         allAddresses:
           type: boolean
-          description: Include events for all addresses (only applied when at least one event or function is provided)
+          description: Include events for all addresses
       required:
-        - webhookUrl
-        - tag
-        - network
-        - description
+      - webhookUrl
+      - tag
+      - network
+      - description
       type: object
-    Partial_AptosCreateStreamType_:
+    Partial_BitcoinCreateStreamType_:
       properties:
         allAddresses:
           type: boolean
-          description: Include events for all addresses (only applied when at least one event or function is provided)
+          description: Include events for all addresses
         demo:
           type: boolean
           description: Indicator if it is a demo stream
         description:
           type: string
           description: A description for this stream
-        includeChanges:
+        includeInputs:
           type: boolean
-          description: "Include or not raw changes for every transaction in webhook defaults to false"
-        includeEvents:
+          description: Include or not input details in webhook defaults to true
+        includeOutputs:
           type: boolean
-          description: "Include or not events in webhook defaults to false"
-        includePayload:
-          type: boolean
-          description: "Include or not payload for every transaction in webhook defaults to false"
+          description: Include or not output details in webhook defaults to true
         network:
-          $ref: '#/components/schemas/AptosNetwork'
+          $ref: '#/components/schemas/BitcoinNetwork'
           description: The network to listen to
-        events:
-          items:
-            type: string
-          type: array
-          description: 'An Array of events in string-signature format ex: [''0x1::coin::WithdrawEvent'']'
-        functions:
-          items:
-            type: string
-          type: array
-          description: 'An Array of events in string-signature format ex: [''0x1::aptos_account::transfer'']'
         tag:
           type: string
-          description: A user-provided tag that will be send along the webhook, the user can use this tag to identify the specific stream if multiple streams are present
+          description: A user-provided tag that will be send along the webhook
         webhookUrl:
           type: string
           description: Webhook URL where moralis will send the POST request.
       type: object
       description: Make all properties in T optional
-    Pick_AptosStreamType.status-or-statusMessage_:
+    BitcoinXpubType:
+      properties:
+        id:
+          type: string
+        streamId:
+          type: string
+        xpub:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+      - id
+      - streamId
+      - xpub
+      - createdAt
+      - updatedAt
+      type: object
+      additionalProperties: false
+    Pick_BitcoinStreamType.status-or-statusMessage_:
       properties:
         status:
           $ref: '#/components/schemas/StreamsStatus'
         statusMessage:
           type: string
       required:
-        - status
-        - statusMessage
+      - status
+      - statusMessage
       type: object
       description: From T, pick a set of properties whose keys are in the union K
+    BitcoinBlock:
+      properties:
+        difficulty:
+          type: string
+        nTx:
+          type: string
+        previousblockhash:
+          type: string
+          nullable: true
+        merkleroot:
+          type: string
+        weight:
+          type: string
+        size:
+          type: string
+        timestamp:
+          type: string
+        hash:
+          type: string
+        height:
+          type: string
+      required:
+      - difficulty
+      - nTx
+      - previousblockhash
+      - merkleroot
+      - weight
+      - size
+      - timestamp
+      - hash
+      - height
+      type: object
+    BitcoinInput:
+      properties:
+        value:
+          type: string
+          nullable: true
+        addresses:
+          items:
+            type: string
+          type: array
+          nullable: true
+        txinwitness:
+          items:
+            type: string
+          type: array
+          nullable: true
+        coinbase:
+          type: string
+          nullable: true
+        sequence:
+          type: number
+          format: double
+        scriptSigHex:
+          type: string
+          nullable: true
+        vout:
+          type: number
+          format: double
+          nullable: true
+        txid:
+          type: string
+          nullable: true
+      required:
+      - value
+      - addresses
+      - txinwitness
+      - coinbase
+      - sequence
+      - scriptSigHex
+      - vout
+      - txid
+      type: object
+    BitcoinOutput:
+      properties:
+        scriptPubKeyAddresses:
+          items:
+            type: string
+          type: array
+          nullable: true
+        scriptPubKeyAddress:
+          type: string
+          nullable: true
+        scriptPubKeyType:
+          type: string
+          nullable: true
+        scriptPubKeyHex:
+          type: string
+          nullable: true
+        n:
+          type: number
+          format: double
+        value:
+          type: number
+          format: double
+      required:
+      - scriptPubKeyAddresses
+      - scriptPubKeyAddress
+      - scriptPubKeyType
+      - scriptPubKeyHex
+      - n
+      - value
+      type: object
+    BitcoinTransactionWebhook:
+      properties:
+        timestamp:
+          type: number
+          format: double
+        blockTimestamp:
+          type: string
+        blockNumber:
+          type: number
+          format: double
+        blockHash:
+          type: string
+        vout:
+          items:
+            $ref: '#/components/schemas/BitcoinOutput'
+          type: array
+        vin:
+          items:
+            $ref: '#/components/schemas/BitcoinInput'
+          type: array
+        outputCount:
+          type: number
+          format: double
+        inputCount:
+          type: number
+          format: double
+        isCoinbase:
+          type: boolean
+        locktime:
+          type: number
+          format: double
+        weight:
+          type: number
+          format: double
+        vsize:
+          type: number
+          format: double
+        size:
+          type: number
+          format: double
+        version:
+          type: number
+          format: double
+        hash:
+          type: string
+        txid:
+          type: string
+      required:
+      - timestamp
+      - blockTimestamp
+      - blockNumber
+      - blockHash
+      - vout
+      - vin
+      - outputCount
+      - inputCount
+      - isCoinbase
+      - locktime
+      - weight
+      - vsize
+      - size
+      - version
+      - hash
+      - txid
+      type: object
+    BitcoinWebhook:
+      properties:
+        block:
+          $ref: '#/components/schemas/BitcoinBlock'
+        chainId:
+          type: string
+        network:
+          type: string
+          enum:
+          - mainnet
+          - testnet
+        retries:
+          type: number
+          format: double
+        streamId:
+          type: string
+        tag:
+          type: string
+        transactions:
+          items:
+            $ref: '#/components/schemas/BitcoinTransactionWebhook'
+          type: array
+        confirmed:
+          type: boolean
+      required:
+      - block
+      - chainId
+      - network
+      - retries
+      - streamId
+      - tag
+      - transactions
+      - confirmed
+      type: object
+      additionalProperties: false
+    BitcoinBlockDataByNumber:
+      properties:
+        tag:
+          type: string
+          description: A user-provided tag that will be send along the webhook
+        allAddresses:
+          type: boolean
+          description: Include events for all addresses
+        includeInputs:
+          type: boolean
+          description: Include or not input details in webhook defaults to true
+        includeOutputs:
+          type: boolean
+          description: Include or not output details in webhook defaults to true
+        addresses:
+          items:
+            type: string
+          type: array
+          description: Bitcoin addresses to filter by
+      type: object
+      additionalProperties: false
   securitySchemes:
     x-api-key:
       type: apiKey
@@ -1701,28 +2073,28 @@ paths:
       description: Get all the evm streams for the current project based on the project api-key .
       summary: Get streams
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: Limit response results max value 100
-          in: query
-          name: limit
-          required: true
-          schema:
-            format: double
-            type: number
-        - description: Cursor for fetching next page
-          in: query
-          name: cursor
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: status
-          required: false
-          schema:
-            type: string
+      - description: Limit response results max value 100
+        in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - description: Cursor for fetching next page
+        in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: status
+        required: false
+        schema:
+          type: string
       x-tag-sdk: evm-streams
     put:
       operationId: CreateStream
@@ -1736,9 +2108,9 @@ paths:
       description: Creates a new evm stream.
       summary: Create stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters: []
       requestBody:
         description: Provide a Stream Model
@@ -1762,16 +2134,16 @@ paths:
       description: Get a specific evm stream.
       summary: Get a specific evm stream.
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to get
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to get
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       x-tag-sdk: evm-streams
     post:
       operationId: UpdateStream
@@ -1785,16 +2157,16 @@ paths:
       description: Updates a specific evm stream.
       summary: Update stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to update
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to update
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       requestBody:
         description: Provide a Stream Model
         required: true
@@ -1816,16 +2188,16 @@ paths:
       description: Delete a specific evm stream.
       summary: Delete stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to delete
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to delete
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       x-tag-sdk: evm-streams
   /streams/evm/{id}/duplicate:
     post:
@@ -1840,16 +2212,16 @@ paths:
       description: Duplicate a specific evm stream.
       summary: Duplicate stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to duplicate
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to duplicate
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       x-tag-sdk: evm-streams
   /streams/evm/{id}/status:
     post:
@@ -1864,16 +2236,16 @@ paths:
       description: Updates the status of specific evm stream.
       summary: Update stream status
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to update
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to update
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       requestBody:
         description: Provide a Stream Model
         required: true
@@ -1896,29 +2268,29 @@ paths:
       description: Get all addresses associated with a specific stream.
       summary: Get addresses by stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: the id of the stream to get the addresses from
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-        - description: Limit response results max value 100
-          in: query
-          name: limit
-          required: true
-          schema:
-            format: double
-            type: number
-        - description: Cursor for fetching next page
-          in: query
-          name: cursor
-          required: false
-          schema:
-            type: string
+      - description: the id of the stream to get the addresses from
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - description: Limit response results max value 100
+        in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - description: Cursor for fetching next page
+        in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
       x-tag-sdk: evm-streams
     post:
       operationId: AddAddressToStream
@@ -1932,16 +2304,16 @@ paths:
       description: Adds an address to a Stream.
       summary: Add address to stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to add the address to
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to add the address to
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       requestBody:
         description: Provide a Address Model
         required: true
@@ -1963,16 +2335,16 @@ paths:
       description: Replaces address from a Stream.
       summary: Replaces address from stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to replace the address from
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to replace the address from
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       requestBody:
         description: Provide a Address Model
         required: true
@@ -1994,16 +2366,24 @@ paths:
       description: Deletes an address from a Stream.
       summary: Delete address from stream
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to delete the address from
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to delete the address from
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        description: Provide a Address Model
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressesRemove'
+              description: Provide a Address Model
       x-tag-sdk: evm-streams
   /streams/evm/{chainId}/block/{blockNumber}:
     post:
@@ -2015,26 +2395,26 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/IWebhook'
+                - $ref: '#/components/schemas/IWebhook'
                 nullable: true
       description: Get webhook data returned on the block number with provided stream config.
       summary: Get webhook data returned on the block number with provided stream config
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - in: path
-          name: chainId
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: blockNumber
-          required: true
-          schema:
-            format: double
-            type: number
+      - in: path
+        name: chainId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blockNumber
+        required: true
+        schema:
+          format: double
+          type: number
       requestBody:
         description: streams config and block number
         required: true
@@ -2055,31 +2435,31 @@ paths:
               schema:
                 type: number
                 enum:
-                  - null
+                - null
                 nullable: true
       description: Execute.
       summary: Send webhook based on a specific block number using stream config and addresses.
       tags:
-        - EVM Streams
+      - EVM Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - in: path
-          name: chainId
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: blockNumber
-          required: true
-          schema:
-            format: double
-            type: number
-        - in: path
-          name: streamId
-          required: true
-          schema:
-            type: string
+      - in: path
+        name: chainId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blockNumber
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: path
+        name: streamId
+        required: true
+        schema:
+          type: string
       x-tag-sdk: evm-streams
   /stats:
     get:
@@ -2094,9 +2474,9 @@ paths:
       description: Get the global stats for the account.
       summary: Get project stats
       tags:
-        - Stats
+      - Stats
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters: []
       x-tag-sdk: stats
   /stats/{streamId}:
@@ -2112,16 +2492,16 @@ paths:
       description: Get the stats for the streamId specified
       summary: Get project stats by Stream ID
       tags:
-        - Stats
+      - Stats
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to get the stats
-          in: path
-          name: streamId
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream to get the stats
+        in: path
+        name: streamId
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       x-tag-sdk: stats
   /settings:
     post:
@@ -2136,9 +2516,9 @@ paths:
       description: Set the settings for the current project based on the project api-key.
       summary: Set project settings
       tags:
-        - Project
+      - Project
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters: []
       requestBody:
         required: true
@@ -2159,9 +2539,9 @@ paths:
       description: Get the settings for the current project based on the project api-key.
       summary: Get project settings
       tags:
-        - Project
+      - Project
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters: []
       x-tag-sdk: project
   /history:
@@ -2177,63 +2557,63 @@ paths:
       description: Get all history
       summary: Get history
       tags:
-        - History
+      - History
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - in: query
-          name: limit
-          required: true
-          schema:
-            format: double
-            type: number
-        - in: query
-          name: cursor
-          required: false
-          schema:
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: transactionHash
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: excludePayload
+        required: false
+        schema:
+          type: boolean
+      - in: query
+        name: streamId
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: chainId
+        required: false
+        schema:
+          type: array
+          items:
             type: string
-        - in: query
-          name: transactionHash
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: excludePayload
-          required: false
-          schema:
-            type: boolean
-        - in: query
-          name: streamId
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: chainId
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - in: query
-          name: blockNumber
-          required: false
-          schema:
-            type: array
-            items:
-              type: number
-              format: double
-        - in: query
-          name: fromTimestamp
-          required: false
-          schema:
-            format: double
+      - in: query
+        name: blockNumber
+        required: false
+        schema:
+          type: array
+          items:
             type: number
-        - in: query
-          name: toTimestamp
-          required: false
-          schema:
             format: double
-            type: number
+      - in: query
+        name: fromTimestamp
+        required: false
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: toTimestamp
+        required: false
+        schema:
+          format: double
+          type: number
       x-tag-sdk: history
   /history/replay/{streamId}/{id}:
     post:
@@ -2248,22 +2628,22 @@ paths:
       description: Replay a specific history.
       summary: Replay history
       tags:
-        - History
+      - History
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream the history will be replayed
-          in: path
-          name: streamId
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-        - description: The id of the history to replay
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - description: The id of the stream the history will be replayed
+        in: path
+        name: streamId
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - description: The id of the history to replay
+        in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       x-tag-sdk: history
   /history/logs:
     get:
@@ -2278,69 +2658,69 @@ paths:
       description: Get All logs.
       summary: Get logs
       tags:
-        - History
+      - History
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - in: query
-          name: limit
-          required: true
-          schema:
-            format: double
-            type: number
-        - in: query
-          name: cursor
-          required: false
-          schema:
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: streamId
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: transactionHash
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: deliveryStatus
+        required: false
+        schema:
+          type: array
+          items:
             type: string
-        - in: query
-          name: streamId
-          required: false
-          schema:
+      - in: query
+        name: chainId
+        required: false
+        schema:
+          type: array
+          items:
             type: string
-        - in: query
-          name: transactionHash
-          required: false
-          schema:
-            type: string
-        - in: query
-          name: deliveryStatus
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - in: query
-          name: chainId
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-        - in: query
-          name: blockNumber
-          required: false
-          schema:
-            type: array
-            items:
-              type: number
-              format: double
-        - in: query
-          name: fromTimestamp
-          required: false
-          schema:
-            format: double
+      - in: query
+        name: blockNumber
+        required: false
+        schema:
+          type: array
+          items:
             type: number
-        - in: query
-          name: toTimestamp
-          required: false
-          schema:
             format: double
-            type: number
+      - in: query
+        name: fromTimestamp
+        required: false
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: toTimestamp
+        required: false
+        schema:
+          format: double
+          type: number
       x-tag-sdk: logs
-  /streams/aptos:
+  /streams/solana:
     get:
-      operationId: aptosStreamsGetAll
+      operationId: solanaStreamsGetAll
       responses:
         '200':
           description: Ok
@@ -2353,114 +2733,99 @@ paths:
                     format: double
                   result:
                     items:
-                      $ref: '#/components/schemas/AptosStreamType'
+                      $ref: '#/components/schemas/SolanaStreamType'
                     type: array
                 required:
-                  - total
-                  - result
+                - total
+                - result
                 type: object
-      description: Get all aptos streams.
-      summary: Gets all aptos streams.
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: Limit response results max value 100
-          in: query
-          name: limit
-          required: true
-          schema:
-            format: double
-            type: number
-        - description: Cursor for fetching next page
-          in: query
-          name: cursor
-          required: false
-          schema:
-            type: string
-      x-tag-sdk: aptos-streams
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      x-tag-sdk: solana-streams
     put:
-      operationId: aptosStreamsCreate
+      operationId: solanaStreamsCreate
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AptosStreamType'
-      description: Creates a new aptos stream.
-      summary: Create stream
+                $ref: '#/components/schemas/SolanaStreamType'
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters: []
       requestBody:
-        description: Provide a valid Aptos Stream Model
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AptosCreateStreamType'
-              description: Provide a valid Aptos Stream Model
-      x-tag-sdk: aptos-streams
-  /streams/aptos/{id}:
+              $ref: '#/components/schemas/SolanaCreateStreamType'
+      x-tag-sdk: solana-streams
+  /streams/solana/{id}:
     get:
-      operationId: aptosStreamsGet
+      operationId: solanaStreamsGet
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AptosStreamType'
-      description: Get a specific aptos stream.
-      summary: Get a specific aptos stream.
+                $ref: '#/components/schemas/SolanaStreamType'
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: The id of the stream to get
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      x-tag-sdk: aptos-streams
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      x-tag-sdk: solana-streams
     post:
-      operationId: aptosStreamsUpdate
+      operationId: solanaStreamsUpdate
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AptosStreamType'
-      description: Updates a new aptos stream.
-      summary: Update stream
+                $ref: '#/components/schemas/SolanaStreamType'
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
       requestBody:
-        description: Provide valid values of a Aptos Stream Model
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Partial_AptosCreateStreamType_'
-              description: Provide valid values of a Aptos Stream Model
-      x-tag-sdk: aptos-streams
+              $ref: '#/components/schemas/Partial_SolanaCreateStreamType_'
+      x-tag-sdk: solana-streams
     delete:
-      operationId: aptosStreamsDelete
+      operationId: solanaStreamsDelete
       responses:
         '200':
           description: Ok
@@ -2468,23 +2833,20 @@ paths:
             application/json:
               schema:
                 type: boolean
-      description: Deletes a aptos stream.
-      summary: Delete a stream
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: the id of the aptos stream to delete
-          in: path
-          name: id
-          required: true
-          schema:
-            type: string
-      x-tag-sdk: aptos-streams
-  /streams/aptos/{id}/address:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      x-tag-sdk: solana-streams
+  /streams/solana/{id}/address:
     post:
-      operationId: aptosStreamsAddAddresses
+      operationId: solanaStreamsAddAddresses
       responses:
         '200':
           description: Ok
@@ -2494,31 +2856,27 @@ paths:
                 properties:
                   address:
                     anyOf:
-                      - type: string
-                      - items:
-                          type: string
-                        type: array
+                    - type: string
+                    - items:
+                        type: string
+                      type: array
                   streamId:
                     type: string
                 required:
-                  - address
-                  - streamId
+                - address
+                - streamId
                 type: object
-      description: Adds addresses to an existing aptos stream
-      summary: Add addresses to an aptos stream
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: the id of the aptos stream to get the addresses from
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       requestBody:
-        description: Provide a list of valid Aptos addresses, or a single address
         required: true
         content:
           application/json:
@@ -2526,17 +2884,16 @@ paths:
               properties:
                 address:
                   anyOf:
-                    - type: string
-                    - items:
-                        type: string
-                      type: array
+                  - type: string
+                  - items:
+                      type: string
+                    type: array
               required:
-                - address
+              - address
               type: object
-              description: Provide a list of valid Aptos addresses, or a single address
-      x-tag-sdk: aptos-streams
+      x-tag-sdk: solana-streams
     delete:
-      operationId: aptosStreamsDeleteAddresses
+      operationId: solanaStreamsDeleteAddresses
       responses:
         '200':
           description: Ok
@@ -2546,32 +2903,44 @@ paths:
                 properties:
                   address:
                     anyOf:
-                      - type: string
-                      - items:
-                          type: string
-                        type: array
+                    - type: string
+                    - items:
+                        type: string
+                      type: array
                   streamId:
                     type: string
                 required:
-                  - address
-                  - streamId
+                - address
+                - streamId
                 type: object
-      description: Deletes addresses of an existing aptos stream
-      summary: Delete addresses of an aptos stream
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: the id of the aptos stream to get the addresses from
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-      x-tag-sdk: aptos-streams
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                address:
+                  anyOf:
+                  - type: string
+                  - items:
+                      type: string
+                    type: array
+              required:
+              - address
+              type: object
+      x-tag-sdk: solana-streams
     get:
-      operationId: aptosStreamsGetAddresses
+      operationId: solanaStreamsGetAddresses
       responses:
         '200':
           description: Ok
@@ -2589,76 +2958,609 @@ paths:
                       properties:
                         address:
                           anyOf:
-                            - type: string
-                            - items:
-                                type: string
-                              type: array
+                          - type: string
+                          - items:
+                              type: string
+                            type: array
                       required:
-                        - address
+                      - address
                       type: object
                     type: array
                 required:
-                  - total
-                  - result
+                - total
+                - result
                 type: object
-      description: Get all addresses associated with a specific aptos stream.
-      summary: Get addresses by aptos stream id
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: the id of the aptos stream to get the addresses from
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-        - description: Limit response results max value 100
-          in: query
-          name: limit
-          required: true
-          schema:
-            format: double
-            type: number
-        - description: Cursor for fetching next page
-          in: query
-          name: cursor
-          required: false
-          schema:
-            type: string
-      x-tag-sdk: aptos-streams
-  /streams/aptos/{id}/status:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      x-tag-sdk: solana-streams
+  /streams/solana/{id}/status:
     post:
-      operationId: aptosStreamsUpdateStatus
+      operationId: solanaStreamsUpdateStatus
       responses:
         '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pick_AptosStreamType.status-or-statusMessage_'
-      description: Update a Stream Status
-      summary: Update a Stream Status
+                $ref: '#/components/schemas/Pick_SolanaStreamType.status-or-statusMessage_'
       tags:
-        - Aptos Streams
+      - Solana Streams
       security:
-        - x-api-key: []
+      - x-api-key: []
       parameters:
-        - description: the id of the aptos stream to update the status
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
       requestBody:
-        description: Provide an object with the status to update can be 'active' or 'paused'
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/StreamsStatusUpdate'
-              description: Provide an object with the status to update can be 'active' or 'paused'
-      x-tag-sdk: aptos-streams
+      x-tag-sdk: solana-streams
+  /streams/solana/{chainId}/block/{blockNumber}:
+    post:
+      operationId: solanaGetBlockByNumber
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/SolanaWebhook'
+                nullable: true
+      tags:
+      - Solana Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: chainId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blockNumber
+        required: true
+        schema:
+          format: double
+          type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolanaBlockDataByNumber'
+      x-tag-sdk: solana-streams
+  /streams/solana/{chainId}/block-to-webhook/{blockNumber}/{streamId}:
+    post:
+      operationId: solanaBlockToWebhook
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: number
+                enum:
+                - null
+                nullable: true
+      tags:
+      - Solana Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: chainId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blockNumber
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: path
+        name: streamId
+        required: true
+        schema:
+          type: string
+      x-tag-sdk: solana-streams
+  /streams/bitcoin:
+    get:
+      operationId: bitcoinStreamsGetAll
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  total:
+                    type: number
+                    format: double
+                  result:
+                    items:
+                      $ref: '#/components/schemas/BitcoinStreamType'
+                    type: array
+                required:
+                - total
+                - result
+                type: object
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      x-tag-sdk: bitcoin-streams
+    put:
+      operationId: bitcoinStreamsCreate
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BitcoinStreamType'
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BitcoinCreateStreamType'
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{id}:
+    get:
+      operationId: bitcoinStreamsGet
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BitcoinStreamType'
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      x-tag-sdk: bitcoin-streams
+    post:
+      operationId: bitcoinStreamsUpdate
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BitcoinStreamType'
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Partial_BitcoinCreateStreamType_'
+      x-tag-sdk: bitcoin-streams
+    delete:
+      operationId: bitcoinStreamsDelete
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: boolean
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{id}/address:
+    post:
+      operationId: bitcoinStreamsAddAddresses
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  address:
+                    anyOf:
+                    - type: string
+                    - items:
+                        type: string
+                      type: array
+                  streamId:
+                    type: string
+                required:
+                - address
+                - streamId
+                type: object
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                address:
+                  anyOf:
+                  - type: string
+                  - items:
+                      type: string
+                    type: array
+              required:
+              - address
+              type: object
+      x-tag-sdk: bitcoin-streams
+    delete:
+      operationId: bitcoinStreamsDeleteAddresses
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  address:
+                    anyOf:
+                    - type: string
+                    - items:
+                        type: string
+                      type: array
+                  streamId:
+                    type: string
+                required:
+                - address
+                - streamId
+                type: object
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                address:
+                  anyOf:
+                  - type: string
+                  - items:
+                      type: string
+                    type: array
+              required:
+              - address
+              type: object
+      x-tag-sdk: bitcoin-streams
+    get:
+      operationId: bitcoinStreamsGetAddresses
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  cursor:
+                    type: string
+                  total:
+                    type: number
+                    format: double
+                  result:
+                    items:
+                      properties:
+                        address:
+                          anyOf:
+                          - type: string
+                          - items:
+                              type: string
+                            type: array
+                      required:
+                      - address
+                      type: object
+                    type: array
+                required:
+                - total
+                - result
+                type: object
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{id}/xpub:
+    post:
+      operationId: bitcoinStreamsAddXpub
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BitcoinXpubType'
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                xpub:
+                  type: string
+              required:
+              - xpub
+              type: object
+      x-tag-sdk: bitcoin-streams
+    get:
+      operationId: bitcoinStreamsGetXpubs
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                properties:
+                  cursor:
+                    type: string
+                  total:
+                    type: number
+                    format: double
+                  result:
+                    items:
+                      $ref: '#/components/schemas/BitcoinXpubType'
+                    type: array
+                required:
+                - total
+                - result
+                type: object
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - in: query
+        name: limit
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{id}/xpub/{xpubId}:
+    delete:
+      operationId: bitcoinStreamsDeleteXpub
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: boolean
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - in: path
+        name: xpubId
+        required: true
+        schema:
+          type: string
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{id}/status:
+    post:
+      operationId: bitcoinStreamsUpdateStatus
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pick_BitcoinStreamType.status-or-statusMessage_'
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamsStatusUpdate'
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{chainId}/block/{blockNumber}:
+    post:
+      operationId: bitcoinGetBlockByNumber
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/BitcoinWebhook'
+                nullable: true
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: chainId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blockNumber
+        required: true
+        schema:
+          format: double
+          type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BitcoinBlockDataByNumber'
+      x-tag-sdk: bitcoin-streams
+  /streams/bitcoin/{chainId}/block-to-webhook/{blockNumber}/{streamId}:
+    post:
+      operationId: bitcoinBlockToWebhook
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: number
+                enum:
+                - null
+                nullable: true
+      tags:
+      - Bitcoin Streams
+      security:
+      - x-api-key: []
+      parameters:
+      - in: path
+        name: chainId
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: blockNumber
+        required: true
+        schema:
+          format: double
+          type: number
+      - in: path
+        name: streamId
+        required: true
+        schema:
+          type: string
+      x-tag-sdk: bitcoin-streams
 servers:
-  - url: https://api.moralis-streams.com
+- url: https://api.moralis-streams.com
