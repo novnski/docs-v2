@@ -95,7 +95,7 @@ export const endpointMetadata = {
     "cus": 50
   },
   "/openapi-files/data-api/api.json GET /nft/{address}/traits/paginate": {
-    "cus": 50
+    "cus": 10
   },
   "/openapi-files/data-api/api.json GET /nft/{address}/traits/resync": {
     "cus": 10
@@ -229,7 +229,7 @@ export const endpointMetadata = {
     "mainnetOnly": true
   },
   "/openapi-files/data-api/api.json GET /wallets/{address}/insight": {
-    "cus": 20,
+    "cus": 100,
     "cusUnit": "chain",
     "mainnetOnly": true
   },
@@ -265,7 +265,7 @@ export const endpointMetadata = {
     "cus": 30
   },
   "/openapi-files/data-api/api.json GET /{address}/balance": {
-    "cus": 100
+    "cus": 10
   },
   "/openapi-files/data-api/api.json GET /{address}/erc20": {
     "cus": 100
@@ -280,7 +280,7 @@ export const endpointMetadata = {
     "cus": 50
   },
   "/openapi-files/data-api/api.json GET /{address}/nft/transfers": {
-    "cus": 20
+    "cus": 50
   },
   "/openapi-files/data-api/api.json GET /{address}/verbose": {
     "cus": 50
@@ -308,7 +308,7 @@ export const endpointMetadata = {
     "premium": true
   },
   "/openapi-files/data-api/api.json POST /tokens/analytics/timeseries": {
-    "cus": 150,
+    "cus": 200,
     "mainnetOnly": true,
     "premium": true
   },
@@ -328,16 +328,16 @@ export const endpointMetadata = {
     "cus": 10
   },
   "/openapi-files/data-api/solana-api.json GET /nft/{network}/{address}/metadata": {
-    "cus": 20
+    "cus": 10
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/exchange/{exchange}/bonding": {
-    "cus": 1
+    "cus": 50
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/exchange/{exchange}/graduated": {
-    "cus": 1
+    "cus": 50
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/exchange/{exchange}/new": {
-    "cus": 1
+    "cus": 50
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/holders/{address}": {
     "cus": 50
@@ -358,7 +358,7 @@ export const endpointMetadata = {
     "cus": 50
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/{address}/bonding-status": {
-    "cus": 1
+    "cus": 20
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/{address}/metadata": {
     "cus": 10
@@ -367,7 +367,7 @@ export const endpointMetadata = {
     "cus": 50
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/{address}/price": {
-    "cus": 50
+    "cus": 10
   },
   "/openapi-files/data-api/solana-api.json GET /token/{network}/{address}/swaps": {
     "cus": 50
