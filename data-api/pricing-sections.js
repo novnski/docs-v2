@@ -192,17 +192,17 @@ export const pricingSections = {
       {
         label: "getDefiSummary",
         href: "/data-api/evm/wallet/wallet-protocols",
-        operation: "/openapi-files/data-api/api.json GET /wallets/{address}/defi/summary",
+        operation: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/summary",
       },
       {
         label: "getDefiPositionsSummary",
         href: "/data-api/evm/wallet/wallet-positions",
-        operation: "/openapi-files/data-api/api.json GET /wallets/{address}/defi/positions",
+        operation: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/positions",
       },
       {
         label: "getDefiPositionsByProtocol",
         href: "/data-api/evm/wallet/detailed-positions",
-        operation: "/openapi-files/data-api/api.json GET /wallets/{address}/defi/{protocol}/positions",
+        operation: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/{protocol}/positions",
       },
       {
         label: "getSwapsByWalletAddress",
@@ -495,17 +495,17 @@ export const pricingSections = {
       {
         label: "getDefiSummary",
         href: "/data-api/evm/defi/wallet-protocols",
-        operation: "/openapi-files/data-api/api.json GET /wallets/{address}/defi/summary",
+        operation: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/summary",
       },
       {
         label: "getDefiPositionsSummary",
         href: "/data-api/evm/defi/wallet-positions",
-        operation: "/openapi-files/data-api/api.json GET /wallets/{address}/defi/positions",
+        operation: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/positions",
       },
       {
         label: "getDefiPositionsByProtocol",
         href: "/data-api/evm/defi/wallet-positions-detailed",
-        operation: "/openapi-files/data-api/api.json GET /wallets/{address}/defi/{protocol}/positions",
+        operation: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/{protocol}/positions",
       },
     ],
     blockchainApi: [

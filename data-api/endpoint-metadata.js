@@ -224,6 +224,18 @@ export const endpointMetadata = {
     "cus": 15,
     "mainnetOnly": true
   },
+  "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/positions": {
+    "cus": 5000,
+    "mainnetOnly": true
+  },
+  "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/summary": {
+    "cus": 5000,
+    "mainnetOnly": true
+  },
+  "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/defi/{protocol}/positions": {
+    "cus": 5000,
+    "mainnetOnly": true
+  },
   "/openapi-files/data-api/api.json GET /wallets/{address}/history": {
     "cus": 150,
     "mainnetOnly": true

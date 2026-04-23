@@ -132,6 +132,14 @@ def read_openapi_operation(path: Path) -> str | None:
     return openapi_match.group("operation")
 
 
+def find_page_slugs_for_operation(operation: str) -> list[str]:
+    slugs: list[str] = []
+    for path in (ROOT / "data-api").rglob("*.mdx"):
+        if read_openapi_operation(path) == operation:
+            slugs.append("/" + str(path.with_suffix("")).replace("\\", "/"))
+    return slugs
+
+
 def parse_operation(operation: str) -> tuple[Path, str, str] | None:
     match = OPERATION_RE.match(operation)
     if not match:
@@ -344,6 +352,9 @@ def validate_pricing_sections(
 
     missing_operations = sorted(set(metadata) - seen_operations)
     for operation in missing_operations:
+        slugs = find_page_slugs_for_operation(operation)
+        if slugs and all("/legacy/" in slug for slug in slugs):
+            continue
         errors.append(
             f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: missing pricing row for "
             f"{operation!r}"
