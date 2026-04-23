@@ -1,0 +1,59 @@
+name: Endpoint Pricing Check
+
+on:
+  pull_request:
+    paths:
+      - "data-api/**"
+      - "docs.json"
+      - "scripts/check-endpoint-metadata.py"
+      - "scripts/sync-endpoint-metadata.py"
+      - "scripts/sync-pricing-page.py"
+      - ".github/workflows/endpoint-pricing-check.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "data-api/**"
+      - "docs.json"
+      - "scripts/check-endpoint-metadata.py"
+      - "scripts/sync-endpoint-metadata.py"
+      - "scripts/sync-pricing-page.py"
+      - ".github/workflows/endpoint-pricing-check.yml"
+
+jobs:
+  endpoint-pricing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Validate docs config JSON
+        run: python3 -m json.tool docs.json >/dev/null
+
+      - name: Validate OpenAPI JSON files
+        run: find openapi-files -name '*.json' -print0 | xargs -0 -n1 python3 -m json.tool >/dev/null
+
+      - name: Validate endpoint pricing coverage
+        run: python3 scripts/check-endpoint-metadata.py
+
+      - name: Validate endpoint metadata modules
+        run: |
+          node --check data-api/endpoint-metadata.js
+          node --check data-api/pricing-sections.js
+
+      - name: Verify generated pricing pages are synced
+        run: |
+          python3 scripts/sync-endpoint-metadata.py
+          python3 scripts/sync-pricing-page.py
+          git diff --exit-code
