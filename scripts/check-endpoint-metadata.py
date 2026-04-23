@@ -18,6 +18,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_CONFIG_PATH = ROOT / "docs.json"
 METADATA_PATH = ROOT / "data-api" / "endpoint-metadata.js"
+PRICING_SECTIONS_PATH = ROOT / "data-api" / "pricing-sections.js"
+PRICING_PAGE_PATH = ROOT / "data-api" / "pricing.mdx"
 VISIBLE_ENDPOINT_PREFIXES = (
     "data-api/evm/",
     "data-api/solana/",
@@ -32,6 +34,10 @@ OPERATION_RE = re.compile(
 )
 METADATA_EXPORT_RE = re.compile(
     r"^export const endpointMetadata = (?P<metadata>\{.*\});\s*$",
+    re.S,
+)
+PRICING_SECTIONS_EXPORT_RE = re.compile(
+    r"^export const pricingSections = (?P<sections>\{.*\});\s*$",
     re.S,
 )
 
@@ -54,6 +60,25 @@ def load_endpoint_metadata(path: Path) -> dict[str, Any]:
         raise ValueError(f"{path.relative_to(ROOT)} must export an object")
 
     return metadata
+
+
+def load_pricing_sections(path: Path) -> dict[str, Any]:
+    text = path.read_text()
+    match = PRICING_SECTIONS_EXPORT_RE.match(text)
+    if not match:
+        raise ValueError(
+            f"{path.relative_to(ROOT)} must export `pricingSections` as a JSON object"
+        )
+
+    raw_sections = match.group("sections")
+    raw_sections = re.sub(r"([{,]\s*)([A-Za-z_][A-Za-z0-9_]*)\s*:", r'\1"\2":', raw_sections)
+    raw_sections = re.sub(r",(\s*[}\]])", r"\1", raw_sections)
+
+    sections = json.loads(raw_sections)
+    if not isinstance(sections, dict):
+        raise ValueError(f"{path.relative_to(ROOT)} must export an object")
+
+    return sections
 
 
 def collect_visible_pages(node: Any) -> set[str]:
@@ -244,6 +269,106 @@ def validate_visible_page(
         )
 
 
+def flatten_pricing_rows(
+    sections: dict[str, Any],
+    errors: list[str],
+) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for section_name, categories in sections.items():
+        if not isinstance(categories, dict):
+            errors.append(
+                f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: section {section_name!r} "
+                "must be an object"
+            )
+            continue
+        for category_name, category_rows in categories.items():
+            if not isinstance(category_rows, list):
+                errors.append(
+                    f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: category "
+                    f"{section_name}.{category_name} must be a list"
+                )
+                continue
+            for row in category_rows:
+                if not isinstance(row, dict):
+                    errors.append(
+                        f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: category "
+                        f"{section_name}.{category_name} contains a non-object row"
+                    )
+                    continue
+                rows.append(row)
+    return rows
+
+
+def validate_pricing_sections(
+    metadata: dict[str, Any],
+    errors: list[str],
+) -> None:
+    sections = load_pricing_sections(PRICING_SECTIONS_PATH)
+    rows = flatten_pricing_rows(sections, errors)
+    seen_operations: set[str] = set()
+
+    for row in rows:
+        label = row.get("label")
+        href = row.get("href")
+        operation = row.get("operation")
+        if not all(isinstance(value, str) and value for value in (label, href, operation)):
+            errors.append(
+                f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: each pricing row must have "
+                "non-empty string label, href, and operation"
+            )
+            continue
+
+        seen_operations.add(operation)
+
+        if operation not in metadata:
+            errors.append(
+                f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: pricing row for {label!r} "
+                f"references unknown operation {operation!r}"
+            )
+
+        page_path = ROOT / href.lstrip("/")
+        page_path = page_path.with_suffix(".mdx")
+        if not page_path.exists():
+            errors.append(
+                f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: pricing row for {label!r} "
+                f"references missing page {href!r}"
+            )
+            continue
+
+        page_operation = read_openapi_operation(page_path)
+        if page_operation != operation:
+            errors.append(
+                f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: pricing row {href!r} does not "
+                f"match page frontmatter ({operation!r} != {page_operation!r})"
+            )
+
+    missing_operations = sorted(set(metadata) - seen_operations)
+    for operation in missing_operations:
+        errors.append(
+            f"{PRICING_SECTIONS_PATH.relative_to(ROOT)}: missing pricing row for "
+            f"{operation!r}"
+        )
+
+
+def validate_pricing_page_sync(errors: list[str]) -> None:
+    sync_script = ROOT / "scripts" / "sync-pricing-page.py"
+    namespace: dict[str, Any] = {
+        "__name__": "sync_pricing_page",
+        "__file__": str(sync_script),
+    }
+    exec(sync_script.read_text(), namespace)  # noqa: S102 - local repo script only.
+    generated = namespace["render_pricing_page"](
+        namespace["load_pricing_sections"](),
+        namespace["load_endpoint_metadata"](),
+    )
+    current = PRICING_PAGE_PATH.read_text()
+    if current != generated:
+        errors.append(
+            f"{PRICING_PAGE_PATH.relative_to(ROOT)} is out of sync; run "
+            "`python3 scripts/sync-pricing-page.py`"
+        )
+
+
 def main() -> int:
     docs_config = load_json(DOCS_CONFIG_PATH)
     try:
@@ -261,6 +386,12 @@ def main() -> int:
 
     errors: list[str] = []
     validate_metadata_shape(metadata, errors)
+    try:
+        validate_pricing_sections(metadata, errors)
+        validate_pricing_page_sync(errors)
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        print(error, file=sys.stderr)
+        return 1
 
     spec_cache: dict[Path, dict[str, Any]] = {}
     for operation in sorted(metadata):

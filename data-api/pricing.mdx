@@ -58,11 +58,11 @@ These endpoints support both EVM and Solana chains.
 | [getWalletActiveChains](/data-api/evm/wallet/chain-activity) | 50 per chain |
 | [getWalletTokenBalancesPrice](/data-api/evm/wallet/token-balances) | 100 |
 | [getWalletTokenBalances](/data-api/evm/wallet/token-balances-legacy) | 100 |
-| [getNativeBalance](/data-api/evm/wallet/native-balance) | 100 |
-| [getNativeBalancesForAddresses](/data-api/evm/wallet/native-balances-batch) | 10 |
+| [getNativeBalance](/data-api/evm/wallet/native-balance) | 10 |
+| [getNativeBalancesForAddresses](/data-api/evm/wallet/native-balances-batch) | 10 per wallet |
 | [getWalletNFTs](/data-api/evm/wallet/nft-balances) | 50 |
 | [getWalletNFTCollections](/data-api/evm/wallet/nft-collections) | 50 |
-| [getWalletNFTTransfers](/data-api/evm/wallet/nft-transfers) | 20 |
+| [getWalletNFTTransfers](/data-api/evm/wallet/nft-transfers) | 50 |
 | [getNFTTradesByWallet](/data-api/evm/wallet/nft-trades-by-wallet) | 40 |
 | [getWalletTokenTransfers](/data-api/evm/wallet/token-transfers) | 50 |
 | [getWalletTransactions](/data-api/evm/wallet/wallet-transactions) | 30 |
@@ -77,7 +77,7 @@ These endpoints support both EVM and Solana chains.
 | [getSwapsByWalletAddress](/data-api/evm/wallet/wallet-swaps) | 50 |
 | [resolveENSDomain](/data-api/evm/wallet/ens-lookup) | 10 |
 | [resolveAddress](/data-api/evm/wallet/resolve-address) | 10 |
-| [getWalletInsight](/data-api/evm/wallet/wallet-insights) | 20 per chain |
+| [getWalletInsight](/data-api/evm/wallet/wallet-insights) | 100 per chain |
 
 ### Token API
 
@@ -113,6 +113,7 @@ These endpoints support both EVM and Solana chains.
 | [getNFTContractMetadata](/data-api/evm/nft/metadata/collection-metadata) | 50 |
 | [getNFTBulkContractMetadata](/data-api/evm/nft/metadata/collection-metadata-batch) | 5 |
 | [getNFTCollectionStats](/data-api/evm/nft/metadata/collection-stats) | 50 |
+| [getContractNFTs](/data-api/evm/nft/collections/nfts-by-collection) | 50 |
 | [getNFTFloorPriceByToken](/data-api/evm/nft/prices/floor) | 30 |
 | [getNFTFloorPriceByContract](/data-api/evm/nft/prices/collection-floor-price) | 30 |
 | [getNFTHistoricalFloorPriceByContract](/data-api/evm/nft/prices/historical-floor-price) | 50 |
@@ -125,7 +126,7 @@ These endpoints support both EVM and Solana chains.
 | [getNFTContractTransfers](/data-api/evm/nft/transfers/collection-transfers) | 50 |
 | [getNFTTransfers](/data-api/evm/nft/transfers/token-id-transfers) | 20 |
 | [getNFTTraitsByCollection](/data-api/evm/nft/traits/traits-by-collection) | 50 |
-| [getNFTTraitsByCollectionPaginate](/data-api/evm/nft/traits/traits-by-collection-paginated) | 50 |
+| [getNFTTraitsByCollectionPaginate](/data-api/evm/nft/traits/traits-by-collection-paginated) | 10 |
 | [getNFTByContractTraits](/data-api/evm/nft/traits/nfts-by-traits) | 50 |
 | [getTopNFTCollectionsByMarketCap](/data-api/evm/nft/discovery/nfts-by-market-cap) | 200 |
 | [getHottestNFTCollectionsByTradingVolume](/data-api/evm/nft/discovery/nfts-by-volume) | 200 |
@@ -187,7 +188,7 @@ These endpoints support both EVM and Solana chains.
 | [getMultipleTokenMetadata](/data-api/solana/token/token-metadata-batch) | 100 |
 | [getTokenScore](/data-api/solana/token/token-score) | 100 |
 | [getHistoricalTokenScore](/data-api/solana/token/token-score-timeseries) | 150 |
-| [getTokenPrice](/data-api/solana/token/prices/token-price) | 50 |
+| [getTokenPrice](/data-api/solana/token/prices/token-price) | 10 |
 | [getMultipleTokenPrices](/data-api/solana/token/prices/token-prices-batch) | 100 |
 | [getCandleSticks](/data-api/solana/token/prices/ohlc) | 150 |
 | [getTopHolders](/data-api/solana/token/holders/top-holders) | 50 |
@@ -199,21 +200,21 @@ These endpoints support both EVM and Solana chains.
 | [getPairStats](/data-api/solana/token/pairs/pair-stats) | 100 |
 | [getAggregatedTokenPairStats](/data-api/solana/token/market-metrics/token-analytics) | 80 |
 | [getSnipersByPairAddress](/data-api/solana/token/advanced-signals/snipers) | 50 |
-| [getNewTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) | 1 |
-| [getGraduatedTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) | 1 |
-| [getBondingTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) | 1 |
-| [getTokenBondingStatus](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status) | 1 |
+| [getNewTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) | 50 |
+| [getGraduatedTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) | 50 |
+| [getBondingTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) | 50 |
+| [getTokenBondingStatus](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status) | 20 |
 
 ### NFT API
 
 | Method | CU Cost |
 | --- | --- |
-| [getNFTMetadata](/data-api/solana/nft/nft-metadata) | 20 |
+| [getNFTMetadata](/data-api/solana/nft/nft-metadata) | 10 |
 
 ### Price API
 
 | Method | CU Cost |
 | --- | --- |
-| [getTokenPrice](/data-api/solana/price/token-price) | 50 |
+| [getTokenPrice](/data-api/solana/price/token-price) | 10 |
 | [getMultipleTokenPrices](/data-api/solana/price/token-prices-batch) | 100 |
 | [getCandleSticks](/data-api/solana/price/ohlc) | 150 |
