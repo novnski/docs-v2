@@ -52,35 +52,48 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
     <div
       className="endpoint-meta"
       style={{
-        border: "1px solid var(--border-color, #e2e8f0)",
+        border: "1px solid var(--endpoint-meta-border, #e2e8f0)",
         borderRadius: "8px",
         overflow: "hidden",
         marginBottom: "16px",
         fontSize: "14px",
         lineHeight: "1.6",
         maxWidth: "100%",
+        color: "var(--endpoint-meta-text, #4b5563)",
       }}
     >
       <style
         dangerouslySetInnerHTML={{
           __html: `
             .endpoint-meta {
-              --border-color: #e2e8f0;
-              --row-bg: #f8fafc;
-              --label-color: #374151;
+              --endpoint-meta-border: #e2e8f0;
+              --endpoint-meta-row-bg: #f8fafc;
+              --endpoint-meta-text: #4b5563;
+              --endpoint-meta-label: #111827;
+              --endpoint-meta-link: #0f7fff;
+              --endpoint-meta-link-hover: #0969da;
             }
-            @media (prefers-color-scheme: dark) {
-              .endpoint-meta {
-                --border-color: #374151 !important;
-                --row-bg: #1e293b !important;
-                --label-color: #d1d5db !important;
-              }
+
+            .endpoint-meta a {
+              color: var(--endpoint-meta-link);
+              font-weight: 500;
+              text-underline-offset: 2px;
             }
+
+            .endpoint-meta a:hover {
+              color: var(--endpoint-meta-link-hover);
+            }
+
+            /* Mintlify toggles dark mode with an html class. Avoid OS-level
+               color media queries so explicit light mode always wins. */
             html.dark .endpoint-meta,
             [data-theme="dark"] .endpoint-meta {
-              --border-color: #374151 !important;
-              --row-bg: #1e293b !important;
-              --label-color: #d1d5db !important;
+              --endpoint-meta-border: #374151;
+              --endpoint-meta-row-bg: #1e293b;
+              --endpoint-meta-text: #d1d5db;
+              --endpoint-meta-label: #f3f4f6;
+              --endpoint-meta-link: #60a5fa;
+              --endpoint-meta-link-hover: #93c5fd;
             }
           `,
         }}
@@ -95,14 +108,14 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
             padding: "10px 14px",
             borderBottom:
               i < items.length - 1
-                ? "1px solid var(--border-color, #e2e8f0)"
+                ? "1px solid var(--endpoint-meta-border, #e2e8f0)"
                 : "none",
-            backgroundColor: "var(--row-bg, #f8fafc)",
+            backgroundColor: "var(--endpoint-meta-row-bg, #f8fafc)",
           }}
         >
           <span style={{ flexShrink: 0 }}>{item.icon}</span>
           <span style={{ wordBreak: "break-word" }}>
-            <strong style={{ color: "var(--label-color, #374151)" }}>
+            <strong style={{ color: "var(--endpoint-meta-label, #111827)" }}>
               {item.label}:
             </strong>{" "}
             {item.text}
