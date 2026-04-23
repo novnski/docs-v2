@@ -1,0 +1,4 @@
+interface:
+  display_name: "Endpoint Pricing Guard"
+  short_description: "Keep endpoint CU pricing in sync"
+  default_prompt: "Use $endpoint-pricing-guard to add or verify endpoint CU pricing in this docs repo."

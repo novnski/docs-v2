@@ -22,6 +22,18 @@ Use MDX with concise headings, short paragraphs, and copy-pasteable examples. Ke
 
 For content-only edits, run JSON validation and `git diff --check`, then preview the affected pages with `mint dev`. For API reference changes, validate the edited file under `openapi-files/` and confirm the corresponding rendered page loads in the local preview. Check navigation changes by opening the relevant tab or group defined in `docs.json`.
 
+## Endpoint Pricing Workflow
+
+Visible endpoint pages under `data-api/evm/`, `data-api/solana/`, and `data-api/universal/` must always render an `EndpointMeta` price card. The editable source of truth is `data-api/endpoint-metadata.js`; page-level `EndpointMeta` props are generated from that file with `python3 scripts/sync-endpoint-metadata.py`.
+
+When adding a new endpoint page or changing a page's `openapi:` frontmatter:
+- Add or update the matching operation in `data-api/endpoint-metadata.js`
+- Run `python3 scripts/sync-endpoint-metadata.py`
+- Run `python3 scripts/check-endpoint-metadata.py`
+- If the price is new or suspicious, verify it with `python3 scripts/audit-endpoint-billing.py` using `MORALIS_API_KEY` and `MORALIS_BILLING_BEARER`
+
+Treat billed usage deltas as the strongest evidence, `x-request-weight` as a fast cross-check, and `404` fixture failures as ambiguous until a working fixture is found. For future work on this flow, use the repo-local skill at `.codex/skills/endpoint-pricing-guard/SKILL.md`.
+
 ## Commit & Pull Request Guidelines
 
 Recent commits use short, direct messages such as `Add Bitcoin Streams page` and `Escape path params in Bitcoin Streams endpoints table`. Keep commit messages imperative and scoped to one logical change. Pull requests should summarize changed sections, list validation performed, link relevant issues, and include screenshots for visible navigation, layout, or component changes.
