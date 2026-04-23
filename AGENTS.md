@@ -32,9 +32,9 @@ When adding a new endpoint page or changing a page's `openapi:` frontmatter:
 - If the endpoint should appear on `/data-api/pricing`, add or update the row definition in `data-api/pricing-sections.js`
 - Run `python3 scripts/sync-pricing-page.py`
 - Run `python3 scripts/check-endpoint-metadata.py`
-- If the price is new or suspicious, verify it with `python3 scripts/audit-endpoint-billing.py` using `MORALIS_API_KEY` and `MORALIS_BILLING_BEARER`
+- If the price is new or unknown, ask the user for the CU value and whether the endpoint is `mainnetOnly`, `premium`, or dynamic via `cusUnit`
 
-Treat billed usage deltas as the strongest evidence, `x-request-weight` as a fast cross-check, and `404` fixture failures as ambiguous until a working fixture is found. For future work on this flow, use the repo-local skill at `.codex/skills/endpoint-pricing-guard/SKILL.md`.
+Do not assume environment variables or billing access exist in this repo by default. For future work on this flow, use the repo-local skill at `.codex/skills/endpoint-pricing-guard/SKILL.md`.
 
 ## New Endpoint Checklist
 
@@ -46,7 +46,7 @@ When a new visible Data API endpoint page is added, or when an existing page is 
 - `data-api/pricing.mdx` has been regenerated via `python3 scripts/sync-pricing-page.py`
 - `python3 scripts/check-endpoint-metadata.py` passes
 - The GitHub Actions workflow `.github/workflows/endpoint-pricing-check.yml` would pass on the branch
-- If the CU value is new or questionable, it has been verified with the billing audit rather than guessed
+- If the CU value or flags are new or questionable, the user has confirmed the CU value and whether the endpoint is `mainnetOnly`, `premium`, or dynamic
 
 If someone asks “I added a new endpoint page, what is left?”, point them to this checklist and the repo-local skill.
 

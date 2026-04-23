@@ -56,47 +56,15 @@ git diff --check
 - Treat [data-api/endpoint-metadata.js](../../../data-api/endpoint-metadata.js) as the authoritative editable file.
 - Treat generated per-page `EndpointMeta` props as derived output.
 - Use `cusUnit` for dynamic pricing such as `chain` or `wallet`.
-- Prefer billed usage deltas over assumptions when verifying a new price.
-- Treat `200` billed results as authoritative.
-- Treat `404` results as ambiguous unless the user explicitly confirms the expected billed value.
-- Treat plan-restricted responses carefully: they may still bill.
-
-## Billing Verification
-
-Use the billing audit first when actual cost matters:
-
-```bash
-python3 scripts/audit-endpoint-billing.py --only '/wallets/{address}/chains'
-python3 scripts/audit-endpoint-billing.py --include-side-effecting
-```
-
-Required environment variables:
-- `MORALIS_API_KEY`
-- `MORALIS_BILLING_BEARER`
-
-Why this script exists:
-- `curl` works reliably against Moralis/Cloudflare from this repo environment
-- billed delta confirms whether `x-request-weight` matches actual usage
-
-Use the header audit for quick spot checks or cross-checking:
-
-```bash
-python3 scripts/audit-endpoint-weights.py --only '/wallets/{address}/chains'
-```
+- Ask the user for the CU value and flags when they are not already known.
+- Ask explicitly whether the endpoint is `mainnetOnly`, `premium`, or dynamic via `cusUnit`.
+- Do not assume this repo has environment variables or billing access available.
+- Do not tell the user to test it manually unless they asked for a testing workflow.
 
 ## Fixture Guidance
 
-Both audit scripts already include working default fixtures for common EVM and Solana cases.
-If an endpoint returns `404` or an unsupported-resource error, override the fixture instead of
-changing pricing immediately.
-
-Example:
-
-```bash
-python3 scripts/audit-endpoint-billing.py \
-  --only '/nft/{network}/{address}/metadata' \
-  --fixture sol_nft=Byg4PiNLvME2zi3fv8eb99mCKmvS6yxe64v2B55stqY5
-```
+If the user already knows the price or flags, prefer their answer over inference.
+If the user does not know them, stop and ask instead of inventing values.
 
 ## New Page Checklist
 
@@ -104,12 +72,16 @@ When adding a new visible endpoint page under `data-api/evm/`, `data-api/solana/
 `data-api/universal/`:
 
 1. Add the page with correct `openapi:` frontmatter.
-2. Add the operation to `data-api/endpoint-metadata.js`.
-3. Run `python3 scripts/sync-endpoint-metadata.py`.
-4. Add the row definition to `data-api/pricing-sections.js` if the endpoint belongs on `/data-api/pricing`.
-5. Run `python3 scripts/sync-pricing-page.py`.
-6. Run `python3 scripts/check-endpoint-metadata.py`.
-7. If the price is new or suspicious, verify it with `scripts/audit-endpoint-billing.py`.
+2. Ask the user for:
+   the CU value,
+   whether it is `mainnetOnly`,
+   whether it is `premium`,
+   and whether it is dynamic via `cusUnit`.
+3. Add the operation to `data-api/endpoint-metadata.js`.
+4. Run `python3 scripts/sync-endpoint-metadata.py`.
+5. Add the row definition to `data-api/pricing-sections.js` if the endpoint belongs on `/data-api/pricing`.
+6. Run `python3 scripts/sync-pricing-page.py`.
+7. Run `python3 scripts/check-endpoint-metadata.py`.
 
 When someone asks “I added this endpoint page, what is left?”, answer with this checklist and verify every item rather than summarizing loosely.
 
