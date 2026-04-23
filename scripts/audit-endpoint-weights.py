@@ -163,8 +163,10 @@ def path_value(operation: Operation, name: str) -> str:
 
     if name == "chain":
         return FIXTURES["evm_chain"]
-    if name in {"address", "tokenAddress", "token_address"}:
+    if name in {"address", "tokenAddress", "token_address", "walletAddress"}:
         if path.startswith("/wallets/") or path.startswith("/{address}"):
+            return FIXTURES["evm_wallet"]
+        if path.startswith("/v1/wallets/"):
             return FIXTURES["evm_wallet"]
         if path.startswith("/nft/"):
             return FIXTURES["evm_nft"]

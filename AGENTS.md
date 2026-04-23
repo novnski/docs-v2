@@ -29,10 +29,26 @@ Visible endpoint pages under `data-api/evm/`, `data-api/solana/`, and `data-api/
 When adding a new endpoint page or changing a page's `openapi:` frontmatter:
 - Add or update the matching operation in `data-api/endpoint-metadata.js`
 - Run `python3 scripts/sync-endpoint-metadata.py`
+- If the endpoint should appear on `/data-api/pricing`, add or update the row definition in `data-api/pricing-sections.js`
+- Run `python3 scripts/sync-pricing-page.py`
 - Run `python3 scripts/check-endpoint-metadata.py`
 - If the price is new or suspicious, verify it with `python3 scripts/audit-endpoint-billing.py` using `MORALIS_API_KEY` and `MORALIS_BILLING_BEARER`
 
 Treat billed usage deltas as the strongest evidence, `x-request-weight` as a fast cross-check, and `404` fixture failures as ambiguous until a working fixture is found. For future work on this flow, use the repo-local skill at `.codex/skills/endpoint-pricing-guard/SKILL.md`.
+
+## New Endpoint Checklist
+
+When a new visible Data API endpoint page is added, or when an existing page is rewired to a different `openapi:` operation, all of the following must be true before the work is done:
+- The page has the correct `openapi:` frontmatter
+- The page renders an `EndpointMeta` card
+- The operation exists in `data-api/endpoint-metadata.js`
+- The operation is included in `data-api/pricing-sections.js` if it should appear on `/data-api/pricing`
+- `data-api/pricing.mdx` has been regenerated via `python3 scripts/sync-pricing-page.py`
+- `python3 scripts/check-endpoint-metadata.py` passes
+- The GitHub Actions workflow `.github/workflows/endpoint-pricing-check.yml` would pass on the branch
+- If the CU value is new or questionable, it has been verified with the billing audit rather than guessed
+
+If someone asks “I added a new endpoint page, what is left?”, point them to this checklist and the repo-local skill.
 
 ## Commit & Pull Request Guidelines
 

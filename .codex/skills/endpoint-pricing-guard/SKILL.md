@@ -37,6 +37,8 @@ This fails when a visible endpoint page:
 - has `openapi:` but no endpoint pricing metadata
 - has stale `EndpointMeta` props that do not match the registry
 - points at an OpenAPI operation missing from the specs
+- is missing from `data-api/pricing-sections.js` when it should appear on `/data-api/pricing`
+- has a stale generated `data-api/pricing.mdx`
 
 5. Run repo verification.
 Run:
@@ -44,6 +46,7 @@ Run:
 ```bash
 python3 -m json.tool docs.json >/dev/null
 find openapi-files -name '*.json' -print0 | xargs -0 -n1 python3 -m json.tool >/dev/null
+python3 scripts/sync-pricing-page.py
 node --check data-api/endpoint-metadata.js
 git diff --check
 ```
@@ -103,8 +106,12 @@ When adding a new visible endpoint page under `data-api/evm/`, `data-api/solana/
 1. Add the page with correct `openapi:` frontmatter.
 2. Add the operation to `data-api/endpoint-metadata.js`.
 3. Run `python3 scripts/sync-endpoint-metadata.py`.
-4. Run `python3 scripts/check-endpoint-metadata.py`.
-5. If the price is new or suspicious, verify it with `scripts/audit-endpoint-billing.py`.
+4. Add the row definition to `data-api/pricing-sections.js` if the endpoint belongs on `/data-api/pricing`.
+5. Run `python3 scripts/sync-pricing-page.py`.
+6. Run `python3 scripts/check-endpoint-metadata.py`.
+7. If the price is new or suspicious, verify it with `scripts/audit-endpoint-billing.py`.
+
+When someone asks “I added this endpoint page, what is left?”, answer with this checklist and verify every item rather than summarizing loosely.
 
 Never report a new endpoint page as complete if it renders without a price card because the
 coverage check is specifically meant to prevent that failure mode.
