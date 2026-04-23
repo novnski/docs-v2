@@ -3,6 +3,6 @@ title: "Native Balance (Batch)"
 openapi: "/openapi-files/data-api/api.json GET /wallets/balances"
 ---
 
-<Info>
-  **Endpoint cost:** 10 CUs per wallet. [Learn more about compute units](/data-api/pricing).
-</Info>
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta operation="/openapi-files/data-api/api.json GET /wallets/balances" cus={10} cusUnit="wallet" />

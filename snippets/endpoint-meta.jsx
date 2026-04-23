@@ -1,9 +1,19 @@
-export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
+export const EndpointMeta = ({
+  operation,
+  premium,
+  cus,
+  cusUnit,
+  mainnetOnly,
+}) => {
+  const resolvedPremium = premium;
+  const resolvedCus = cus;
+  const resolvedCusUnit = cusUnit;
+  const resolvedMainnetOnly = mainnetOnly;
   const items = [];
 
-  const planName = typeof premium === "string" ? premium : "Pro";
+  const planName = typeof resolvedPremium === "string" ? resolvedPremium : "Pro";
 
-  if (premium) {
+  if (resolvedPremium) {
     items.push({
       icon: "\u26a0\ufe0f",
       label: "Premium endpoint",
@@ -19,26 +29,26 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
     });
   }
 
-  if (cus) {
-    const isDynamic = !!cusUnit;
+  if (resolvedCus) {
+    const isDynamic = !!resolvedCusUnit;
     items.push({
       icon: "\u26a1",
       label: isDynamic ? "Dynamic cost" : "Endpoint cost",
       text: isDynamic ? (
         <>
-          {cus} CUs per {cusUnit}.{" "}
+          {resolvedCus} CUs per {resolvedCusUnit}.{" "}
           <a href="/get-started/pricing#dynamic-endpoints">Learn more</a>.
         </>
       ) : (
         <>
-          {cus} CUs.{" "}
+          {resolvedCus} CUs.{" "}
           <a href="/get-started/pricing">Learn more</a>.
         </>
       ),
     });
   }
 
-  if (mainnetOnly) {
+  if (resolvedMainnetOnly) {
     items.push({
       icon: "\ud83d\udd17",
       label: "Mainnet only",
@@ -51,6 +61,7 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
   return (
     <div
       className="endpoint-meta"
+      data-operation={operation}
       style={{
         border: "1px solid var(--endpoint-meta-border, #e2e8f0)",
         borderRadius: "8px",

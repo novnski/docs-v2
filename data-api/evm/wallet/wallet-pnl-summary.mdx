@@ -6,6 +6,6 @@ openapi: "/openapi-files/data-api/api.json GET /wallets/{address}/profitability/
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 import { SupportedChains } from '/snippets/supported-chains.jsx'
 
-<EndpointMeta cus={30} mainnetOnly />
+<EndpointMeta operation="/openapi-files/data-api/api.json GET /wallets/{address}/profitability/summary" cus={30} mainnetOnly />
 
 <SupportedChains chains={["ethereum", "base", "polygon"]} />
