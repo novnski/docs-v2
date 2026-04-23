@@ -67,20 +67,34 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
             .endpoint-meta {
               --border-color: #e2e8f0;
               --row-bg: #f8fafc;
-              --label-color: #374151;
+              --label-color: #0f172a;
+              --text-color: #1f2937;
+            }
+            .endpoint-meta a {
+              color: #0f7fff !important;
+              text-decoration: underline;
             }
             @media (prefers-color-scheme: dark) {
               .endpoint-meta {
                 --border-color: #374151 !important;
                 --row-bg: #1e293b !important;
-                --label-color: #d1d5db !important;
+                --label-color: #f9fafb !important;
+                --text-color: #e5e7eb !important;
+              }
+              .endpoint-meta a {
+                color: #60a5fa !important;
               }
             }
             html.dark .endpoint-meta,
             [data-theme="dark"] .endpoint-meta {
               --border-color: #374151 !important;
               --row-bg: #1e293b !important;
-              --label-color: #d1d5db !important;
+              --label-color: #f9fafb !important;
+              --text-color: #e5e7eb !important;
+            }
+            html.dark .endpoint-meta a,
+            [data-theme="dark"] .endpoint-meta a {
+              color: #60a5fa !important;
             }
           `,
         }}
@@ -101,8 +115,13 @@ export const EndpointMeta = ({ premium, cus, cusUnit, mainnetOnly }) => {
           }}
         >
           <span style={{ flexShrink: 0 }}>{item.icon}</span>
-          <span style={{ wordBreak: "break-word" }}>
-            <strong style={{ color: "var(--label-color, #374151)" }}>
+          <span
+            style={{
+              wordBreak: "break-word",
+              color: "var(--text-color, #1f2937)",
+            }}
+          >
+            <strong style={{ color: "var(--label-color, #0f172a)" }}>
               {item.label}:
             </strong>{" "}
             {item.text}

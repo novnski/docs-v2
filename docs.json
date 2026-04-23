@@ -316,6 +316,14 @@
                   {
                     "group": "DeFi Positions",
                     "pages": [
+                      {
+                        "group": "Legacy",
+                        "pages": [
+                          "data-api/evm/wallet/legacy/wallet-protocols",
+                          "data-api/evm/wallet/legacy/wallet-positions",
+                          "data-api/evm/wallet/legacy/detailed-positions"
+                        ]
+                      },
                       "data-api/evm/wallet/wallet-protocols",
                       "data-api/evm/wallet/wallet-positions",
                       "data-api/evm/wallet/detailed-positions"
@@ -506,6 +514,14 @@
                 "group": "DeFi API",
                 "pages": [
                   "data-api/evm/defi/overview",
+                  {
+                    "group": "Legacy",
+                    "pages": [
+                      "data-api/evm/defi/legacy/wallet-protocols",
+                      "data-api/evm/defi/legacy/wallet-positions",
+                      "data-api/evm/defi/legacy/wallet-positions-detailed"
+                    ]
+                  },
                   "data-api/evm/defi/wallet-protocols",
                   "data-api/evm/defi/wallet-positions",
                   "data-api/evm/defi/wallet-positions-detailed"
