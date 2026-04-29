@@ -1,0 +1,12 @@
+---
+title: "Token Balances (Legacy)"
+openapi: "/openapi-files/data-api/api.json GET /wallets/{address}/tokens"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={100} />
+
+<Warning>
+  This endpoint returns token balances for a single chain per request. We recommend using the new multi-chain [Token Balances](/data-api/evm/wallet/token-balances) endpoint, which returns balances across multiple chains in a single call. All existing filters - spam exclusion, unverified contracts, liquidity thresholds, and USD pricing - are preserved.
+</Warning>

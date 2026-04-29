@@ -1,8 +1,14 @@
 ---
 title: "Token Balances"
-openapi: "/openapi-files/data-api/api.json GET /wallets/{address}/tokens"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddressOrPublicKey}/tokens"
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
 <EndpointMeta cus={100} />
+
+<Note>
+  This is the multi-chain Token Balances endpoint. **A single request returns a wallet's token balances across multiple EVM chains** - no more one-call-per-chain stitching. All existing filters (spam exclusion, unverified contracts, liquidity thresholds, USD pricing) are preserved.
+
+  The previous single-chain and ERC-20 endpoints are still available under [Legacy](/data-api/evm/wallet/legacy/token-balances).
+</Note>

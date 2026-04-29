@@ -303,7 +303,13 @@
                       "data-api/evm/wallet/native-balance",
                       "data-api/evm/wallet/native-balances-batch",
                       "data-api/evm/wallet/approvals",
-                      "data-api/evm/wallet/token-balances-legacy"
+                      {
+                        "group": "Legacy",
+                        "pages": [
+                          "data-api/evm/wallet/legacy/token-balances",
+                          "data-api/evm/wallet/legacy/token-balances-erc20"
+                        ]
+                      }
                     ]
                   },
                   {
