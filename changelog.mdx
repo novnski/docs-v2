@@ -3,6 +3,39 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="April 29, 2026" tags={["New Feature"]}>
+  ## DeFi API: Now on Solana
+
+The same three Universal DeFi API endpoints that returned EVM positions last week now return Solana positions too. No new endpoints, no schema changes - the existing calls now cover the most-used Solana protocols alongside EVM.
+
+**What's new:**
+
+- **Solana support** on the same Universal DeFi endpoints used for EVM
+- **7 of the most-used Solana protocols** supported at launch:
+  - Jito
+  - Save (formerly Solend)
+  - Jupiter Lending
+  - Raydium
+  - Orca
+  - Drift
+  - Marinade
+- **Unified schema:** identical response shape across EVM and Solana - no client-side stitching
+- **Single call:** query EVM and Solana wallets through the same endpoints with the same filters
+
+**Main endpoints:**
+
+- [`getDefiSummary`](/data-api/solana/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
+- [`getDefiPositionsSummary`](/data-api/solana/defi/wallet-positions) — all positions with token types, values, and reward tokens
+- [`getDefiPositionsByProtocol`](/data-api/solana/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
+
+**Usecases:** portfolio trackers, exchanges, tax tools, DeFi dashboards, and AI agents that need a unified DeFi position view across EVM and Solana in a single, consistent response.
+
+More Solana protocols are being added on a rolling basis. If you need a specific Solana protocol prioritized, [reach out to the team](https://moralis.com/contact-sales).
+
+[Explore the Solana DeFi API →](/data-api/solana/defi/overview)
+
+</Update>
+
 <Update label="April 22, 2026" tags={["Improvement"]}>
   ## DeFi API: 5,000+ Protocols, Now Multichain
 

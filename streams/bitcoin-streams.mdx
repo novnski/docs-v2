@@ -17,7 +17,8 @@ Webhooks typically arrive within seconds of a block being mined — no node, no 
 - **Real-time delivery:** end-to-end latency is typically under 10 seconds after a block is mined
 - **Dual-phase notifications:** matched transactions trigger two webhook deliveries: once when the transaction enters the mempool (unconfirmed) and again upon on-chain confirmation
 - **All address formats supported:** P2PKH (legacy, `1...`), P2SH (SegWit-wrapped, `3...`), and Bech32 native SegWit (`bc1q...`)
-- **Flexible monitoring:** watch specific addresses or enable firehose mode with `allAddresses` to receive every Bitcoin transaction
+- **Xpub support:** attach an extended public key to a stream and Moralis derives and monitors its addresses automatically — ideal for HD wallets
+- **Flexible monitoring:** watch specific addresses, attach an xpub, or enable firehose mode with `allAddresses` to receive every Bitcoin transaction
 - **Automatic retries:** Moralis retries webhook delivery until it receives an HTTP 200 response
 
 ---
@@ -72,13 +73,34 @@ When creating a Bitcoin stream you specify:
 
 All Bitcoin Streams endpoints require the `x-api-key` header.
 
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| `PUT` | `/streams/bitcoin` | Create a stream with a webhook URL and configuration |
-| `POST` | `/streams/bitcoin/:streamId/address` | Add an address to monitor (one per request) |
-| `GET` | `/streams/bitcoin?limit=100` | List existing Bitcoin streams |
-| `DELETE` | `/streams/bitcoin/:streamId` | Remove a stream |
-| `POST` | `/streams/bitcoin/bitcoin_mainnet/block-to-webhook/:blockNumber/:streamId` | Replay a historical block for backfilling |
+### Streams
+
+| Method   | Endpoint                                                               | Purpose                                                                        |
+| -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `PUT`    | `/streams/bitcoin`                                                     | [Create a stream](/streams/api-reference/bitcoin/streams/create-streams) with a webhook URL and configuration |
+| `POST`   | `/streams/bitcoin/{id}`                                                | [Update a stream's](/streams/api-reference/bitcoin/streams/update-stream) configuration                       |
+| `POST`   | `/streams/bitcoin/{id}/status`                                         | [Pause or resume a stream](/streams/api-reference/bitcoin/streams/update-stream-status)                       |
+| `GET`    | `/streams/bitcoin`                                                     | [List existing Bitcoin streams](/streams/api-reference/bitcoin/streams/get-streams)                           |
+| `GET`    | `/streams/bitcoin/{id}`                                                | [Get a stream by ID](/streams/api-reference/bitcoin/streams/get-stream-by-id)                                 |
+| `DELETE` | `/streams/bitcoin/{id}`                                                | [Remove a stream](/streams/api-reference/bitcoin/streams/delete-stream)                                       |
+| `POST`   | `/streams/bitcoin/{chainId}/block/{blockNumber}`                       | [Get webhook data for a historical block](/streams/api-reference/bitcoin/streams/get-webhook-data-by-block-number) |
+| `POST`   | `/streams/bitcoin/{chainId}/block-to-webhook/{blockNumber}/{streamId}` | [Replay a historical block](/streams/api-reference/bitcoin/streams/send-webhook-data-by-block-number) for backfilling |
+
+### Addresses
+
+| Method   | Endpoint                          | Purpose                                                                              |
+| -------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| `GET`    | `/streams/bitcoin/{id}/address`   | [List addresses](/streams/api-reference/bitcoin/address/get-addresses-by-stream) attached to a stream |
+| `POST`   | `/streams/bitcoin/{id}/address`   | [Add an address](/streams/api-reference/bitcoin/address/add-address-to-stream) to monitor (one per request) |
+| `DELETE` | `/streams/bitcoin/{id}/address`   | [Remove an address](/streams/api-reference/bitcoin/address/delete-address-from-stream) from a stream  |
+
+### Xpub
+
+| Method   | Endpoint                                  | Purpose                                                                         |
+| -------- | ----------------------------------------- | ------------------------------------------------------------------------------- |
+| `GET`    | `/streams/bitcoin/{id}/xpub`              | [List xpubs](/streams/api-reference/bitcoin/xpub/get-xpubs) attached to a stream |
+| `POST`   | `/streams/bitcoin/{id}/xpub`              | [Add an xpub](/streams/api-reference/bitcoin/xpub/add-xpub) to derive and monitor addresses from |
+| `DELETE` | `/streams/bitcoin/{id}/xpub/{xpubId}`     | [Remove an xpub](/streams/api-reference/bitcoin/xpub/delete-xpub) from a stream   |
 
 ---
 
@@ -136,7 +158,7 @@ const satoshis = Math.round(btc * 1e8);
 1. Generate an API key from [admin.moralis.com](https://admin.moralis.com)
 2. Deploy a publicly accessible HTTPS webhook endpoint
 3. Create the stream via `PUT /streams/bitcoin`
-4. Register each watched address individually via `POST /streams/bitcoin/{streamId}/address`
+4. Attach the wallets you want to monitor — either by [registering individual addresses](/streams/api-reference/bitcoin/address/add-address-to-stream) (`POST /streams/bitcoin/{id}/address`) or by [adding an xpub](/streams/api-reference/bitcoin/xpub/add-xpub) (`POST /streams/bitcoin/{id}/xpub`) to auto-derive and watch its addresses
 5. Implement the verification handler — respond to the empty-body test `POST` with HTTP `200`
 6. Build upsert logic keyed on `txid` to handle the mempool → confirmed transition
 7. Always return HTTP `200` from your handler, even when your own processing errors — Moralis retries on non-200 responses

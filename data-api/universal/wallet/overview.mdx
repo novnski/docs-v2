@@ -1,0 +1,57 @@
+---
+title: "Wallets API"
+sidebarTitle: "Overview"
+description: "Multi-chain wallet endpoints in the Universal API - return balances and holdings across multiple chains in a single request."
+---
+
+## Overview
+
+The **Universal Wallets API** brings multi-chain wallet data into a single, consistent request shape. Instead of querying one chain at a time and stitching responses together client-side, you ask for the chains you care about in one call and receive a unified response.
+
+The first endpoint in this group is **Cross-Chain Token Balances** - a multi-chain version of one of our most-used Deep Index endpoints.
+
+---
+
+## What Is the Universal Wallets API?
+
+The Universal Wallets API lets you query:
+
+- **Cross-Chain Token Balances** - Token balances for a wallet across multiple chains in one call
+
+More multi-chain wallet endpoints are on the way as we consolidate cross-chain functionality into the Universal API.
+
+---
+
+## Key Features
+
+- **Multi-chain in one call** - Query a wallet across many chains in a single request
+- **Same trusted filters** - Spam exclusion, unverified contracts, liquidity thresholds, USD pricing - all carry over from the legacy Deep Index endpoints
+- **Unified response shape** - One schema across chains, no client-side stitching
+- **Direct migration path** - Existing implementations port cleanly with minimal changes
+
+---
+
+## Common Use Cases
+
+- **Wallets** - Show full multi-chain holdings on a single screen
+- **Exchanges** - Surface a user's deposit balances across networks
+- **Portfolio Trackers** - Aggregate token holdings across EVM (and, soon, Bitcoin and Solana) in one query
+- **Tax Tools** - Pull a complete asset list per wallet for cost-basis and reporting flows
+- **AI Agents** - Hand the model a single response containing the wallet's full token footprint
+
+---
+
+## Roadmap
+
+The current scope is EVM. Coming next:
+
+- **Bitcoin** - native Bitcoin wallet balances in the same endpoint
+- **Solana** - Solana token balances brought into the Universal API alongside our existing dedicated Solana Token Balances endpoint, unified into the same multi-chain request structure
+
+The end state: one endpoint, one request shape, balances across EVM, Bitcoin, and Solana wallets.
+
+---
+
+## Get Started
+
+- [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances)

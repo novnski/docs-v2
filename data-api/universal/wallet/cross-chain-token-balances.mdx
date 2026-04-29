@@ -1,0 +1,14 @@
+---
+title: "Cross-Chain Token Balances"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddressOrPublicKey}/tokens"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={100} />
+
+<Note>
+  This is the multi-chain successor to the legacy Deep Index [Token Balances](/data-api/evm/wallet/legacy/token-balances-erc20) endpoint. The same filters - spam exclusion, unverified contracts, liquidity thresholds, USD pricing - are preserved. The headline change is that **a single request now returns balances across multiple chains.**
+
+  Currently EVM. Bitcoin and Solana support is on the roadmap.
+</Note>
