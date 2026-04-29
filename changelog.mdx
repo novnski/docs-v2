@@ -3,6 +3,99 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="April 29, 2026" tags={["New Feature"]}>
+  ## DeFi API: Now on Solana
+
+The same three Universal DeFi API endpoints that returned EVM positions last week now return Solana positions too. No new endpoints, no schema changes - the existing calls now cover the most-used Solana protocols alongside EVM.
+
+**What's new:**
+
+- **Solana support** on the same Universal DeFi endpoints used for EVM
+- **7 of the most-used Solana protocols** supported at launch:
+  - Jito
+  - Save (formerly Solend)
+  - Jupiter Lending
+  - Raydium
+  - Orca
+  - Drift
+  - Marinade
+- **Unified schema:** identical response shape across EVM and Solana - no client-side stitching
+- **Single call:** query EVM and Solana wallets through the same endpoints with the same filters
+
+**Main endpoints:**
+
+- [`getDefiSummary`](/data-api/solana/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
+- [`getDefiPositionsSummary`](/data-api/solana/defi/wallet-positions) — all positions with token types, values, and reward tokens
+- [`getDefiPositionsByProtocol`](/data-api/solana/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
+
+**Usecases:** portfolio trackers, exchanges, tax tools, DeFi dashboards, and AI agents that need a unified DeFi position view across EVM and Solana in a single, consistent response.
+
+More Solana protocols are being added on a rolling basis. If you need a specific Solana protocol prioritized, [reach out to the team](https://moralis.com/contact-sales).
+
+[Explore the Solana DeFi API →](/data-api/solana/defi/overview)
+
+</Update>
+
+<Update label="April 29, 2026" tags={["New Feature"]}>
+  ## Streams: Now on Solana
+
+Moralis Streams now supports **Solana mainnet**. The same product, the same delivery model (webhook push to your endpoint) - extended to Solana.
+
+If you're already using Streams on EVM, the developer experience is familiar: define a stream, set filters, receive webhooks. The differences are in **what you filter on**, because Solana's transaction model is different from EVM's.
+
+**Filters available at launch:**
+
+- `addresses` — match transactions where any `accountKey` in the transaction matches one of the watched addresses
+- `programIds` — filter to transactions invoking specific Solana programs (e.g., the SPL Token Program)
+- `mintAddresses` — filter to transactions involving specific SPL tokens, matched via `pre` / `postTokenBalances`
+- `allAddresses` — receive every transaction on the network
+
+**What's in the payload:** transaction `signature`, full `accountKeys`, top-level and inner instructions, and pre / post SPL token balances - everything you need to compute deltas without replaying instruction logic.
+
+**Usecases:** wallet activity notifications, DEX / DeFi position monitoring, SPL token transfer tracking (airdrops, payments, compliance), bot monitoring and MEV detection, and AI agents reacting to on-chain events.
+
+If you've built on Streams for EVM, you can stand up a Solana equivalent in minutes - the developer model is identical, only the filters differ.
+
+[Explore Solana Streams →](/streams/solana-streams)
+
+</Update>
+
+<Update label="April 29, 2026" tags={["New Feature"]}>
+  ## Cross-Chain Token Balances on the Universal API
+
+One of our most popular Deep Index endpoints, **Token Balances**, is now available on the Universal API as **Cross-Chain Token Balances**.
+
+The headline change: **a single request returns a wallet's token balances across multiple chains.** Previously, getting a multi-chain portfolio meant one request per chain and stitching results together client-side. Now it's one call.
+
+**What changed vs. the legacy endpoint:**
+
+|                | Legacy (`getWalletTokenBalancesPrice`) | New (`getTokenBalances`)              |
+| -------------- | -------------------------------------- | ------------------------------------- |
+| Scope          | Single chain per request               | Multi-chain in one request            |
+| Chain coverage | EVM                                    | EVM (Bitcoin and Solana coming)       |
+| Filters        | Spam exclusion, unverified contracts, liquidity thresholds, etc. | All preserved |
+| Pricing data   | Included                               | Included                              |
+
+Everything you already rely on - spam filtering, unverified contract exclusion, liquidity thresholds, USD pricing - works exactly the same. The only difference is you can now ask for multiple chains in a single call.
+
+**Usecases:** wallets, exchanges, portfolio dashboards, tax tools, and AI agents that need a wallet's full multi-chain holdings without firing one request per chain.
+
+**Roadmap:** Bitcoin support comes next, followed by Solana. The end state is one endpoint, one request shape, balances across EVM, Bitcoin, and Solana wallets.
+
+[Explore Cross-Chain Token Balances →](/data-api/universal/wallet/cross-chain-token-balances)
+
+<iframe
+  src="https://www.youtube.com/embed/K9mL6EiWvtU"
+  title="Cross-Chain Token Balances Tracker"
+  width="100%"
+  height="400"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+/>
+
+</Update>
+
 <Update label="April 22, 2026" tags={["Improvement"]}>
   ## DeFi API: 5,000+ Protocols, Now Multichain
 

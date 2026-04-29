@@ -641,6 +641,16 @@
                   "data-api/solana/token/prices/token-prices-batch",
                   "data-api/solana/price/ohlc"
                 ]
+              },
+              {
+                "group": "DeFi API",
+                "tag": "New",
+                "pages": [
+                  "data-api/solana/defi/overview",
+                  "data-api/solana/defi/wallet-protocols",
+                  "data-api/solana/defi/wallet-positions",
+                  "data-api/solana/defi/wallet-positions-detailed"
+                ]
               }
             ]
           },
@@ -648,6 +658,14 @@
             "group": "Universal API",
             "pages": [
               "data-api/universal/overview",
+              {
+                "group": "Wallets API",
+                "tag": "New",
+                "pages": [
+                  "data-api/universal/wallet/overview",
+                  "data-api/universal/wallet/cross-chain-token-balances"
+                ]
+              },
               {
                 "group": "Token API",
                 "tag": "New features",
@@ -817,7 +835,9 @@
           },
           {
             "group": "Solana Streams API",
+            "tag": "New",
             "pages": [
+              "streams/solana-streams",
               {
                 "group": "Streams",
                 "pages": [
