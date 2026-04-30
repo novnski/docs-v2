@@ -1813,6 +1813,21 @@
     { "source": "/reference/weights-and-rate-limits", "destination": "/data-api/pricing" }
   ],
   "footer": {
+    "links": [
+      {
+        "header": "AI",
+        "items": [
+          {
+            "label": "LLMs.txt",
+            "href": "https://docs.moralis.com/llms.txt"
+          },
+          {
+            "label": "Full LLMs.txt",
+            "href": "https://docs.moralis.com/llms-full.txt"
+          }
+        ]
+      }
+    ],
     "socials": {
       "youtube": "https://www.youtube.com/channel/UCgWS9Q3P5AxCWyQLT2kQhBw",
       "x": "https://x.com/moralisdevs",
