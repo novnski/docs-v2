@@ -30,6 +30,65 @@ If you've used Streams on EVM, the developer model is identical — only the fil
 
 </Update>
 
+<Update label="May 5, 2026" tags={["Deprecation"]}>
+  ## Cortex API, Discovery, Volume, Sniper, ERC20, and Market Data Endpoints Sunsetting
+
+The following endpoints and APIs are now deprecated and will be removed on **June 4, 2026** (30 days from today):
+
+**Cortex API:**
+
+- `POST /chat` — migrate to [Onchain Skills](/data-api/onchain-skills/overview), which replaces Cortex as our AI interface for Moralis data.
+
+
+**Discovery endpoints (`/discovery/*`):**
+
+- `POST /discovery/tokens`
+- `GET /discovery/token`
+- `GET /discovery/tokens/rising-liquidity`
+- `GET /discovery/tokens/buying-pressure`
+- `GET /discovery/tokens/solid-performers`
+- `GET /discovery/tokens/experienced-buyers`
+- `GET /discovery/tokens/risky-bets`
+- `GET /discovery/tokens/blue-chip`
+- `GET /discovery/tokens/top-gainers`
+- `GET /discovery/tokens/top-losers`
+- `GET /discovery/tokens/trending`
+
+**Volume endpoints (`/volume/*`):**
+
+- `GET /volume/chains`
+- `GET /volume/categories`
+- `GET /volume/timeseries`
+- `GET /volume/timeseries/{categoryId}`
+
+**Sniper endpoints (EVM and Solana):**
+
+- `GET /pairs/{address}/snipers` (EVM)
+- `GET /token/{network}/pairs/{pairAddress}/snipers` (Solana)
+
+**ERC20 endpoints (EVM):**
+
+- `GET /erc20/exchange/{exchangeName}/new`
+- `GET /erc20/exchange/{exchangeName}/bonding`
+- `GET /erc20/exchange/{exchangeName}/graduated`
+- `GET /erc20/{tokenAddress}/bondingStatus`
+- `GET /erc20/{address}/stats`
+- `GET /erc20/{token_address}/pairs/stats` — migrate to [`GET /tokens/{tokenAddress}/analytics`](/data-api/universal/token/analytics/token-analytics)
+- `GET /erc20/metadata/symbols` — migrate to [`GET /tokens/search`](/data-api/universal/token/search/token-search)
+
+**Market data endpoints (`/market-data/*`):**
+
+- `GET /market-data/erc20s/top-tokens`
+- `GET /market-data/erc20s/top-movers`
+- `GET /market-data/nfts/top-collections`
+- `GET /market-data/nfts/hottest-collections`
+- `GET /market-data/global/market-cap`
+- `GET /market-data/global/volume`
+
+If you rely on any of these endpoints, please migrate before June 4, 2026. [Reach out to the team](https://moralis.com/contact-sales) if you need help identifying replacements.
+
+</Update>
+
 <Update label="Apr 30, 2026" tags={["Deprecation"]}>
   ## Fantom Chain Sunsetting
 
