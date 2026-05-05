@@ -6,214 +6,192 @@ description: "New releases and improvements"
 <Update label="May 5, 2026" tags={["New Feature"]}>
   ## Solana Streams
 
-Moralis Streams now extends to Solana mainnet. Define a stream, set filters, and receive real-time webhook deliveries the moment matching transactions land in a slot - no node, no polling, no missed slots.
+  Moralis Streams now extends to Solana mainnet. Define a stream, set filters, and receive real-time webhook deliveries the moment matching transactions land in a slot - no node, no polling, no missed slots.
 
-**What's new:**
+  **What's new:**
 
-- **Solana mainnet support** on the same Streams developer model used for EVM
-- **Pre / post token balances** included in every payload, so you can compute exact SPL token deltas without replaying instructions
-- **Inner instructions included**, so you can trace nested behavior across Cross-Program Invocations (CPIs) directly from the payload
-- **Automatic retries** until your endpoint returns HTTP 200
+  - **Solana mainnet support** on the same Streams developer model used for EVM
+  - **Pre / post token balances** included in every payload, so you can compute exact SPL token deltas without replaying instructions
+  - **Inner instructions included**, so you can trace nested behavior across Cross-Program Invocations (CPIs) directly from the payload
+  - **Automatic retries** until your endpoint returns HTTP 200
 
-**Filters available at launch:**
+  **Filters available at launch:**
 
-- `addresses` — match transactions where any `accountKey` in the transaction matches a watched address
-- `programIds` — filter to transactions invoking specific Solana programs (e.g., the SPL Token Program)
-- `mintAddresses` — filter to transactions involving specific SPL tokens, matched via `pre` / `postTokenBalances`
-- `allAddresses` — firehose mode: receive every Solana transaction
+  - `addresses` — match transactions where any `accountKey` in the transaction matches a watched address
+  - `programIds` — filter to transactions invoking specific Solana programs (e.g., the SPL Token Program)
+  - `mintAddresses` — filter to transactions involving specific SPL tokens, matched via `pre` / `postTokenBalances`
+  - `allAddresses` — firehose mode: receive every Solana transaction
 
-**Use cases:** wallet activity notifications, DEX / DeFi position monitoring by `programId`, SPL token transfer tracking, bot and MEV monitoring, and AI agents reacting to on-chain events as they happen.
+  **Use cases:** wallet activity notifications, DEX / DeFi position monitoring by `programId`, SPL token transfer tracking, bot and MEV monitoring, and AI agents reacting to on-chain events as they happen.
 
-If you've used Streams on EVM, the developer model is identical — only the filters differ.
+  If you've used Streams on EVM, the developer model is identical — only the filters differ.
 
-[Explore Solana Streams →](/streams/solana-streams)
-
+  [Explore Solana Streams →](/streams/solana-streams)
 </Update>
 
 <Update label="May 5, 2026" tags={["Deprecation"]}>
-  ## Cortex API, Discovery, Volume, Sniper, ERC20, and Market Data Endpoints Sunsetting
+  ## Cortex API and legacy Data API Endpoints Sunsetting
 
-The following endpoints and APIs are now deprecated and will be removed on **June 4, 2026** (30 days from today):
+  The following endpoints and APIs are now deprecated and will be removed on **June 4, 2026** (30 days from today):
 
-**Cortex API:**
+  **Cortex API:**
 
-- `POST /chat` — migrate to [Onchain Skills](/data-api/onchain-skills/overview), which replaces Cortex as our AI interface for Moralis data.
+  - `POST /chat` — migrate to [Onchain Skills](/data-api/onchain-skills/overview), which replaces Cortex as our AI interface for Moralis data.
 
+  **Discovery endpoints (`/discovery/*`):**
 
-**Discovery endpoints (`/discovery/*`):**
+  - `POST /discovery/tokens`
+  - `GET /discovery/token`
+  - `GET /discovery/tokens/rising-liquidity`
+  - `GET /discovery/tokens/buying-pressure`
+  - `GET /discovery/tokens/solid-performers`
+  - `GET /discovery/tokens/experienced-buyers`
+  - `GET /discovery/tokens/risky-bets`
+  - `GET /discovery/tokens/blue-chip`
+  - `GET /discovery/tokens/top-gainers`
+  - `GET /discovery/tokens/top-losers`
+  - `GET /discovery/tokens/trending`
 
-- `POST /discovery/tokens`
-- `GET /discovery/token`
-- `GET /discovery/tokens/rising-liquidity`
-- `GET /discovery/tokens/buying-pressure`
-- `GET /discovery/tokens/solid-performers`
-- `GET /discovery/tokens/experienced-buyers`
-- `GET /discovery/tokens/risky-bets`
-- `GET /discovery/tokens/blue-chip`
-- `GET /discovery/tokens/top-gainers`
-- `GET /discovery/tokens/top-losers`
-- `GET /discovery/tokens/trending`
+  **Volume endpoints (`/volume/*`):**
 
-**Volume endpoints (`/volume/*`):**
+  - `GET /volume/chains`
+  - `GET /volume/categories`
+  - `GET /volume/timeseries`
+  - `GET /volume/timeseries/{categoryId}`
 
-- `GET /volume/chains`
-- `GET /volume/categories`
-- `GET /volume/timeseries`
-- `GET /volume/timeseries/{categoryId}`
+  **Sniper endpoints (EVM and Solana):**
 
-**Sniper endpoints (EVM and Solana):**
+  - `GET /pairs/{address}/snipers` (EVM)
+  - `GET /token/{network}/pairs/{pairAddress}/snipers` (Solana)
 
-- `GET /pairs/{address}/snipers` (EVM)
-- `GET /token/{network}/pairs/{pairAddress}/snipers` (Solana)
+  **ERC20 endpoints (EVM):**
 
-**ERC20 endpoints (EVM):**
+  - `GET /erc20/exchange/{exchangeName}/new`
+  - `GET /erc20/exchange/{exchangeName}/bonding`
+  - `GET /erc20/exchange/{exchangeName}/graduated`
+  - `GET /erc20/{tokenAddress}/bondingStatus`
+  - `GET /erc20/{address}/stats`
+  - `GET /erc20/{token_address}/pairs/stats` — migrate to [`GET /tokens/{tokenAddress}/analytics`](/data-api/universal/token/analytics/token-analytics)
+  - `GET /erc20/metadata/symbols` — migrate to [`GET /tokens/search`](/data-api/universal/token/search/token-search)
 
-- `GET /erc20/exchange/{exchangeName}/new`
-- `GET /erc20/exchange/{exchangeName}/bonding`
-- `GET /erc20/exchange/{exchangeName}/graduated`
-- `GET /erc20/{tokenAddress}/bondingStatus`
-- `GET /erc20/{address}/stats`
-- `GET /erc20/{token_address}/pairs/stats` — migrate to [`GET /tokens/{tokenAddress}/analytics`](/data-api/universal/token/analytics/token-analytics)
-- `GET /erc20/metadata/symbols` — migrate to [`GET /tokens/search`](/data-api/universal/token/search/token-search)
+  **Market data endpoints (`/market-data/*`):**
 
-**Market data endpoints (`/market-data/*`):**
+  - `GET /market-data/erc20s/top-tokens`
+  - `GET /market-data/erc20s/top-movers`
+  - `GET /market-data/nfts/top-collections`
+  - `GET /market-data/nfts/hottest-collections`
+  - `GET /market-data/global/market-cap`
+  - `GET /market-data/global/volume`
 
-- `GET /market-data/erc20s/top-tokens`
-- `GET /market-data/erc20s/top-movers`
-- `GET /market-data/nfts/top-collections`
-- `GET /market-data/nfts/hottest-collections`
-- `GET /market-data/global/market-cap`
-- `GET /market-data/global/volume`
-
-If you rely on any of these endpoints, please migrate before June 4, 2026. [Reach out to the team](https://moralis.com/contact-sales) if you need help identifying replacements.
-
+  If you rely on any of these endpoints, please migrate before June 4, 2026. [Reach out to the team](https://moralis.com/contact-sales) if you need help identifying replacements.
 </Update>
 
 <Update label="Apr 30, 2026" tags={["Deprecation"]}>
   ## Fantom Chain Sunsetting
 
-Fantom mainnet support will be removed across all Moralis APIs on **May 29, 2026**. Fantom Opera testnet has already been removed as of today. The Fantom Opera network is winding down as a legacy chain, and we're retiring our integration in line with the broader ecosystem shift.
-
+  Fantom mainnet support will be removed across all Moralis APIs on **May 29, 2026**. Fantom Opera testnet has already been removed as of today. The Fantom Opera network is winding down as a legacy chain, and we're retiring our integration in line with the broader ecosystem shift.
 </Update>
-
-
 
 <Update label="April 29, 2026" tags={["New Feature"]}>
   ## DeFi API: Now on Solana
 
-The same three Universal DeFi API endpoints that returned EVM positions last week now return Solana positions too. No new endpoints, no schema changes - the existing calls now cover the most-used Solana protocols alongside EVM.
+  The same three Universal DeFi API endpoints that returned EVM positions last week now return Solana positions too. No new endpoints, no schema changes - the existing calls now cover the most-used Solana protocols alongside EVM.
 
-**What's new:**
+  **What's new:**
 
-- **Solana support** on the same Universal DeFi endpoints used for EVM
-- **7 of the most-used Solana protocols** supported at launch:
-  - Jito
-  - Save (formerly Solend)
-  - Jupiter Lending
-  - Raydium
-  - Orca
-  - Drift
-  - Marinade
-- **Unified schema:** identical response shape across EVM and Solana - no client-side stitching
-- **Single call:** query EVM and Solana wallets through the same endpoints with the same filters
+  - **Solana support** on the same Universal DeFi endpoints used for EVM
+  - **7 of the most-used Solana protocols** supported at launch:
+    - Jito
+    - Save (formerly Solend)
+    - Jupiter Lending
+    - Raydium
+    - Orca
+    - Drift
+    - Marinade
+  - **Unified schema:** identical response shape across EVM and Solana - no client-side stitching
+  - **Single call:** query EVM and Solana wallets through the same endpoints with the same filters
 
-**Main endpoints:**
+  **Main endpoints:**
 
-- [`getDefiSummary`](/data-api/solana/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
-- [`getDefiPositionsSummary`](/data-api/solana/defi/wallet-positions) — all positions with token types, values, and reward tokens
-- [`getDefiPositionsByProtocol`](/data-api/solana/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
+  - [`getDefiSummary`](/data-api/solana/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
+  - [`getDefiPositionsSummary`](/data-api/solana/defi/wallet-positions) — all positions with token types, values, and reward tokens
+  - [`getDefiPositionsByProtocol`](/data-api/solana/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
 
-**Usecases:** portfolio trackers, exchanges, tax tools, DeFi dashboards, and AI agents that need a unified DeFi position view across EVM and Solana in a single, consistent response.
+  **Usecases:** portfolio trackers, exchanges, tax tools, DeFi dashboards, and AI agents that need a unified DeFi position view across EVM and Solana in a single, consistent response.
 
-More Solana protocols are being added on a rolling basis. If you need a specific Solana protocol prioritized, [reach out to the team](https://moralis.com/contact-sales).
+  More Solana protocols are being added on a rolling basis. If you need a specific Solana protocol prioritized, [reach out to the team](https://moralis.com/contact-sales).
 
-[Explore the Solana DeFi API →](/data-api/solana/defi/overview)
-
+  [Explore the Solana DeFi API →](/data-api/solana/defi/overview)
 </Update>
 
 <Update label="April 22, 2026" tags={["Improvement"]}>
-  ## DeFi API: 5,000+ Protocols, Now Multichain
+  ## DeFi API: 5,000\+ Protocols, Now Multichain
 
-We've significantly expanded the DeFi API (EVM) with broader protocol coverage and simpler multichain queries in a single call.
+  We've significantly expanded the DeFi API (EVM) with broader protocol coverage and simpler multichain queries in a single call.
 
-**What's new:**
+  **What's new:**
 
-- **5,000+ DeFi protocols** supported, covering 96% of the entire EVM DeFi market
-- **Multichain queries:** fetch positions from a single chain, multiple chains, or all EVM chains in one API call
-- **Protocols include:** Uniswap V2/V3, Aave V2/V3, Lido, Curve, Compound, MakerDAO, Pendle, Convex, Yearn, GMX, Aerodrome, Velodrome, SushiSwap, PancakeSwap, Eigenlayer, Etherfi, Rocket Pool, Spark, Morpho, and thousands more
+  - **5,000\+ DeFi protocols** supported, covering 96% of the entire EVM DeFi market
+  - **Multichain queries:** fetch positions from a single chain, multiple chains, or all EVM chains in one API call
+  - **Protocols include:** Uniswap V2/V3, Aave V2/V3, Lido, Curve, Compound, MakerDAO, Pendle, Convex, Yearn, GMX, Aerodrome, Velodrome, SushiSwap, PancakeSwap, Eigenlayer, Etherfi, Rocket Pool, Spark, Morpho, and thousands more
 
-**Main endpoints:**
+  **Main endpoints:**
 
-- [`getDefiSummary`](/data-api/evm/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
-- [`getDefiPositionsSummary`](/data-api/evm/defi/wallet-positions) — all positions with token types, values, and reward tokens
-- [`getDefiPositionsByProtocol`](/data-api/evm/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
+  - [`getDefiSummary`](/data-api/evm/defi/wallet-protocols) — every protocol a wallet holds positions in, total USD value, and unclaimed rewards
+  - [`getDefiPositionsSummary`](/data-api/evm/defi/wallet-positions) — all positions with token types, values, and reward tokens
+  - [`getDefiPositionsByProtocol`](/data-api/evm/defi/wallet-positions-detailed) — detailed per-protocol breakdown with position-level detail
 
-**Usecases:** portfolio trackers, DeFi dashboards, tax and accounting tools, and risk monitoring. Anywhere you need a unified view of a wallet's DeFi exposure without wiring each protocol in manually.
+  **Usecases:** portfolio trackers, DeFi dashboards, tax and accounting tools, and risk monitoring. Anywhere you need a unified view of a wallet's DeFi exposure without wiring each protocol in manually.
 
-Solana DeFi support is coming soon.
+  Solana DeFi support is coming soon.
 
-[Explore the DeFi API →](/data-api/evm/defi/overview)
+  [Explore the DeFi API →](/data-api/evm/defi/overview)
 
-<iframe
-  src="https://www.youtube.com/embed/yc-THd5xH5s"
-  title="Moralis DeFi API Overview"
-  width="100%"
-  height="400"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-/>
-
+  <iframe src="https://www.youtube.com/embed/yc-THd5xH5s" title="Moralis DeFi API Overview" width="100%" height="400" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
 </Update>
 
 <Update label="April 2, 2026" tags={["New Feature"]}>
   ## Wallet Insights
 
-We've launched the Wallet Insights endpoint - a single API call that returns a comprehensive behavioral profile for any EVM wallet address.
+  We've launched the Wallet Insights endpoint - a single API call that returns a comprehensive behavioral profile for any EVM wallet address.
 
-Get wallet age, activity timelines, transaction counts, transfer breakdowns (native, ERC-20, NFT), swap volume, gas spend, net flow, unique counterparties, contracts created, and more - all in one response. Each metric is also available per-chain via the `includeChainBreakdown` array, so you can see exactly how a wallet behaves across different networks.
+  Get wallet age, activity timelines, transaction counts, transfer breakdowns (native, ERC-20, NFT), swap volume, gas spend, net flow, unique counterparties, contracts created, and more - all in one response. Each metric is also available per-chain via the `includeChainBreakdown` array, so you can see exactly how a wallet behaves across different networks.
 
-[Explore Wallet Insights →](/data-api/evm/wallet/wallet-insights)
-
+  [Explore Wallet Insights →](/data-api/evm/wallet/wallet-insights)
 </Update>
 
 <Update label="Feburary 4, 2026" tags={["New Feature"]}>
   ## Historical Token Scores
 
-We've added the ability to track Token Scores over time with a new Historical Token Score endpoint.
+  We've added the ability to track Token Scores over time with a new Historical Token Score endpoint.
 
-The Historical Token Score endpoint lets you retrieve a token's score history across different timeframes, so you can see how a token's onchain quality has changed over time.
+  The Historical Token Score endpoint lets you retrieve a token's score history across different timeframes, so you can see how a token's onchain quality has changed over time.
 
-[Explore Historical Token Scores →](/data-api/universal/token/score/token-score-timeseries)
-
+  [Explore Historical Token Scores →](/data-api/universal/token/score/token-score-timeseries)
 </Update>
 
 <Update label="December 16, 2025" tags={["New Feature"]}>
   ## Token Scores
 
-We've launched the Moralis Token Score - a unified 0–100 rating that summarizes a token's onchain quality in a single, easy-to-use metric.
+  We've launched the Moralis Token Score - a unified 0–100 rating that summarizes a token's onchain quality in a single, easy-to-use metric.
 
-[Explore Token Scores →](/data-api/universal/token/score/token-score)
-
+  [Explore Token Scores →](/data-api/universal/token/score/token-score)
 </Update>
 
 <Update label="November 24, 2025" tags={["New Chains"]}>
   ## Monad EVM Live
 
-We've added Monad EVM support to both the Data APIs and the Streams API, giving you access to this next-generation, EVM-compatible Layer-1 that delivers 10,000 TPS, 0.4-second block times, 800 ms finality, and near-zero gas fees.
-
+  We've added Monad EVM support to both the Data APIs and the Streams API, giving you access to this next-generation, EVM-compatible Layer-1 that delivers 10,000 TPS, 0.4-second block times, 800 ms finality, and near-zero gas fees.
 </Update>
 
 <Update label="October 16, 2025" tags={["New Chains"]}>
   ## Sei EVM Live
 
-We’ve added Sei EVM support to both the Data APIs and the Streams API, expanding your access to this high-performance Layer 1 chain built for speed and scalability.
-
+  We’ve added Sei EVM support to both the Data APIs and the Streams API, expanding your access to this high-performance Layer 1 chain built for speed and scalability.
 </Update>
 
 <Update label="September 30, 2025" tags={["New Chains"]}>
   ## HyperEVM Live
 
-We've added HyperEVM mainnet to the Moralis Streams API. You can now listen to real-time blockchain activity on HyperEVM - perfect for notifications, indexing, and on-chain automation.
-
+  We've added HyperEVM mainnet to the Moralis Streams API. You can now listen to real-time blockchain activity on HyperEVM - perfect for notifications, indexing, and on-chain automation.
 </Update>
