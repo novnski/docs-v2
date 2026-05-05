@@ -693,9 +693,23 @@
                 "tag": "New",
                 "pages": [
                   "data-api/evm/defi/overview",
-                  "data-api/evm/defi/wallet-protocols",
-                  "data-api/evm/defi/wallet-positions",
-                  "data-api/evm/defi/wallet-positions-detailed"
+                  {
+                    "group": "EVM",
+                    "pages": [
+                      "data-api/evm/defi/wallet-protocols",
+                      "data-api/evm/defi/wallet-positions",
+                      "data-api/evm/defi/wallet-positions-detailed"
+                    ]
+                  },
+                  {
+                    "group": "Solana",
+                    "pages": [
+                      "data-api/solana/defi/overview",
+                      "data-api/solana/defi/wallet-protocols",
+                      "data-api/solana/defi/wallet-positions",
+                      "data-api/solana/defi/wallet-positions-detailed"
+                    ]
+                  }
                 ]
               },
               {
