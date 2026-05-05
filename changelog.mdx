@@ -3,6 +3,33 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="May 5, 2026" tags={["New Feature"]}>
+  ## Solana Streams
+
+Moralis Streams now extends to Solana mainnet. Define a stream, set filters, and receive real-time webhook deliveries the moment matching transactions land in a slot - no node, no polling, no missed slots.
+
+**What's new:**
+
+- **Solana mainnet support** on the same Streams developer model used for EVM
+- **Pre / post token balances** included in every payload, so you can compute exact SPL token deltas without replaying instructions
+- **Inner instructions included**, so you can trace nested behavior across Cross-Program Invocations (CPIs) directly from the payload
+- **Automatic retries** until your endpoint returns HTTP 200
+
+**Filters available at launch:**
+
+- `addresses` — match transactions where any `accountKey` in the transaction matches a watched address
+- `programIds` — filter to transactions invoking specific Solana programs (e.g., the SPL Token Program)
+- `mintAddresses` — filter to transactions involving specific SPL tokens, matched via `pre` / `postTokenBalances`
+- `allAddresses` — firehose mode: receive every Solana transaction
+
+**Use cases:** wallet activity notifications, DEX / DeFi position monitoring by `programId`, SPL token transfer tracking, bot and MEV monitoring, and AI agents reacting to on-chain events as they happen.
+
+If you've used Streams on EVM, the developer model is identical — only the filters differ.
+
+[Explore Solana Streams →](/streams/solana-streams)
+
+</Update>
+
 <Update label="Apr 30, 2026" tags={["Deprecation"]}>
   ## Fantom Chain Sunsetting
 
