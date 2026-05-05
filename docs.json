@@ -689,6 +689,30 @@
                 ]
               },
               {
+                "group": "DeFi API",
+                "tag": "New",
+                "pages": [
+                  "data-api/evm/defi/overview",
+                  {
+                    "group": "EVM",
+                    "pages": [
+                      "data-api/evm/defi/wallet-protocols",
+                      "data-api/evm/defi/wallet-positions",
+                      "data-api/evm/defi/wallet-positions-detailed"
+                    ]
+                  },
+                  {
+                    "group": "Solana",
+                    "pages": [
+                      "data-api/solana/defi/overview",
+                      "data-api/solana/defi/wallet-protocols",
+                      "data-api/solana/defi/wallet-positions",
+                      "data-api/solana/defi/wallet-positions-detailed"
+                    ]
+                  }
+                ]
+              },
+              {
                 "group": "Market Metrics API",
                 "pages": [
                   "data-api/universal/market-metrics/overview",
