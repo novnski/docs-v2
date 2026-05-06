@@ -3,6 +3,32 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="May 7, 2026" tags={["New Feature"]}>
+  ## Bitcoin Streams
+
+  Moralis Streams now extends to Bitcoin mainnet. Define a stream, attach the addresses or xpubs you want to watch, and receive real-time webhook deliveries within seconds of a block being mined - no node, no polling, no missed blocks.
+
+  **What's new:**
+
+  - **Bitcoin mainnet support** on the same Streams developer model used for EVM and Solana
+  - **Dual-phase notifications** - matched transactions fire a webhook in the mempool (unconfirmed) and again on block confirmation, so you can mark deposits `pending` then `confirmed` from the same stream
+  - **All address formats supported** - P2PKH (legacy `1...`), P2SH (SegWit-wrapped `3...`), and Bech32 native SegWit (`bc1q...`)
+  - **Xpub support** - attach an extended public key and Moralis derives and monitors its addresses automatically, ideal for HD wallets
+  - **Automatic retries** until your endpoint returns HTTP 200
+
+  **Monitoring modes available at launch:**
+
+  - `addresses` — watch specific Bitcoin addresses
+  - `xpub` — derive and monitor addresses from an extended public key
+  - `allAddresses` — firehose mode: receive every Bitcoin transaction
+
+  **Use cases:** exchange deposit detection (mempool → confirmed lifecycle), cold wallet surveillance, mining pool payout tracking, and real-time treasury monitoring for corporate or DAO-held BTC.
+
+  A few Bitcoin-specific behaviors to plan around: input `address` and `value` fields are not populated (inbound detection only), output values are BTC decimals rather than satoshis, and `isCoinbase` should be detected via heuristic. See the [Bitcoin Streams docs](/streams/bitcoin-streams) for the full payload structure and processing patterns.
+
+  [Explore Bitcoin Streams →](/streams/bitcoin-streams)
+</Update>
+
 <Update label="May 5, 2026" tags={["New Feature"]}>
   ## Solana Streams
 
