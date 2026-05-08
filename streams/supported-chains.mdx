@@ -14,7 +14,22 @@ Streams support a subset of chains where:
 - Real-time indexing is available.
 - Finality and reorg handling meet production requirements.
 
-Use the table below to see which chains are supported for Streams and what types of events can be monitored.
+Use the tables below to see which chains are supported for Streams and what types of events can be monitored.
+
+### Non-EVM Chains
+
+Bitcoin and Solana streams have their own API groups and chain-specific configuration. See [Bitcoin Streams](/streams/bitcoin-streams) and [Solana Streams](/streams/solana-streams) for details.
+
+| Chain Name      | Type    | Chain ID         | Streams Supported | Confirmation Threshold |
+| --------------- | ------- | ---------------- | ----------------- | ---------------------- |
+| Bitcoin Mainnet | Mainnet | `btc-mainnet`    | ✓                 | 2 blocks               |
+| Solana Mainnet  | Mainnet | `solana_mainnet` | ✓                 | 100 slots              |
+
+<Note>
+`Internal Txs` is an EVM-only concept and does not apply to Bitcoin or Solana. On Solana, the time unit is the **slot** rather than the block — most slots produce a block.
+</Note>
+
+### EVM Chains
 
 | Chain Name                  | Type    | Chain ID              | Streams Supported | Internal Txs | Blocks Until Confirmed |
 | --------------------------- | ------- | --------------------- | ----------------- | ------------ | ---------------------- |

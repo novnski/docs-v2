@@ -79,11 +79,11 @@ Retry and replay behavior:
 
 ### Use deterministic event keys
 
-Common approaches include:
+Pick a key that's stable for the chain you're consuming:
 
-- `transactionHash`
-- `transactionHash + logIndex`
-- `streamId + transactionHash`
+- **EVM** — `transactionHash`, or `transactionHash + logIndex` for log-level events. `streamId + transactionHash` works when consuming multiple streams.
+- **Bitcoin** — `txid` (each transaction is delivered twice, once for the mempool phase and once for the confirmed phase; upsert on the second delivery to flip `confirmed`).
+- **Solana** — `signature` (the base58 transaction id).
 
 Store processed keys and ignore duplicates.
 

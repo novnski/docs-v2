@@ -34,6 +34,16 @@ During a reload, the stream may temporarily be unable to detect events for newly
 
 If you need to add many addresses, always batch them into as few requests as possible.
 
+The same rate limit applies on every chain — but what counts as an "address" depends on the chain:
+
+- **EVM** — hex-encoded `0x...` addresses, case-insensitive
+- **Bitcoin** — P2PKH (`1...`), P2SH (`3...`), or Bech32 (`bc1q...`). Adding an [xpub](/streams/api-reference/bitcoin/xpub/add-xpub) is a separate operation that auto-derives addresses for HD wallets and is **not** counted as an address-add against this limit.
+- **Solana** — base58 addresses, **case-sensitive** (unlike EVM). Programs IDs and mint addresses count toward the same address-add limit when added through the address endpoints.
+
+<Warning>
+Solana addresses must be submitted in their original case. Lowercased addresses will not match.
+</Warning>
+
 ---
 
 ## Impact on Webhook Delivery

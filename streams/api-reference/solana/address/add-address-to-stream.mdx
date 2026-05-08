@@ -2,3 +2,7 @@
 title: "Add Address to Stream"
 openapi: "/openapi-files/streams-api/streams.yaml POST /streams/solana/{id}/address"
 ---
+
+<Warning>
+Solana addresses are base58 and **case-sensitive**. Submit them in their original case — unlike EVM, lowercased addresses will not match.
+</Warning>

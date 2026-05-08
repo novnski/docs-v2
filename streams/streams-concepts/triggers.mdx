@@ -3,6 +3,10 @@ title: "Triggers"
 description: "Run read-only smart contract calls as part of Streams processing and enrich webhook events with on-chain data in real time."
 ---
 
+<Note>
+Triggers (read-only contract calls, ERC-20 / NFT transfer ABIs, `topic0`) are an **EVM-only** feature. Bitcoin and Solana streams use chain-native filtering instead — see [Filters](/streams/streams-concepts/filters).
+</Note>
+
 ## Overview
 
 Triggers allow you to **run read-only smart contract functions** as part of Streams processing and include the results directly in your webhook payloads.

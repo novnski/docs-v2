@@ -803,6 +803,7 @@
           {
             "group": "EVM Streams API",
             "pages": [
+              "streams/evm-streams",
               {
                 "group": "Streams",
                 "pages": [

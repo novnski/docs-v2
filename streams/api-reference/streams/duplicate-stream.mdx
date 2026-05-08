@@ -3,3 +3,6 @@ title: "Duplicate Stream"
 openapi: "/openapi-files/streams-api/streams.yaml POST /streams/evm/{id}/duplicate"
 ---
 
+<Note>
+This endpoint is **EVM-only**. Bitcoin and Solana streams cannot be duplicated — recreate them via the chain-specific create endpoints ([Bitcoin](/streams/api-reference/bitcoin/streams/create-streams), [Solana](/streams/api-reference/solana/streams/create-streams)).
+</Note>

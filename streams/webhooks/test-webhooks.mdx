@@ -46,35 +46,73 @@ Any non-2xx response will cause the test to fail.
 
 ## Test Webhook Payload
 
-The test webhook uses the **same payload structure** as real webhooks, but contains **empty data**.
+The test webhook uses the **same payload structure** as real webhooks for that chain, but contains **empty data**. The shape varies by chain — make sure your handler tolerates the right one.
 
-Example:
-
-```javascript
-{
-  "confirmed": true,
-  "chainId": "",
-  "streamId": "",
-  "tag": "",
-  "retries": 0,
-  "block": {
-    "number": "",
-    "hash": "",
-    "timestamp": ""
-  },
-  "logs": [],
-  "txs": [],
-  "txsInternal": [],
-  "erc20Transfers": [],
-  "erc20Approvals": [],
-  "nftTransfers": [],
-  "nftApprovals": {
-    "ERC721": [],
-    "ERC1155": []
-  },
-  "abi": {}
-}
-```
+<Tabs>
+  <Tab title="EVM">
+    ```javascript
+    {
+      "confirmed": true,
+      "chainId": "",
+      "streamId": "",
+      "tag": "",
+      "retries": 0,
+      "block": {
+        "number": "",
+        "hash": "",
+        "timestamp": ""
+      },
+      "logs": [],
+      "txs": [],
+      "txsInternal": [],
+      "erc20Transfers": [],
+      "erc20Approvals": [],
+      "nftTransfers": [],
+      "nftApprovals": {
+        "ERC721": [],
+        "ERC1155": []
+      },
+      "abi": {}
+    }
+    ```
+  </Tab>
+  <Tab title="Bitcoin">
+    ```javascript
+    {
+      "confirmed": true,
+      "chainId": "btc-mainnet",
+      "streamId": "",
+      "tag": "",
+      "retries": 0,
+      "block": {
+        "hash": "",
+        "height": 0,
+        "timestamp": 0
+      },
+      "txs": []
+    }
+    ```
+  </Tab>
+  <Tab title="Solana">
+    ```javascript
+    {
+      "confirmed": true,
+      "chainId": "solana_mainnet",
+      "network": "mainnet",
+      "streamId": "",
+      "tag": "",
+      "retries": 0,
+      "block": {
+        "slot": "",
+        "blockHash": "",
+        "blockHeight": "",
+        "blockTime": 0
+      },
+      "transactions": []
+    }
+    ```
+  </Tab>
+</Tabs>
 
 Important notes:
 

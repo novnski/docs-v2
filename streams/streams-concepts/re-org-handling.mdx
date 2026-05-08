@@ -64,6 +64,16 @@ Streams ensures:
 
 ---
 
+### Re-org Behavior by Chain
+
+- **EVM** — re-orgs are most common on high-throughput chains, L2s, and testnets. Confirmation thresholds vary per chain (see [Supported Chains](/streams/supported-chains)).
+- **Bitcoin** — re-orgs follow the longest-valid-chain rule and are exponentially less likely with each additional confirmation.
+- **Solana** — re-orgs are rare and bounded by the network's slot-based finality model.
+
+In all cases, the same Streams handling applies: dropped transactions never receive a `confirmed: true` webhook, and replacement transactions are delivered in their place.
+
+---
+
 ### Replays & Recovery
 
 If your system was offline during a re-org:

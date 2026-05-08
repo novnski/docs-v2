@@ -1,0 +1,128 @@
+---
+title: "EVM Streams"
+sidebarTitle: "EVM Streams"
+description: "Stream real-time EVM transaction data, contract events, and token activity directly to your application with webhooks, no node infrastructure, no polling, no missed blocks."
+---
+
+## Overview
+
+**EVM Streams** is the original Moralis Streams product, delivering real-time on-chain activity from every supported EVM chain via webhooks. Moralis indexes each chain automatically and pushes structured payloads to your endpoint whenever transactions or contract events match your criteria.
+
+Webhooks typically arrive within seconds of a block being mined — no node, no polling, no missed blocks.
+
+For a full chain list (Ethereum, Base, Polygon, BNB, Arbitrum, Optimism, Avalanche, and more), see [Supported Chains](/streams/supported-chains).
+
+---
+
+## Key Features
+
+- **Real-time delivery:** webhooks arrive within seconds of a block being produced
+- **Dual-phase notifications:** every match fires twice — once unconfirmed (`confirmed: false`) and again at finality (`confirmed: true`)
+- **Rich filtering:** watch addresses, contract events (via ABI), specific topics, or apply advanced value/contract conditions
+- **Free decoded data:** ERC-20 transfers, ERC-20 approvals, NFT transfers (ERC-721 / ERC-1155), and NFT approvals are decoded into clean fields at no extra record cost
+- **Internal transactions:** opt in to receive value moves that occur inside contract execution
+- **Triggers:** invoke read-only contract functions as part of event processing — e.g. fetch token balances at the moment of a transfer
+- **Automatic retries:** Moralis retries webhook delivery until your endpoint returns HTTP `200`
+
+---
+
+## How It Works
+
+1. A new block is produced on a supported EVM chain
+2. Moralis evaluates every transaction and log in the block against your stream's filters
+3. Matching events fire an **unconfirmed** webhook immediately
+4. Once the block reaches the chain's confirmation threshold, a **confirmed** webhook is delivered
+5. Your service upserts on `transactionHash` (or `transactionHash + logIndex` for logs) to reconcile the two-phase lifecycle
+
+---
+
+## Webhook Payload Structure
+
+Each EVM webhook payload contains:
+
+- **Block metadata** — number, hash, timestamp
+- **`txs`** — native transactions (when `includeNativeTxs` is enabled)
+- **`txsInternal`** — internal transactions (when `includeInternalTxs` is enabled)
+- **`logs`** — raw contract event logs (when `includeContractLogs` is enabled)
+- **`erc20Transfers` / `erc20Approvals`** — automatically decoded from logs, free
+- **`nftTransfers` / `nftApprovals`** — automatically decoded for ERC-721 and ERC-1155, free
+- **Confirmation status** — `confirmed: true` / `false`
+
+For full schemas and examples, see [Webhook Payload](/streams/webhooks/webhook-payloads).
+
+<Note>
+EVM addresses are hex-encoded (`0x...`) and **case-insensitive**. Comparisons should be done with `toLowerCase()` to avoid false negatives.
+</Note>
+
+---
+
+## Configuration Parameters
+
+When creating an EVM stream you specify:
+
+| Parameter             | Description                                                                            |
+| --------------------- | -------------------------------------------------------------------------------------- |
+| `webhookUrl`          | Public HTTPS endpoint that will receive payloads (required)                            |
+| `chainIds`            | Array of hex chain IDs to watch (e.g. `["0x1", "0x2105"]`)                             |
+| `includeNativeTxs`    | Include native transactions in the payload                                             |
+| `includeContractLogs` | Include raw contract logs in the payload                                               |
+| `includeInternalTxs`  | Include internal transactions in the payload                                           |
+| `abi`                 | ABI fragments used to decode targeted contract events                                  |
+| `topic0`              | Event signature(s) to match (e.g. `Transfer(address,address,uint256)`)                 |
+| `advancedOptions`     | Per-event value-based filters and aggregations — see [Advanced Options](/streams/streams-concepts/advanced-options) |
+| `triggers`            | Read-only contract calls to execute at match time — see [Triggers](/streams/streams-concepts/triggers) |
+| `description`         | Human-readable stream description                                                      |
+| `tag`                 | Identifier for routing / filtering on your side                                        |
+
+---
+
+## API Endpoints
+
+All EVM Streams endpoints require the `x-api-key` header.
+
+### Streams
+
+| Method   | Endpoint                                                          | Purpose                                                                                                  |
+| -------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `PUT`    | `/streams/evm`                                                    | [Create a stream](/streams/api-reference/streams/create-streams) with a webhook URL and configuration    |
+| `POST`   | `/streams/evm/{id}`                                               | [Update a stream's](/streams/api-reference/streams/update-stream) configuration                          |
+| `POST`   | `/streams/evm/{id}/status`                                        | [Pause or resume a stream](/streams/api-reference/streams/update-stream-status)                          |
+| `GET`    | `/streams/evm`                                                    | [List existing EVM streams](/streams/api-reference/streams/get-streams)                                  |
+| `GET`    | `/streams/evm/{id}`                                               | [Get a stream by ID](/streams/api-reference/streams/get-stream-by-id)                                    |
+| `DELETE` | `/streams/evm/{id}`                                               | [Remove a stream](/streams/api-reference/streams/delete-stream)                                          |
+| `POST`   | `/streams/evm/{id}/duplicate`                                     | [Duplicate a stream](/streams/api-reference/streams/duplicate-stream)                                    |
+| `POST`   | `/streams/evm/{chainId}/block/{blockNumber}`                      | [Get webhook data for a historical block](/streams/api-reference/streams/get-webhook-data-by-block-number) |
+| `POST`   | `/streams/evm/{chainId}/block-to-webhook/{blockNumber}/{streamId}`| [Replay a historical block](/streams/api-reference/streams/send-webhook-data-by-block-number) for backfilling |
+
+### Addresses
+
+| Method   | Endpoint                       | Purpose                                                                                          |
+| -------- | ------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `GET`    | `/streams/evm/{id}/address`    | [List addresses](/streams/api-reference/streams/get-addresses-by-stream) attached to a stream    |
+| `POST`   | `/streams/evm/{id}/address`    | [Add an address](/streams/api-reference/streams/add-address-to-stream) to monitor                |
+| `PATCH`  | `/streams/evm/{id}/address`    | [Replace an address](/streams/api-reference/streams/replace-address-on-stream) on a stream       |
+| `DELETE` | `/streams/evm/{id}/address`    | [Remove an address](/streams/api-reference/streams/delete-address-from-stream) from a stream     |
+
+---
+
+## Common Use Cases
+
+- **Wallet activity notifications** — alert users on inbound and outbound transfers, swaps, and contract interactions
+- **Token transfer tracking** — ERC-20 movements (airdrops, payments, vesting) decoded for free
+- **NFT marketplaces** — mint, transfer, and approval events for ERC-721 and ERC-1155 collections
+- **DeFi protocol monitoring** — track interactions with specific contracts via ABI events and topics
+- **Treasury & accounting** — real-time corporate or DAO wallet activity across multiple chains
+- **AI agents** — react to on-chain events as they happen
+
+---
+
+## Setup Checklist
+
+1. Generate an API key from [admin.moralis.com](https://admin.moralis.com)
+2. Deploy a publicly accessible HTTPS webhook endpoint
+3. Create the stream via `PUT /streams/evm`
+4. Register the addresses you want to monitor (`POST /streams/evm/{id}/address`)
+5. Implement the verification handler — respond to the empty-body test `POST` with HTTP `200`
+6. Verify the [`x-signature` header](/streams/security-and-reliability/webhook-security) on every delivery
+7. Build dedupe logic keyed on `transactionHash` (or `transactionHash + logIndex` for logs) to handle the unconfirmed → confirmed transition
+8. Always return HTTP `200` from your handler, even when your own processing errors — Moralis retries on non-200 responses
