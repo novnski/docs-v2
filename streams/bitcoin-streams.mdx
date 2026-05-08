@@ -15,7 +15,7 @@ Webhooks typically arrive within seconds of a block being mined — no node, no 
 ## Key Features
 
 - **Real-time delivery:** end-to-end latency is typically under 10 seconds after a block is mined
-- **Dual-phase notifications:** matched transactions trigger two webhook deliveries: once when the transaction enters the mempool (unconfirmed) and again upon on-chain confirmation
+- **Dual-phase notifications:** every match fires twice — first when the transaction is included in a block (`confirmed: false`, the block is near the chain tip and could still be reorged), then again after the 2-block confirmation depth (`confirmed: true`, reorg-safe)
 - **All address formats supported:** P2PKH (legacy, `1...`), P2SH (SegWit-wrapped, `3...`), and Bech32 native SegWit (`bc1q...`)
 - **Xpub support:** attach an extended public key to a stream and Moralis derives and monitors its addresses automatically — ideal for HD wallets
 - **Flexible monitoring:** watch specific addresses, attach an xpub, or enable firehose mode with `allAddresses` to receive every Bitcoin transaction
@@ -26,9 +26,9 @@ Webhooks typically arrive within seconds of a block being mined — no node, no 
 ## How It Works
 
 1. A new Bitcoin block is produced
-2. Moralis evaluates every transaction against your registered addresses
-3. Matching transactions fire a webhook in the **mempool** phase (unconfirmed)
-4. When the block confirms, a second webhook is delivered marking the transaction as confirmed
+2. Moralis evaluates every transaction in the block against your registered addresses
+3. Matching transactions fire a webhook with `confirmed: false` — the block is close to the chain tip and could still be reorged
+4. After 2 additional blocks have been mined on top, Moralis re-fetches the block and delivers a second webhook with `confirmed: true` — the transaction is now reorg-safe
 5. Your service upserts on `txid` to reconcile the two-phase lifecycle
 
 ---
@@ -41,7 +41,7 @@ Each Bitcoin webhook payload contains:
 - **Transaction details** — `txid`, input/output counts, locktime, version, block reference
 - **Outputs (`vout`)** — value in BTC (not satoshis), script type, recipient address
 - **Inputs (`vin`)** — structural fields only; `address` and `value` fields remain `null`
-- **Confirmation status** — boolean flag distinguishing mempool from confirmed deliveries
+- **Confirmation status** — `confirmed: false` for the near-tip delivery, `confirmed: true` once the block has cleared the 2-block confirmation depth
 
 <Note>
 Output values are represented as **BTC decimals** (e.g. `3.13258866`). To convert to satoshis, multiply by `1e8`:
@@ -121,7 +121,7 @@ Bitcoin Streams has a few behaviors that differ from EVM Streams — plan your c
 
 ### Deduplication
 
-Each matched transaction is delivered **twice** (mempool + confirmation). Use the transaction id (`txid`) as your natural deduplication key and upsert on the second delivery to flip the confirmation flag.
+Each matched transaction is delivered **twice** — first at block inclusion (`confirmed: false`, near-tip), then again after the 2-block confirmation depth (`confirmed: true`, reorg-safe). Use the transaction id (`txid`) as your natural deduplication key and upsert on the second delivery to flip the confirmation flag.
 
 ### Coinbase detection
 
@@ -146,7 +146,7 @@ const satoshis = Math.round(btc * 1e8);
 
 ## Common Use Cases
 
-- **Exchange deposits** — monitor hot wallet addresses, mark deposits as `pending` on the mempool delivery and `confirmed` on the block delivery
+- **Exchange deposits** — monitor hot wallet addresses, mark deposits as `pending` on the first delivery (`confirmed: false`) and `confirmed` on the reorg-safe delivery (`confirmed: true`)
 - **Cold wallet surveillance** — alert on any inbound transfer to an offline storage address
 - **Mining pool revenue** — watch payout addresses for both standard payments and coinbase block rewards
 - **Treasury monitoring** — real-time accounting for corporate or DAO-held BTC addresses
@@ -160,5 +160,5 @@ const satoshis = Math.round(btc * 1e8);
 3. Create the stream via `PUT /streams/bitcoin`
 4. Attach the wallets you want to monitor — either by [registering individual addresses](/streams/api-reference/bitcoin/address/add-address-to-stream) (`POST /streams/bitcoin/{id}/address`) or by [adding an xpub](/streams/api-reference/bitcoin/xpub/add-xpub) (`POST /streams/bitcoin/{id}/xpub`) to auto-derive and watch its addresses
 5. Implement the verification handler — respond to the empty-body test `POST` with HTTP `200`
-6. Build upsert logic keyed on `txid` to handle the mempool → confirmed transition
+6. Build upsert logic keyed on `txid` to handle the `confirmed: false` → `confirmed: true` transition
 7. Always return HTTP `200` from your handler, even when your own processing errors — Moralis retries on non-200 responses

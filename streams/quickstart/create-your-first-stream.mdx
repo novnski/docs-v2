@@ -286,7 +286,7 @@ The flow is the same on every chain — define a stream, attach the addresses (o
     See [Add Address](/streams/api-reference/bitcoin/address/add-address-to-stream) and [Add Xpub](/streams/api-reference/bitcoin/xpub/add-xpub) for details.
 
     <Note>
-    Bitcoin Streams delivers each matched transaction **twice** — once when it enters the mempool (`confirmed: false`) and again when the block is mined (`confirmed: true`). Dedupe on `txid` and upsert on the second delivery to flip your local confirmation flag.
+    Bitcoin Streams delivers each matched transaction **twice** — once at first block inclusion (`confirmed: false`, the block is near the chain tip and could still be reorged) and again after 2 blocks have been mined on top (`confirmed: true`, reorg-safe). Dedupe on `txid` and upsert on the second delivery to flip your local confirmation flag.
     </Note>
   </Tab>
   <Tab title="Solana">

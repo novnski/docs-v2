@@ -71,8 +71,8 @@ Each chain has its own finality model, which determines how long it takes for a 
   <Tab title="Bitcoin">
     Bitcoin finality is **proof-of-work based**. Once a transaction is included in a mined block, each subsequent block adds another confirmation. Streams sends:
 
-    - `confirmed: false` when the transaction enters the mempool
-    - `confirmed: true` once the configured confirmation depth is reached
+    - `confirmed: false` when the transaction is first included in a block — the block is close to the chain tip and could still be reorged
+    - `confirmed: true` once 2 additional blocks have been mined on top, at which point Moralis re-fetches the block and treats the transaction as reorg-safe
 
     Bitcoin reorgs follow the longest-valid-chain rule and become exponentially less likely with each additional confirmation. See [Supported Chains](/streams/supported-chains) for the threshold Streams uses.
   </Tab>

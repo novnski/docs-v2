@@ -92,7 +92,7 @@ The exact contents within each chain depend on the options enabled when the stre
 
     | Field       | Description                                                                |
     | :---------- | :------------------------------------------------------------------------- |
-    | `confirmed` | `false` for the mempool delivery, `true` once the block is mined           |
+    | `confirmed` | `false` for the near-tip delivery (block could still be reorged), `true` once it has cleared the 2-block confirmation depth |
     | `chainId`   | `btc-mainnet`                                                              |
     | `streamId`  | Unique stream identifier                                                   |
     | `tag`       | Optional stream tag                                                        |
@@ -173,8 +173,8 @@ If you're unfamiliar with any of these fields, see [Parsed Data](/streams/stream
 
 Streams sends **two webhook payloads per match**:
 
-1. **Unconfirmed (`confirmed: false`)** — sent as soon as the block is mined / slot is produced (or when the transaction enters the mempool, on Bitcoin).
-2. **Confirmed (`confirmed: true`)** — sent once finality is reached for the chain.
+1. **Unconfirmed (`confirmed: false`)** — sent as soon as the matching transaction is included in a block (or slot, on Solana). The block is close to the chain tip and could still be reorged.
+2. **Confirmed (`confirmed: true`)** — sent after the chain's reorg-safety threshold has passed and the same block has been re-fetched.
 
 This design lets you react instantly to on-chain activity, then safely update state once finality is guaranteed.
 
@@ -461,7 +461,7 @@ See [Webhook Security](/streams/security-and-reliability/webhook-security) for f
   <Tab title="Bitcoin">
     ### Block metadata
 
-    Each Bitcoin payload begins with the block the matched transaction belongs to (or the mempool sentinel for unconfirmed deliveries):
+    Each Bitcoin payload begins with the block the matched transaction was included in:
 
     - `hash` — block hash
     - `height` — block height
@@ -495,8 +495,8 @@ See [Webhook Security](/streams/security-and-reliability/webhook-security) for f
 
     A matched transaction generates **two** webhook deliveries:
 
-    1. **Mempool** — `confirmed: false`, sent the moment Moralis sees the transaction enter the mempool.
-    2. **Confirmed** — `confirmed: true`, sent when the transaction is included in a mined block.
+    1. **First delivery (near-tip)** — `confirmed: false`, sent when the matching transaction is included in a block. The block is close to the chain tip and could still be reorged.
+    2. **Second delivery (reorg-safe)** — `confirmed: true`, sent after 2 additional blocks have been mined on top. Moralis re-fetches the block and treats the transaction as final.
 
     Use `txid` as your dedupe key and upsert on the second delivery to flip your local confirmation flag.
 

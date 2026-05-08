@@ -34,7 +34,7 @@ What you can listen to depends on the chain:
   <Tab title="Bitcoin">
     - Inbound transfers to watched addresses (P2PKH, P2SH, Bech32)
     - HD wallet monitoring via xpub — Moralis derives addresses automatically
-    - Mempool + confirmed two-phase delivery for every matched transaction
+    - Two-phase delivery for every matched transaction (`confirmed: false` at first block inclusion, then `confirmed: true` once the block is reorg-safe)
     - Firehose mode (`allAddresses`) to receive every Bitcoin transaction
 
     See [Bitcoin Streams](/streams/bitcoin-streams) for details.
