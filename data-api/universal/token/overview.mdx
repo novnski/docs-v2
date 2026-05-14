@@ -1,0 +1,68 @@
+---
+title: "Token API Overview"
+sidebarTitle: "Overview"
+description: "Search, score, rank, and analyze tokens across EVM chains and Solana through a single, multichain interface."
+---
+
+## Overview
+
+The **Token API** gives you a unified, multichain interface for discovering and analyzing tokens across EVM networks and Solana. Search by address, name, or symbol, pull token scores and analytics, and surface trending or top-moving tokens — all without writing chain-specific logic.
+
+---
+
+## What Is the Token API?
+
+The Token API lets you:
+
+- **Search Tokens** — find tokens by contract address, pair address, name, or symbol
+- **Score Tokens** — retrieve a token score and historical score timeseries
+- **Discover Tokens** — list filtered, trending, and top-gaining / top-losing tokens
+- **Analyze Tokens** — get buy/sell volume, buyers, sellers, transactions, liquidity, and FDV trends
+
+---
+
+## Key Features
+
+- **Cross-chain by default** — one endpoint shape spans EVM and Solana
+- **Discovery and ranking** — trending, top gainers, top losers, and customizable filtering
+- **Scoring** — current token score plus historical timeseries to track quality over time
+- **Deep analytics** — buy/sell volume, buyer/seller counts, transactions, liquidity, and FDV — single token, multi-token, or timeseries
+- **Sort and filter** — rank results by market cap, liquidity, volume, and more
+
+---
+
+## Endpoints
+
+| Group       | Endpoint                                                                                                          | Purpose                                          |
+| ----------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Search      | [Token Search](/data-api/universal/token/search/token-search)                                                     | Find tokens by address, name, or symbol          |
+| Score       | [Token Score](/data-api/universal/token/score/token-score)                                                        | Current score and quality metrics for a token    |
+| Score       | [Token Score Timeseries](/data-api/universal/token/score/token-score-timeseries)                                  | Historical score for a token                     |
+| Discovery   | [Filtered Tokens](/data-api/universal/token/filtered-tokens)                                                      | Query tokens with custom filters and sorts       |
+| Discovery   | [Trending Tokens](/data-api/universal/token/trending-tokens)                                                      | Tokens trending across the market                |
+| Discovery   | [Top Gainers](/data-api/universal/token/top-gainers)                                                              | Tokens with the largest positive price moves     |
+| Discovery   | [Top Losers](/data-api/universal/token/top-losers)                                                                | Tokens with the largest negative price moves     |
+| Analytics   | [Token Analytics](/data-api/universal/token/analytics/token-analytics)                                            | Trading analytics for a single token             |
+| Analytics   | [Multi-Token Analytics](/data-api/universal/token/analytics/token-analytics-multi)                                | Trading analytics for a batch of tokens          |
+| Analytics   | [Token Analytics Timeseries](/data-api/universal/token/analytics/token-analytics-timeseries)                      | Historical trading analytics for a token         |
+
+---
+
+## Common Use Cases
+
+- **Token discovery**\
+  (surface trending, top-gaining, and newly notable tokens)
+- **Wallet and portfolio apps**\
+  (resolve token metadata and show market context next to holdings)
+- **Trading and analytics platforms**\
+  (rank tokens by quality, momentum, or liquidity and dive into per-token analytics)
+- **Research and screening**\
+  (filter the long tail by score, volume, or liquidity to find candidates)
+- **Risk and quality signals**\
+  (combine score and analytics to flag illiquid or low-quality tokens)
+
+---
+
+## Get Started
+
+Pick an endpoint above to start querying tokens, or head to the [Universal API overview](/data-api/universal/overview) to see how the Token API fits alongside the rest of the multichain Data API.
