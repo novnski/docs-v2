@@ -15,7 +15,8 @@ Webhooks typically arrive within seconds of a block being mined — no node, no 
 ## Key Features
 
 - **Real-time delivery:** end-to-end latency is typically under 10 seconds after a block is mined
-- **Dual-phase notifications:** every match fires twice — first when the transaction is included in a block (`confirmed: false`, the block is near the chain tip and could still be reorged), then again after the 2-block confirmation depth (`confirmed: true`, reorg-safe)
+- **Mempool notifications:** unconfirmed transactions fire a webhook the moment they hit the mempool — react before the next block is mined
+- **Three-phase notifications:** matches can fire up to three times — first when the transaction is broadcast to the mempool (`block.hash: "mempool"`), again when it lands in a block (`confirmed: false`, near the chain tip), and finally after the 2-block confirmation depth (`confirmed: true`, reorg-safe)
 - **All address formats supported:** P2PKH (legacy, `1...`), P2SH (SegWit-wrapped, `3...`), and Bech32 native SegWit (`bc1q...`)
 - **Xpub support:** attach an extended public key to a stream and Moralis derives and monitors its addresses automatically — ideal for HD wallets
 - **Flexible monitoring:** watch specific addresses, attach an xpub, or enable firehose mode with `allAddresses` to receive every Bitcoin transaction
@@ -25,11 +26,12 @@ Webhooks typically arrive within seconds of a block being mined — no node, no 
 
 ## How It Works
 
-1. A new Bitcoin block is produced
-2. Moralis evaluates every transaction in the block against your registered addresses
-3. Matching transactions fire a webhook with `confirmed: false` — the block is close to the chain tip and could still be reorged
-4. After 2 additional blocks have been mined on top, Moralis re-fetches the block and delivers a second webhook with `confirmed: true` — the transaction is now reorg-safe
-5. Your service upserts on `txid` to reconcile the two-phase lifecycle
+1. A transaction is broadcast to the Bitcoin mempool. Moralis evaluates every mempool transaction against your registered addresses and xpubs
+2. Matching mempool transactions fire a webhook with `confirmed: false` and the sentinel values `block.height: "0"` / `block.hash: "mempool"` — delivered once per stream
+3. A new Bitcoin block is produced and Moralis evaluates every transaction in it against your registered addresses
+4. Matching block transactions fire a webhook with `confirmed: false` and the real block `height` / `hash` — the block is close to the chain tip and could still be reorged
+5. After 2 additional blocks have been mined on top, Moralis re-fetches the block and delivers a third webhook with `confirmed: true` — the transaction is now reorg-safe
+6. Your service upserts on `txid` to reconcile the lifecycle, branching on `block.hash === "mempool"` for the mempool stage
 
 ---
 
@@ -50,6 +52,56 @@ Output values are represented as **BTC decimals** (e.g. `3.13258866`). To conver
 const satoshis = Math.round(btc * 1e8);
 ```
 </Note>
+
+---
+
+## Mempool Notifications
+
+Bitcoin Streams emit webhook notifications for **unconfirmed transactions** as soon as they hit the mempool — no need to wait for block inclusion. The payload shape is identical to a confirmed-block webhook, with sentinel fields on the `block` object marking it as mempool:
+
+| Field          | Mempool value | Confirmed-block value         |
+| -------------- | ------------- | ----------------------------- |
+| `block.height` | `"0"`         | real block height             |
+| `block.hash`   | `"mempool"`   | real block hash               |
+| `confirmed`    | `false`       | `false` then `true`           |
+
+Everything else (`transactions[]`, `vin`, `vout`, addresses, value, fee) is populated normally.
+
+### Example payload
+
+```json
+{
+  "streamId": "cefa6529-e3ec-4ee8-8cbd-206d2e7ce64e",
+  "chainId": "btc-mainnet",
+  "confirmed": false,
+  "block": {
+    "height": "0",
+    "hash": "mempool"
+  },
+  "retries": 0,
+  "transactions": [ ]
+}
+```
+
+### Detecting mempool in your handler
+
+Branch on either sentinel field — `block.hash` is the most explicit:
+
+```js
+const isMempool = payload.block.hash === "mempool";
+```
+
+### Behavior
+
+- **Delivered at most once per stream** per matching mempool transaction
+- **No follow-up webhook on confirmation from the mempool delivery itself** — the regular confirmed-block stream handles `confirmed: false` (in-block) and `confirmed: true` (reorg-safe) for the same `txid`
+- **Mempool transactions are not guaranteed to confirm.** They can be evicted, replaced (RBF), or expire on low fee. Treat them as **pending**, not settled
+- **Matching covers both sends and receives.** In mempool payloads, `vin` and `vout` addresses are both populated, so a watched address triggers a match whether it is sending or receiving
+- **Xpub-derived addresses are fully supported** — addresses derived from an attached xpub match against the mempool the same way they do against confirmed blocks
+
+### Getting started
+
+No new endpoint, parameter, or schema. Existing Bitcoin streams pick up mempool notifications automatically. Just branch on `block.hash === "mempool"` (or `block.height === "0"`) in your handler to separate mempool events from confirmed-block events.
 
 ---
 
@@ -119,9 +171,23 @@ Bitcoin Streams has a few behaviors that differ from EVM Streams — plan your c
 
 ## Processing Patterns
 
+### Branching on mempool vs. confirmed block
+
+A single `txid` can arrive up to three times: once from the mempool, once on block inclusion, and once on reorg-safe confirmation. Branch on the `block.hash` sentinel before doing any block-specific work:
+
+```js
+if (payload.block.hash === "mempool") {
+  // pending: tx broadcast but not yet mined
+} else if (payload.confirmed === false) {
+  // included in a block near the chain tip — could still reorg
+} else {
+  // reorg-safe — safe to persist
+}
+```
+
 ### Deduplication
 
-Each matched transaction is delivered **twice** — first at block inclusion (`confirmed: false`, near-tip), then again after the 2-block confirmation depth (`confirmed: true`, reorg-safe). Use the transaction id (`txid`) as your natural deduplication key and upsert on the second delivery to flip the confirmation flag.
+Use the transaction id (`txid`) as your natural deduplication key. Upsert on each delivery, advancing your state machine through `mempool` → `in-block` → `confirmed` as each webhook arrives. Note that the mempool delivery can be **skipped entirely** for transactions Moralis only observes once they are already mined.
 
 ### Coinbase detection
 
@@ -146,7 +212,10 @@ const satoshis = Math.round(btc * 1e8);
 
 ## Common Use Cases
 
-- **Exchange deposits** — monitor hot wallet addresses, mark deposits as `pending` on the first delivery (`confirmed: false`) and `confirmed` on the reorg-safe delivery (`confirmed: true`)
+- **Exchange deposits** — surface deposits the moment they hit the mempool (`block.hash === "mempool"`), mark them `pending` on block inclusion (`confirmed: false`), and `confirmed` on the reorg-safe delivery (`confirmed: true`)
+- **Pending balances** — show users a pending balance the instant a tx is broadcast, before any block has been mined
+- **Payment UX** — trigger downstream flows on payment broadcast instead of waiting for confirmation
+- **Mempool analytics** — RBF detection, fee analytics, and MEV / arbitrage signals against unconfirmed activity
 - **Cold wallet surveillance** — alert on any inbound transfer to an offline storage address
 - **Mining pool revenue** — watch payout addresses for both standard payments and coinbase block rewards
 - **Treasury monitoring** — real-time accounting for corporate or DAO-held BTC addresses
