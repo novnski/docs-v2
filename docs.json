@@ -662,6 +662,7 @@
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
+                  "data-api/universal/token/overview",
                   "data-api/universal/token/search/token-search",
                   "data-api/universal/token/score/token-score",
                   "data-api/universal/token/score/token-score-timeseries",
