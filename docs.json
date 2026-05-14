@@ -303,13 +303,7 @@
                       "data-api/evm/wallet/native-balance",
                       "data-api/evm/wallet/native-balances-batch",
                       "data-api/evm/wallet/approvals",
-                      {
-                        "group": "Legacy",
-                        "pages": [
-                          "data-api/evm/wallet/legacy/token-balances",
-                          "data-api/evm/wallet/legacy/token-balances-erc20"
-                        ]
-                      }
+                      "data-api/evm/wallet/token-balances-legacy"
                     ]
                   },
                   {
@@ -664,14 +658,6 @@
             "group": "Universal API",
             "pages": [
               "data-api/universal/overview",
-              {
-                "group": "Wallets API",
-                "tag": "New",
-                "pages": [
-                  "data-api/universal/wallet/overview",
-                  "data-api/universal/wallet/cross-chain-token-balances"
-                ]
-              },
               {
                 "group": "Token API",
                 "tag": "New features",
