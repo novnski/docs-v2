@@ -104,8 +104,12 @@ The exact contents within each chain depend on the options enabled when the stre
     Output values are represented as **BTC decimals** (e.g. `3.13258866`), not satoshis. Convert with `Math.round(btc * 1e8)` for integer ledgers.
     </Note>
 
+    <Note>
+    **Mempool deliveries** use the same payload shape with sentinel values: `block.height: "0"` and `block.hash: "mempool"`. Branch on `block.hash === "mempool"` to separate pre-confirmation events from in-block events. See [Mempool Notifications](/streams/bitcoin-streams#mempool-notifications).
+    </Note>
+
     <Warning>
-    Even with `includeInputs: true`, input `address` and `value` fields return `null`. Bitcoin Streams reliably detects **inbound** transfers to watched addresses, not outflows. See [Bitcoin Streams](/streams/bitcoin-streams) for the full list of behaviors.
+    For confirmed-block deliveries, input `address` and `value` fields return `null` even with `includeInputs: true` — Bitcoin Streams reliably detects **inbound** transfers to watched addresses, not outflows. Mempool deliveries populate both `vin` and `vout` addresses, so sends and receives both match. See [Bitcoin Streams](/streams/bitcoin-streams) for the full list of behaviors.
     </Warning>
   </Tab>
   <Tab title="Solana">

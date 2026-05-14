@@ -3,6 +3,34 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="May 14, 2026" tags={["New Feature"]}>
+  ## Mempool Notifications for Bitcoin Streams
+
+  Bitcoin Streams now emit webhook notifications for **unconfirmed transactions** as soon as they hit the mempool — no need to wait for block inclusion.
+
+  **What's new:**
+
+  - **Pre-confirmation delivery** — matching transactions fire a webhook the moment they are broadcast to the mempool
+  - **Same payload shape** as a confirmed-block webhook, with sentinel fields on the `block` object marking the delivery as mempool:
+    - `block.height` → `"0"`
+    - `block.hash` → `"mempool"`
+    - `confirmed` → `false`
+  - **`vin` and `vout` addresses both populated** in mempool payloads, so a watched address triggers a match whether it is sending or receiving
+  - **Xpub-derived addresses fully supported**
+
+  **Behavior to plan around:**
+
+  - Each mempool transaction is delivered **at most once per stream**
+  - The mempool delivery has **no follow-up** — the regular confirmed-block stream (`confirmed: false` then `confirmed: true`) handles in-block and reorg-safe deliveries for the same `txid`
+  - Mempool transactions are **not guaranteed to confirm** — they can be replaced (RBF), evicted, or expire on low fee. Treat them as pending, not settled
+
+  **Use cases:** show users a pending balance the instant a tx is broadcast, trigger UX flows on payment broadcast instead of confirmation, mempool monitoring, RBF detection, fee analytics, and MEV / arbitrage signals.
+
+  No new endpoint, parameter, or schema. Existing Bitcoin streams pick this up automatically — branch on `block.hash === "mempool"` in your webhook handler to separate mempool events from confirmed-block events. See the [Mempool Notifications](/streams/bitcoin-streams#mempool-notifications) section for the full payload and handler patterns.
+
+  [Explore Bitcoin Streams →](/streams/bitcoin-streams)
+</Update>
+
 <Update label="May 7, 2026" tags={["New Feature"]}>
   ## Bitcoin Streams
 
