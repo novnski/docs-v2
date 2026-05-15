@@ -659,6 +659,14 @@
             "pages": [
               "data-api/universal/overview",
               {
+                "group": "Wallets API",
+                "tag": "New",
+                "pages": [
+                  "data-api/universal/wallet/overview",
+                  "data-api/universal/wallet/cross-chain-token-balances"
+                ]
+              },
+              {
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
