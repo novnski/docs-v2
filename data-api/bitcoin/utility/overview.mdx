@@ -1,0 +1,27 @@
+---
+title: "Xpub Utility"
+sidebarTitle: "Overview"
+description: "Native Bitcoin xpub tooling — derive every address from a Bitcoin extended public key (xpub) along with its transfer count."
+---
+
+## Overview
+
+Bitcoin developers regularly need to map an xpub to **every address it derives** — and to know which of those addresses have actually been used. The xpub utility solves that natively.
+
+Pass a Bitcoin extended public key (xpub), and the API returns every derived address with its transfer count. No client-side derivation library required.
+
+---
+
+## Endpoint
+
+| Endpoint                                                                                            | Universal path                                                       |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [Addresses From Xpub](/data-api/bitcoin/utility/addresses-from-xpub)                                | `GET /v1/chains/bitcoin/wallets/{publicKey}/addresses`               |
+
+---
+
+## Pairing With the Wallet API
+
+The Wallet API endpoints accept either an address or an xpub directly. For most flows you don't need to call the utility endpoint first — the API derives the addresses server-side.
+
+Use the utility endpoint when you need to **enumerate and display** the derived addresses themselves — for example a wallet UI that surfaces "this xpub controls the following addresses," or an analytics pipeline that wants to track each derived address independently.

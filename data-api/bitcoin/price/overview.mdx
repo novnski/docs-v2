@@ -1,0 +1,30 @@
+---
+title: "Bitcoin Price API"
+sidebarTitle: "Overview"
+description: "Current BTC price, full historical time series, and chart-ready sparklines through the Universal Token Price endpoints."
+---
+
+## Overview
+
+The **Bitcoin Price API** delivers BTC market data through the Moralis Universal Token Price endpoints. Pass `bitcoin` as the chain alias and `native` as the token alias to target BTC itself.
+
+Sparklines ship alongside historical data, so building a price chart UI doesn't require a second integration or your own caching layer.
+
+---
+
+## Endpoints
+
+| Endpoint                                                                  | Universal path                                                                          |
+| ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [Current Price](/data-api/bitcoin/price/current-price)                    | `GET /v1/chains/bitcoin/tokens/native/price`                                            |
+| [Historical Price](/data-api/bitcoin/price/historical-price)              | `GET /v1/chains/bitcoin/tokens/native/price/timeseries`                                 |
+| [Sparkline](/data-api/bitcoin/price/sparkline)                            | `GET /v1/chains/bitcoin/tokens/native/price/sparkline`                                  |
+
+---
+
+## Common Use Cases
+
+- **Portfolio dashboards** — BTC price, change, and a sparkline next to balances
+- **Trading apps** — full historical charts with configurable granularity
+- **Notifications** — fire on price thresholds without polling a third-party feed
+- **Reporting** — pull historical price for accounting and tax flows

@@ -1,0 +1,13 @@
+---
+title: "Get Block"
+sidebarTitle: "Get Block"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/chains/{chainAlias}/blocks/{blockIdentifier}"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={100} />
+
+<Note>
+  For Bitcoin, pass `bitcoin` (or `bitcoin-mainnet`) as `chainAlias`. The `blockIdentifier` accepts either a Bitcoin block height (all-digit values are treated as heights) or a block hash (any other value is forwarded as a hash).
+</Note>

@@ -1,0 +1,29 @@
+---
+title: "Bitcoin Blockchain API"
+sidebarTitle: "Overview"
+description: "Raw Bitcoin blocks and transactions — block headers, full transaction payloads, inputs, outputs, and UTXO-level detail."
+---
+
+## Overview
+
+The **Bitcoin Blockchain API** provides direct access to raw Bitcoin blocks and transactions through Moralis's Universal API. Pass `bitcoin` as the chain alias on the standard block and transaction endpoints.
+
+Query block headers, full transaction payloads, inputs, outputs, and UTXO-level detail without running your own Bitcoin node.
+
+---
+
+## Endpoints
+
+| Endpoint                                                                | Universal path                                                       |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [Get Block](/data-api/bitcoin/blockchain/block)                         | `GET /v1/chains/bitcoin/blocks/{blockIdentifier}`                    |
+| [Get Transaction](/data-api/bitcoin/blockchain/transaction)             | `GET /v1/chains/bitcoin/transactions/{txHash}`                       |
+
+---
+
+## Common Use Cases
+
+- **Block explorers** — display block and transaction detail
+- **Analytics pipelines** — ingest raw onchain data for custom indexing
+- **Compliance and tracing** — follow UTXO flows across transactions
+- **Wallet backends** — verify transaction inclusion and confirmation depth

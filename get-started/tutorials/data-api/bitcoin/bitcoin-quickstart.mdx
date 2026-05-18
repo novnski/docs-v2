@@ -1,0 +1,150 @@
+---
+title: "Bitcoin API Quickstart"
+description: "Make your first Bitcoin API request — fetch balances and history using either a Bitcoin address or an xpub via the Moralis Universal API."
+---
+
+## Introduction
+
+This quickstart walks you through your first request to the **Bitcoin Data API**. Under the hood it's the Moralis Universal API — every endpoint is the same one EVM and Solana developers already use, just with `bitcoin` as the chain.
+
+You'll fetch BTC balances and a page of wallet history, then call the xpub utility. The interesting part: the wallet endpoints accept **either an address or an xpub** as input, so you can drop the API into whichever shape your app already has.
+
+## Prerequisites
+
+- Node.js v18+ installed
+- A Moralis API key ([get one free](https://admin.moralis.io))
+
+## Step 1: Set up your project
+
+```bash
+mkdir bitcoin-quickstart && cd bitcoin-quickstart
+npm init -y
+```
+
+## Step 2: Fetch a BTC balance — by address
+
+Create a file called `balance-by-address.js`:
+
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+const ADDRESS = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
+
+async function getBalance() {
+  const response = await fetch(
+    `https://api.moralis.com/v1/wallets/${ADDRESS}/tokens?chains=bitcoin`,
+    { headers: { 'X-API-Key': API_KEY } }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getBalance();
+```
+
+Run it:
+
+```bash
+node balance-by-address.js
+```
+
+You should see the native BTC balance for the address.
+
+## Step 3: Fetch the same kind of balance — by xpub
+
+The same endpoint accepts an xpub. Create `balance-by-xpub.js`:
+
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+const XPUB =
+  'xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz';
+
+async function getBalance() {
+  const response = await fetch(
+    `https://api.moralis.com/v1/wallets/${XPUB}/tokens?chains=bitcoin`,
+    { headers: { 'X-API-Key': API_KEY } }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getBalance();
+```
+
+The API derives every address from the xpub and aggregates balances for you. No client-side derivation, no extra libraries.
+
+## Step 4: Pull wallet transaction history
+
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+const ADDRESS_OR_XPUB = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq';
+
+async function getHistory() {
+  const response = await fetch(
+    `https://api.moralis.com/v1/wallets/${ADDRESS_OR_XPUB}/history?chains=bitcoin&limit=10`,
+    { headers: { 'X-API-Key': API_KEY } }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getHistory();
+```
+
+Use the returned `cursor` to paginate.
+
+## Step 5: Get the current BTC price (with sparkline)
+
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+
+async function getPrice() {
+  const [priceRes, sparkRes] = await Promise.all([
+    fetch('https://api.moralis.com/v1/chains/bitcoin/tokens/native/price', {
+      headers: { 'X-API-Key': API_KEY },
+    }),
+    fetch(
+      'https://api.moralis.com/v1/chains/bitcoin/tokens/native/price/sparkline',
+      { headers: { 'X-API-Key': API_KEY } }
+    ),
+  ]);
+
+  console.log('price:', await priceRes.json());
+  console.log('sparkline:', await sparkRes.json());
+}
+
+getPrice();
+```
+
+## Step 6: Enumerate the addresses derived from an xpub
+
+If your UI needs to **display every address** controlled by an xpub (not just query against it), call the utility endpoint:
+
+```javascript
+const API_KEY = 'YOUR_API_KEY';
+const XPUB =
+  'xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz';
+
+async function getAddresses() {
+  const response = await fetch(
+    `https://api.moralis.com/v1/chains/bitcoin/wallets/${XPUB}/addresses`,
+    { headers: { 'X-API-Key': API_KEY } }
+  );
+
+  const data = await response.json();
+  console.log(JSON.stringify(data, null, 2));
+}
+
+getAddresses();
+```
+
+You'll get every derived address with its transfer count.
+
+## What's next
+
+- [Bitcoin Wallet API](/data-api/bitcoin/wallet/overview) — balances and history
+- [Bitcoin Price API](/data-api/bitcoin/price/overview) — current price, history, sparklines
+- [Bitcoin Blockchain API](/data-api/bitcoin/blockchain/overview) — raw blocks and transactions
+- [Xpub Utility](/data-api/bitcoin/utility/addresses-from-xpub) — enumerate derived addresses

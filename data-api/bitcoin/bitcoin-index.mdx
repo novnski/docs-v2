@@ -1,0 +1,83 @@
+---
+title: "Bitcoin Data API"
+sidebarTitle: "Overview"
+description: "Complete Bitcoin data coverage — raw blocks and transactions, market prices with sparklines, address history and balances, plus native xpub-key tooling."
+---
+
+### Overview
+
+The **Bitcoin Data API** brings full Bitcoin coverage to the Moralis Universal API. Every endpoint is the same Universal endpoint EVM and Solana developers already use — just pass `bitcoin` as the chain.
+
+Historically, shipping a serious Bitcoin app meant stitching together five different services: a block explorer for raw data, a price feed, a custom indexer for address activity, a derivation library for xpubs, and your own caching layer for chart UIs. The Bitcoin API replaces all of that under one consistent surface with the same auth, SDKs, pricing, and rate limits as the rest of Moralis.
+
+---
+
+### Explore the Bitcoin API
+
+<Columns cols={2}>
+  <Card icon="cubes" href="/data-api/bitcoin/blockchain/overview" title="Blockchain API">
+    Raw blocks and raw transactions — work directly with onchain data.
+  </Card>
+  <Card icon="chart-candlestick" href="/data-api/bitcoin/price/overview" title="Price API">
+    Current BTC price, full historical time series, and chart-ready sparklines.
+  </Card>
+  <Card icon="wallet" href="/data-api/bitcoin/wallet/overview" title="Wallet API">
+    Transaction history and token balances for any Bitcoin address or xpub.
+  </Card>
+  <Card icon="key" href="/data-api/bitcoin/utility/overview" title="Xpub Utility">
+    Derive every address associated with a Bitcoin xpub.
+  </Card>
+</Columns>
+
+---
+
+### How It Works
+
+The Bitcoin API is delivered through Moralis's Universal API endpoints:
+
+| Capability                | Universal endpoint                                                                  | Bitcoin parameters                                          |
+| ------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Raw blocks                | `GET /v1/chains/{chainAlias}/blocks/{blockIdentifier}`                              | `chainAlias=bitcoin`                                        |
+| Raw transactions          | `GET /v1/chains/{chainAlias}/transactions/{txHash}`                                 | `chainAlias=bitcoin`                                        |
+| BTC current price         | `GET /v1/chains/{chainAlias}/tokens/{tokenAliasOrTokenAddress}/price`               | `chainAlias=bitcoin`, `tokenAlias=native`                   |
+| BTC historical price      | `GET /v1/chains/{chainAlias}/tokens/{tokenAliasOrTokenAddress}/price/timeseries`    | `chainAlias=bitcoin`, `tokenAlias=native`                   |
+| BTC sparkline             | `GET /v1/chains/{chainAlias}/tokens/{tokenAliasOrTokenAddress}/price/sparkline`     | `chainAlias=bitcoin`, `tokenAlias=native`                   |
+| Wallet BTC balances       | `GET /v1/wallets/{walletAddressOrPublicKey}/tokens`                                 | `chains=bitcoin`, `walletAddress=address OR xpub`            |
+| Wallet transaction history| `GET /v1/wallets/{walletAddressOrPublicKey}/history`                                | `chains=bitcoin`, `walletAddress=address OR xpub`            |
+| Addresses from xpub       | `GET /v1/chains/{chainAlias}/wallets/{publicKey}/addresses`                         | `chainAlias=bitcoin`, `publicKey=xpub`                       |
+
+---
+
+### Key Capabilities
+
+- **Full Bitcoin data lifecycle in one API** — raw blocks and transactions, market data, address activity, and balances. No stitching required.
+- **Native xpub support** — every wallet endpoint accepts a Bitcoin address **or** an xpub, plus a utility endpoint to enumerate every derived address from an xpub.
+- **Chart-ready price data** — sparklines bundled alongside historical time series, no second integration needed.
+- **Address OR xpub inputs** — slot the API into whatever your wallet or backend already uses.
+- **Same Moralis developer experience** — consistent auth, SDKs, pricing, and rate limits with the rest of Moralis coverage.
+
+---
+
+### Address or Xpub Inputs
+
+The wallet endpoints accept either a Bitcoin address or an xpub directly:
+
+```bash
+# Address input
+GET /v1/wallets/bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq/tokens?chains=bitcoin
+
+# Xpub input — same endpoint, derives addresses server-side
+GET /v1/wallets/xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz/tokens?chains=bitcoin
+```
+
+To **enumerate** every derived address from an xpub (rather than just query against it), use the [xpub utility endpoint](/data-api/bitcoin/utility/addresses-from-xpub).
+
+---
+
+### Get Started
+
+- [**Blockchain API**](/data-api/bitcoin/blockchain/overview) — raw blocks and transactions
+- [**Price API**](/data-api/bitcoin/price/overview) — current price, history, and sparklines
+- [**Wallet API**](/data-api/bitcoin/wallet/overview) — address history and balances
+- [**Xpub Utility**](/data-api/bitcoin/utility/overview) — derive addresses from an xpub
+- [**Bitcoin Quickstart**](/get-started/tutorials/data-api/bitcoin/bitcoin-quickstart) — first request, address-or-xpub flow
