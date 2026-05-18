@@ -35,7 +35,7 @@ More multi-chain wallet endpoints are on the way as we consolidate cross-chain f
 
 - **Wallets** - Show full multi-chain holdings on a single screen
 - **Exchanges** - Surface a user's deposit balances across networks
-- **Portfolio Trackers** - Aggregate token holdings across EVM (and, soon, Bitcoin and Solana) in one query
+- **Portfolio Trackers** - Aggregate token holdings across EVM in one query, with Bitcoin and Solana available today through their [dedicated Wallet APIs](/data-api/bitcoin/wallet/overview)
 - **Tax Tools** - Pull a complete asset list per wallet for cost-basis and reporting flows
 - **AI Agents** - Hand the model a single response containing the wallet's full token footprint
 
@@ -43,12 +43,12 @@ More multi-chain wallet endpoints are on the way as we consolidate cross-chain f
 
 ## Roadmap
 
-The current scope is EVM. Coming next:
+The current scope of this Universal Wallets endpoint is EVM. Bitcoin and Solana already have full standalone coverage through their dedicated APIs:
 
-- **Bitcoin** - native Bitcoin wallet balances in the same endpoint
-- **Solana** - Solana token balances brought into the Universal API alongside our existing dedicated Solana Token Balances endpoint, unified into the same multi-chain request structure
+- [**Bitcoin Wallet API**](/data-api/bitcoin/wallet/overview) - native Bitcoin balances and history, today
+- [**Solana Wallet API**](/data-api/solana/wallet/overview) - Solana balances, NFTs, and portfolio, today
 
-The end state: one endpoint, one request shape, balances across EVM, Bitcoin, and Solana wallets.
+Next on this endpoint: bringing Bitcoin and Solana into the same multi-chain request shape, so one call returns balances across EVM, Bitcoin, and Solana wallets.
 
 ---
 

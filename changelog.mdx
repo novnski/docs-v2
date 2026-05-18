@@ -31,6 +31,40 @@ description: "New releases and improvements"
   [Explore Bitcoin Streams →](/streams/bitcoin-streams)
 </Update>
 
+<Update label="May 13, 2026" tags={["New Feature"]}>
+  ## Cross-Chain Token Balances
+
+  One of our most popular Deep Index endpoints, **Token Balances**, is now available on the Universal API as **Cross-Chain Token Balances**. A single request returns a wallet's token balances across multiple chains - no more one-request-per-chain plus client-side stitching.
+
+  **What changed vs. the legacy endpoint:**
+
+  |  | Legacy ([getWalletTokenBalancesPrice](https://deep-index.moralis.io/api-docs-2.2/#/Wallets/getWalletTokenBalancesPrice)) | New ([getTokenBalances](https://api.moralis.com/api#/Wallets/getTokenBalances)) |
+  | --- | --- | --- |
+  | Scope | Single chain per request | Multi-chain in one request |
+  | Chain coverage | EVM | EVM (Bitcoin and Solana coming) |
+  | Filters | Spam exclusion, unverified contracts, liquidity thresholds, etc. | All preserved |
+  | Pricing data | Included | Included |
+
+  Everything customers already rely on - spam filtering, unverified contract exclusion, liquidity thresholds, USD pricing - works exactly the same. The only difference is you can now ask for multiple chains in a single call.
+
+  **Who it's for:** wallets, exchanges, portfolio dashboards, tax tools, and AI agents that need a wallet's full multi-chain holdings without firing one request per chain.
+
+  **Why it matters:**
+
+  - **Fewer requests, simpler integration** - one call instead of N (where N = chains your users hold assets on)
+  - **Faster portfolio views** - no client-side stitching across responses
+  - **Same trusted filters** - spam, unverified, and low-liquidity controls carry over unchanged, so existing implementations port cleanly
+
+  **Roadmap:** currently EVM. Coming next:
+
+  - **Bitcoin** - native Bitcoin wallet balances in the same endpoint
+  - **Solana** - Solana token balances brought into the Universal API (we already offer Solana token balances as a dedicated API; this unifies them into the same multi-chain request structure)
+
+  The end state: one endpoint, one request shape, balances across EVM, Bitcoin, and Solana wallets.
+
+  [Try the new endpoint →](https://api.moralis.com/api#/Wallets/getTokenBalances)
+</Update>
+
 <Update label="May 7, 2026" tags={["New Feature"]}>
   ## Bitcoin Streams
 

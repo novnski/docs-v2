@@ -1,0 +1,13 @@
+---
+title: "Addresses From Xpub"
+sidebarTitle: "Addresses From Xpub"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/chains/{chainAlias}/wallets/{publicKey}/addresses"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={10} />
+
+<Note>
+  Pass `bitcoin` (or `bitcoin-mainnet`) as `chainAlias` and your Bitcoin extended public key as `publicKey`. The response lists every derived address along with its transfer count, so you can show only the addresses that have actually been used.
+</Note>

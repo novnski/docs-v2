@@ -1,0 +1,13 @@
+---
+title: "BTC Balances"
+sidebarTitle: "BTC Balances"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddressOrPublicKey}/tokens"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={100} />
+
+<Note>
+  For Bitcoin balances, pass `chains=bitcoin` as a query parameter. The `walletAddressOrPublicKey` path parameter accepts either a Bitcoin address or an **xpub** — when an xpub is supplied, balances are aggregated across all derived addresses server-side.
+</Note>

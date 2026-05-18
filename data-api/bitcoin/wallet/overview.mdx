@@ -1,0 +1,37 @@
+---
+title: "Bitcoin Wallet API"
+sidebarTitle: "Overview"
+description: "Transaction history and token balances for any Bitcoin address — or xpub. Slots into whatever shape your wallet or backend already uses."
+---
+
+## Overview
+
+The **Bitcoin Wallet API** provides address-level activity and balances through the Moralis Universal Wallet endpoints. Pass `bitcoin` as the chain and either a Bitcoin address **or** an xpub as the wallet identifier.
+
+For workflows that need to enumerate every address derived from an xpub, pair the Wallet API with the [xpub utility](/data-api/bitcoin/utility/addresses-from-xpub).
+
+---
+
+## Endpoints
+
+| Endpoint                                                                             | Universal path                                                        |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| [BTC Balances](/data-api/bitcoin/wallet/address-balances)                            | `GET /v1/wallets/{addressOrXpub}/tokens?chains=bitcoin`               |
+| [Wallet History](/data-api/bitcoin/wallet/address-transactions)                      | `GET /v1/wallets/{addressOrXpub}/history?chains=bitcoin`              |
+
+---
+
+## Key Features
+
+- **Address OR xpub input** — pass either; the API derives addresses server-side for xpubs
+- **Paginated history** — cursor-based pagination tuned for high-activity addresses
+- **No node required** — managed indexer handles UTXO accounting and reorgs
+
+---
+
+## Common Use Cases
+
+- **Bitcoin wallets** — show balances and history without operating a node
+- **Custody platforms** — surface activity for managed addresses
+- **Block explorers** — render address pages with full history and holdings
+- **Analytics** — aggregate flows across every address derived from a single xpub

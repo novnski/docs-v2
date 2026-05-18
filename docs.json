@@ -105,6 +105,13 @@
                       "get-started/tutorials/data-api/blocks-and-transactions/get-a-blockchain-transaction-by-hash",
                       "get-started/tutorials/data-api/blocks-and-transactions/find-the-closest-block-by-unix-timestamp"
                     ]
+                  },
+                  {
+                    "group": "Bitcoin",
+                    "tag": "New",
+                    "pages": [
+                      "get-started/tutorials/data-api/bitcoin/bitcoin-quickstart"
+                    ]
                   }
                 ]
               },
@@ -655,9 +662,56 @@
             ]
           },
           {
+            "group": "Bitcoin API",
+            "tag": "New",
+            "pages": [
+              "data-api/bitcoin/bitcoin-index",
+              {
+                "group": "Blockchain API",
+                "pages": [
+                  "data-api/bitcoin/blockchain/overview",
+                  "data-api/bitcoin/blockchain/block",
+                  "data-api/bitcoin/blockchain/transaction"
+                ]
+              },
+              {
+                "group": "Price API",
+                "pages": [
+                  "data-api/bitcoin/price/overview",
+                  "data-api/bitcoin/price/current-price",
+                  "data-api/bitcoin/price/historical-price",
+                  "data-api/bitcoin/price/sparkline"
+                ]
+              },
+              {
+                "group": "Wallet API",
+                "pages": [
+                  "data-api/bitcoin/wallet/overview",
+                  "data-api/bitcoin/wallet/address-transactions",
+                  "data-api/bitcoin/wallet/address-balances"
+                ]
+              },
+              {
+                "group": "Xpub Utility",
+                "pages": [
+                  "data-api/bitcoin/utility/overview",
+                  "data-api/bitcoin/utility/addresses-from-xpub"
+                ]
+              }
+            ]
+          },
+          {
             "group": "Universal API",
             "pages": [
               "data-api/universal/overview",
+              {
+                "group": "Wallets API",
+                "tag": "New",
+                "pages": [
+                  "data-api/universal/wallet/overview",
+                  "data-api/universal/wallet/cross-chain-token-balances"
+                ]
+              },
               {
                 "group": "Token API",
                 "tag": "New features",
