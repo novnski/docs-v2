@@ -1,0 +1,213 @@
+---
+title: 'Migrating from Sim by Dune to Moralis'
+sidebarTitle: 'Migrating from Sim by Dune'
+description: 'Sim by Dune is being sunset on August 1, 2026, and new signups closed on May 18, 2026. This guide maps every Sim endpoint to its Moralis equivalent so you can keep shipping without rewriting your data layer.'
+---
+
+# Migrating from Sim by Dune to Moralis
+
+<Info>
+Sim (`sim.dune.com`) is being sunset on **August 1, 2026**. New signups were disabled on May 18, 2026. Any production workload backed by Sim needs a replacement read layer before the cutoff — this page maps the Sim API surface to Moralis endpoint-by-endpoint so the swap is a search-and-replace in most cases.
+</Info>
+
+Sim and Moralis cover the same wallet-centric problem space: real-time balances, activity, NFTs, DeFi positions, token metadata, and webhook subscriptions across 60+ EVM chains and Solana. Moralis is a drop-in target for the vast majority of Sim usage — the field names differ, but the resource shapes line up.
+
+## Quick reference
+
+### EVM — Account data
+
+| Sim feature                | Sim endpoint                                        | Moralis equivalent                                                                          |
+| -------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Activity (full history)    | `GET /v1/evm/activity/{address}`                    | [Wallet History](/data-api/evm/wallet/wallet-history)                                       |
+| Token balances             | `GET /v1/evm/balances/{address}`                    | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)                         |
+| Native balance             | `GET /v1/evm/balances/{address}` (native row)       | [Get Native Balance by Wallet](/data-api/evm/wallet/native-balance)                         |
+| Transactions               | `GET /v1/evm/transactions/{address}`                | [Get Wallet Transactions](/data-api/evm/wallet/wallet-transactions)                         |
+| Decoded transactions       | `GET /v1/evm/transactions/{address}` (decoded view) | [Get Decoded Wallet Transactions](/data-api/evm/wallet/decoded-transactions)                |
+| Collectibles (NFTs)        | `GET /v1/evm/collectibles/{address}`                | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                                     |
+| NFT collections held       | `GET /v1/evm/collectibles/{address}` (grouped)      | [Get NFT Collections by Wallet](/data-api/evm/wallet/nft-collections)                       |
+| Net worth                  | `GET /v1/evm/balances/{address}` (`value_usd` sum)  | [Get Wallet Net Worth](/data-api/evm/wallet/net-worth)                                      |
+
+### EVM — Token data
+
+| Sim feature                | Sim endpoint                              | Moralis equivalent                                                                          |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Token info / metadata      | `GET /v1/evm/token-info/{address}`        | [Get Token Metadata](/data-api/evm/token/metadata/token-metadata)                           |
+| Search tokens              | `GET /v1/evm/token-search`                | [Search Tokens](/data-api/universal/token/search)                                           |
+| Token holders              | `GET /v1/evm/token-holders/{address}`     | [Get Token Holders](/data-api/evm/token/holders/token-holders)                              |
+| Holder distribution stats  | (derived from holders endpoint)           | [Get Token Holder Stats](/data-api/evm/token/holders/token-holder-stats)                    |
+| Holders over time          | _not available in Sim_                    | [Get Historical Token Holders](/data-api/evm/token/holders/historical-token-holders)        |
+| Stablecoin balances        | `GET /v1/evm/stablecoins/{address}`       | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances) — filter on `category`  |
+
+### EVM — DeFi
+
+| Sim feature                | Sim endpoint                              | Moralis equivalent                                                                          |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| DeFi positions             | `GET /v1/evm/defi/positions/{address}`    | [Get Wallet DeFi Positions Summary](/data-api/evm/defi/wallet-positions)                    |
+| Position details           | `GET /v1/evm/defi/positions/{address}`    | [Get Detailed Wallet Positions](/data-api/evm/defi/wallet-positions-detailed)               |
+| Supported protocols        | `GET /v1/evm/defi/protocols`              | [Get DeFi Protocols by Wallet](/data-api/evm/defi/wallet-protocols)                         |
+
+### Real-time — Webhooks → Streams
+
+| Sim feature                | Sim endpoint                              | Moralis equivalent                                                                          |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Create webhook             | `POST /v1/webhooks`                       | [Create a Stream](/streams/api-reference) (or via the [Streams dashboard](/streams/overview))|
+| List / get webhooks        | `GET /v1/webhooks`                        | [List Streams](/streams/api-reference)                                                      |
+| Update / delete webhook    | `PUT` / `DELETE /v1/webhooks/{id}`        | [Update / Delete Stream](/streams/api-reference)                                            |
+| Add or replace addresses   | `POST /v1/webhooks/{id}/addresses`        | [Add Address to Stream](/streams/api-reference)                                             |
+| Balance-change events      | Subscription `type: balance_change`       | [EVM Streams](/streams/evm-streams) — address activity + ERC20 transfer filters             |
+| Activity / transfer events | Subscription `type: activity`             | [EVM Streams](/streams/evm-streams)                                                         |
+
+Moralis Streams covers the same delivery model (HTTP webhooks with retries, signature verification, and address management) and adds richer filtering — contract events by ABI, smart-filter expressions, internal-tx visibility, and per-chain throughput tuning.
+
+### Solana (SVM)
+
+| Sim feature                | Sim endpoint                              | Moralis equivalent                                                                          |
+| -------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Balances                   | `GET /v1/svm/balances/{address}`          | [Get SPL Token Balances](/data-api/solana/wallet/token-balances)                            |
+| Portfolio (with USD)       | `GET /v1/svm/balances/{address}`          | [Get Portfolio](/data-api/solana/wallet/portfolio)                                          |
+| Native SOL balance         | `GET /v1/svm/balances/{address}` (native) | [Get Native Balance](/data-api/solana/wallet/native-balance)                                |
+| Transactions / swaps       | `GET /v1/svm/transactions/{address}`      | [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps)                                    |
+| NFT holdings               | (via balances endpoint)                   | [Get NFTs by Wallet](/data-api/solana/wallet/nft-balances)                                  |
+| Token metadata             | `GET /v1/svm/token-info/{mint}`           | [Get Token Metadata](/data-api/solana/token/token-metadata)                                 |
+| Real-time events           | Webhooks                                  | [Solana Streams](/streams/solana-streams)                                                   |
+
+## Endpoint walkthroughs
+
+### Wallet activity
+
+**Sim**:
+
+```bash
+curl "https://api.sim.dune.com/v1/evm/activity/0xd8da6bf26964af9d7eed9e03e53415d37aa96045?chain_ids=1,8453" \
+  -H "X-Sim-Api-Key: $SIM_API_KEY"
+```
+
+**Moralis**:
+
+```bash
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/history?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+Moralis returns a normalized, chronological feed of native transfers, ERC20 movements, NFT transfers, swaps, contract interactions, and approvals in a single call. See [Wallet History](/data-api/evm/wallet/wallet-history). For multi-chain rollups, call the endpoint per chain in parallel or use [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances) for the balance view.
+
+### Token balances
+
+**Sim**:
+
+```bash
+curl "https://api.sim.dune.com/v1/evm/balances/0xd8da6bf26964af9d7eed9e03e53415d37aa96045?chain_ids=1" \
+  -H "X-Sim-Api-Key: $SIM_API_KEY"
+```
+
+**Moralis**:
+
+```bash
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/tokens?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+The response includes balance, decimals, USD price, USD value, and token metadata (symbol, name, logo, verified-contract flag, possible-spam flag). See [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances).
+
+### NFTs / collectibles
+
+**Sim**:
+
+```bash
+curl "https://api.sim.dune.com/v1/evm/collectibles/0xd8da6bf26964af9d7eed9e03e53415d37aa96045?chain_ids=1" \
+  -H "X-Sim-Api-Key: $SIM_API_KEY"
+```
+
+**Moralis**:
+
+```bash
+curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/nft?chain=eth&format=decimal&normalizeMetadata=true&media_items=true" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+Moralis returns ERC721 and ERC1155 holdings with normalized metadata, hosted media previews, and spam indicators. See [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances).
+
+### DeFi positions
+
+**Sim**:
+
+```bash
+curl "https://api.sim.dune.com/v1/evm/defi/positions/0xd8da6bf26964af9d7eed9e03e53415d37aa96045" \
+  -H "X-Sim-Api-Key: $SIM_API_KEY"
+```
+
+**Moralis**:
+
+```bash
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/defi/positions?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+Returns the wallet's positions grouped by protocol with USD value, position type (liquidity, staking, lending, etc.), and per-position breakdown. For the per-protocol detail view, see [Get Detailed Wallet Positions](/data-api/evm/defi/wallet-positions-detailed).
+
+### Webhooks → Streams
+
+Sim webhooks deliver events for a watched address; Moralis Streams does the same and adds contract-event ABIs, smart-filter expressions, and internal-transaction visibility. Create a stream once and attach addresses to it dynamically:
+
+```bash
+# Create a stream that fires on any activity for a watched set of addresses
+curl -X POST "https://api.moralis-streams.com/streams/evm" \
+  -H "X-API-Key: $MORALIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://your.app/webhooks/moralis",
+    "description": "Wallet activity",
+    "tag": "wallet-activity",
+    "chainIds": ["0x1", "0x2105"],
+    "includeNativeTxs": true,
+    "includeContractLogs": true,
+    "includeInternalTxs": false
+  }'
+```
+
+Then attach addresses to the stream as your user base changes — no need to recreate the subscription. See the [Streams overview](/streams/overview) and [EVM Streams](/streams/evm-streams).
+
+### Solana balances and activity
+
+**Sim**:
+
+```bash
+curl "https://api.sim.dune.com/v1/svm/balances/D8da6bf26964af9d7eed9e03e53415d37aa96045aaaaaaaaaaaaaaaaaaaaaaaa" \
+  -H "X-Sim-Api-Key: $SIM_API_KEY"
+```
+
+**Moralis**:
+
+```bash
+curl "https://solana-gateway.moralis.io/account/mainnet/D8da6bf26964af9d7eed9e03e53415d37aa96045aaaaaaaaaaaaaaaaaaaaaaaa/portfolio" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+The [Solana Portfolio endpoint](/data-api/solana/wallet/portfolio) returns native SOL, SPL token balances with USD pricing, and NFT holdings in a single response. For swap history, use [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps); for real-time events, use [Solana Streams](/streams/solana-streams).
+
+## Chain coverage
+
+Sim covers 60+ EVM chains plus Solana. Moralis covers a comparable footprint across EVM, Solana, and Bitcoin. The full list is on [Supported Chains](/data-api/supported-chains) — if you're migrating, do a one-time diff against the chains you've configured in Sim and flag any gaps before cutover.
+
+## Migration checklist
+
+1. **Get an API key** — [Get your API key](/data-api/get-your-api-key).
+2. **Map your call sites** — replace each Sim endpoint with the equivalent above. Field names differ; most teams write a thin response adapter rather than threading new shapes through the codebase.
+3. **Move webhooks to Streams** — create one Stream per event class (activity, ERC20 transfers, contract events) and attach addresses dynamically instead of one webhook per address.
+4. **Verify chain coverage** — diff your Sim chain configuration against [Supported Chains](/data-api/supported-chains).
+5. **Cut over before August 1, 2026** — Sim's API stops serving on that date.
+
+## What you gain beyond a like-for-like swap
+
+Sim's surface maps cleanly onto Moralis, but Moralis also exposes endpoints that don't have a Sim counterpart and that are commonly used by teams once they migrate:
+
+- **Wallet PnL** — realized and unrealized PnL per wallet with token-level breakdown. See [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) and [Wallet PnL by Token](/data-api/evm/wallet/wallet-pnl).
+- **Wallet Stats & Insights** — first/last activity, chain-level activity rollups, and behavioral signals. See [Wallet Stats](/data-api/evm/wallet/wallet-stats) and [Wallet Insights](/data-api/evm/wallet/wallet-insights).
+- **Token approvals** — open ERC20 approvals for a wallet, used widely in revoke flows. See [Wallet Approvals](/data-api/evm/wallet/approvals).
+- **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
+- **OHLCV & pair stats** — candle data and DEX pair analytics. See [Get OHLCV by Pair Address](/data-api/evm/token/swaps/pair-stats).
+- **Cross-chain balances in one call** — see [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances).
+
+## Need help?
+
+If you're moving a production workload over before the August 1 deadline, the support team can help size the migration and review your call patterns — reach out via [moralis.com](https://moralis.com/).

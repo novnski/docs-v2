@@ -166,7 +166,8 @@
                 "pages": [
                   "get-started/tutorials/migration-guides/migrating-from-reservoir-to-moralis",
                   "get-started/tutorials/migration-guides/migrating-from-simple-hash-to-moralis",
-                  "get-started/tutorials/migration-guides/migrating-from-ok-link-to-moralis"
+                  "get-started/tutorials/migration-guides/migrating-from-ok-link-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-sim-by-dune-to-moralis"
                 ]
               },
               {
