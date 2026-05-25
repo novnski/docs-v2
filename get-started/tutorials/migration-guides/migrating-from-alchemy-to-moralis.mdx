@@ -71,7 +71,7 @@ Alchemy and Moralis solve the same problem: get clean, decoded, enriched blockch
 | NFT Activity / NFT Metadata Update       | [EVM Streams](/streams/evm-streams) — NFT transfer filters                                |
 | Mined / Dropped Transaction              | [EVM Streams](/streams/evm-streams)                                                       |
 | Custom (GraphQL) webhook                 | [EVM Streams](/streams/evm-streams) — contract-event + smart-filter expressions          |
-| Subscription API (`eth_subscribe`, `alchemy_minedTransactions`) | [Streams API](/streams/api-reference) (push delivery) or websockets via [RPC Nodes](/rpc-nodes/overview) |
+| Subscription API (`eth_subscribe`, `alchemy_minedTransactions`) | [Streams API](/streams/api-reference/streams/create-streams) (push delivery) or websockets via [RPC Nodes](/rpc-nodes/overview) |
 
 ### Solana (SVM)
 
@@ -189,7 +189,7 @@ curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e
 | Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
 | NFT activity events     | EVM Streams           | [Documentation](/streams/evm-streams)    |
 | Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
-| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference)  |
+| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference/streams/create-streams)  |
 
 ```bash
 # Moralis Streams — create one stream, then attach many addresses to it

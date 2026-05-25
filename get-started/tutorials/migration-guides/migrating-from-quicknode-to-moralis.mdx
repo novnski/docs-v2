@@ -21,7 +21,7 @@ QuickNode delivers blockchain data through RPC plus marketplace add-ons — most
 | `qn_getWalletTokenBalance`            | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)       |
 | `qn_getWalletTokenTransactions`       | [Get Wallet History](/data-api/evm/wallet/wallet-history)                 |
 | `qn_getTokenMetadataByContractAddress`| [Get Token Metadata](/data-api/evm/token/metadata/token-metadata)         |
-| `qn_getTokenMetadataBySymbol`         | [Search Tokens](/data-api/universal/token/search)                         |
+| `qn_getTokenMetadataBySymbol`         | [Search Tokens](/data-api/universal/token/search/token-search)                         |
 
 ### NFT API (v2)
 
@@ -48,7 +48,7 @@ QuickNode delivers blockchain data through RPC plus marketplace add-ons — most
 | ----------------------- | ---------------------------------------------------------------------------------------- |
 | Streams (data feeds)    | [EVM Streams](/streams/evm-streams) / [Solana Streams](/streams/solana-streams)          |
 | QuickAlerts (webhooks)  | [EVM Streams](/streams/evm-streams) — address activity + ERC20/contract filters          |
-| Stream management       | [Streams API Reference](/streams/api-reference)                                          |
+| Stream management       | [Streams API Reference](/streams/api-reference/streams/create-streams)                                          |
 
 ### Solana (SVM)
 
@@ -153,7 +153,7 @@ curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37
 | Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
 | Contract / log events   | EVM Streams           | [Documentation](/streams/evm-streams)    |
 | Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
-| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference)  |
+| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference/streams/create-streams)  |
 
 ```bash
 # Moralis Streams — create one stream, then attach many addresses to it
