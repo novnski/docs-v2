@@ -1,0 +1,209 @@
+---
+title: 'Migrating from Infura to Moralis'
+sidebarTitle: 'Migrating from Infura'
+description: 'Move from Infura (MetaMask Developer) to Moralis and get an enriched Web3 Data API and real-time Streams on top of RPC. This guide maps Infura RPC, the Gas API, IPFS, and the NFT API to their Moralis equivalents across EVM and Solana.'
+---
+
+# Migrating from Infura to Moralis
+
+<Info>
+**Moralis is a drop-in alternative to Infura — and more.** Infura (now part of MetaMask Developer) is primarily an RPC node provider with a Gas API and IPFS. Moralis gives you RPC node access *plus* the enriched Web3 Data API and real-time Streams that Infura doesn't offer — so migrating isn't just a swap, it removes the indexing layer you'd otherwise build yourself on top of Infura's raw RPC.
+</Info>
+
+Infura serves raw JSON-RPC and a handful of supporting services (Gas API, IPFS). To turn that into product features — wallet token balances, transaction history, NFT data, token prices, DeFi positions, real-time webhooks — teams typically build and operate an indexing layer on top of Infura's nodes. Moralis ships that layer as a REST API, so you replace the RPC endpoint *and* delete the indexer.
+
+## Quick reference: Infura → Moralis
+
+### RPC & node services
+
+| Infura service                  | Moralis equivalent                                                        |
+| ------------------------------- | ------------------------------------------------------------------------- |
+| JSON-RPC node access            | [Moralis RPC Nodes](/rpc-nodes/overview)                                  |
+| Gas API (`suggestedGasFees`, `basefeehistory`, `basefeepercentile`, `busythreshold`) | `eth_gasPrice` / `eth_feeHistory` via [Moralis RPC Nodes](/rpc-nodes/overview) |
+| Archive data / failover         | [Moralis RPC Nodes](/rpc-nodes/overview)                                  |
+| IPFS API & gateway              | No direct equivalent — see note below                                     |
+
+### Data the Infura RPC layer doesn't give you (Moralis does)
+
+| What you'd build on Infura RPC          | Moralis endpoint (no indexing required)                                  |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| Wallet token balances + USD value       | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)      |
+| Native balance                          | [Get Native Balance by Wallet](/data-api/evm/wallet/native-balance)      |
+| Decoded transaction history             | [Get Wallet History](/data-api/evm/wallet/wallet-history)                |
+| Token metadata & prices                 | [Get Token Metadata](/data-api/evm/token/metadata/token-metadata) · [Get Token Price](/data-api/evm/token/prices/token-price) |
+| Token holders                           | [Get Token Holders](/data-api/evm/token/holders/token-holders)           |
+| DeFi positions                          | [Get Wallet DeFi Positions](/data-api/evm/defi/wallet-positions)         |
+| Wallet net worth                        | [Get Wallet Net Worth](/data-api/evm/wallet/net-worth)                   |
+
+### NFT API (legacy Infura NFT API)
+
+| Infura NFT API capability   | Moralis equivalent                                                              |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| NFTs owned by an address    | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                         |
+| NFTs in a collection        | [Get NFTs by Contract](/data-api/evm/nft/collections/nfts-by-collection)        |
+| NFT collection metadata     | [Get NFT Collection Metadata](/data-api/evm/nft/metadata/collection-metadata)   |
+| NFT token metadata          | [Get NFT Metadata](/data-api/evm/nft/metadata/nft-metadata)                     |
+| NFT owners                  | [Get NFT Owners by Contract](/data-api/evm/nft/ownership/owners-by-contract)    |
+| NFT transfers / trades      | [Get NFT Contract Transfers](/data-api/evm/nft/transfers/collection-transfers) · [Get NFT Trades](/data-api/evm/nft/trades/collection-trades) |
+
+### Real-time (Infura has no webhook product) → Streams
+
+| Need                    | Moralis equivalent                                                                       |
+| ----------------------- | ---------------------------------------------------------------------------------------- |
+| Address activity events | [EVM Streams](/streams/evm-streams)                                                      |
+| Contract / log events   | [EVM Streams](/streams/evm-streams)                                                      |
+| Solana account events   | [Solana Streams](/streams/solana-streams)                                                |
+| Stream management API   | [Streams API Reference](/streams/api-reference)                                          |
+
+### Solana (SVM)
+
+| Capability                  | Moralis equivalent                                                                       |
+| --------------------------- | ---------------------------------------------------------------------------------------- |
+| Solana RPC                  | [Moralis RPC Nodes](/rpc-nodes/overview)                                                 |
+| Solana token balances       | [Get SPL Token Balances](/data-api/solana/wallet/token-balances) · [Get Portfolio](/data-api/solana/wallet/portfolio) |
+| Solana NFTs                 | [Get NFTs by Wallet](/data-api/solana/wallet/nft-balances)                               |
+| Solana swaps / transactions | [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps)                                 |
+
+## Endpoint details
+
+### RPC node access
+
+**Infura**: `https://mainnet.infura.io/v3/{apiKey}` (and per-network subdomains)
+
+| Chain | Moralis Equivalent | Documentation                       |
+| ----- | ------------------ | ----------------------------------- |
+| EVM   | Moralis RPC Nodes  | [Documentation](/rpc-nodes/overview)|
+| Solana| Moralis RPC Nodes  | [Documentation](/rpc-nodes/overview)|
+
+```bash
+# Infura
+curl "https://mainnet.infura.io/v3/$INFURA_API_KEY" \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}'
+
+# Moralis RPC Nodes — same JSON-RPC interface, different endpoint URL
+curl "$MORALIS_RPC_URL" \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"eth_blockNumber","params":[]}'
+```
+
+**Notes**: Moralis RPC Nodes speak standard JSON-RPC, so existing `web3.js`/`ethers`/`viem` code keeps working — point the provider URL at your Moralis RPC endpoint. Grab the URL from the [RPC Nodes](/rpc-nodes/overview) dashboard.
+
+### Gas API
+
+**Infura**: `https://gas.api.infura.io/v3/{apiKey}/networks/{chainId}/suggestedGasFees`
+
+| Chain | Moralis Equivalent                | Documentation                       |
+| ----- | --------------------------------- | ----------------------------------- |
+| EVM   | `eth_feeHistory` / `eth_gasPrice` | [Documentation](/rpc-nodes/overview)|
+
+**Notes**: Infura's Gas API (`suggestedGasFees`, `basefeehistory`, `basefeepercentile`, `busythreshold`) wraps EIP-1559 fee estimation. With Moralis, call the standard `eth_feeHistory` and `eth_gasPrice` JSON-RPC methods through [Moralis RPC Nodes](/rpc-nodes/overview) to compute priority and max fees.
+
+### Wallet token balances (build-it-yourself on Infura)
+
+On Infura you'd enumerate token contracts and batch `eth_call` to `balanceOf`, then resolve metadata yourself. Moralis returns it directly:
+
+| Chain  | Moralis Equivalent           | Moralis URL                                                             | Documentation                                           |
+| ------ | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| EVM    | Get Native & ERC20 Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/wallet/token-balances)    |
+| Solana | Get Portfolio (native + SPL) | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/wallet/portfolio)      |
+
+```bash
+# Moralis — one call, no contract enumeration, no metadata round-trips
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/tokens?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Response includes balance, decimals, USD price, USD value, and metadata (symbol, name, logo, verified flag, spam flag).
+
+### Transaction history
+
+| Chain | Moralis Equivalent | Moralis URL                                                       | Documentation                                        |
+| ----- | ------------------ | ----------------------------------------------------------------- | ---------------------------------------------------- |
+| EVM   | Get Wallet History | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history` | [Documentation](/data-api/evm/wallet/wallet-history) |
+
+```bash
+# Moralis — decoded, chronological feed of all wallet activity
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/history?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Reconstructing this on Infura means paging blocks, pulling receipts, and decoding logs against ABIs. Moralis returns native transfers, ERC20 movements, NFT transfers, swaps, contract interactions, and approvals already decoded.
+
+### NFTs by wallet
+
+**Infura**: legacy NFT API — NFTs owned by an address
+
+| Chain  | Moralis Equivalent | Moralis URL                                                       | Documentation                                         |
+| ------ | ------------------ | ----------------------------------------------------------------- | ----------------------------------------------------- |
+| EVM    | Get NFTs by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/wallet/nft-balances)    |
+| Solana | Get NFTs by Wallet | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/wallet/nft-balances) |
+
+```bash
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/nft?chain=eth&format=decimal&normalizeMetadata=true&media_items=true" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Returns ERC721 and ERC1155 holdings with normalized metadata, hosted media previews, and a `possible_spam` flag.
+
+### Real-time events → Moralis Streams
+
+Infura does not offer a webhook or notification product — to react to on-chain events you'd poll RPC or run a log subscription and your own delivery infrastructure. Moralis Streams replaces that with managed webhooks:
+
+| Feature                 | Moralis Equivalent    | Documentation                            |
+| ----------------------- | --------------------- | ---------------------------------------- |
+| Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Contract / log events   | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
+| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference)  |
+
+```bash
+# Moralis Streams — create one stream, then attach many addresses to it
+curl -X POST "https://api.moralis-streams.com/streams/evm" \
+  -H "X-API-Key: $MORALIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://your.app/webhooks/moralis",
+    "description": "Wallet activity",
+    "tag": "wallet-activity",
+    "chainIds": ["0x1", "0x2105"],
+    "includeNativeTxs": true,
+    "includeContractLogs": true
+  }'
+```
+
+**Notes**: Streams delivers HTTP webhooks with retries, signature verification, and dynamic address management, plus ABI-decoded contract events and smart-filter expressions.
+
+<Note>
+Infura's **IPFS** pinning service has no direct Moralis equivalent — Moralis is a blockchain data and streaming platform, not a file-storage host. Keep a dedicated IPFS provider for pinning, and use Moralis for on-chain data and real-time events.
+</Note>
+
+## Chain coverage
+
+Infura supports a broad set of EVM networks plus Solana and Starknet. Moralis covers EVM, Solana, and Bitcoin — see [Supported Chains](/data-api/supported-chains). Before cutover, diff the networks you've configured in Infura against the supported list and flag any gaps.
+
+## Migration checklist
+
+1. **Get an API key** — [Get your API key](/data-api/get-your-api-key).
+2. **Repoint RPC** — swap your Infura RPC URL for a [Moralis RPC Nodes](/rpc-nodes/overview) URL in your provider config; no code changes for standard JSON-RPC calls.
+3. **Replace home-grown indexing** — delete the balance/history/NFT/price logic you built on Infura RPC and call the Moralis Data API endpoints instead.
+4. **Swap the Gas API** — compute fees from `eth_feeHistory` / `eth_gasPrice` via Moralis RPC.
+5. **Add Streams for real-time** — replace polling or self-hosted log subscriptions with [Moralis Streams](/streams/overview).
+6. **Verify chain coverage** — diff your Infura network configuration against [Supported Chains](/data-api/supported-chains).
+
+## Beyond Infura: what Moralis adds
+
+Because Infura is RPC-first, almost the entire Moralis Data API is net-new capability after you migrate:
+
+- **Wallet PnL** — realized and unrealized PnL per wallet. See [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) and [Wallet PnL by Token](/data-api/evm/wallet/wallet-pnl).
+- **Wallet net worth & approvals** — [Wallet Net Worth](/data-api/evm/wallet/net-worth) and [Wallet Approvals](/data-api/evm/wallet/approvals).
+- **DeFi positions** — [Wallet DeFi Positions](/data-api/evm/defi/wallet-positions).
+- **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
+- **Token holder analytics** — [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) and [Historical Token Holders](/data-api/evm/token/holders/historical-token-holders).
+- **DEX & pair analytics** — [Pair Stats](/data-api/evm/token/swaps/pair-stats) and [OHLCV by Pair Address](/data-api/evm/token/prices/ohlc).
+- **Name resolution** — [ENS Lookup](/data-api/evm/wallet/ens-lookup) and [Resolve Address](/data-api/evm/wallet/resolve-address).
+
+## Need help migrating off Infura?
+
+If you're moving a production Infura workload to Moralis — RPC, home-grown indexing, or both — the support team can help size the migration and review your call patterns. Reach out via [moralis.com](https://moralis.com/).

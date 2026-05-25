@@ -1,0 +1,238 @@
+---
+title: 'Migrating from Alchemy to Moralis'
+sidebarTitle: 'Migrating from Alchemy'
+description: 'Move from Alchemy to Moralis without rewriting your data layer. This guide maps the Alchemy NFT API, Token API, Prices API, Portfolio API, Transfers API, and Webhooks (Notify) to their Moralis equivalents, endpoint by endpoint, across EVM and Solana.'
+---
+
+# Migrating from Alchemy to Moralis
+
+<Info>
+**Moralis is a drop-in alternative to Alchemy.** Moralis combines RPC node access, an enriched Web3 Data API, and real-time Streams behind a single API key — so you can replace Alchemy's enhanced APIs (NFT, Token, Prices, Portfolio, Transfers, Webhooks) and, if you want, your RPC traffic too. This page maps the Alchemy surface to Moralis method-by-method so the swap is mostly search-and-replace.
+</Info>
+
+Alchemy and Moralis solve the same problem: get clean, decoded, enriched blockchain data into your app without running indexers. Alchemy exposes this through its Enhanced APIs (mostly JSON-RPC method extensions plus REST Data APIs); Moralis exposes it through a REST Web3 Data API. Field names differ, but the resource shapes line up — most teams write a thin response adapter and keep shipping.
+
+## Quick reference: Alchemy → Moralis
+
+### NFT API
+
+| Alchemy method            | Moralis equivalent                                                                   |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| `getNFTsForOwner`         | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                                |
+| `getContractsForOwner`    | [Get NFT Collections by Wallet](/data-api/evm/wallet/nft-collections)                  |
+| `getNFTsForContract`      | [Get NFTs by Contract](/data-api/evm/nft/collections/nfts-by-collection)              |
+| `getNFTMetadata` / `getNFTMetadataBatch` | [Get NFT Metadata](/data-api/evm/nft/metadata/nft-metadata)            |
+| `getContractMetadata`     | [Get NFT Collection Metadata](/data-api/evm/nft/metadata/collection-metadata)         |
+| `getOwnersForNFT`         | [Get NFT Owners by Token ID](/data-api/evm/nft/ownership/owners-by-token-id)          |
+| `getOwnersForContract`    | [Get NFT Owners by Contract](/data-api/evm/nft/ownership/owners-by-contract)          |
+| `getFloorPrice`           | [Get NFT Floor Price by Contract](/data-api/evm/nft/prices/collection-floor-price)    |
+| `getNFTSales`             | [Get NFT Trades by Contract](/data-api/evm/nft/trades/collection-trades)              |
+| `getTransfersForContract` | [Get NFT Contract Transfers](/data-api/evm/nft/transfers/collection-transfers)        |
+| `getTransfersForOwner`    | [Get NFT Trades by Wallet](/data-api/evm/wallet/nft-trades-by-wallet)                 |
+| `summarizeNFTAttributes`  | [Get NFT Traits by Collection](/data-api/evm/nft/traits/traits-by-collection)         |
+| `computeRarity` / search by trait | [Get NFTs by Traits](/data-api/evm/nft/traits/nfts-by-traits)                |
+| `getSpamContracts` / `isSpamContract` | Built in — every NFT response includes a `possible_spam` flag         |
+
+### Token API & Prices API
+
+| Alchemy method                          | Moralis equivalent                                                                  |
+| --------------------------------------- | ----------------------------------------------------------------------------------- |
+| `alchemy_getTokenBalances`              | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)                 |
+| `alchemy_getTokenMetadata`              | [Get Token Metadata](/data-api/evm/token/metadata/token-metadata)                   |
+| `alchemy_getTokenAllowance`             | [Get Wallet Token Approvals](/data-api/evm/wallet/approvals)                         |
+| Prices — Token Prices by Address/Symbol | [Get Token Price](/data-api/evm/token/prices/token-price) · [Get Multiple Token Prices](/data-api/evm/token/prices/token-prices-batch) |
+| Prices — Historical Token Prices        | [Get OHLCV by Pair Address](/data-api/evm/token/prices/ohlc)                         |
+| Token holders (via indexing)            | [Get Token Holders](/data-api/evm/token/holders/token-holders)                      |
+
+### Transfers & transaction data
+
+| Alchemy method                  | Moralis equivalent                                                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------------- |
+| `alchemy_getAssetTransfers`     | [Get Wallet History](/data-api/evm/wallet/wallet-history) (native + ERC20 + NFT, decoded)   |
+| `alchemy_getTransactionReceipts`| [Get Wallet Transactions](/data-api/evm/wallet/wallet-transactions)                         |
+| Decoded transaction view        | [Get Decoded Wallet Transactions](/data-api/evm/wallet/decoded-transactions)                |
+| `eth_getTransactionByHash`      | [Get Transaction by Hash](/data-api/evm/blockchain/transaction-by-hash)                     |
+
+### Portfolio API (multichain)
+
+| Alchemy endpoint                              | Moralis equivalent                                                                       |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Tokens by Wallet (`/assets/tokens/by-address`)| [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances)      |
+| NFTs by Wallet (`/assets/nfts/by-address`)    | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                                  |
+| NFT Collections by Wallet                     | [Get NFT Collections by Wallet](/data-api/evm/wallet/nft-collections)                    |
+| Transaction History by Wallet                 | [Get Wallet History](/data-api/evm/wallet/wallet-history)                                |
+| Net worth (derived)                           | [Get Wallet Net Worth](/data-api/evm/wallet/net-worth)                                   |
+
+### Real-time — Webhooks (Notify) & Subscription API → Streams
+
+| Alchemy feature                          | Moralis equivalent                                                                       |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Address Activity webhook                 | [EVM Streams](/streams/evm-streams) — address activity + ERC20/native filters            |
+| NFT Activity / NFT Metadata Update       | [EVM Streams](/streams/evm-streams) — NFT transfer filters                                |
+| Mined / Dropped Transaction              | [EVM Streams](/streams/evm-streams)                                                       |
+| Custom (GraphQL) webhook                 | [EVM Streams](/streams/evm-streams) — contract-event + smart-filter expressions          |
+| Subscription API (`eth_subscribe`, `alchemy_minedTransactions`) | [Streams API](/streams/api-reference) (push delivery) or websockets via [RPC Nodes](/rpc-nodes/overview) |
+
+### Solana (SVM)
+
+| Alchemy capability                       | Moralis equivalent                                                                       |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Solana token balances / `getTokenAccountsByOwner` | [Get SPL Token Balances](/data-api/solana/wallet/token-balances) · [Get Portfolio](/data-api/solana/wallet/portfolio) |
+| Solana NFTs (DAS `getAssetsByOwner`)     | [Get NFTs by Wallet](/data-api/solana/wallet/nft-balances)                               |
+| Solana NFT metadata                      | [Get NFT Metadata](/data-api/solana/nft/nft-metadata)                                    |
+| Solana token prices                      | [Get Token Price](/data-api/solana/token/prices/token-price)                             |
+| Solana swaps / transactions              | [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps)                                 |
+| Real-time events                         | [Solana Streams](/streams/solana-streams)                                                |
+
+### RPC
+
+| Alchemy feature           | Moralis equivalent                          |
+| ------------------------- | ------------------------------------------- |
+| Supernode JSON-RPC        | [Moralis RPC Nodes](/rpc-nodes/overview)    |
+
+## Endpoint details
+
+Each section shows the Alchemy call, the Moralis URL(s) that replace it by chain, and a runnable example.
+
+### NFTs by wallet
+
+**Alchemy**: `GET https://{network}.g.alchemy.com/nft/v3/{apiKey}/getNFTsForOwner`
+
+| Chain  | Moralis Equivalent | Moralis URL                                                       | Documentation                                         |
+| ------ | ------------------ | ----------------------------------------------------------------- | ----------------------------------------------------- |
+| EVM    | Get NFTs by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/wallet/nft-balances)    |
+| Solana | Get NFTs by Wallet | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/wallet/nft-balances) |
+
+```bash
+# Alchemy
+curl "https://eth-mainnet.g.alchemy.com/nft/v3/$ALCHEMY_API_KEY/getNFTsForOwner?owner=0xd8da6bf26964af9d7eed9e03e53415d37aa96045&withMetadata=true"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/nft?chain=eth&format=decimal&normalizeMetadata=true&media_items=true" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis returns ERC721 and ERC1155 holdings with normalized metadata, hosted media previews, and a `possible_spam` flag — no separate `getSpamContracts` call needed.
+
+### Token balances
+
+**Alchemy**: `POST {rpcUrl}` with method `alchemy_getTokenBalances`
+
+| Chain  | Moralis Equivalent           | Moralis URL                                                             | Documentation                                           |
+| ------ | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| EVM    | Get Native & ERC20 Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/wallet/token-balances)    |
+| Solana | Get Portfolio (native + SPL) | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/wallet/portfolio)      |
+
+```bash
+# Alchemy
+curl "https://eth-mainnet.g.alchemy.com/v2/$ALCHEMY_API_KEY" \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"alchemy_getTokenBalances","params":["0xd8da6bf26964af9d7eed9e03e53415d37aa96045"]}'
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/tokens?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Unlike `alchemy_getTokenBalances` (which returns raw balances and requires a second `alchemy_getTokenMetadata` call), Moralis returns balance, decimals, USD price, USD value, and full metadata (symbol, name, logo, verified flag, spam flag) in one response.
+
+### Asset transfers / wallet history
+
+**Alchemy**: `POST {rpcUrl}` with method `alchemy_getAssetTransfers`
+
+| Chain  | Moralis Equivalent | Moralis URL                                                         | Documentation                                          |
+| ------ | ------------------ | ------------------------------------------------------------------- | ------------------------------------------------------ |
+| EVM    | Wallet History     | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history`   | [Documentation](/data-api/evm/wallet/wallet-history)   |
+| Solana | Wallet Swaps       | `https://solana-gateway.moralis.io/account/:network/:address/swaps` | [Documentation](/data-api/solana/wallet/wallet-swaps)  |
+
+```bash
+# Alchemy
+curl "https://eth-mainnet.g.alchemy.com/v2/$ALCHEMY_API_KEY" \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"alchemy_getAssetTransfers","params":[{"fromAddress":"0xd8da6bf26964af9d7eed9e03e53415d37aa96045","category":["external","erc20","erc721","erc1155"]}]}'
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/history?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis returns a single normalized, chronological feed of native transfers, ERC20 movements, NFT transfers, swaps, contract interactions, and approvals — already decoded into human-readable summaries.
+
+### Token prices
+
+**Alchemy**: `GET https://api.g.alchemy.com/prices/v1/{apiKey}/tokens/by-address`
+
+| Chain  | Moralis Equivalent        | Moralis URL                                                       | Documentation                                              |
+| ------ | ------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| EVM    | Get Token Price           | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price`     | [Documentation](/data-api/evm/token/prices/token-price)    |
+| EVM    | Get Multiple Token Prices | `https://deep-index.moralis.io/api/v2.2/erc20/prices`             | [Documentation](/data-api/evm/token/prices/token-prices-batch) |
+| Solana | Get Token Price           | `https://solana-gateway.moralis.io/token/:network/:address/price` | [Documentation](/data-api/solana/token/prices/token-price) |
+
+**Notes**: For historical prices and candles, use [Get OHLCV by Pair Address](/data-api/evm/token/prices/ohlc). Moralis pricing is sourced from on-chain DEX liquidity with USD conversion.
+
+### Portfolio (multichain balances)
+
+**Alchemy**: `POST https://api.g.alchemy.com/data/v1/{apiKey}/assets/tokens/by-address`
+
+| Chain | Moralis Equivalent          | Moralis URL                                                      | Documentation                                                          |
+| ----- | --------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| EVM   | Cross-Chain Token Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens` | [Documentation](/data-api/universal/wallet/cross-chain-token-balances) |
+
+**Notes**: Alchemy's Portfolio API rolls up multiple chains in one request; Moralis offers the same with [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances), and per-chain calls can be parallelized for full control.
+
+### Webhooks (Notify) → Moralis Streams
+
+**Alchemy**: Notify API webhooks (Address Activity, NFT Activity, Mined/Dropped Transaction, Custom GraphQL)
+
+| Feature                 | Moralis Equivalent    | Documentation                            |
+| ----------------------- | --------------------- | ---------------------------------------- |
+| Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| NFT activity events     | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
+| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference)  |
+
+```bash
+# Moralis Streams — create one stream, then attach many addresses to it
+curl -X POST "https://api.moralis-streams.com/streams/evm" \
+  -H "X-API-Key: $MORALIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://your.app/webhooks/moralis",
+    "description": "Wallet activity",
+    "tag": "wallet-activity",
+    "chainIds": ["0x1", "0x2105"],
+    "includeNativeTxs": true,
+    "includeContractLogs": true
+  }'
+```
+
+**Notes**: Where Alchemy's Notify API is one webhook per address list, Moralis Streams uses a stream-with-attached-addresses model — create the stream once and add or remove addresses dynamically without re-subscribing. Streams also adds ABI-decoded contract events and smart-filter expressions, covering the same ground as Alchemy's Custom (GraphQL) webhooks.
+
+## Chain coverage
+
+Alchemy supports 80+ EVM networks plus Solana. Moralis covers a comparable footprint across EVM, Solana, and Bitcoin — see [Supported Chains](/data-api/supported-chains). Before cutover, diff the chains you've configured in Alchemy against the supported list and flag any gaps.
+
+## Migration checklist
+
+1. **Get an API key** — [Get your API key](/data-api/get-your-api-key).
+2. **Map your call sites** — replace each Alchemy method with the equivalent above. Field names differ; most teams write a thin response adapter rather than threading new shapes through the codebase.
+3. **Collapse multi-call patterns** — Alchemy flows that chained `getTokenBalances` + `getTokenMetadata` (or `getNFTsForOwner` + spam checks) usually become a single Moralis call.
+4. **Move Notify webhooks to Streams** — create one Stream per event class and attach addresses dynamically instead of one webhook per address list.
+5. **Verify chain coverage** — diff your Alchemy network configuration against [Supported Chains](/data-api/supported-chains).
+6. **(Optional) Move RPC traffic** — point your JSON-RPC calls at [Moralis RPC Nodes](/rpc-nodes/overview) to consolidate billing.
+
+## Beyond Alchemy: what Moralis adds
+
+Once migrated, teams commonly adopt Moralis endpoints that have no direct Alchemy counterpart:
+
+- **Wallet PnL** — realized and unrealized PnL per wallet with token-level breakdown. See [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) and [Wallet PnL by Token](/data-api/evm/wallet/wallet-pnl).
+- **Wallet Net Worth** — full USD net worth in one call. See [Wallet Net Worth](/data-api/evm/wallet/net-worth).
+- **DeFi positions** — protocol positions with USD value and breakdown. See [Wallet DeFi Positions](/data-api/evm/defi/wallet-positions).
+- **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
+- **Token holder analytics** — [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) and [Historical Token Holders](/data-api/evm/token/holders/historical-token-holders).
+- **DEX & pair analytics** — [Pair Stats](/data-api/evm/token/swaps/pair-stats) and [Token Pairs](/data-api/evm/token/swaps/token-pairs).
+- **Name resolution** — [ENS Lookup](/data-api/evm/wallet/ens-lookup) and [Resolve Address](/data-api/evm/wallet/resolve-address).
+
+## Need help migrating off Alchemy?
+
+If you're moving a production Alchemy workload to Moralis, the support team can help size the migration and review your call patterns — reach out via [moralis.com](https://moralis.com/).

@@ -1,0 +1,205 @@
+---
+title: 'Migrating from QuickNode to Moralis'
+sidebarTitle: 'Migrating from QuickNode'
+description: 'Move from QuickNode to Moralis without rewriting your data layer. This guide maps the QuickNode Token & NFT API (v2), Streams, and QuickAlerts to their Moralis equivalents, endpoint by endpoint, across EVM, Solana, and Bitcoin.'
+---
+
+# Migrating from QuickNode to Moralis
+
+<Info>
+**Moralis is a drop-in alternative to QuickNode.** Moralis combines RPC node access, an enriched Web3 Data API, and real-time Streams behind a single API key — so you can replace QuickNode's Token & NFT API add-ons, Streams, and QuickAlerts, and consolidate your RPC traffic too. This page maps the QuickNode surface to Moralis method-by-method so the swap is mostly search-and-replace.
+</Info>
+
+QuickNode delivers blockchain data through RPC plus marketplace add-ons — most notably the **Token and NFT API v2 bundle** (the `qn_*` RPC methods), **Streams**, and **QuickAlerts**. Moralis delivers the same data through a first-party REST Web3 Data API and Streams, with no add-on bundles to enable per endpoint. Field names differ, but the resource shapes line up.
+
+## Quick reference: QuickNode → Moralis
+
+### Token API (v2)
+
+| QuickNode method                      | Moralis equivalent                                                        |
+| ------------------------------------- | ------------------------------------------------------------------------- |
+| `qn_getWalletTokenBalance`            | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)       |
+| `qn_getWalletTokenTransactions`       | [Get Wallet History](/data-api/evm/wallet/wallet-history)                 |
+| `qn_getTokenMetadataByContractAddress`| [Get Token Metadata](/data-api/evm/token/metadata/token-metadata)         |
+| `qn_getTokenMetadataBySymbol`         | [Search Tokens](/data-api/universal/token/search)                         |
+
+### NFT API (v2)
+
+| QuickNode method                | Moralis equivalent                                                              |
+| ------------------------------- | ------------------------------------------------------------------------------- |
+| `qn_fetchNFTs`                  | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                         |
+| `qn_fetchNFTsByCollection` / `qn_getNFTsByCollection` | [Get NFTs by Contract](/data-api/evm/nft/collections/nfts-by-collection) |
+| `qn_fetchNFTCollectionDetails`  | [Get NFT Collection Metadata](/data-api/evm/nft/metadata/collection-metadata)   |
+| `qn_verifyNFTsOwner`            | [Get NFT Owners by Token ID](/data-api/evm/nft/ownership/owners-by-token-id)    |
+| `qn_getTransfersByNFT`          | [Get NFT Contract Transfers](/data-api/evm/nft/transfers/collection-transfers)  |
+
+### Prices, swaps & DeFi (QuickNode Marketplace add-ons)
+
+| QuickNode capability             | Moralis equivalent                                                          |
+| -------------------------------- | --------------------------------------------------------------------------- |
+| Token price add-ons              | [Get Token Price](/data-api/evm/token/prices/token-price) · [Get Multiple Token Prices](/data-api/evm/token/prices/token-prices-batch) |
+| OHLC / candle add-ons            | [Get OHLCV by Pair Address](/data-api/evm/token/prices/ohlc)                |
+| DEX / swap data add-ons          | [Get Swaps by Token Address](/data-api/evm/token/swaps/token-swaps) · [Pair Stats](/data-api/evm/token/swaps/pair-stats) |
+| DeFi position add-ons            | [Get Wallet DeFi Positions](/data-api/evm/defi/wallet-positions)            |
+
+### Real-time — Streams & QuickAlerts → Streams
+
+| QuickNode feature       | Moralis equivalent                                                                       |
+| ----------------------- | ---------------------------------------------------------------------------------------- |
+| Streams (data feeds)    | [EVM Streams](/streams/evm-streams) / [Solana Streams](/streams/solana-streams)          |
+| QuickAlerts (webhooks)  | [EVM Streams](/streams/evm-streams) — address activity + ERC20/contract filters          |
+| Stream management       | [Streams API Reference](/streams/api-reference)                                          |
+
+### Solana (SVM)
+
+| QuickNode capability                     | Moralis equivalent                                                                       |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Solana token balances                    | [Get SPL Token Balances](/data-api/solana/wallet/token-balances) · [Get Portfolio](/data-api/solana/wallet/portfolio) |
+| Solana NFTs (DAS / add-ons)              | [Get NFTs by Wallet](/data-api/solana/wallet/nft-balances)                               |
+| Solana token metadata                    | [Get Token Metadata](/data-api/solana/token/token-metadata)                              |
+| Solana swaps / transactions              | [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps)                                 |
+| Real-time events                         | [Solana Streams](/streams/solana-streams)                                                |
+
+### RPC
+
+| QuickNode feature           | Moralis equivalent                          |
+| --------------------------- | ------------------------------------------- |
+| Core API JSON-RPC endpoints | [Moralis RPC Nodes](/rpc-nodes/overview)    |
+
+## Endpoint details
+
+Each section shows the QuickNode call, the Moralis URL(s) that replace it by chain, and a runnable example. QuickNode's `qn_*` methods are JSON-RPC calls against your QuickNode endpoint URL with the relevant add-on enabled; the Moralis equivalents are plain REST calls.
+
+### Token balances by wallet
+
+**QuickNode**: `qn_getWalletTokenBalance` (Token API v2)
+
+| Chain  | Moralis Equivalent           | Moralis URL                                                             | Documentation                                           |
+| ------ | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| EVM    | Get Native & ERC20 Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/wallet/token-balances)    |
+| Solana | Get Portfolio (native + SPL) | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/wallet/portfolio)      |
+
+```bash
+# QuickNode (Token & NFT API v2 add-on enabled on your endpoint)
+curl "https://your-endpoint.quiknode.pro/$QUICKNODE_TOKEN/" \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"qn_getWalletTokenBalance","params":[{"wallet":"0xd8da6bf26964af9d7eed9e03e53415d37aa96045"}]}'
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/tokens?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis returns balance, decimals, USD price, USD value, and token metadata (symbol, name, logo, verified flag, spam flag) in one call — no separate metadata lookup.
+
+### NFTs by wallet
+
+**QuickNode**: `qn_fetchNFTs` (NFT API v2)
+
+| Chain  | Moralis Equivalent | Moralis URL                                                       | Documentation                                         |
+| ------ | ------------------ | ----------------------------------------------------------------- | ----------------------------------------------------- |
+| EVM    | Get NFTs by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/wallet/nft-balances)    |
+| Solana | Get NFTs by Wallet | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/wallet/nft-balances) |
+
+```bash
+# QuickNode
+curl "https://your-endpoint.quiknode.pro/$QUICKNODE_TOKEN/" \
+  -X POST -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"qn_fetchNFTs","params":[{"wallet":"0xd8da6bf26964af9d7eed9e03e53415d37aa96045","perPage":40,"page":1}]}'
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/nft?chain=eth&format=decimal&normalizeMetadata=true&media_items=true" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: In Token & NFT API v2, `qn_fetchNFTs` no longer returns provenance or `currentOwner` (those moved to separate calls). Moralis returns normalized metadata, hosted media previews, and a `possible_spam` flag inline.
+
+### Verify NFT ownership
+
+**QuickNode**: `qn_verifyNFTsOwner`
+
+| Chain | Moralis Equivalent         | Moralis URL                                                            | Documentation                                                  |
+| ----- | -------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------- |
+| EVM   | Get NFT Owners by Token ID | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/owners` | [Documentation](/data-api/evm/nft/ownership/owners-by-token-id) |
+
+**Notes**: `qn_verifyNFTsOwner` confirms a wallet holds specific tokens; the Moralis owners-by-token-id endpoint returns the owner set for a token, and [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances) can be filtered by contract for the inverse check.
+
+### NFT transfers
+
+**QuickNode**: `qn_getTransfersByNFT`
+
+| Chain | Moralis Equivalent         | Moralis URL                                                     | Documentation                                                    |
+| ----- | -------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------- |
+| EVM   | Get NFT Contract Transfers | `https://deep-index.moralis.io/api/v2.2/nft/:address/transfers` | [Documentation](/data-api/evm/nft/transfers/collection-transfers) |
+| EVM   | Get NFT Trades by Token    | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/trades` | [Documentation](/data-api/evm/nft/trades/trades-by-token-id) |
+
+### Token & wallet transactions
+
+**QuickNode**: `qn_getWalletTokenTransactions`
+
+| Chain | Moralis Equivalent              | Moralis URL                                                       | Documentation                                              |
+| ----- | ------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| EVM   | Get Wallet History              | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history` | [Documentation](/data-api/evm/wallet/wallet-history)       |
+| EVM   | Get Decoded Wallet Transactions | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history` | [Documentation](/data-api/evm/wallet/decoded-transactions) |
+
+**Notes**: Moralis Wallet History returns native, ERC20, NFT, swap, and contract activity as one decoded, chronological feed — broader than the token-only view from `qn_getWalletTokenTransactions`.
+
+### Streams & QuickAlerts → Moralis Streams
+
+**QuickNode**: Streams (data feeds) and QuickAlerts (webhooks)
+
+| Feature                 | Moralis Equivalent    | Documentation                            |
+| ----------------------- | --------------------- | ---------------------------------------- |
+| Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Contract / log events   | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
+| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference)  |
+
+```bash
+# Moralis Streams — create one stream, then attach many addresses to it
+curl -X POST "https://api.moralis-streams.com/streams/evm" \
+  -H "X-API-Key: $MORALIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://your.app/webhooks/moralis",
+    "description": "Wallet activity",
+    "tag": "wallet-activity",
+    "chainIds": ["0x1", "0x2105"],
+    "includeNativeTxs": true,
+    "includeContractLogs": true
+  }'
+```
+
+**Notes**: Both QuickNode Streams and Moralis Streams deliver real-time on-chain data over HTTP webhooks with retries and address management. Moralis Streams adds ABI-decoded contract events and smart-filter expressions on top of the address-activity feed.
+
+<Note>
+QuickNode **Functions** (serverless compute) and **Key-Value Store** have no direct Moralis equivalent — Moralis is a data and streaming platform, not a compute host. Keep that logic in your own backend or a function host, and call Moralis APIs from it.
+</Note>
+
+## Chain coverage
+
+QuickNode supports 75+ chains including EVM networks, Solana, and Bitcoin. Moralis covers a comparable footprint across EVM, Solana, and Bitcoin — see [Supported Chains](/data-api/supported-chains). Before cutover, diff the chains you've configured in QuickNode against the supported list and flag any gaps.
+
+## Migration checklist
+
+1. **Get an API key** — [Get your API key](/data-api/get-your-api-key).
+2. **Map your call sites** — replace each `qn_*` method with the REST equivalent above. Field names differ; most teams write a thin response adapter.
+3. **Drop the add-on bundles** — capabilities that required enabling the Token & NFT API v2 (or other Marketplace add-ons) are first-party in Moralis, available on one key.
+4. **Move Streams / QuickAlerts to Moralis Streams** — create one Stream per event class and attach addresses dynamically.
+5. **Verify chain coverage** — diff your QuickNode chain configuration against [Supported Chains](/data-api/supported-chains).
+6. **(Optional) Move RPC traffic** — point your JSON-RPC calls at [Moralis RPC Nodes](/rpc-nodes/overview).
+
+## Beyond QuickNode: what Moralis adds
+
+Once migrated, teams commonly adopt Moralis endpoints that QuickNode covers only via add-ons or not at all:
+
+- **Wallet PnL** — realized and unrealized PnL per wallet. See [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) and [Wallet PnL by Token](/data-api/evm/wallet/wallet-pnl).
+- **Wallet Net Worth** — full USD net worth in one call. See [Wallet Net Worth](/data-api/evm/wallet/net-worth).
+- **DeFi positions** — protocol positions with USD value and breakdown. See [Wallet DeFi Positions](/data-api/evm/defi/wallet-positions).
+- **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
+- **Token holder analytics** — [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) and [Historical Token Holders](/data-api/evm/token/holders/historical-token-holders).
+- **NFT discovery** — [Top NFT Collections by Market Cap](/data-api/evm/nft/discovery/nfts-by-market-cap) and [by Trading Volume](/data-api/evm/nft/discovery/nfts-by-volume).
+
+## Need help migrating off QuickNode?
+
+If you're moving a production QuickNode workload to Moralis, the support team can help size the migration and review your call patterns — reach out via [moralis.com](https://moralis.com/).
