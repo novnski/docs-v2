@@ -164,14 +164,15 @@
               {
                 "group": "Migration Guides",
                 "pages": [
-                  "get-started/tutorials/migration-guides/migrating-from-reservoir-to-moralis",
-                  "get-started/tutorials/migration-guides/migrating-from-simple-hash-to-moralis",
-                  "get-started/tutorials/migration-guides/migrating-from-ok-link-to-moralis",
-                  "get-started/tutorials/migration-guides/migrating-from-sim-by-dune-to-moralis",
                   "get-started/tutorials/migration-guides/migrating-from-alchemy-to-moralis",
                   "get-started/tutorials/migration-guides/migrating-from-infura-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-ok-link-to-moralis",
                   "get-started/tutorials/migration-guides/migrating-from-quicknode-to-moralis",
-                  "get-started/tutorials/migration-guides/migrating-from-tatum-to-moralis"
+                  "get-started/tutorials/migration-guides/migrating-from-reservoir-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-sim-by-dune-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-simple-hash-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-tatum-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-the-graph-to-moralis"
                 ]
               },
               {

@@ -1,0 +1,253 @@
+---
+title: 'Migrating from Tatum to Moralis'
+sidebarTitle: 'Migrating from Tatum'
+description: 'Move from Tatum to Moralis without rewriting your data layer. This guide maps the Tatum v4 Data API (balances, transactions, tokens, NFTs, blocks), Notifications/Subscriptions webhooks, and RPC Gateway to their Moralis equivalents, endpoint by endpoint, across EVM, Solana, and Bitcoin.'
+---
+
+# Migrating from Tatum to Moralis
+
+<Info>
+**Moralis is a drop-in alternative to Tatum.** Moralis combines RPC node access, an enriched Web3 Data API, and real-time Streams behind a single API key — so you can replace Tatum's v4 Data API, Notifications/Subscriptions webhooks, and RPC Gateway, and consolidate your data, real-time, and RPC traffic in one place. This page maps the Tatum surface to Moralis endpoint-by-endpoint so the swap is mostly search-and-replace.
+</Info>
+
+Tatum and Moralis solve the same problem: get clean, decoded, enriched blockchain data into your app without running your own indexers. Tatum exposes this through its v4 Data API (REST endpoints under `/v4/data`), Notifications webhooks (Subscriptions), and a multichain RPC Gateway. Moralis exposes the same data through a REST Web3 Data API plus Streams. Field names differ, but the resource shapes line up — most teams write a thin response adapter and keep shipping.
+
+## Quick reference: Tatum → Moralis
+
+### Wallet & balances (Data API)
+
+| Tatum endpoint                                              | Moralis equivalent                                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `GET /v4/data/balances` (`tokenTypes=native,fungible`)     | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)       |
+| `GET /v4/data/balances` (`tokenTypes=nft,multitoken`)      | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                   |
+| `GET /v4/wallet/portfolio/{address}` (Wallet Portfolio)    | [Get Wallet Net Worth](/data-api/evm/wallet/net-worth)                    |
+| `GET /v4/data/transactions` (transaction history)          | [Get Wallet History](/data-api/evm/wallet/wallet-history)                 |
+| Historical balance by time/block                           | [Get Wallet History](/data-api/evm/wallet/wallet-history)                 |
+
+### Tokens (Data API)
+
+| Tatum endpoint                          | Moralis equivalent                                                                  |
+| --------------------------------------- | ----------------------------------------------------------------------------------- |
+| `GET /v4/data/tokens` (token metadata)  | [Get Token Metadata](/data-api/evm/token/metadata/token-metadata)                   |
+| `GET /v4/data/rate/{currency}` (rate)   | [Get Token Price](/data-api/evm/token/prices/token-price) · [Get Multiple Token Prices](/data-api/evm/token/prices/token-prices-batch) |
+| Token holders / owners                  | [Get Token Holders](/data-api/evm/token/holders/token-holders)                      |
+
+### NFTs (Data API)
+
+| Tatum endpoint                                      | Moralis equivalent                                                              |
+| --------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `GET /v4/data/balances` (`tokenTypes=nft`)          | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                         |
+| `GET /v4/data/tokens` (NFT metadata by tokenId)     | [Get NFT Metadata](/data-api/evm/nft/metadata/nft-metadata)                     |
+| `GET /v4/data/collections` (collection metadata)    | [Get NFT Collection Metadata](/data-api/evm/nft/metadata/collection-metadata)   |
+| `GET /v4/data/owners` (owners of an NFT)            | [Get NFT Owners by Token ID](/data-api/evm/nft/ownership/owners-by-token-id)    |
+| `GET /v4/data/owners/address` (verify ownership)    | [Get NFT Owners by Contract](/data-api/evm/nft/ownership/owners-by-contract)    |
+
+### Blocks & transactions (Data API)
+
+| Tatum endpoint                                  | Moralis equivalent                                                          |
+| ----------------------------------------------- | --------------------------------------------------------------------------- |
+| `GET /v4/data/blockchains/transaction` (by hash)| [Get Transaction by Hash](/data-api/evm/blockchain/transaction-by-hash)     |
+| `GET /v4/data/blockchains/block` (block)        | [Get Block by Hash](/data-api/evm/blockchain/block-by-hash) · [Get Latest Block](/data-api/evm/blockchain/latest-block) |
+
+### Real-time — Notifications / Subscriptions → Streams
+
+| Tatum subscription type                          | Moralis equivalent                                                                       |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `ADDRESS_EVENT` (incoming/outgoing native + token)| [EVM Streams](/streams/evm-streams) — address activity + ERC20/native filters            |
+| Fungible / NFT transfer notifications            | [EVM Streams](/streams/evm-streams) — ERC20 / NFT transfer filters                       |
+| Contract / log event notifications               | [EVM Streams](/streams/evm-streams) — contract-event + smart-filter expressions          |
+| Failed-transaction notifications                 | [EVM Streams](/streams/evm-streams)                                                       |
+| Subscription management API (`/v4/subscription`) | [Streams API Reference](/streams/api-reference/streams/create-streams)                   |
+
+### Solana (SVM)
+
+| Tatum capability                         | Moralis equivalent                                                                       |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Solana balances (`/v4/data/balances`)    | [Get SPL Token Balances](/data-api/solana/wallet/token-balances) · [Get Portfolio](/data-api/solana/wallet/portfolio) |
+| Solana NFTs                              | [Get NFTs by Wallet](/data-api/solana/wallet/nft-balances)                               |
+| Solana token / NFT metadata             | [Get Token Metadata](/data-api/solana/token/token-metadata) · [Get NFT Metadata](/data-api/solana/nft/nft-metadata) |
+| Solana token prices                      | [Get Token Price](/data-api/solana/token/prices/token-price)                             |
+| Solana swaps / transactions             | [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps)                                 |
+| Real-time events                         | [Solana Streams](/streams/solana-streams)                                                |
+
+### RPC
+
+| Tatum feature                       | Moralis equivalent                          |
+| ----------------------------------- | ------------------------------------------- |
+| RPC Gateway (JSON-RPC, 100+ chains) | [Moralis RPC Nodes](/rpc-nodes/overview)    |
+
+## Endpoint details
+
+Each section shows the Tatum call, the Moralis URL(s) that replace it by chain, and a runnable example. Tatum Data API calls are REST against `https://api.tatum.io` with an `x-api-key` header; the Moralis equivalents are plain REST with an `X-API-Key` header.
+
+### Token balances by wallet
+
+**Tatum**: `GET /v4/data/balances` with `tokenTypes=native,fungible`
+
+| Chain  | Moralis Equivalent           | Moralis URL                                                             | Documentation                                           |
+| ------ | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| EVM    | Get Native & ERC20 Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/wallet/token-balances)    |
+| Solana | Get Portfolio (native + SPL) | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/wallet/portfolio)      |
+
+```bash
+# Tatum
+curl "https://api.tatum.io/v4/data/balances?chain=ethereum-mainnet&addresses=0xd8da6bf26964af9d7eed9e03e53415d37aa96045&tokenTypes=native,fungible" \
+  -H "x-api-key: $TATUM_API_KEY"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/tokens?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis returns balance, decimals, USD price, USD value, and token metadata (symbol, name, logo, verified flag, spam flag) in one call — no separate metadata or exchange-rate lookup.
+
+### NFTs by wallet
+
+**Tatum**: `GET /v4/data/balances` with `tokenTypes=nft,multitoken`
+
+| Chain  | Moralis Equivalent | Moralis URL                                                       | Documentation                                         |
+| ------ | ------------------ | ----------------------------------------------------------------- | ----------------------------------------------------- |
+| EVM    | Get NFTs by Wallet | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/wallet/nft-balances)    |
+| Solana | Get NFTs by Wallet | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/wallet/nft-balances) |
+
+```bash
+# Tatum
+curl "https://api.tatum.io/v4/data/balances?chain=ethereum-mainnet&addresses=0xd8da6bf26964af9d7eed9e03e53415d37aa96045&tokenTypes=nft,multitoken" \
+  -H "x-api-key: $TATUM_API_KEY"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/nft?chain=eth&format=decimal&normalizeMetadata=true&media_items=true" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Tatum's `balances` endpoint returns token addresses and IDs the wallet holds. Moralis returns ERC721 and ERC1155 holdings with normalized metadata, hosted media previews, and a `possible_spam` flag inline — no separate metadata call needed.
+
+### Transaction history by wallet
+
+**Tatum**: `GET /v4/data/transactions`
+
+| Chain | Moralis Equivalent              | Moralis URL                                                       | Documentation                                              |
+| ----- | ------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| EVM   | Get Wallet History              | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history` | [Documentation](/data-api/evm/wallet/wallet-history)       |
+| EVM   | Get Decoded Wallet Transactions | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history` | [Documentation](/data-api/evm/wallet/decoded-transactions) |
+
+```bash
+# Tatum
+curl "https://api.tatum.io/v4/data/transactions?chain=ethereum-mainnet&addresses=0xd8da6bf26964af9d7eed9e03e53415d37aa96045" \
+  -H "x-api-key: $TATUM_API_KEY"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/history?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis Wallet History returns native, ERC20, NFT, swap, and contract activity as one decoded, chronological feed with human-readable summaries — broader than Tatum's per-address transaction list.
+
+### Token metadata & price
+
+**Tatum**: `GET /v4/data/tokens` (metadata) and `GET /v4/data/rate/{currency}` (exchange rate)
+
+| Chain  | Moralis Equivalent | Moralis URL                                                       | Documentation                                              |
+| ------ | ------------------ | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| EVM    | Get Token Metadata | `https://deep-index.moralis.io/api/v2.2/erc20/metadata`           | [Documentation](/data-api/evm/token/metadata/token-metadata) |
+| EVM    | Get Token Price    | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price`     | [Documentation](/data-api/evm/token/prices/token-price)    |
+| Solana | Get Token Price    | `https://solana-gateway.moralis.io/token/:network/:address/price` | [Documentation](/data-api/solana/token/prices/token-price) |
+
+**Notes**: Tatum exposes fiat/crypto exchange rates via `/v4/data/rate`. Moralis prices are sourced from on-chain DEX liquidity with USD conversion; for historical prices and candles use [Get OHLCV by Pair Address](/data-api/evm/token/prices/ohlc).
+
+### NFT owners & ownership
+
+**Tatum**: `GET /v4/data/owners` (owners of an NFT) and `GET /v4/data/owners/address` (verify a wallet holds a token)
+
+| Chain | Moralis Equivalent          | Moralis URL                                                            | Documentation                                                   |
+| ----- | --------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
+| EVM   | Get NFT Owners by Token ID  | `https://deep-index.moralis.io/api/v2.2/nft/:address/:token_id/owners` | [Documentation](/data-api/evm/nft/ownership/owners-by-token-id) |
+| EVM   | Get NFT Owners by Contract  | `https://deep-index.moralis.io/api/v2.2/nft/:address/owners`           | [Documentation](/data-api/evm/nft/ownership/owners-by-contract) |
+
+**Notes**: Tatum's `/v4/data/owners/address` confirms a wallet holds a specific token; the inverse — listing every owner of a token or contract — maps to the Moralis owners endpoints, and [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances) filtered by contract covers the ownership check.
+
+### Blocks & transactions by hash
+
+**Tatum**: `GET /v4/data/blockchains/transaction` and `GET /v4/data/blockchains/block`
+
+| Chain | Moralis Equivalent       | Moralis URL                                                            | Documentation                                                |
+| ----- | ------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------ |
+| EVM   | Get Transaction by Hash  | `https://deep-index.moralis.io/api/v2.2/transaction/:hash`            | [Documentation](/data-api/evm/blockchain/transaction-by-hash) |
+| EVM   | Get Block by Hash        | `https://deep-index.moralis.io/api/v2.2/block/:block_number_or_hash`  | [Documentation](/data-api/evm/blockchain/block-by-hash)      |
+
+**Notes**: Moralis decodes transactions into native, ERC20, and NFT transfers plus logs; for the latest block height use [Get Latest Block](/data-api/evm/blockchain/latest-block).
+
+### Notifications / Subscriptions → Moralis Streams
+
+**Tatum**: `POST /v4/subscription` (webhook notifications: `ADDRESS_EVENT`, token/NFT transfers, failed transactions, contract events)
+
+| Feature                 | Moralis Equivalent    | Documentation                            |
+| ----------------------- | --------------------- | ---------------------------------------- |
+| Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Token / NFT transfers   | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Contract / log events   | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
+| Subscription management | Streams API Reference | [Documentation](/streams/api-reference/streams/create-streams) |
+
+```bash
+# Tatum — create one subscription per address/event
+curl -X POST "https://api.tatum.io/v4/subscription" \
+  -H "x-api-key: $TATUM_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "ADDRESS_EVENT",
+    "attr": {
+      "address": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+      "chain": "ETH",
+      "url": "https://your.app/webhooks/tatum"
+    }
+  }'
+
+# Moralis Streams — create one stream, then attach many addresses to it
+curl -X POST "https://api.moralis-streams.com/streams/evm" \
+  -H "X-API-Key: $MORALIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://your.app/webhooks/moralis",
+    "description": "Wallet activity",
+    "tag": "wallet-activity",
+    "chainIds": ["0x1", "0x2105"],
+    "includeNativeTxs": true,
+    "includeContractLogs": true
+  }'
+```
+
+**Notes**: Where Tatum creates one subscription per address per event type, Moralis Streams uses a stream-with-attached-addresses model — create the stream once and add or remove addresses dynamically without re-subscribing. Streams also adds ABI-decoded contract events and smart-filter expressions, covering the same ground as Tatum's contract-event notifications.
+
+<Note>
+Tatum's **transaction-execution and custody features** — wallet/key generation, KMS, transaction signing and broadcasting, smart-contract and token deployment/minting, Gas Pump, fee estimation, and virtual accounts — have no direct Moralis equivalent. Moralis is a data and streaming platform, not a custody or transaction-execution host. Keep that logic in your own backend (or its current Tatum integration) and call Moralis APIs for data and real-time events.
+</Note>
+
+## Chain coverage
+
+Tatum supports 100+ blockchains across EVM, Solana, Bitcoin, Tron, and more through its RPC Gateway, with Data API coverage across a large subset. Moralis covers a comparable footprint across EVM, Solana, and Bitcoin — see [Supported Chains](/data-api/supported-chains). Before cutover, diff the chains you've configured in Tatum against the supported list and flag any gaps.
+
+## Migration checklist
+
+1. **Get an API key** — [Get your API key](/data-api/get-your-api-key).
+2. **Map your call sites** — replace each `/v4/data/*` call with the REST equivalent above. Field names differ; most teams write a thin response adapter.
+3. **Collapse multi-call patterns** — Tatum flows that fetched balances and then looked up token metadata or exchange rates separately usually become a single Moralis call.
+4. **Move Notifications to Streams** — replace per-address subscriptions with one Stream per event class and attach addresses dynamically.
+5. **Verify chain coverage** — diff your Tatum chain configuration against [Supported Chains](/data-api/supported-chains).
+6. **(Optional) Move RPC traffic** — point your JSON-RPC calls at [Moralis RPC Nodes](/rpc-nodes/overview) to consolidate billing.
+
+## Beyond Tatum: what Moralis adds
+
+Once migrated, teams commonly adopt Moralis endpoints that Tatum's Data API doesn't cover:
+
+- **Wallet PnL** — realized and unrealized PnL per wallet with token-level breakdown. See [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) and [Wallet PnL by Token](/data-api/evm/wallet/wallet-pnl).
+- **Wallet Net Worth** — full USD net worth in one call. See [Wallet Net Worth](/data-api/evm/wallet/net-worth).
+- **DeFi positions** — protocol positions with USD value and breakdown. See [Wallet DeFi Positions](/data-api/evm/defi/wallet-positions).
+- **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
+- **Token holder analytics** — [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) and [Historical Token Holders](/data-api/evm/token/holders/historical-token-holders).
+- **DEX & pair analytics** — [Get Swaps by Token Address](/data-api/evm/token/swaps/token-swaps) and [Pair Stats](/data-api/evm/token/swaps/pair-stats).
+- **NFT discovery** — [Top NFT Collections by Market Cap](/data-api/evm/nft/discovery/nfts-by-market-cap) and [by Trading Volume](/data-api/evm/nft/discovery/nfts-by-volume).
+
+## Need help migrating off Tatum?
+
+If you're moving a production Tatum workload to Moralis, the support team can help size the migration and review your call patterns — reach out via [moralis.com](https://moralis.com/).

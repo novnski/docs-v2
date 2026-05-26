@@ -1,0 +1,241 @@
+---
+title: 'Migrating from The Graph to Moralis'
+sidebarTitle: 'Migrating from The Graph'
+description: 'Move from The Graph to Moralis without building or maintaining subgraphs. This guide maps The Graph Token API (balances, transfers, holders, prices, NFTs), custom subgraph GraphQL queries, and Substreams to their Moralis equivalents, endpoint by endpoint, across EVM and Solana.'
+---
+
+# Migrating from The Graph to Moralis
+
+<Info>
+**Moralis is a drop-in alternative to The Graph.** Moralis combines RPC node access, an enriched Web3 Data API, and real-time Streams behind a single API key — so you can replace The Graph's Token API, retire the custom subgraphs you maintain for standard token/NFT/wallet data, and move Substreams real-time workloads to webhooks. This page maps the The Graph surface to Moralis endpoint-by-endpoint so the swap is mostly search-and-replace.
+</Info>
+
+The Graph exposes blockchain data three ways: **subgraphs** (custom GraphQL APIs you define with a schema and mappings, then deploy and wait to index), the **Token API** (a prebuilt REST service for balances, transfers, holders, prices, and NFTs), and **Substreams** (high-throughput streaming extraction). Moralis delivers the same data through a prebuilt REST Web3 Data API plus Streams — with no subgraph to write, deploy, or keep in sync, and no indexing lead time. For standard token, NFT, wallet, and price data, the migration is mostly search-and-replace; most subgraphs exist to reindex exactly this kind of data.
+
+## Quick reference: The Graph → Moralis
+
+### Token API (REST)
+
+| The Graph endpoint              | Moralis equivalent                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------- |
+| `GET /v1/evm/balances`          | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)                   |
+| `GET /v1/evm/transfers`         | [Get ERC20 Transfers](/data-api/evm/token/transfers/token-transfers) · [Get Wallet History](/data-api/evm/wallet/wallet-history) |
+| `GET /v1/evm/tokens`            | [Get Token Metadata](/data-api/evm/token/metadata/token-metadata)                     |
+| `GET /v1/evm/holders`           | [Get Token Holders](/data-api/evm/token/holders/token-holders)                        |
+| `GET /v1/evm/swaps`             | [Get Swaps by Token Address](/data-api/evm/token/swaps/token-swaps)                   |
+| `GET /v1/evm/pools/ohlc`        | [Get OHLCV by Pair Address](/data-api/evm/token/prices/ohlc)                          |
+| `GET /v1/evm/nft/ownerships`    | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                               |
+| `GET /v1/evm/nft/items`         | [Get NFTs by Contract](/data-api/evm/nft/collections/nfts-by-collection)             |
+| `GET /v1/evm/nft/collections`   | [Get NFT Collection Metadata](/data-api/evm/nft/metadata/collection-metadata)         |
+| `GET /v1/evm/nft/holders`       | [Get NFT Owners by Contract](/data-api/evm/nft/ownership/owners-by-contract)          |
+| `GET /v1/evm/nft/sales`         | [Get NFT Trades by Contract](/data-api/evm/nft/trades/collection-trades)             |
+| `GET /v1/evm/nft/transfers`     | [Get NFT Contract Transfers](/data-api/evm/nft/transfers/collection-transfers)        |
+
+### Subgraphs (custom GraphQL) → prebuilt Moralis endpoints
+
+Most subgraphs reindex standard token, NFT, wallet, and DeFi data. Those become a single prebuilt Moralis call — no schema, mappings, deployment, or indexing wait.
+
+| Common subgraph use case                  | Moralis prebuilt equivalent                                                              |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Account / wallet token balances           | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances)                      |
+| `Transfer` event indexing                 | [Get Wallet History](/data-api/evm/wallet/wallet-history) · [Get ERC20 Transfers](/data-api/evm/token/transfers/token-transfers) |
+| Token holder / holder-count tracking      | [Get Token Holders](/data-api/evm/token/holders/token-holders) · [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) |
+| NFT ownership & transfer indexing         | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances) · [NFT Contract Transfers](/data-api/evm/nft/transfers/collection-transfers) |
+| DEX pool / swap indexing                  | [Get Swaps by Token Address](/data-api/evm/token/swaps/token-swaps) · [Pair Stats](/data-api/evm/token/swaps/pair-stats) |
+| Price / OHLC from pool events             | [Get Token Price](/data-api/evm/token/prices/token-price) · [Get OHLCV by Pair Address](/data-api/evm/token/prices/ohlc) |
+| Portfolio value / PnL aggregation         | [Wallet Net Worth](/data-api/evm/wallet/net-worth) · [Wallet PnL](/data-api/evm/wallet/wallet-pnl-summary) |
+
+### Substreams & real-time → Streams
+
+| The Graph feature                         | Moralis equivalent                                                                       |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Substreams (real-time extraction)         | [EVM Streams](/streams/evm-streams) / [Solana Streams](/streams/solana-streams)          |
+| Polling a subgraph for new events         | [EVM Streams](/streams/evm-streams) — push delivery via webhooks                         |
+| Contract / log event handling             | [EVM Streams](/streams/evm-streams) — contract-event + smart-filter expressions          |
+| Stream / subscription management          | [Streams API Reference](/streams/api-reference/streams/create-streams)                   |
+
+### Solana (SVM)
+
+| The Graph capability                      | Moralis equivalent                                                                       |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `GET /v1/svm/balances`                    | [Get SPL Token Balances](/data-api/solana/wallet/token-balances) · [Get Portfolio](/data-api/solana/wallet/portfolio) |
+| `GET /v1/svm/tokens`                      | [Get Token Metadata](/data-api/solana/token/token-metadata)                              |
+| `GET /v1/svm/swaps` / `/v1/svm/transfers` | [Get Wallet Swaps](/data-api/solana/wallet/wallet-swaps)                                 |
+| Solana NFTs                               | [Get NFTs by Wallet](/data-api/solana/wallet/nft-balances)                               |
+| Solana token prices                       | [Get Token Price](/data-api/solana/token/prices/token-price)                             |
+| Real-time events                          | [Solana Streams](/streams/solana-streams)                                                |
+
+## Endpoint details
+
+Each section shows the The Graph call, the Moralis URL(s) that replace it by chain, and a runnable example. The Graph Token API calls are REST against `https://token-api.thegraph.com` with a `Bearer` token; the Moralis equivalents are plain REST with an `X-API-Key` header.
+
+### Token balances by wallet
+
+**The Graph**: `GET /v1/evm/balances`
+
+| Chain  | Moralis Equivalent           | Moralis URL                                                             | Documentation                                           |
+| ------ | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
+| EVM    | Get Native & ERC20 Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens`        | [Documentation](/data-api/evm/wallet/token-balances)    |
+| Solana | Get Portfolio (native + SPL) | `https://solana-gateway.moralis.io/account/:network/:address/portfolio` | [Documentation](/data-api/solana/wallet/portfolio)      |
+
+```bash
+# The Graph (Token API)
+curl "https://token-api.thegraph.com/v1/evm/balances?network=mainnet&address=0xd8da6bf26964af9d7eed9e03e53415d37aa96045" \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer $THEGRAPH_API_TOKEN"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/tokens?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis returns balance, decimals, USD price, USD value, and token metadata (symbol, name, logo, verified flag, spam flag) in one call.
+
+### Token transfers
+
+**The Graph**: `GET /v1/evm/transfers`
+
+| Chain | Moralis Equivalent  | Moralis URL                                                       | Documentation                                                  |
+| ----- | ------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------- |
+| EVM   | Get ERC20 Transfers | `https://deep-index.moralis.io/api/v2.2/erc20/:address/transfers` | [Documentation](/data-api/evm/token/transfers/token-transfers) |
+| EVM   | Get Wallet History  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/history` | [Documentation](/data-api/evm/wallet/wallet-history)           |
+
+```bash
+# The Graph
+curl "https://token-api.thegraph.com/v1/evm/transfers?network=mainnet&address=0xd8da6bf26964af9d7eed9e03e53415d37aa96045" \
+  -H "Authorization: Bearer $THEGRAPH_API_TOKEN"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/history?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: For transfers of one token, use Get ERC20 Transfers; for a full decoded, chronological feed of native, ERC20, NFT, swap, and contract activity for a wallet, use Get Wallet History.
+
+### Token holders
+
+**The Graph**: `GET /v1/evm/holders`
+
+| Chain | Moralis Equivalent | Moralis URL                                                       | Documentation                                          |
+| ----- | ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------ |
+| EVM   | Get Token Holders  | `https://deep-index.moralis.io/api/v2.2/erc20/:address/owners`    | [Documentation](/data-api/evm/token/holders/token-holders) |
+
+**Notes**: For aggregate metrics (holder count, distribution, acquisition over time) use [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) and [Historical Token Holders](/data-api/evm/token/holders/historical-token-holders) — common targets for custom holder-tracking subgraphs.
+
+### Swaps & OHLC prices
+
+**The Graph**: `GET /v1/evm/swaps` and `GET /v1/evm/pools/ohlc`
+
+| Chain  | Moralis Equivalent         | Moralis URL                                                       | Documentation                                              |
+| ------ | -------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| EVM    | Get Swaps by Token Address | `https://deep-index.moralis.io/api/v2.2/erc20/:address/swaps`     | [Documentation](/data-api/evm/token/swaps/token-swaps)     |
+| EVM    | Get OHLCV by Pair Address  | `https://deep-index.moralis.io/api/v2.2/pairs/:address/ohlcv`     | [Documentation](/data-api/evm/token/prices/ohlc)           |
+| EVM    | Get Token Price            | `https://deep-index.moralis.io/api/v2.2/erc20/:address/price`     | [Documentation](/data-api/evm/token/prices/token-price)    |
+| Solana | Get Token Price            | `https://solana-gateway.moralis.io/token/:network/:address/price` | [Documentation](/data-api/solana/token/prices/token-price) |
+
+**Notes**: Moralis pricing is sourced from on-chain DEX liquidity with USD conversion. For pair-level analytics see [Pair Stats](/data-api/evm/token/swaps/pair-stats) and [Token Pairs](/data-api/evm/token/swaps/token-pairs).
+
+### NFTs by wallet & by contract
+
+**The Graph**: `GET /v1/evm/nft/ownerships` and `GET /v1/evm/nft/items`
+
+| Chain  | Moralis Equivalent   | Moralis URL                                                       | Documentation                                                       |
+| ------ | -------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
+| EVM    | Get NFTs by Wallet   | `https://deep-index.moralis.io/api/v2.2/:address/nft`             | [Documentation](/data-api/evm/wallet/nft-balances)                  |
+| EVM    | Get NFTs by Contract | `https://deep-index.moralis.io/api/v2.2/nft/:address`             | [Documentation](/data-api/evm/nft/collections/nfts-by-collection)   |
+| Solana | Get NFTs by Wallet   | `https://solana-gateway.moralis.io/account/:network/:address/nft` | [Documentation](/data-api/solana/wallet/nft-balances)               |
+
+```bash
+# The Graph
+curl "https://token-api.thegraph.com/v1/evm/nft/ownerships?network=mainnet&address=0xd8da6bf26964af9d7eed9e03e53415d37aa96045" \
+  -H "Authorization: Bearer $THEGRAPH_API_TOKEN"
+
+# Moralis
+curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/nft?chain=eth&format=decimal&normalizeMetadata=true&media_items=true" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+**Notes**: Moralis returns ERC721 and ERC1155 holdings with normalized metadata, hosted media previews, and a `possible_spam` flag inline. For owner sets use [Get NFT Owners by Contract](/data-api/evm/nft/ownership/owners-by-contract) or [by Token ID](/data-api/evm/nft/ownership/owners-by-token-id); for sales/trades use [Get NFT Trades by Contract](/data-api/evm/nft/trades/collection-trades).
+
+### Replacing a subgraph GraphQL query
+
+A typical subgraph query for a wallet's token transfers maps to one Moralis REST call — no subgraph deploy or indexing wait.
+
+```graphql
+# The Graph — subgraph GraphQL query
+{
+  transfers(where: { from: "0xd8da6bf26964af9d7eed9e03e53415d37aa96045" }, first: 100) {
+    id
+    from
+    to
+    value
+    blockNumber
+  }
+}
+```
+
+```bash
+# Moralis — prebuilt REST equivalent
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e53415d37aa96045/history?chain=eth" \
+  -H "X-API-Key: $MORALIS_API_KEY"
+```
+
+### Substreams & real-time → Moralis Streams
+
+**The Graph**: Substreams / polling a subgraph for new entities
+
+| Feature                 | Moralis Equivalent    | Documentation                            |
+| ----------------------- | --------------------- | ---------------------------------------- |
+| Address activity events | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Contract / log events   | EVM Streams           | [Documentation](/streams/evm-streams)    |
+| Solana account events   | Solana Streams        | [Documentation](/streams/solana-streams) |
+| Stream management API   | Streams API Reference | [Documentation](/streams/api-reference/streams/create-streams) |
+
+```bash
+# Moralis Streams — create one stream, then attach many addresses to it
+curl -X POST "https://api.moralis-streams.com/streams/evm" \
+  -H "X-API-Key: $MORALIS_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "webhookUrl": "https://your.app/webhooks/moralis",
+    "description": "Wallet activity",
+    "tag": "wallet-activity",
+    "chainIds": ["0x1", "0x2105"],
+    "includeNativeTxs": true,
+    "includeContractLogs": true
+  }'
+```
+
+**Notes**: Where Substreams is a streaming-extraction primitive you wire into your own sink, Moralis Streams pushes decoded events to an HTTP webhook with retries and dynamic address management, plus ABI-decoded contract events and smart-filter expressions.
+
+<Note>
+The Graph's **fully custom subgraphs** — indexing bespoke protocol state, derived entities, or arbitrary contract business logic — have no prebuilt Moralis equivalent. Moralis ships standard token, NFT, wallet, price, and DeFi data out of the box; it is not a general-purpose custom indexer. If a subgraph encodes domain-specific logic you can't express as standard data, keep that on [Streams](/streams/evm-streams) plus your own processing, or retain it on The Graph and use Moralis for everything standard. The decentralized network, curation, and GRT query economics likewise have no Moralis counterpart — Moralis is a managed API with a single key.
+</Note>
+
+## Chain coverage
+
+The Graph Token API covers Ethereum, BNB Smart Chain, Polygon, Optimism, Arbitrum, Base, Unichain, Avalanche, and Solana; subgraphs can index many more chains via custom deployments. Moralis covers a comparable footprint across EVM, Solana, and Bitcoin — see [Supported Chains](/data-api/supported-chains). Before cutover, diff the chains you index on The Graph against the supported list and flag any gaps.
+
+## Migration checklist
+
+1. **Get an API key** — [Get your API key](/data-api/get-your-api-key).
+2. **Map Token API calls** — replace each `/v1/...` REST call with the Moralis equivalent above. Field names differ; most teams write a thin response adapter.
+3. **Retire standard subgraphs** — any subgraph that indexes balances, transfers, holders, NFTs, prices, or swaps can be replaced by a prebuilt Moralis endpoint. Delete the schema/mappings you were maintaining and drop the deploy + indexing wait.
+4. **Move Substreams / polling to Streams** — create one Stream per event class and attach addresses dynamically for push delivery.
+5. **Verify chain coverage** — diff your indexed chains against [Supported Chains](/data-api/supported-chains).
+6. **(Optional) Add RPC** — The Graph isn't a JSON-RPC provider; if you also need RPC, [Moralis RPC Nodes](/rpc-nodes/overview) consolidate it onto the same key.
+
+## Beyond The Graph: what Moralis adds
+
+Once migrated, teams commonly adopt Moralis endpoints that would each require a separate custom subgraph on The Graph:
+
+- **Wallet PnL** — realized and unrealized PnL per wallet with token-level breakdown. See [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) and [Wallet PnL by Token](/data-api/evm/wallet/wallet-pnl).
+- **Wallet Net Worth** — full USD net worth in one call. See [Wallet Net Worth](/data-api/evm/wallet/net-worth).
+- **DeFi positions** — protocol positions with USD value and breakdown. See [Wallet DeFi Positions](/data-api/evm/defi/wallet-positions).
+- **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
+- **Token holder analytics** — [Token Holder Stats](/data-api/evm/token/holders/token-holder-stats) and [Historical Token Holders](/data-api/evm/token/holders/historical-token-holders).
+- **DEX & pair analytics** — [Pair Stats](/data-api/evm/token/swaps/pair-stats) and [Token Pairs](/data-api/evm/token/swaps/token-pairs).
+
+## Need help migrating off The Graph?
+
+If you're moving production subgraphs or Token API traffic to Moralis, the support team can help size the migration and review which subgraphs map cleanly to prebuilt endpoints — reach out via [moralis.com](https://moralis.com/).
