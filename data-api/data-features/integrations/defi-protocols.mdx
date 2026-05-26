@@ -1,14 +1,35 @@
 ---
 title: "DeFi Protocols"
-description: "A list of DeFi protocols supported by Moralis, including how protocol coverage works, what data is enriched, and how support expands over time."
+description: "DeFi protocol coverage across EVM and Solana, how protocol decoding works, and how to fetch the full, always-current list of supported protocols from the API."
 ---
 
-## Supported Blockchains
+Moralis decodes DeFi activity - lending, borrowing, staking, liquid staking, and liquidity pools - across **thousands of protocols on EVM chains** and the **top protocols on Solana**, returning enriched, protocol-aware positions through the [DeFi API](/data-api/evm/defi/overview).
 
-DeFi protocol support is available across the following blockchain networks:
+Coverage expands continuously, so the API itself is the source of truth for what is supported at any given moment.
+
+## Fetch the Full List of Supported Protocols
+
+Use the **Get Supported DeFi Protocols** endpoint to retrieve the complete, current list of supported protocols for a chain - ideal for keeping your own UI or coverage checks in sync:
+
+```bash
+curl "https://api.moralis.com/v1/defi/protocols?chain=eth" \
+  -H "X-Api-Key: YOUR_API_KEY"
+```
+
+Pass the `chain` parameter (for example `eth`, `base`, `polygon`, or `solana`) to list the protocols supported on that chain.
+
+{/* TODO: link to the /v1/defi/protocols API reference page once the OpenAPI schema is added */}
+
+<Info>
+  By default, we track all forked Uniswap v2 protocols. If a particular protocol has not yet been decoded, it appears as `unknown` in API responses - [reach out to support](https://moralis.com/contact-sales) and we will prioritize decoding it.
+</Info>
+
+## EVM Coverage
+
+DeFi protocol decoding is available across these EVM chains:
 
 - Arbitrum
-- Avalance
+- Avalanche
 - Base
 - Binance
 - Ethereum
@@ -19,46 +40,41 @@ DeFi protocol support is available across the following blockchain networks:
 - Sei
 
 <Note>
-  **Important:** DeFi protocol support is **not uniform across all chains**. The level of support depends on protocol availability, adoption, and chain-specific deployments.
+  **Coverage is not uniform across chains.** Protocol availability depends on where each protocol is deployed and its adoption per chain. Query the endpoint above for exact per-chain support.
 </Note>
 
-Refer to the table below for a detailed breakdown of **which protocols are supported on each chain**.
+We support thousands of EVM protocols, including all forked Uniswap v2 protocols. A few of the most widely used, with their query parameters:
 
-## Supported Protocols
+| Protocol       | Query Parameter  | Example Chains                                                  |
+| -------------- | ---------------- | -------------------------------------------------------------- |
+| Aave v3        | `aave-v3`        | Base, Ethereum, Polygon                                        |
+| Uniswap v3     | `uniswap-v3`     | Arbitrum, Avalanche, Base, Binance, Ethereum, Optimism, Polygon |
+| Pancakeswap v3 | `pancakeswap-v3` | Arbitrum, Base, Binance, Ethereum, Linea, Monad                |
+| Lido           | `lido`           | Ethereum                                                       |
+| Rocket Pool    | `rocketpool`     | Arbitrum, Base, Ethereum, Optimism, Polygon                    |
+| Eigenlayer     | `eigenlayer`     | Ethereum                                                       |
+| MakerDAO       | `makerdao`       | Ethereum                                                       |
+| Pendle         | `pendle`         | Ethereum                                                       |
 
-<Info>
-  By default, we track all forked Uniswap v2 protocols. If a particular protocol has not yet been decoded, it will appear as `unknown` within the API responses. Please reach out to our support team, and we will prioritize decoding these protocols.
-</Info>
+This is a curated highlight, not the full list - call the endpoint above for complete, up-to-date coverage.
 
-| Protocol       | Query Parameter  | Supported Chains                                                                                                      |
-| -------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Aave v2        | `aave-v2`        | - Ethereum <br />- Polygon                                                                                            |
-| Aave v3        | `aave-v3`        | - Base <br />- Ethereum <br />- Polygon                                                                               |
-| Dragonswap v2  | `dragonswap-v2`  | - Sei                                                                                                                 |
-| Dragonswap v3  | `dragonswap-v3`  | - Sei                                                                                                                 |
-| Eigenlayer     | `eigenlayer`     | - Ethereum                                                                                                            |
-| Etherfi\*      | `etherfi`        | - Ethereum<br />- Arbitrum<br />- Base<br />- Binance<br />- Linea<br />- Optimism                                    |
-| FraxSwap v1    | `fraxswap-v1`    | - Binance<br />- Ethereum<br />- Polygon                                                                              |
-| Kintsu         | `kintsu`         | - Monad                                                                                                               |
-| FraxSwap v2    | `fraxswap-v2`    | - Binance<br />- Ethereum<br />- Polygon                                                                              |
-| Lido           | `lido`           | - Ethereum                                                                                                            |
-| MakerDAO       | `makerdao`       | - Ethereum                                                                                                            |
-| Neverland      | `neverland`      | - Monad                                                                                                               |
-| OKU Trade      | `okutrade`       | - Sei                                                                                                                 |
-| Pancakeswap v2 | `pancakeswap-v2` | - Arbitrum <br />- Base <br />- Binance <br />- Ethereum<br />- Linea<br />- Monad                                    |
-| Pancakeswap v3 | `pancakeswap-v3` | - Arbitrum <br />- Base <br />- Binance <br />- Ethereum<br />- Linea<br />- Monad                                    |
-| Pendle         | `pendle`         | - Ethereum                                                                                                            |
-| QuickSwap v2   | `quickswap-v2`   | - Polygon                                                                                                             |
-| QuickSwap v3   | `quickswap-v3`   | - Polygon                                                                                                             |
-| Rocket Pool    | `rocketpool`     | - Ethereum<br />- Arbitrum<br />- Base<br />- Polygon<br />- Optimism                                                 |
-| Sailor Swap    | `sailorswap`     | - Sei                                                                                                                 |
-| Spark          | `sparkfi`        | - Ethereum                                                                                                            |
-| SushiSwap v2   | `sushiswap-v2`   | - Base <br />- Binance <br />- Ethereum <br />- Polygon                                                               |
-| Takara Lend    | `takara-lend`    | - Sei                                                                                                                 |
-| Uniswap v2\*\* | `uniswap-v2`     | - Arbitrum <br />- Base <br />- Binance <br />- Ethereum <br />- Linea<br />- Monad<br />- Polygon                    |
-| Uniswap v3     | `uniswap-v3`     | - Arbitrum <br />- Avalanche <br />- Base <br />- Binance<br />- Ethereum<br />- Monad<br />- Optimism<br />- Polygon |
-| Yei Finance    | `yei-finance`    | - Sei                                                                                                                 |
+## Solana Coverage
 
-_\*Etherfi currently only supports Staking positions. Yield positions are not yet supported._
+The Solana DeFi API supports **10 protocols**, together covering roughly **90% of Solana DeFi TVL** - including the top protocols by TVL (Jupiter, Kamino, Sanctum, and Raydium):
 
-Many more protocols are on the way as we prioritize the top protocols and chains based on Total Value Locked (TVL).
+| Protocol                   | Category       |
+| -------------------------- | -------------- |
+| Jupiter Lend               | Lending        |
+| Jupiter Perpetual Exchange | Perpetuals     |
+| Kamino Lend                | Lending        |
+| Sanctum                    | Liquid staking |
+| Save (formerly Solend)     | Lending        |
+| Raydium                    | DEX / AMM      |
+| Orca                       | DEX / AMM      |
+| Drift                      | Perpetuals     |
+| Jito                       | Liquid staking |
+| Marinade                   | Liquid staking |
+
+See the [Solana DeFi API](/data-api/solana/defi/overview) for endpoints and examples.
+
+More protocols are added on a rolling basis. To request prioritization of a specific protocol, [reach out to the team](https://moralis.com/contact-sales).

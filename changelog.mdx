@@ -3,6 +3,24 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="May 26, 2026" tags={["New Feature"]}>
+  ## Three New Solana DeFi Protocols
+
+  Three top-tier Solana DeFi protocols are now supported through our existing DeFi endpoints, taking total Solana DeFi coverage to **10 protocols** - roughly 90% of Solana DeFi TVL, including all of the top protocols by TVL (Jupiter, Kamino, Sanctum, and Raydium).
+
+  **Newly supported:**
+
+  - **Jupiter Perpetual Exchange** - derivatives on the dominant Solana DEX aggregator (Jupiter Lend was already supported)
+  - **Kamino Lend** - the second-largest protocol on Solana by TVL
+  - **Sanctum** - validator liquid staking; the third-largest protocol on Solana by TVL
+
+  These plug into the existing [Solana DeFi endpoints](/data-api/solana/defi/overview), so anyone already pulling Solana DeFi data picks them up automatically - no code changes required.
+
+  **New utility endpoint:** `GET /v1/defi/protocols` returns the full list of supported DeFi protocols for a given chain, so you can query coverage programmatically and keep your integration in sync. See [DeFi Protocols](/data-api/data-features/integrations/defi-protocols).
+
+  [Explore the Solana DeFi API →](/data-api/solana/defi/overview)
+</Update>
+
 <Update label="May 14, 2026" tags={["New Feature"]}>
   ## Mempool Notifications for Bitcoin Streams
 
