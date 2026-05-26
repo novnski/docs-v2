@@ -170,7 +170,8 @@
                   "get-started/tutorials/migration-guides/migrating-from-sim-by-dune-to-moralis",
                   "get-started/tutorials/migration-guides/migrating-from-alchemy-to-moralis",
                   "get-started/tutorials/migration-guides/migrating-from-infura-to-moralis",
-                  "get-started/tutorials/migration-guides/migrating-from-quicknode-to-moralis"
+                  "get-started/tutorials/migration-guides/migrating-from-quicknode-to-moralis",
+                  "get-started/tutorials/migration-guides/migrating-from-tatum-to-moralis"
                 ]
               },
               {
@@ -1003,7 +1004,7 @@
         ]
       },
       {
-        "tab": "Data Indexer",
+        "tab": "Data Feeds",
         "pages": [
           "data-indexer/overview",
           "data-indexer/features",
