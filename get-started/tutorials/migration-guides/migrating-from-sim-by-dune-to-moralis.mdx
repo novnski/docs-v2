@@ -94,7 +94,7 @@ curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e
   -H "X-API-Key: $MORALIS_API_KEY"
 ```
 
-**Notes**: Moralis returns a normalized, chronological feed of native transfers, ERC20 movements, NFT transfers, swaps, contract interactions, and approvals in a single call. For multi-chain rollups, call per chain in parallel or use [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances) for the balance view.
+**Notes**: Moralis returns a normalized, chronological feed of native transfers, ERC20 movements, NFT transfers, swaps, contract interactions, and approvals in a single call. For multi-chain rollups, call per chain in parallel or use [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances) for the balance view.
 
 ### Token balances
 
@@ -283,7 +283,6 @@ The Sim APIs surface maps cleanly onto Moralis, but Moralis also exposes endpoin
 - **Token approvals** — open ERC20 approvals for a wallet, used widely in revoke flows. See [Wallet Approvals](/data-api/evm/wallet/approvals).
 - **Token discovery** — [Trending Tokens](/data-api/universal/token/trending-tokens), [Top Gainers](/data-api/universal/token/top-gainers), [Top Losers](/data-api/universal/token/top-losers), and [Filtered Tokens](/data-api/universal/token/filtered-tokens).
 - **OHLCV & pair stats** — candle data and DEX pair analytics. See [Get OHLCV by Pair Address](/data-api/evm/token/swaps/pair-stats).
-- **Cross-chain balances in one call** — see [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances).
 
 ## Need help migrating off the Sim APIs?
 

@@ -57,7 +57,7 @@ Alchemy and Moralis solve the same problem: get clean, decoded, enriched blockch
 
 | Alchemy endpoint                              | Moralis equivalent                                                                       |
 | --------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Tokens by Wallet (`/assets/tokens/by-address`)| [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances)      |
+| Tokens by Wallet (`/assets/tokens/by-address`)| [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances) (per chain)         |
 | NFTs by Wallet (`/assets/nfts/by-address`)    | [Get NFTs by Wallet](/data-api/evm/wallet/nft-balances)                                  |
 | NFT Collections by Wallet                     | [Get NFT Collections by Wallet](/data-api/evm/wallet/nft-collections)                    |
 | Transaction History by Wallet                 | [Get Wallet History](/data-api/evm/wallet/wallet-history)                                |
@@ -176,9 +176,9 @@ curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8da6bf26964af9d7eed9e03e
 
 | Chain | Moralis Equivalent          | Moralis URL                                                      | Documentation                                                          |
 | ----- | --------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| EVM   | Cross-Chain Token Balances  | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens` | [Documentation](/data-api/universal/wallet/cross-chain-token-balances) |
+| EVM   | Get Token Balances by Wallet | `https://deep-index.moralis.io/api/v2.2/wallets/:address/tokens` | [Documentation](/data-api/evm/wallet/token-balances) |
 
-**Notes**: Alchemy's Portfolio API rolls up multiple chains in one request; Moralis offers the same with [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances), and per-chain calls can be parallelized for full control.
+**Notes**: Alchemy's Portfolio API rolls up multiple chains in one request; with Moralis, call [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances) per chain and parallelize the requests for full control.
 
 ### Webhooks (Notify) → Moralis Streams
 
