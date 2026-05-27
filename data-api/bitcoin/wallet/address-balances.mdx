@@ -1,13 +1,21 @@
 ---
 title: "BTC Balances"
 sidebarTitle: "BTC Balances"
-openapi: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddressOrPublicKey}/tokens"
+openapi: "/openapi-files/data-api/bitcoin-api-v1.json GET /v1/wallets/{walletAddressOrPublicKey}/tokens"
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
 <EndpointMeta cus={100} />
 
+<Warning>
+  **Bitcoin** is fully live on this endpoint. **EVM and Solana** support is in early-access beta and launching soon — the chain parameters may work today, but production usage isn't recommended yet.
+</Warning>
+
 <Note>
-  For Bitcoin balances, pass `chains=bitcoin` as a query parameter. The `walletAddressOrPublicKey` path parameter accepts either a Bitcoin address or an **xpub** — when an xpub is supplied, balances are aggregated across all derived addresses server-side.
+  The `walletAddressOrPublicKey` path parameter accepts either a Bitcoin address or an **xpub** — when an xpub is supplied, balances are aggregated across all derived addresses server-side.
 </Note>
+
+<Info>
+  **Address auto-detection:** for a Bitcoin address or xpub, the `chains` parameter is optional — Moralis detects the chain family from the address format. Passing `chains=bitcoin` explicitly still works.
+</Info>

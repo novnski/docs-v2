@@ -1,16 +1,16 @@
 ---
 title: "Data API"
 sidebarTitle: "Overview"
-description: "The universal multichain Data API provides a single, consistent interface for accessing blockchain data across 30+ supported chains, including Ethereum, Solana, Base, Binance Smart Chain, and more. It standardizes complex on-chain data into clean, developer-friendly formats."
+description: "The universal multichain Data API provides a single, consistent interface for accessing blockchain data across 30+ supported chains, including Ethereum, Solana, Bitcoin, Base, Binance Smart Chain, and more. It standardizes complex on-chain data into clean, developer-friendly formats."
 ---
 
 ### How it's structured
 
-The Data API is made up of **three core components**, designed to balance **cross-chain consistency** with **chain-specific depth**:
+The Data API is made up of **four core components**, designed to balance **cross-chain consistency** with **chain-specific depth**:
 
 #### Universal API
 
-Our [Universal API](/data-api/universal/overview) supports cross-chain endpoints that work across **EVM and Solana**, using unified schemas wherever possible. Ideal for applications that need to support multiple chains without maintaining separate integrations.
+Our [Universal API](/data-api/universal/overview) supports cross-chain endpoints that work across **EVM, Solana, and Bitcoin**, using unified schemas wherever possible. Ideal for applications that need to support multiple chains without maintaining separate integrations.
 
 #### EVM API
 
@@ -19,6 +19,10 @@ The [EVM API](/data-api/evm/overview) offers deep, EVM-specific APIs covering Et
 #### Solana API
 
 Our [Solana API](/data-api/solana/solana-index) provides parsed, high-performance access to Solana transactions, programs, token accounts, and NFTs, designed around Solana’s unique architecture.
+
+#### Bitcoin API
+
+The [Bitcoin API](/data-api/bitcoin/bitcoin-index) brings full Bitcoin coverage — raw blocks and transactions, BTC market data, address activity, and balances — through the same Universal endpoints used for EVM and Solana. Pass `bitcoin` as the chain, with native xpub support across every wallet endpoint.
 
 ### Explore Data APIs
 
@@ -57,7 +61,7 @@ Our [Solana API](/data-api/solana/solana-index) provides parsed, high-performanc
 ### Key features
 
 - **Low-latency APIs** optimized for production workloads
-- **Unified schemas** across EVM and Solana where possible
+- **Unified schemas** across EVM, Solana, and Bitcoin where possible
 - **Decoded and enriched data** (tokens, NFTs, prices, metadata)
 - **Multi-chain support** across 30+ blockchains
 - **High throughput & reliability** at scale
