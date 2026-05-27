@@ -557,7 +557,7 @@
           {
             "group": "Solana API",
             "pages": [
-              "data-api/solana/solana-index",
+              "data-api/solana/overview",
               {
                 "group": "Wallet API",
                 "pages": [
@@ -670,7 +670,7 @@
             "group": "Bitcoin API",
             "tag": "New",
             "pages": [
-              "data-api/bitcoin/bitcoin-index",
+              "data-api/bitcoin/overview",
               {
                 "group": "Blockchain API",
                 "pages": [
@@ -998,10 +998,10 @@
       {
         "tab": "Data Feeds",
         "pages": [
-          "data-indexer/overview",
-          "data-indexer/features",
-          "data-indexer/how-it-works",
-          "data-indexer/early-access"
+          "data-feeds/overview",
+          "data-feeds/features",
+          "data-feeds/how-it-works",
+          "data-feeds/early-access"
         ]
       },
       {
@@ -1866,10 +1866,18 @@
     { "source": "/data-api/solana/token/index", "destination": "/data-api/solana/token/overview" },
     { "source": "/data-api/solana/nft/index", "destination": "/data-api/solana/nft/overview" },
     { "source": "/data-api/solana/price/index", "destination": "/data-api/solana/price/overview" },
+    { "source": "/data-api/solana/solana-index", "destination": "/data-api/solana/overview" },
+    { "source": "/data-api/bitcoin/bitcoin-index", "destination": "/data-api/bitcoin/overview" },
     { "source": "/data-api/universal/index", "destination": "/data-api/universal/overview" },
     { "source": "/streams/index", "destination": "/streams/overview" },
     { "source": "/datashare/index", "destination": "/datashare/overview" },
-    { "source": "/data-indexer/index", "destination": "/data-indexer/overview" },
+    { "source": "/data-feeds/index", "destination": "/data-feeds/overview" },
+    { "source": "/data-indexer", "destination": "/data-feeds/overview" },
+    { "source": "/data-indexer/index", "destination": "/data-feeds/overview" },
+    { "source": "/data-indexer/overview", "destination": "/data-feeds/overview" },
+    { "source": "/data-indexer/features", "destination": "/data-feeds/features" },
+    { "source": "/data-indexer/how-it-works", "destination": "/data-feeds/how-it-works" },
+    { "source": "/data-indexer/early-access", "destination": "/data-feeds/early-access" },
     { "source": "/rpc-nodes/index", "destination": "/rpc-nodes/overview" },
     { "source": "/data-api/universal/entity/index", "destination": "/data-api/universal/entity/overview" },
     { "source": "/data-api/universal/market-metrics/index", "destination": "/data-api/universal/market-metrics/overview" },
