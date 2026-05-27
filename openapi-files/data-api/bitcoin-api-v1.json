@@ -112,25 +112,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/EvmBlockDto"
-                    },
-                    {
-                      "$ref": "#/components/schemas/BitcoinBlockDto"
-                    },
-                    {
-                      "$ref": "#/components/schemas/SolanaBlockDto"
-                    }
-                  ],
-                  "discriminator": {
-                    "propertyName": "chainFamily",
-                    "mapping": {
-                      "EVM": "#/components/schemas/EvmBlockDto",
-                      "Bitcoin": "#/components/schemas/BitcoinBlockDto",
-                      "Solana": "#/components/schemas/SolanaBlockDto"
-                    }
-                  }
+                  "$ref": "#/components/schemas/BitcoinBlockDto"
                 }
               }
             }
@@ -232,25 +214,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/EvmTransactionDto"
-                    },
-                    {
-                      "$ref": "#/components/schemas/BitcoinTransactionDto"
-                    },
-                    {
-                      "$ref": "#/components/schemas/SolanaTransactionDto"
-                    }
-                  ],
-                  "discriminator": {
-                    "propertyName": "chainFamily",
-                    "mapping": {
-                      "EVM": "#/components/schemas/EvmTransactionDto",
-                      "Bitcoin": "#/components/schemas/BitcoinTransactionDto",
-                      "Solana": "#/components/schemas/SolanaTransactionDto"
-                    }
-                  }
+                  "$ref": "#/components/schemas/BitcoinTransactionDto"
                 }
               }
             }
@@ -1059,9 +1023,7 @@
           "chainFamily": {
             "type": "string",
             "enum": [
-              "EVM",
-              "Bitcoin",
-              "Solana"
+              "Bitcoin"
             ],
             "description": "Chain family discriminator used to identify the response variant"
           },
@@ -1322,9 +1284,7 @@
           "chainFamily": {
             "type": "string",
             "enum": [
-              "EVM",
-              "Bitcoin",
-              "Solana"
+              "Bitcoin"
             ],
             "description": "Chain family discriminator used to identify the response variant"
           },
@@ -1791,7 +1751,7 @@
           "chain": {
             "type": "string",
             "description": "The resolved blockchain chain ID",
-            "example": "0x1"
+            "example": "bitcoin"
           },
           "range": {
             "type": "string",
@@ -1860,7 +1820,7 @@
           "chain": {
             "type": "string",
             "description": "The blockchain network chain ID",
-            "example": "0x1"
+            "example": "bitcoin"
           },
           "fromDate": {
             "type": "string",
@@ -1931,8 +1891,6 @@
             "type": "string",
             "description": "The wallet address type",
             "enum": [
-              "evm",
-              "solana",
               "bitcoin"
             ],
             "example": "evm"
@@ -1969,11 +1927,9 @@
           },
           "addressType": {
             "type": "string",
-            "description": "Address type derived from chain family (evm for Ethereum-compatible, bitcoin for BTC, solana for Solana)",
+            "description": "The wallet address type",
             "enum": [
-              "evm",
-              "bitcoin",
-              "solana"
+              "bitcoin"
             ],
             "example": "evm"
           },
@@ -2214,7 +2170,7 @@
               "type": "number"
             },
             "example": {
-              "0x1": 19800000
+              "bitcoin": "latest"
             }
           }
         },
@@ -2341,7 +2297,7 @@
           "difficulty": {
             "type": "string",
             "nullable": true,
-            "description": "Block difficulty (also present on EVM blocks)"
+            "description": "Block difficulty"
           },
           "merkleRoot": {
             "type": "string",
@@ -2399,17 +2355,17 @@
           "txid": {
             "type": "string",
             "nullable": true,
-            "description": "UTXO input transaction ID (Bitcoin only, null for EVM/Solana)"
+            "description": "UTXO input transaction ID (Bitcoin only)"
           },
           "vout": {
             "type": "number",
             "nullable": true,
-            "description": "UTXO output index spent by this input (Bitcoin only, null for EVM/Solana)"
+            "description": "UTXO output index spent by this input (Bitcoin only)"
           },
           "sequence": {
             "type": "number",
             "nullable": true,
-            "description": "UTXO input sequence number (Bitcoin only, null for EVM/Solana)"
+            "description": "UTXO input sequence number (Bitcoin only)"
           },
           "n": {
             "type": "number",
@@ -2434,7 +2390,7 @@
           "hex": {
             "type": "string",
             "nullable": true,
-            "description": "Script hex (Bitcoin only, null for EVM/Solana)"
+            "description": "Script hex (Bitcoin only)"
           }
         },
         "required": [
@@ -2478,7 +2434,7 @@
           "hex": {
             "type": "string",
             "nullable": true,
-            "description": "Script hex (Bitcoin only, null for EVM/Solana)"
+            "description": "Script hex (Bitcoin only)"
           }
         },
         "required": [
@@ -2738,16 +2694,13 @@
               ]
             },
             "example": {
-              "0x1": 1710000000,
-              "solana-mainnet": "latest"
+              "bitcoin": "latest"
             }
           },
           "unsupportedChains": {
             "description": "Requested chains that are not supported",
             "nullable": true,
-            "example": [
-              "0x89"
-            ],
+            "example": [],
             "type": "array",
             "items": {
               "type": "string"
@@ -2756,9 +2709,7 @@
           "failedChains": {
             "description": "Requested chains that are not supported",
             "nullable": true,
-            "example": [
-              "0x89"
-            ],
+            "example": [],
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ChainFailureDto"
@@ -3290,7 +3241,7 @@
           "chainId": {
             "type": "string",
             "description": "The chain id",
-            "example": "0x1"
+            "example": "bitcoin"
           },
           "name": {
             "type": "string",
@@ -3419,8 +3370,8 @@
         "properties": {
           "chainId": {
             "type": "string",
-            "description": "Chain ID (e.g. \"0x1\", \"0x89\", \"solana-mainnet\")",
-            "example": "0x1"
+            "description": "Chain ID (e.g. \"bitcoin\")",
+            "example": "bitcoin"
           },
           "block": {
             "description": "Block information",
@@ -3439,42 +3390,15 @@
             ]
           },
           "raw": {
-            "description": "Chain-family-specific raw data (only the matching chain family key is present)",
-            "oneOf": [
-              {
-                "type": "object",
-                "properties": {
-                  "evm": {
-                    "$ref": "#/components/schemas/WalletHistoryEvmRawDto"
-                  }
-                },
-                "required": [
-                  "evm"
-                ]
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "bitcoin": {
-                    "$ref": "#/components/schemas/WalletHistoryBitcoinRawDto"
-                  }
-                },
-                "required": [
-                  "bitcoin"
-                ]
-              },
-              {
-                "type": "object",
-                "properties": {
-                  "solana": {
-                    "nullable": true,
-                    "example": null
-                  }
-                },
-                "required": [
-                  "solana"
-                ]
+            "description": "Bitcoin raw transaction data",
+            "type": "object",
+            "properties": {
+              "bitcoin": {
+                "$ref": "#/components/schemas/WalletHistoryBitcoinRawDto"
               }
+            },
+            "required": [
+              "bitcoin"
             ]
           },
           "meta": {
@@ -3498,7 +3422,7 @@
             "type": "object",
             "description": "Per-chain indexed block height (-1 while real sync metadata is unavailable)",
             "example": {
-              "0x1": -1
+              "bitcoin": "latest"
             }
           },
           "unsupportedChains": {
@@ -3781,8 +3705,7 @@
         "properties": {
           "chainId": {
             "type": "string",
-            "description": "Chain ID of the failed chain",
-            "example": "0x89"
+            "description": "Chain ID of the failed chain"
           },
           "code": {
             "type": "string",
@@ -4072,7 +3995,7 @@
           },
           "tokenTransfers": {
             "type": "object",
-            "description": "Token transfers (ERC20 for EVM)",
+            "description": "Token transfers",
             "properties": {
               "items": {
                 "type": "array",

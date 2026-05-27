@@ -8,10 +8,6 @@ import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
 <EndpointMeta cus={10} />
 
-<Warning>
-  **Bitcoin** is fully live on this endpoint. **EVM and Solana** support is in early-access beta and launching soon — the chain parameters may work today, but production usage isn't recommended yet.
-</Warning>
-
 <Note>
   For BTC, pass `bitcoin` as `chainAlias` and `native` as `tokenAliasOrTokenAddress`. The response is a compact, chart-ready price array — drop it directly into a sparkline widget without resampling.
 </Note>
