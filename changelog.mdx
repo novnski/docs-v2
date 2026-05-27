@@ -3,6 +3,37 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="May 27, 2026" tags={["New Feature"]}>
+  ## Bitcoin Data API
+
+  Full Bitcoin coverage now lands on the Moralis Universal API — raw blocks and transactions, market prices with sparklines, address history and balances, plus native xpub tooling. Every endpoint is the same Universal endpoint EVM and Solana developers already use; just pass `bitcoin` as the chain.
+
+  **What's new:**
+
+  - **Raw data** — raw blocks and raw transactions for teams working directly with onchain data
+  - **Market data** — current BTC price, full historical time series, and chart-ready price sparklines for chart UIs
+  - **Address-level data** — transaction history and token balances for any Bitcoin address
+  - **Xpub tooling** — pass a Bitcoin address **or** an xpub to the wallet endpoints, plus a new utility endpoint to enumerate every derived address from a given xpub
+
+  **Address or xpub inputs:** the wallet endpoints accept either a Bitcoin address or an xpub directly, so the API slots into whatever shape your wallet or backend already uses.
+
+  ```bash
+  # Address input
+  GET /v1/wallets/bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq/tokens?chains=bitcoin
+
+  # Xpub input — same endpoint, derives addresses server-side
+  GET /v1/wallets/{xpub}/tokens?chains=bitcoin
+  ```
+
+  This brings the full Bitcoin data lifecycle under one consistent surface — replacing the block explorer, price feed, custom indexer, xpub derivation library, and chart caching layer teams used to stitch together — with the same auth, SDKs, pricing, and rate limits as the rest of Moralis.
+
+  **Use cases:** Bitcoin wallets, custody platforms, block explorers, BTC analytics, and multi-chain platforms extending their Bitcoin coverage.
+
+  See the [Bitcoin Data API overview](/data-api/bitcoin/bitcoin-index) for the full endpoint list and schemas, or start with the [Bitcoin Quickstart](/get-started/tutorials/data-api/bitcoin/bitcoin-quickstart).
+
+  [Explore the Bitcoin Data API →](/data-api/bitcoin/bitcoin-index)
+</Update>
+
 <Update label="May 26, 2026" tags={["New Feature"]}>
   ## Three New Solana DeFi Protocols
 
