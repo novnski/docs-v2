@@ -51,14 +51,14 @@ These endpoints support both EVM and Solana chains.
 
 Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Per-chain wallet endpoints are billed once for each requested chain.
 
-### Blockchain API
+### Bitcoin Blockchain API
 
 | Method | CU Cost |
 | --- | --- |
 | [getBlockByNumberOrHash](/data-api/bitcoin/blockchain/block) | 100 |
 | [getTransactionByHash](/data-api/bitcoin/blockchain/transaction) | 10 |
 
-### Price API
+### Bitcoin Price API
 
 | Method | CU Cost |
 | --- | --- |
@@ -66,14 +66,14 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getTokenPriceTimeSeries](/data-api/bitcoin/price/historical-price) | 50 |
 | [getTokenPriceSparkline](/data-api/bitcoin/price/sparkline) | 50 |
 
-### Wallet API
+### Bitcoin Wallet API
 
 | Method | CU Cost |
 | --- | --- |
 | [getWalletHistory](/data-api/bitcoin/wallet/address-transactions) | 150 per chain |
 | [getTokenBalances](/data-api/bitcoin/wallet/address-balances) | 50 per chain |
 
-### Xpub Utility
+### Bitcoin Xpub Utility
 
 | Method | CU Cost |
 | --- | --- |
@@ -83,7 +83,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 
 ## EVM API Compute Units
 
-### Wallet API
+### EVM Wallet API
 
 | Method | CU Cost |
 | --- | --- |
@@ -113,7 +113,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [resolveAddress](/data-api/evm/wallet/resolve-address) | 10 |
 | [getWalletInsight](/data-api/evm/wallet/wallet-insights) | 100 per chain |
 
-### Token API
+### EVM Token API
 
 | Method | CU Cost |
 | --- | --- |
@@ -138,7 +138,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getTopGainersTokens](/data-api/evm/token/discovery/top-gainers) | 250 |
 | [getTopLosersTokens](/data-api/evm/token/discovery/top-losers) | 250 |
 
-### NFT API
+### EVM NFT API
 
 | Method | CU Cost |
 | --- | --- |
@@ -166,7 +166,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [reSyncMetadata](/data-api/evm/nft/utilities/resync-nft-metadata) | 50 |
 | [resyncNFTRarity](/data-api/evm/nft/utilities/resync-nft-traits) | 10 |
 
-### Price API
+### EVM Price API
 
 | Method | CU Cost |
 | --- | --- |
@@ -179,7 +179,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getNFTSalePrices](/data-api/evm/price/sale-price-by-token-id) | 30 |
 | [getNFTContractSalePrices](/data-api/evm/price/sale-prices-by-collection) | 1 |
 
-### DeFi API
+### EVM DeFi API
 
 | Method | CU Cost |
 | --- | --- |
@@ -187,7 +187,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getDefiPositionsSummary](/data-api/evm/defi/wallet-positions) | 5000 |
 | [getDefiPositionsByProtocol](/data-api/evm/defi/wallet-positions-detailed) | 5000 |
 
-### Blockchain API
+### EVM Blockchain API
 
 | Method | CU Cost |
 | --- | --- |
@@ -203,7 +203,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 
 ## Solana API Compute Units
 
-### Wallet API
+### Solana Wallet API
 
 | Method | CU Cost |
 | --- | --- |
@@ -213,7 +213,7 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getPortfolio](/data-api/solana/wallet/portfolio) | 10 |
 | [getSwapsByWalletAddress](/data-api/solana/wallet/wallet-swaps) | 50 |
 
-### Token API
+### Solana Token API
 
 | Method | CU Cost |
 | --- | --- |
@@ -238,13 +238,13 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getBondingTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) | 50 |
 | [getTokenBondingStatus](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status) | 20 |
 
-### NFT API
+### Solana NFT API
 
 | Method | CU Cost |
 | --- | --- |
 | [getNFTMetadata](/data-api/solana/nft/nft-metadata) | 10 |
 
-### Price API
+### Solana Price API
 
 | Method | CU Cost |
 | --- | --- |
