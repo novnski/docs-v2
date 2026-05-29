@@ -47,6 +47,40 @@ These endpoints support both EVM and Solana chains.
 
 ---
 
+## Bitcoin API Compute Units
+
+Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Per-chain wallet endpoints are billed once for each requested chain.
+
+### Blockchain API
+
+| Method | CU Cost |
+| --- | --- |
+| [getBlockByNumberOrHash](/data-api/bitcoin/blockchain/block) | 100 |
+| [getTransactionByHash](/data-api/bitcoin/blockchain/transaction) | 10 |
+
+### Price API
+
+| Method | CU Cost |
+| --- | --- |
+| [getTokenPrice](/data-api/bitcoin/price/current-price) | 50 |
+| [getTokenPriceTimeSeries](/data-api/bitcoin/price/historical-price) | 50 |
+| [getTokenPriceSparkline](/data-api/bitcoin/price/sparkline) | 50 |
+
+### Wallet API
+
+| Method | CU Cost |
+| --- | --- |
+| [getWalletHistory](/data-api/bitcoin/wallet/address-transactions) | 150 per chain |
+| [getTokenBalances](/data-api/bitcoin/wallet/address-balances) | 50 per chain |
+
+### Xpub Utility
+
+| Method | CU Cost |
+| --- | --- |
+| [getAddressesByXpub](/data-api/bitcoin/utility/addresses-from-xpub) | 50 |
+
+---
+
 ## EVM API Compute Units
 
 ### Wallet API
