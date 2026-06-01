@@ -79,6 +79,17 @@ This is especially important for:
 
 ---
 
+## Liquidity Skew
+
+Get Token Pairs ([EVM](/data-api/evm/token/swaps/token-pairs), [Solana](/data-api/solana/token/pairs/token-pairs)) exposes a property that measures how balanced a pair's reserves are across both sides of the pool. It is named `liquidity_skew` on EVM and `liquiditySkew` on Solana.
+
+- `1` = perfectly balanced reserves
+- `0` = fully imbalanced (liquidity concentrated on one side)
+
+When this value is below `0.005`, the pair's liquidity is treated as `0`. This prevents heavily one-sided pools, where one side is effectively empty, from being used as a reliable pricing venue.
+
+---
+
 ## Low Liquidity Behavior
 
 When a pool fails liquidity filtering, behavior depends on the endpoint.
