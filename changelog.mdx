@@ -11,6 +11,28 @@ description: "New releases and improvements"
   If you rely on Zeta Chain RPC, please migrate to an alternative provider. All other supported chains are unaffected.
 </Update>
 
+<Update label="May 29, 2026" tags={["Deprecation"]}>
+  ## Fantom Chain Sunsetting
+
+  Fantom mainnet support is being removed across all Moralis APIs on **May 29, 2026**. Fantom Opera testnet has already been removed. The Fantom Opera network is winding down as a legacy chain, and we're retiring our integration in line with the broader ecosystem shift.
+
+  **What's changing:**
+
+  - **Data API** — wallet, token, NFT, DeFi, and price endpoints no longer return Fantom (`0xfa`) data. Requests passing `fantom` or chain id `0xfa` will return an error.
+  - **RPC Nodes** — Fantom RPC node endpoints are no longer available, and their documentation has been removed.
+  - **Streams** — existing Fantom streams will stop emitting webhook notifications and should be deleted from your workspace.
+  - **Testnet** — Fantom Opera testnet was removed ahead of mainnet as part of this wind-down.
+
+  **Why:** Fantom Opera has transitioned into a legacy chain with declining activity following the broader migration to Sonic. Maintaining a dedicated integration is no longer justified by usage, so we're consolidating support onto actively maintained networks.
+
+  **What to do:**
+
+  - Remove any `fantom` / `0xfa` references from your API requests, SDK calls, and stream configurations before May 29 to avoid errored responses.
+  - If you still rely on Fantom data, migrate to an alternative provider, or move your workloads to one of the [supported chains](/data-api/supported-chains).
+
+  All other supported chains are unaffected.
+</Update>
+
 <Update label="May 27, 2026" tags={["New Feature"]}>
   ## Bitcoin Data API
 
