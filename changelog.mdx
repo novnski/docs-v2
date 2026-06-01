@@ -3,6 +3,14 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="June 1, 2026" tags={["Deprecation"]}>
+  ## Sunsetting Zeta Chain RPC
+
+  As of June 1, 2026, Moralis is sunsetting RPC node support for Zeta Chain. The Zetachain and Zetachain Testnet RPC endpoints are no longer available, and their documentation has been removed.
+
+  If you rely on Zeta Chain RPC, please migrate to an alternative provider. All other supported chains are unaffected.
+</Update>
+
 <Update label="May 27, 2026" tags={["New Feature"]}>
   ## Bitcoin Data API
 
@@ -144,7 +152,7 @@ description: "New releases and improvements"
   **Discovery endpoints (`/discovery/*`):**
 
   - `POST /discovery/tokens`
-  - `GET /discovery/token`
+  - `GET /discovery/token` — migrate to the [Token Search API](/data-api/universal/token/search/token-search).
   - `GET /discovery/tokens/rising-liquidity`
   - `GET /discovery/tokens/buying-pressure`
   - `GET /discovery/tokens/solid-performers`

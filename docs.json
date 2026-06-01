@@ -1771,45 +1771,6 @@
                 ]
               }
             ]
-          },
-          {
-            "group": "Zetachain RPC",
-            "pages": [
-              "rpc-nodes/zetachain/overview",
-              {
-                "group": "Zetachain JSON-RPC API",
-                "pages": [
-                  "rpc-nodes/zetachain/eth-blockNumber",
-                  "rpc-nodes/zetachain/eth-call",
-                  "rpc-nodes/zetachain/eth-chain-id",
-                  "rpc-nodes/zetachain/eth-create-access-list",
-                  "rpc-nodes/zetachain/eth-estimate-gas",
-                  "rpc-nodes/zetachain/eth-fee-history",
-                  "rpc-nodes/zetachain/eth-gas-price",
-                  "rpc-nodes/zetachain/eth-get-balance",
-                  "rpc-nodes/zetachain/eth-get-block-by-hash",
-                  "rpc-nodes/zetachain/eth-get-block-by-number",
-                  "rpc-nodes/zetachain/eth-get-block-transaction-count-by-hash",
-                  "rpc-nodes/zetachain/eth-get-block-transaction-count-by-number",
-                  "rpc-nodes/zetachain/eth-get-block-receipts",
-                  "rpc-nodes/zetachain/eth-get-code",
-                  "rpc-nodes/zetachain/eth-get-logs",
-                  "rpc-nodes/zetachain/eth-get-proof",
-                  "rpc-nodes/zetachain/eth-get-storage-at",
-                  "rpc-nodes/zetachain/eth-get-transaction-by-hash",
-                  "rpc-nodes/zetachain/eth-get-transaction-by-block-hash-and-index",
-                  "rpc-nodes/zetachain/eth-get-transaction-by-block-number-and-index",
-                  "rpc-nodes/zetachain/eth-get-transaction-count",
-                  "rpc-nodes/zetachain/eth-get-transaction-receipt",
-                  "rpc-nodes/zetachain/eth-get-uncle-by-block-hash-and-index",
-                  "rpc-nodes/zetachain/eth-get-uncle-by-block-number-and-index",
-                  "rpc-nodes/zetachain/eth-get-uncle-count-by-block-hash",
-                  "rpc-nodes/zetachain/eth-get-uncle-count-by-block-number",
-                  "rpc-nodes/zetachain/eth-max-priority-fee-per-gas",
-                  "rpc-nodes/zetachain/eth-send-raw-transaction"
-                ]
-              }
-            ]
           }
         ]
       },

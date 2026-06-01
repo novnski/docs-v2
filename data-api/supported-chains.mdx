@@ -5,6 +5,8 @@ description: "Blockchains supported by the Moralis Data APIs for tokens, wallets
 mode: "wide"
 ---
 
+import { DataApiSupportedChainsTable } from "/snippets/data-api-supported-chains-table.jsx";
+
 ### Data API Supported Chains
 
 The Moralis Data APIs support multiple blockchain networks for **onchain data access**, including wallets, tokens, NFTs, DeFi, and prices.
@@ -15,40 +17,6 @@ Chain support may vary by feature. Some chains support the full Data API surface
 - Protocol availability
 - Onchain data structure
 
-Use the table below to see which chains are supported by the Data APIs and which features are available on each chain.
+Use the selector below to filter the table by feature, or view all features at once.
 
-| Chain                       | Type    | Chain ID              | Query Params                         | Data API | Wallet | NFT | Token | DeFi | Entity | Blockchain | PNL | Prices | Internal Txs | NFT Trades | NFT Prices | Floor Prices |
-| --------------------------- | ------- | --------------------- | ------------------------------------ | -------- | ------ | --- | ----- | ---- | ------ | ---------- | --- | ------ | ------------ | ---------- | ---------- | ------------ |
-| Ethereum Mainnet            | Mainnet | 0x1 (1)               | `eth` · `0x1`                        | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✓   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Ethereum Sepolia            | Testnet | 0xaa36a7 (11155111)   | `sepolia` · `0xaa36a7`              | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Polygon Mainnet             | Mainnet | 0x89 (137)            | `polygon` · `0x89`                   | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✓   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Polygon Amoy                | Testnet | 0x13882 (80002)       | `polygon amoy` · `0x13882`          | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Binance Smart Chain Mainnet | Mainnet | 0x38 (56)             | `bsc` · `0x38`                       | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Binance Smart Chain Testnet | Testnet | 0x61 (97)             | `bsc testnet` · `0x61`              | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Arbitrum                    | Mainnet | 0xa4b1 (42161)        | `arbitrum` · `0xa4b1`               | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Base                        | Mainnet | 0x2105 (8453)         | `base` · `0x2105`                    | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✓   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Base Sepolia                | Testnet | 0x14a34 (84532)       | `base sepolia` · `0x14a34`          | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Optimism                    | Mainnet | 0xa (10)              | `optimism` · `0xa`                   | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Linea                       | Mainnet | 0xe708 (59144)        | `linea` · `0xe708`                   | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✗          | ✗          | ✗            |
-| Linea Sepolia               | Testnet | 0xe705 (59141)        | `linea sepolia` · `0xe705`          | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Avalanche                   | Mainnet | 0xa86a (43114)        | `avalanche` · `0xa86a`              | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Fantom Mainnet              | Mainnet | 0xfa (250)            | `fantom` · `0xfa`                    | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✓      | ✓            | ✗          | ✗          | ✗            |
-| Cronos Mainnet              | Mainnet | 0x19 (25)             | `cronos` · `0x19`                    | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✓      | ✗            | ✗          | ✗          | ✗            |
-| Gnosis                      | Mainnet | 0x64 (100)            | `gnosis` · `0x64`                    | ✓        | ✓      | ✗   | ✓     | ✗    | ✓      | ✓          | ✗   | ✓      | ✓            | ✗          | ✗          | ✗            |
-| Gnosis Chiado               | Testnet | 0x27d8 (10200)        | `gnosis testnet` · `0x27d8`         | ✓        | ✓      | ✗   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✗            | ✗          | ✗          | ✗            |
-| Chiliz Mainnet              | Mainnet | 0x15b38 (88888)       | `chiliz` · `0x15b38`                | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Chiliz Testnet              | Testnet | 0x15b32 (88882)       | `chiliz testnet` · `0x15b32`        | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Moonbeam                    | Mainnet | 0x504 (1284)          | `moonbeam` · `0x504`                | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✗            | ✗          | ✗          | ✗            |
-| Moonriver                   | Testnet | 0x505 (1285)          | `moonriver` · `0x505`               | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✗            | ✗          | ✗          | ✗            |
-| Moonbase                    | Testnet | 0x507 (1287)          | `moonbase` · `0x507`                | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✗            | ✗          | ✗          | ✗            |
-| Flow                        | Mainnet | 0x2eb (747)           | `flow` · `0x2eb`                     | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✗            | ✗          | ✗          | ✗            |
-| Flow Testnet                | Testnet | 0x221 (545)           | `flow-testnet` · `0x221`            | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✗            | ✗          | ✗          | ✗            |
-| Ronin                       | Mainnet | 0x7e4 (2020)          | `ronin` · `0x7e4`                    | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Ronin Saigon Testnet        | Testnet | 0x7e5 (2021)          | `ronin-testnet` · `0x31769`         | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Lisk                        | Mainnet | 0x46f (1135)          | `lisk` · `0x46f`                     | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Lisk Sepolia Testnet        | Testnet | 0x106a (4202)         | `lisk-sepolia` · `0x106a`           | ✓        | ✓      | ✓   | ✓     | ✗    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Pulsechain                  | Mainnet | 0x171 (369)           | `pulse` · `0x171`                    | ✓        | ✓      | ✗   | ✓     | ✗    | ✓      | ✓          | ✗   | ✓      | ✓            | ✗          | ✗          | ✗            |
-| Sei                         | Mainnet | 0x531 (1329)          | `sei` · `0x531`                      | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Sei Testnet                 | Testnet | 0x530 (1328)          | `sei-testnet` · `0x530`             | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✗      | ✓            | ✗          | ✗          | ✗            |
-| Monad                       | Mainnet | 0x8f (143)            | `monad` · `0x8f`                     | ✓        | ✓      | ✓   | ✓     | ✓    | ✓      | ✓          | ✗   | ✓      | ✓            | ✓          | ✓          | ✓            |
-| Bitcoin Mainnet             | Mainnet | mainnet               | `bitcoin` · `bitcoin-mainnet`        | ✓        | ✓      | ✗   | ✓     | ✗    | ✗      | ✓          | ✗   | ✓      | ✗            | ✗          | ✗          | ✗            |
+<DataApiSupportedChainsTable />
