@@ -1,0 +1,189 @@
+---
+title: "NFT Transfers"
+description: "Sync every ERC-721 / ERC-1155 transfer — by contract, by wallet, or for a single (contract, token_id) — as a flat event log into your own database."
+---
+
+### Question it answers
+
+> "Give me every NFT transfer — by contract **0x…**, by wallet **0x…**, or for a single `(contract, token_id)`."
+
+A single recipe serves all three access paths. It mirrors the on-chain subset of Moralis `GET /nft/{address}/transfers` (by contract), `GET /{address}/nft/transfers` (by wallet), and `GET /nft/{address}/{token_id}/transfers` (single token). It carries no off-chain enrichment — the source array has no collection metadata or address labels (see [Fidelity gaps](#fidelity-gaps)).
+
+### What you get
+
+One row per NFT transfer, mapped straight from Moralis-indexed, normalized per-block onchain data:
+
+| Column | Description |
+| --- | --- |
+| `token_address` | The NFT contract that emitted the transfer |
+| `token_id` | The token id — a `uint256` big decimal stored as text (never numeric); compare as strings |
+| `from_address`, `to_address` | The two sides of the transfer |
+| `amount` | The ERC-1155 quantity (`1` for ERC-721) |
+| `contract_type` | `ERC721` or `ERC1155` (the emitted `tokenType`) |
+| `initiated_by` | The address that initiated the transfer |
+| `tx_hash` | Transaction that produced the transfer |
+| `block_number`, `transaction_index`, `log_index` | On-chain ordering tuple |
+| `block_timestamp` | Block time |
+
+### Source
+
+The transform reads one per-block array and lands one row per transfer:
+
+`nftTokenTransfers`
+
+Fields map straight from the source struct — `tokenAddress`, `tokenId` (as a string), `fromAddress`, `toAddress`, `amount`, `tokenType` (→ `contract_type`), and `initiatedBy`. There's no price or metadata join — this is a flat event stream.
+
+### Destination
+
+| Destination | Table | Read pattern |
+| --- | --- | --- |
+| **ClickHouse** (first-class) | `fact_nft_transfers` | Prefix scan on `(chain_id, token_address, token_id, block_number)`; by-wallet via `bloom_filter` skip indexes; read with `FINAL` or `sum(sign)` |
+| **Postgres** | `nft_transfers` | Index on `(token_address, block_number DESC)`, `(token_address, token_id, block_number DESC)`, and `(from_address, …)` / `(to_address, …)` |
+| **MySQL** | `nft_transfers` | Same composite indexes (ascending) |
+
+ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct — the `+1/−1` reorg pair for a row shares an identical key and collapses cleanly. The fact table's sort key is contract-first, so by-contract is a prefix scan on `token_address` and by-token-id a prefix scan on `(token_address, token_id)`. By-wallet reads are served by `bloom_filter` data-skipping indexes on `from_address` and `to_address`.
+
+### Full schema
+
+Below is the complete read table this recipe produces. Keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` and `amount` are stored at full `uint256` width — `token_id` as text (hash-derived ENS / ERC-1155 ids routinely exceed any SQL numeric precision), `amount` as a wide decimal.
+
+<Accordion title="ClickHouse — fact_nft_transfers">
+
+```sql
+CREATE TABLE recipe_nft_transfers.fact_nft_transfers
+(
+    vendor_event_id     String,
+    ingested_at         DateTime64(3),
+    chain_id            UInt32,
+    block_hash          String,
+    block_number        UInt64,
+    event_ts            DateTime64(3),
+    token_address       String,
+    token_id            String,        -- uint256 big decimal, NEVER numeric
+    from_address        String,
+    to_address          String,
+    amount              String,        -- ERC-1155 quantity (1 for ERC-721)
+    contract_type       LowCardinality(String),  -- ERC721 | ERC1155
+    initiated_by        String,
+    tx_hash             String,
+    log_index           Nullable(UInt32),
+    transaction_index   Nullable(Int32),
+    sign                Int8,
+    -- by-wallet skip indexes: prune granules that cannot contain the wallet.
+    INDEX bf_from from_address TYPE bloom_filter(0.01) GRANULARITY 4,
+    INDEX bf_to   to_address   TYPE bloom_filter(0.01) GRANULARITY 4
+)
+ENGINE = ReplicatedCollapsingMergeTree(
+    '/clickhouse/tables/{database}/fact_nft_transfers', '{replica}', sign)
+PARTITION BY (chain_id, toYYYYMM(event_ts))
+ORDER BY (chain_id, token_address, token_id, block_number, vendor_event_id);
+```
+
+The `sign` column drives reorg collapsing — read with `FINAL` or `sum(sign)`, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+
+</Accordion>
+
+<Accordion title="Postgres — nft_transfers">
+
+```sql
+CREATE TABLE public.nft_transfers (
+  position           BIGINT      NOT NULL,
+  log_index          BIGINT,
+  transaction_index  BIGINT,
+  block_number       BIGINT      NOT NULL,
+  block_timestamp    BIGINT      NOT NULL,    -- unix seconds
+  tx_hash            TEXT        NOT NULL,
+  vendor_event_id    TEXT        NOT NULL,
+  token_address      TEXT        NOT NULL,
+  token_id           TEXT        NOT NULL,    -- uint256 big decimal, NEVER numeric
+  from_address       TEXT        NOT NULL,
+  to_address         TEXT        NOT NULL,
+  amount             NUMERIC(76, 0)  NOT NULL,
+  contract_type      TEXT        NOT NULL,    -- ERC721 | ERC1155
+  initiated_by       TEXT        NOT NULL
+);
+
+-- By-contract access (the recipe's primary purpose).
+CREATE INDEX IF NOT EXISTS nft_transfers_token_block_idx
+  ON public.nft_transfers (token_address, block_number DESC);
+-- By-token-id access (single NFT provenance).
+CREATE INDEX IF NOT EXISTS nft_transfers_token_id_block_idx
+  ON public.nft_transfers (token_address, token_id, block_number DESC);
+-- By-wallet access (either side).
+CREATE INDEX IF NOT EXISTS nft_transfers_from_block_idx
+  ON public.nft_transfers (from_address, block_number DESC);
+CREATE INDEX IF NOT EXISTS nft_transfers_to_block_idx
+  ON public.nft_transfers (to_address, block_number DESC);
+-- Block-range helper.
+CREATE INDEX IF NOT EXISTS nft_transfers_block_idx
+  ON public.nft_transfers (block_number);
+```
+
+MySQL is the same shape with `VARCHAR(80)` for `token_id` and equivalent ascending composite keys. `position` is the block-level cursor used during backfill.
+
+</Accordion>
+
+### Example reads
+
+All transfers of an NFT contract, newest first (ClickHouse):
+
+```sql
+SELECT block_number, token_id, from_address, to_address, amount, contract_type, tx_hash
+FROM recipe_nft_transfers.fact_nft_transfers FINAL
+WHERE chain_id = 1 AND token_address = lower('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D')
+ORDER BY block_number DESC
+LIMIT 50;
+```
+
+Provenance of a single token (contract + token_id):
+
+```sql
+SELECT block_number, from_address, to_address, amount, tx_hash
+FROM recipe_nft_transfers.fact_nft_transfers FINAL
+WHERE chain_id = 1 AND token_address = lower('0xBC4C...') AND token_id = '1234'
+ORDER BY block_number DESC
+LIMIT 50;
+```
+
+All NFT transfers involving a wallet (either side), bloom-pruned:
+
+```sql
+SELECT block_number, token_address, token_id, from_address, to_address, amount
+FROM recipe_nft_transfers.fact_nft_transfers FINAL
+WHERE chain_id = 1
+  AND (from_address = lower('0x...') OR to_address = lower('0x...'))
+ORDER BY block_number DESC
+LIMIT 50;
+```
+
+### Modes
+
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+
+<Note>
+  The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level (many transfers share one block), so array-expanded transfer rows can only carry a composite unique. Run **realtime / hybrid on ClickHouse** — its log table corrects reorgs per-block via the collapsing companion table. The Postgres / MySQL shapes here are intended for `historical` backfill.
+</Note>
+
+### Multichain
+
+The recipe is chain-parametrized — point it at any supported EVM chain or Solana. On Solana the same `logIndex` can be assigned to multiple events in one instruction, so the event identity is widened with `(from_address, to_address, token_address, token_id, amount)` to keep rows distinct; the transfer log it produces is identical in shape.
+
+### Fidelity gaps
+
+The recipe lands only what the `nftTokenTransfers` array carries. Fields a Moralis NFT transfers endpoint surfaces that have **no onchain source** in this array are omitted:
+
+- **Collection metadata** (`token_name`, `token_symbol`) — these come from the NFT contract / a metadata indexer, not the transfer event. Out of scope for a flat transfer log; see NFT Collection Metadata for the contract-metadata pattern.
+- **Address labels / entity tags** (`from_address_label`, `to_address_entity`, …) — off-chain labels from a separate labelling service, not on-chain data.
+- **`value`** — the native value attached to the transfer transaction isn't carried on the transfer event; omitted. `amount` (the ERC-1155 quantity) is present.
+- **Pre/post NFT balances** — the recipe omits the balance surface to stay a flat event stream.
+
+### Related
+
+<Columns cols={2}>
+  <Card title="NFT Trades" href="/data-feeds/recipes/nft/nft-trades" icon="tags">
+    Marketplace sales with price — the trade-priced complement to raw transfers.
+  </Card>
+  <Card title="NFT Marketplace" href="/data-feeds/use-cases/nft-marketplace" icon="store">
+    The use case these NFT recipes power.
+  </Card>
+</Columns>
