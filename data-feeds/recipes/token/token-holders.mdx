@@ -1,0 +1,219 @@
+---
+title: "Token Holders"
+description: "Sync the full holder list of a token — every non-zero wallet, its current balance, and a best-effort USD value — as a continuously updated table in your own database. Mirrors the Moralis GET /erc20/{address}/owners endpoint."
+---
+
+### Question it answers
+
+> "Who holds token **0x…** — with their current balance and USD value? Give me the full holder list, biggest first."
+
+Mirrors Moralis [`GET /erc20/{address}/owners`](https://docs.moralis.com/web3-data-api/evm/reference/get-token-owners). Storing the holder set **pre-aggregated**, keyed by token, in your own database is the value — no per-request rebuild from raw transfers.
+
+### What you get
+
+Token transfers carry the **absolute** post-transfer balance of both sides of every transfer (`fromPostBalance` / `toPostBalance`). Each transfer becomes two per-wallet balance observations, and the latest observation per `(token, wallet)` is the current holding — no running-sum reconstruction. Each observation is USD-enriched in-block from the same block's price updates.
+
+| Column | Description |
+| --- | --- |
+| `token_address` | The token contract being held |
+| `wallet_address` | The holder |
+| `balance` | Absolute balance after the latest transfer, raw `uint256` as text |
+| `usd_price` | In-block USD spot price per **whole** token (newest-wins from the block's price updates; `0` if no same-block update) |
+| `usd_value` | Best-effort holding value — `balance / 10^18 × usd_price` (see [fidelity gaps](#fidelity-gaps)) |
+| `block_number`, `log_index` | Recency tuple — the latest pair wins as the current holding |
+| `leg` | `from` / `to` — which side of the transfer produced this observation |
+
+Balances are **latest-wins**: the current holding of a `(token, wallet)` is simply the observation with the highest `(block_number, log_index)`.
+
+### Source
+
+The transform reads one per-block array and unpivots it:
+
+`tokenTransfers`
+
+Each transfer yields `(from_address, from_post_balance)` and `(to_address, to_post_balance)`. The EVM zero address (mint/burn counterparty) and any side without a resolved post-balance are skipped. USD spot prices are folded in **inline** from the same block's `tokenPriceUpdates` (reversed so the chronologically-last update wins per token) — no separate price join at read time.
+
+This recipe is **Token Balances by Token** plus the in-block USD valuation leg.
+
+### Destination
+
+| Destination | Table | Read pattern |
+| --- | --- | --- |
+| **ClickHouse** (first-class) | `fact_token_holders` | Prefix scan on `(chain_id, token_address, wallet_address, …)`; current holding via `argMax` over `FINAL` |
+| **Postgres** | `token_holders` (materialized view over `token_holder_observations`) | Partial index `(token_address, wallet_address) WHERE balance > 0` |
+| **MySQL** | `token_holders` (trigger-maintained from `token_holder_observations`) | PK `(token_address, wallet_address)` + `DELETE … WHERE balance = 0` cleanup |
+
+ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct — a reorg negates the rolled-back block's observations (`sign = -1`) and re-emits the corrected ones, and `FINAL` collapses the pair before `argMax` so the aggregate sees only canonical state. The fact table's sort key is token-first, so a token's holder set is a contiguous range read.
+
+Postgres and MySQL keep an append-only observations table and derive the current-holder projection: Postgres as a `DISTINCT ON (token, wallet) … ORDER BY block_number DESC, log_index DESC` materialized view (refresh on a schedule), MySQL via an `AFTER INSERT` latest-wins upsert trigger with a periodic `DELETE … WHERE balance = 0` cleanup.
+
+### Full schema
+
+Below is the complete read table this recipe produces. It's a starting point — keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` balances are stored as text (they exceed numeric precision); `usd_price` is a wide decimal so a low-decimals token × price never overflows.
+
+<Accordion title="ClickHouse — fact_token_holders">
+
+```sql
+CREATE TABLE recipe_token_holders.fact_token_holders
+(
+    vendor_event_id   String,
+    ingested_at       DateTime64(3),
+    chain_id          UInt32,
+    block_hash        String,
+    block_number      UInt64,
+    log_index         UInt32,
+    event_ts          DateTime64(3),
+    token_address     String,
+    wallet_address    String,
+    balance           String,            -- absolute balance after this transfer (raw uint256)
+    usd_price         Nullable(String),  -- in-block USD spot per whole token
+    leg               LowCardinality(String),   -- 'from' | 'to'
+    sign              Int8
+)
+ENGINE = ReplicatedCollapsingMergeTree(
+    '/clickhouse/tables/{database}/fact_token_holders', '{replica}', sign)
+PARTITION BY (chain_id, toYYYYMM(event_ts))
+ORDER BY (chain_id, token_address, wallet_address, block_number, log_index, vendor_event_id, leg);
+```
+
+The `sign` column drives reorg collapsing — read with `FINAL` (then `argMax`) or a sign-aware aggregate, never a bare `WHERE sign = 1`. `leg` keeps the two unpivoted rows of one transfer distinct; the `+1`/`-1` reorg pair for one leg shares a key and collapses. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+
+</Accordion>
+
+<Accordion title="Postgres — token_holders">
+
+```sql
+-- 1. Observations (append-only sink target).
+CREATE TABLE public.token_holder_observations (
+  position         BIGINT          NOT NULL,
+  log_index        BIGINT          NOT NULL,
+  block_number     BIGINT          NOT NULL,
+  block_timestamp  BIGINT          NOT NULL,   -- unix seconds
+  token_address    TEXT            NOT NULL,
+  wallet_address   TEXT            NOT NULL,
+  balance          NUMERIC(76, 0)  NOT NULL,   -- absolute balance after the transfer
+  usd_price        NUMERIC(38, 18) NOT NULL,   -- in-block USD spot per whole token (0 if none)
+  leg              TEXT            NOT NULL,    -- 'from' | 'to'
+  vendor_event_id  TEXT            NOT NULL
+);
+
+-- Speeds the DISTINCT ON (latest-per-key) the materialized view computes.
+CREATE INDEX tho_token_wallet_recency_idx
+  ON public.token_holder_observations
+  (token_address, wallet_address, block_number DESC, log_index DESC);
+
+-- 2. Current-holder materialized view: latest observation per (token, wallet),
+--    with the best-effort usd_value (assumes 18 decimals).
+CREATE MATERIALIZED VIEW public.token_holders AS
+SELECT DISTINCT ON (token_address, wallet_address)
+  token_address,
+  wallet_address,
+  balance,
+  usd_price,
+  (balance / 1e18 * usd_price)::NUMERIC(38, 18) AS usd_value,
+  block_number,
+  log_index,
+  block_timestamp
+FROM public.token_holder_observations
+ORDER BY token_address, wallet_address, block_number DESC, log_index DESC;
+
+-- Required by REFRESH MATERIALIZED VIEW CONCURRENTLY.
+CREATE UNIQUE INDEX token_holders_pk
+  ON public.token_holders (token_address, wallet_address);
+
+-- Active holders of a token (this recipe's primary access path).
+CREATE INDEX token_holders_by_token_active_idx
+  ON public.token_holders (token_address, wallet_address)
+  WHERE balance > 0;
+
+-- OPTIONAL: sibling access path — all non-zero balances held by a wallet.
+-- CREATE INDEX token_holders_by_wallet_active_idx
+--   ON public.token_holders (wallet_address, token_address)
+--   WHERE balance > 0;
+
+-- OPTIONAL: cleanup index — find zeroed-out positions to prune.
+-- CREATE INDEX token_holders_zero_cleanup_idx
+--   ON public.token_holders (token_address, wallet_address)
+--   WHERE balance = 0;
+```
+
+MySQL is the same shape with `DECIMAL(76,0)` / `DECIMAL(38,18)`, and replaces the materialized view with a trigger-maintained `token_holders` table. `position` is the block-level cursor used during backfill. `balance` is typed `NUMERIC(76, 0)` so the raw `uint256` survives without overflow.
+
+</Accordion>
+
+### Example reads
+
+All current non-zero holders of a token with balance and best-effort `usd_value` — `FINAL` collapses reorg `±1` pairs before `argMax` (ClickHouse). The example assumes 18 decimals; substitute the token's real decimals to be exact:
+
+```sql
+SELECT wallet_address,
+       argMax(balance, (block_number, log_index))   AS current_balance,
+       argMax(usd_price, (block_number, log_index)) AS usd_price,
+       toString(toDecimal256(
+         (toFloat64OrZero(argMax(balance, (block_number, log_index))) / pow(10, 18))
+         * toFloat64OrZero(argMax(usd_price, (block_number, log_index))), 18)) AS usd_value
+FROM recipe_token_holders.fact_token_holders FINAL
+WHERE chain_id = 1 AND token_address = lower('0xA0b8...')
+GROUP BY wallet_address
+HAVING current_balance != '0' AND current_balance != ''
+ORDER BY toFloat64OrZero(current_balance) DESC
+LIMIT 100;
+```
+
+Holder count for a token (ClickHouse):
+
+```sql
+SELECT countDistinct(wallet_address) FROM (
+  SELECT wallet_address,
+         argMax(balance, (block_number, log_index)) AS bal
+  FROM recipe_token_holders.fact_token_holders FINAL
+  WHERE chain_id = 1 AND token_address = lower('0xA0b8...')
+  GROUP BY wallet_address
+  HAVING bal != '0' AND bal != '');
+```
+
+The same read on Postgres after refreshing the view (the partial index serves it directly):
+
+```sql
+REFRESH MATERIALIZED VIEW CONCURRENTLY token_holders;
+
+SELECT wallet_address, balance, usd_price, usd_value FROM public.token_holders
+WHERE token_address = lower('0xA0b8...') AND balance > 0
+ORDER BY balance DESC LIMIT 100;
+```
+
+### Modes
+
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+
+<Note>
+  The Postgres materialized view and the MySQL trigger state are not reorg-aware on their own — under realtime you would have to re-derive or refresh them. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block via `sign` automatically; the Postgres/MySQL configs target `historical` backfill.
+</Note>
+
+### Multichain
+
+The recipe is chain-parametrized via the `chain` setting — point it at any supported EVM chain or Solana. On Solana, the event identity already includes `(from, to, token, amount)` so each observation stays row-unique despite Solana's repeated `logIndex` within an instruction; the holder set it produces is identical in shape.
+
+### Fidelity gaps
+
+The Moralis `/erc20/{address}/owners` response has fields that aren't derivable from normalized per-block data and are therefore omitted or approximated:
+
+- **`balance_formatted`** — needs the token's `decimals`, which is contract metadata not present in `tokenTransfers`. Only the raw `balance` (uint256 string) is emitted; divide by `10^decimals` off-stream to format. Source decimals from a Token Metadata sync.
+- **`usd_value`** — emitted **best-effort assuming 18 decimals** (`balance / 1e18 × usd_price`). The faithful per-token USD spot `usd_price` (same-block, newest-wins) is stored alongside, so a consumer that knows the real decimals can recompute exactly: `usd_value = balance / 10^decimals × usd_price`. Tokens with no same-block price update get `usd_price = 0` (→ `usd_value = 0`) for that observation.
+- **`percentage_relative_to_total_supply`** and **`total_supply`** — there's no clean circulating/total-supply figure in the block stream (it would require summing all mints − burns since genesis or a contract `totalSupply()` read). Omitted.
+- **`owner_address_label`**, **`is_contract`**, **`entity`**, **`entity_logo`** — off-chain enrichment / address-classification metadata, not on-chain block data. Omitted.
+
+The core access key — `token_address` → holder `wallet_address` + current `balance` — is fully covered, so these gaps don't block the recipe.
+
+### Related
+
+<Columns cols={2}>
+  <Card title="Token Transfers" href="/data-feeds/recipes/token/token-transfers" icon="right-left">
+    The per-token movement ledger this holder set is derived from.
+  </Card>
+  <Card title="Token Analytics" href="/data-feeds/use-cases/token-analytics" icon="chart-line">
+    The use case holder distribution and concentration power.
+  </Card>
+</Columns>
+</content>
+</invoke>

@@ -3,22 +3,24 @@ title: "DeFi Protocols"
 description: "DeFi protocol coverage across EVM and Solana, how protocol decoding works, and how to fetch the full, always-current list of supported protocols from the API."
 ---
 
-Moralis decodes DeFi activity - lending, borrowing, staking, liquid staking, and liquidity pools - across **thousands of protocols on EVM chains** and the **top protocols on Solana**, returning enriched, protocol-aware positions through the [DeFi API](/data-api/evm/defi/overview).
+Moralis decodes DeFi activity - lending, borrowing, staking, liquid staking, and liquidity pools - across **thousands of protocols on EVM chains** and the **top protocols on Solana**, returning enriched, protocol-aware positions through the [DeFi API](/data-api/universal/defi/overview).
 
 Coverage expands continuously, so the API itself is the source of truth for what is supported at any given moment.
 
+<Note>
+  This page covers **protocol availability**. To fetch a wallet's actual DeFi **balances and positions**, use the DeFi API endpoints — [Wallet Protocols](/data-api/universal/defi/wallet-protocols), [Wallet Positions](/data-api/universal/defi/wallet-positions), and [Detailed Positions](/data-api/universal/defi/wallet-positions-detailed) — each accepts the `chain` parameter for EVM or Solana.
+</Note>
+
 ## Fetch the Full List of Supported Protocols
 
-Use the **Get Supported DeFi Protocols** endpoint to retrieve the complete, current list of supported protocols for a chain - ideal for keeping your own UI or coverage checks in sync:
+Use the [**Get Supported DeFi Protocols**](/data-api/universal/defi/supported-protocols) endpoint to retrieve the complete, current list of supported protocols with their chain coverage - ideal for keeping your own UI or coverage checks in sync:
 
 ```bash
-curl "https://api.moralis.com/v1/defi/protocols?chain=eth" \
+curl "https://api.moralis.com/v1/defi/protocols?chains=eth" \
   -H "X-Api-Key: YOUR_API_KEY"
 ```
 
-Pass the `chain` parameter (for example `eth`, `base`, `polygon`, or `solana`) to list the protocols supported on that chain.
-
-{/* TODO: link to the /v1/defi/protocols API reference page once the OpenAPI schema is added */}
+Pass the optional `chains` filter (for example `eth`, `base`, `polygon`, or `solana`) to narrow results to specific chains.
 
 <Info>
   By default, we track all forked Uniswap v2 protocols. If a particular protocol has not yet been decoded, it appears as `unknown` in API responses - [reach out to support](https://moralis.com/contact-sales) and we will prioritize decoding it.
@@ -75,6 +77,6 @@ The Solana DeFi API supports **10 protocols**, together covering roughly **90% o
 | Jito                       | Liquid staking |
 | Marinade                   | Liquid staking |
 
-See the [Solana DeFi API](/data-api/solana/defi/overview) for endpoints and examples.
+See the [DeFi API](/data-api/universal/defi/overview) for endpoints and examples — the same cross-chain endpoints return Solana and EVM positions.
 
 More protocols are added on a rolling basis. To request prioritization of a specific protocol, [reach out to the team](https://moralis.com/contact-sales).

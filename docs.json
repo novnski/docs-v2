@@ -730,24 +730,11 @@
                 "group": "DeFi API",
                 "tag": "New",
                 "pages": [
-                  "data-api/evm/defi/overview",
-                  {
-                    "group": "EVM",
-                    "pages": [
-                      "data-api/evm/defi/wallet-protocols",
-                      "data-api/evm/defi/wallet-positions",
-                      "data-api/evm/defi/wallet-positions-detailed"
-                    ]
-                  },
-                  {
-                    "group": "Solana",
-                    "pages": [
-                      "data-api/solana/defi/overview",
-                      "data-api/solana/defi/wallet-protocols",
-                      "data-api/solana/defi/wallet-positions",
-                      "data-api/solana/defi/wallet-positions-detailed"
-                    ]
-                  }
+                  "data-api/universal/defi/overview",
+                  "data-api/universal/defi/wallet-protocols",
+                  "data-api/universal/defi/wallet-positions",
+                  "data-api/universal/defi/wallet-positions-detailed",
+                  "data-api/universal/defi/supported-protocols"
                 ]
               },
               {
@@ -998,10 +985,80 @@
       {
         "tab": "Data Feeds",
         "pages": [
-          "data-feeds/overview",
-          "data-feeds/features",
-          "data-feeds/how-it-works",
-          "data-feeds/early-access"
+          {
+            "group": "Introduction",
+            "pages": [
+              "data-feeds/overview",
+              "data-feeds/features",
+              "data-feeds/how-it-works",
+              "data-feeds/early-access"
+            ]
+          },
+          {
+            "group": "Recipes",
+            "pages": [
+              "data-feeds/recipes/overview",
+              {
+                "group": "Wallet",
+                "pages": [
+                  "data-feeds/recipes/wallet/wallet-history",
+                  "data-feeds/recipes/wallet/token-balances-by-wallet",
+                  "data-feeds/recipes/wallet/native-balances",
+                  "data-feeds/recipes/wallet/nfts-by-wallet",
+                  "data-feeds/recipes/wallet/token-approvals"
+                ]
+              },
+              {
+                "group": "Token",
+                "pages": [
+                  "data-feeds/recipes/token/token-prices",
+                  "data-feeds/recipes/token/token-holders",
+                  "data-feeds/recipes/token/token-balances-by-token",
+                  "data-feeds/recipes/token/token-transfers",
+                  "data-feeds/recipes/token/token-stats",
+                  "data-feeds/recipes/token/token-metadata"
+                ]
+              },
+              {
+                "group": "Swaps & Markets",
+                "pages": [
+                  "data-feeds/recipes/markets/swaps-by-wallet",
+                  "data-feeds/recipes/markets/swaps-by-token",
+                  "data-feeds/recipes/markets/swaps-by-pair",
+                  "data-feeds/recipes/markets/pair-ohlcv",
+                  "data-feeds/recipes/markets/pair-reserves"
+                ]
+              },
+              {
+                "group": "NFT",
+                "pages": [
+                  "data-feeds/recipes/nft/nft-transfers",
+                  "data-feeds/recipes/nft/nft-trades",
+                  "data-feeds/recipes/nft/nft-owners-by-contract",
+                  "data-feeds/recipes/nft/nft-collection-metadata"
+                ]
+              },
+              {
+                "group": "Logs & Events",
+                "pages": [
+                  "data-feeds/recipes/logs/contract-logs",
+                  "data-feeds/recipes/logs/logs-by-topic0"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Use Cases",
+            "pages": [
+              "data-feeds/use-cases/accounting",
+              "data-feeds/use-cases/portfolio-tracking",
+              "data-feeds/use-cases/token-analytics",
+              "data-feeds/use-cases/trading-charting",
+              "data-feeds/use-cases/nft-marketplace",
+              "data-feeds/use-cases/compliance-aml",
+              "data-feeds/use-cases/event-indexing"
+            ]
+          }
         ]
       },
       {
