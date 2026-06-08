@@ -41,7 +41,6 @@ export const DataApiSupportedChainsTable = () => {
     { name: "Linea", type: "Mainnet", chainId: "0xe708 (59144)", qp: ["linea", "0xe708"], s: mk(T, T, T, T, T, T, T, F, T, T, F, F, F) },
     { name: "Linea Sepolia", type: "Testnet", chainId: "0xe705 (59141)", qp: ["linea sepolia", "0xe705"], s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
     { name: "Avalanche", type: "Mainnet", chainId: "0xa86a (43114)", qp: ["avalanche", "0xa86a"], s: mk(T, T, T, T, T, T, T, F, T, T, T, T, T) },
-    { name: "Fantom Mainnet", type: "Mainnet", chainId: "0xfa (250)", qp: ["fantom", "0xfa"], s: mk(T, T, T, T, F, T, T, F, T, T, F, F, F) },
     { name: "Cronos Mainnet", type: "Mainnet", chainId: "0x19 (25)", qp: ["cronos", "0x19"], s: mk(T, T, T, T, F, T, T, F, T, F, F, F, F) },
     { name: "Gnosis", type: "Mainnet", chainId: "0x64 (100)", qp: ["gnosis", "0x64"], s: mk(T, T, F, T, F, T, T, F, T, T, F, F, F) },
     { name: "Gnosis Chiado", type: "Testnet", chainId: "0x27d8 (10200)", qp: ["gnosis testnet", "0x27d8"], s: mk(T, T, F, T, F, T, T, F, F, F, F, F, F) },

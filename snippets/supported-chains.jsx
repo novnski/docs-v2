@@ -7,7 +7,6 @@ export const SupportedChains = ({ chains }) => {
     base: { name: "Base", chainId: "0x2105", alias: "base" },
     optimism: { name: "Optimism", chainId: "0xa", alias: "optimism" },
     arbitrum: { name: "Arbitrum", chainId: "0xa4b1", alias: "arbitrum" },
-    fantom: { name: "Fantom", chainId: "0xfa", alias: "fantom" },
     cronos: { name: "Cronos", chainId: "0x19", alias: "cronos" },
     gnosis: { name: "Gnosis", chainId: "0x64", alias: "gnosis" },
     chiliz: { name: "Chiliz", chainId: "0x15b38", alias: "chiliz" },

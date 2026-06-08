@@ -31,7 +31,6 @@ export const SupportedChainsTable = () => {
     { name: "Linea", type: "Mainnet", chainId: "0xe708 (59144)", s: mk(true, true, true, true, true) },
     { name: "Linea Sepolia", type: "Testnet", chainId: "0xe705 (59141)", s: mk(true, true, true, true, true) },
     { name: "Avalanche", type: "Mainnet", chainId: "0xa86a (43114)", s: mk(true, true, true, true, true) },
-    { name: "Fantom Mainnet", type: "Mainnet", chainId: "0xfa (250)", s: mk(true, true, true, false, true) },
     { name: "Cronos Mainnet", type: "Mainnet", chainId: "0x19 (25)", s: mk(true, true, true, false, true) },
     { name: "Gnosis", type: "Mainnet", chainId: "0x64 (100)", s: mk(true, true, true, true, true) },
     { name: "Gnosis Chiado", type: "Testnet", chainId: "0x27d8 (10200)", s: mk(true, true, true, true, true) },
