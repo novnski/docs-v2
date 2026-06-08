@@ -5,6 +5,8 @@ description: "Overview of all blockchain networks supported by Moralis across Da
 mode: "wide"
 ---
 
+import { SupportedChainsTable } from "/snippets/supported-chains-table.jsx";
+
 ### Supported Chains
 
 Moralis supports a wide range of EVM and non-EVM blockchain networks across its product stack, including Data APIs, Streams, Datashare, and RPC nodes.
@@ -15,41 +17,9 @@ This page provides a **high-level view of chain coverage across Moralis**, helpi
 - Which products are available per chain
 - Where coverage may differ between products
 
-| Chain Name                  | Type    | Chain ID              | Data API | Streams | Datashare | RPC Nodes | Auth API |
-| --------------------------- | ------- | --------------------- | -------- | ------- | --------- | --------- | -------- |
-| Ethereum Mainnet            | Mainnet | 0x1 (1)               | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Ethereum Sepolia            | Testnet | 0xaa36a7 (11155111)   | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Polygon Mainnet             | Mainnet | 0x89 (137)            | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Polygon Amoy                | Testnet | 0x13882 (80002)       | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Binance Smart Chain Mainnet | Mainnet | 0x38 (56)             | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Binance Smart Chain Testnet | Testnet | 0x61 (97)             | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Arbitrum                    | Mainnet | 0xa4b1 (42161)        | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Base                        | Mainnet | 0x2105 (8453)         | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Base Sepolia                | Testnet | 0x14a34 (84532)       | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Optimism                    | Mainnet | 0xa (10)              | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Linea                       | Mainnet | 0xe708 (59144)        | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Linea Sepolia               | Testnet | 0xe705 (59141)        | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Avalanche                   | Mainnet | 0xa86a (43114)        | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Cronos Mainnet              | Mainnet | 0x19 (25)             | ✓        | ✓       | ✓         | ✗         | ✓        |
-| Gnosis                      | Mainnet | 0x64 (100)            | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Gnosis Chiado               | Testnet | 0x27d8 (10200)        | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Chiliz Mainnet              | Mainnet | 0x15b38 (88888)       | ✓        | ✓       | ✓         | ✗         | ✓        |
-| Chiliz Testnet              | Testnet | 0x15b32 (88882)       | ✓        | ✓       | ✓         | ✗         | ✓        |
-| Moonbeam                    | Mainnet | 0x504 (1284)          | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Moonriver                   | Testnet | 0x505 (1285)          | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Moonbase                    | Testnet | 0x507 (1287)          | ✓        | ✓       | ✓         | ✓         | ✓        |
-| Flow                        | Mainnet | 0x2eb (747)           | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Flow Testnet                | Testnet | 0x221 (545)           | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Ronin                       | Mainnet | 0x7e4 (2020)          | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Ronin Saigon Testnet        | Testnet | 0x7e5 (2021)          | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Lisk                        | Mainnet | 0x46f (1135)          | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Lisk Sepolia Testnet        | Testnet | 0x106a (4202)         | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Pulsechain                  | Mainnet | 0x171 (369)           | ✓        | ✓       | ✓         | ✓         | ✗        |
-| Sei                         | Mainnet | 0x531 (1329)          | ✓        | ✓       | ✓         | ✗         | ✗        |
-| Sei Testnet                 | Testnet | 0x530 (1328)          | ✓        | ✓       | ✓         | ✗         | ✗        |
-| Monad                       | Mainnet | 0x8f (143)            | ✓        | ✓       | ✓         | ✗         | ✓        |
-| Solana Mainnet              | Mainnet | mainnet               | ✓        | ✗       | ✓         | ✗         | ✗        |
-| Bitcoin Mainnet             | Mainnet | mainnet               | ✓        | ✓       | ✗         | ✗         | ✗        |
+Use the selector below to filter the table by product.
+
+<SupportedChainsTable />
 
 For product-specific details, see the dedicated supported-chains pages below.
 

@@ -1174,68 +1174,6 @@
         },
     },
     {
-        name: "Zetachain",
-        logo: "/img/content/zetachain.png",
-        type: "Mainnet",
-        chainID: "0x1b58 (7000)",
-        isNew: false,
-        evmApi: {
-            supported: false,
-            internalTxs: false,
-            erc20Swaps: false,
-            nftTrades: false,
-            reason: "Coming soon",
-            queryParams: ["n/a"],
-        },
-        streamsApi: {
-            supported: false,
-            reason: "Coming soon",
-            internalTxs: false,
-        },
-        rpcNodes: {
-            supported: true,
-            urls: [
-                "https://site1.moralis-nodes.com/zetachain/",
-                "https://site2.moralis-nodes.com/zetachain/",
-            ],
-        },
-        authApi: {
-            supported: false,
-            reason: "Coming soon",
-        },
-    },
-    {
-        name: "Zetachain Testnet",
-        logo: "/img/content/zetachain.png",
-        type: "Testnet",
-        chainID: "0x1b59 (7001)",
-        isNew: false,
-        evmApi: {
-            supported: false,
-            internalTxs: false,
-            erc20Swaps: false,
-            nftTrades: false,
-            reason: "Coming soon",
-            queryParams: ["n/a"],
-        },
-        streamsApi: {
-            supported: false,
-            reason: "Coming soon",
-            internalTxs: false,
-        },
-        rpcNodes: {
-            supported: true,
-            urls: [
-                "https://site1.moralis-nodes.com/zetachain-testnet/",
-                "https://site2.moralis-nodes.com/zetachain-testnet/",
-            ],
-        },
-        authApi: {
-            supported: false,
-            reason: "Coming soon",
-        },
-    },
-    {
         name: "Flow",
         logo: "/img/content/flow.png",
         type: "Mainnet",

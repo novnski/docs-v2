@@ -3,6 +3,116 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="June 4, 2026" tags={["Deprecation"]}>
+  ## Cortex API and legacy Data API Endpoints Removed
+
+  As [announced on May 5](#cortex-api-and-legacy-data-api-endpoints-sunsetting), the following endpoints and APIs have now been **removed** as of June 4, 2026. Requests to these endpoints will return an error. If you are still calling any of them, migrate to the replacements below.
+
+  **Cortex API:**
+
+  - `POST /chat` — migrate to [Onchain Skills](/data-api/onchain-skills/overview), which replaces Cortex as our AI interface for Moralis data.
+
+  **Discovery endpoints (`/discovery/*`):**
+
+  - `POST /discovery/tokens`
+  - `GET /discovery/token` — migrate to the [Token Search API](/data-api/universal/token/search/token-search).
+  - `GET /discovery/tokens/rising-liquidity`
+  - `GET /discovery/tokens/buying-pressure`
+  - `GET /discovery/tokens/solid-performers`
+  - `GET /discovery/tokens/experienced-buyers`
+  - `GET /discovery/tokens/risky-bets`
+  - `GET /discovery/tokens/blue-chip`
+  - `GET /discovery/tokens/top-gainers`
+  - `GET /discovery/tokens/top-losers`
+  - `GET /discovery/tokens/trending`
+
+  **Volume endpoints (`/volume/*`):**
+
+  - `GET /volume/chains`
+  - `GET /volume/categories`
+  - `GET /volume/timeseries`
+  - `GET /volume/timeseries/{categoryId}`
+
+  **Sniper endpoints (EVM and Solana):**
+
+  - `GET /pairs/{address}/snipers` (EVM)
+  - `GET /token/{network}/pairs/{pairAddress}/snipers` (Solana)
+
+  **ERC20 endpoints (EVM):**
+
+  - `GET /erc20/exchange/{exchangeName}/new`
+  - `GET /erc20/exchange/{exchangeName}/bonding`
+  - `GET /erc20/exchange/{exchangeName}/graduated`
+  - `GET /erc20/{tokenAddress}/bondingStatus`
+  - `GET /erc20/{address}/stats`
+  - `GET /erc20/{token_address}/pairs/stats` — migrate to [`GET /tokens/{tokenAddress}/analytics`](/data-api/universal/token/analytics/token-analytics)
+  - `GET /erc20/metadata/symbols` — migrate to [`GET /tokens/search`](/data-api/universal/token/search/token-search)
+
+  **Market data endpoints (`/market-data/*`):**
+
+  - `GET /market-data/erc20s/top-tokens`
+  - `GET /market-data/erc20s/top-movers`
+  - `GET /market-data/nfts/top-collections`
+  - `GET /market-data/nfts/hottest-collections`
+  - `GET /market-data/global/market-cap`
+  - `GET /market-data/global/volume`
+
+  If you need help identifying the right replacement for a removed endpoint, [reach out to the team](https://admin.moralis.com/) (via chat widget).
+</Update>
+
+<Update label="June 1, 2026" tags={["New Feature"]}>
+  ## 11 New Solana DEXes
+
+  We've expanded Solana DEX coverage with **11 newly indexed DEX programs**, powering token pairs, swaps, prices, OHLC, and other DEX-derived features across the Data API.
+
+  **Newly supported:**
+
+  - **BisonFi**
+  - **HumidiFi**
+  - **Phoenix**
+  - **Manifest**
+  - **Tessera V**
+  - **SolFi**
+  - **ZeroFi**
+  - **GoonFi V1** (dormant) and **GoonFi V2** (active)
+  - **Saber**
+  - **PancakeSwap**
+
+  For these protocols, swap data (and therefore prices) is available from **June 1, 2026** onwards. Full historical coverage is coming soon. All other Solana DEXes have full history.
+
+  See the full list of program IDs on the [Supported DEXes](/data-api/data-features/integrations/supported-dexs#solana-dex-support) page.
+</Update>
+
+<Update label="June 1, 2026" tags={["Deprecation"]}>
+  ## Sunsetting Zeta Chain RPC
+
+  As of June 1, 2026, Moralis is sunsetting RPC node support for Zeta Chain. The Zetachain and Zetachain Testnet RPC endpoints are no longer available, and their documentation has been removed.
+
+  If you rely on Zeta Chain RPC, please migrate to an alternative provider. All other supported chains are unaffected.
+</Update>
+
+<Update label="May 29, 2026" tags={["Deprecation"]}>
+  ## Fantom Chain Sunsetting
+
+  Fantom mainnet support is being removed across all Moralis APIs on **May 29, 2026**. Fantom Opera testnet has already been removed. The Fantom Opera network is winding down as a legacy chain, and we're retiring our integration in line with the broader ecosystem shift.
+
+  **What's changing:**
+
+  - **Data API** — wallet, token, NFT, DeFi, and price endpoints no longer return Fantom (`0xfa`) data. Requests passing `fantom` or chain id `0xfa` will return an error.
+  - **RPC Nodes** — Fantom RPC node endpoints are no longer available, and their documentation has been removed.
+  - **Streams** — existing Fantom streams will stop emitting webhook notifications and should be deleted from your workspace.
+  - **Testnet** — Fantom Opera testnet was removed ahead of mainnet as part of this wind-down.
+
+  **Why:** Fantom Opera has transitioned into a legacy chain with declining activity following the broader migration to Sonic. Maintaining a dedicated integration is no longer justified by usage, so we're consolidating support onto actively maintained networks.
+
+  **What to do:**
+
+  - Remove any `fantom` / `0xfa` references from your API requests, SDK calls, and stream configurations before May 29 to avoid errored responses.
+  - If you still rely on Fantom data, migrate to an alternative provider, or move your workloads to one of the [supported chains](/data-api/supported-chains).
+
+  All other supported chains are unaffected.
+</Update>
+
 <Update label="May 27, 2026" tags={["New Feature"]}>
   ## Bitcoin Data API
 
@@ -144,7 +254,7 @@ description: "New releases and improvements"
   **Discovery endpoints (`/discovery/*`):**
 
   - `POST /discovery/tokens`
-  - `GET /discovery/token`
+  - `GET /discovery/token` — migrate to the [Token Search API](/data-api/universal/token/search/token-search).
   - `GET /discovery/tokens/rising-liquidity`
   - `GET /discovery/tokens/buying-pressure`
   - `GET /discovery/tokens/solid-performers`

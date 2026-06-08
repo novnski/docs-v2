@@ -1,0 +1,88 @@
+---
+title: "DeFi API"
+sidebarTitle: "Overview"
+description: "Track DeFi positions, balances, rewards, and protocol interactions with enriched, protocol-aware data across EVM chains and Solana — through one unified set of endpoints."
+---
+
+## Overview
+
+The **DeFi API** provides a unified view of a wallet's DeFi positions across protocols - lending, borrowing, staking, liquid staking, and liquidity pools - on both **EVM chains and Solana**.
+
+It is one cross-chain endpoint set: the **same three endpoints** return EVM and Solana positions, with an identical response shape. Pass the `chain` parameter (for example `eth`, `base`, `polygon`, or `solana`) to choose the network - no separate integration per chain.
+
+---
+
+## What Is the DeFi API?
+
+The DeFi API lets you query:
+
+- **Protocol Summary** - overview of all DeFi protocols a wallet uses
+- **Positions** - detailed position data per protocol
+- **Position Details** - enhanced breakdown with underlying assets
+- **Multi-Chain in One Integration** - query EVM and Solana wallets through the same endpoints and schema
+
+---
+
+## Key Features
+
+- **Protocol Detection** - automatically identifies which protocols a wallet uses
+- **Position Breakdown** - detailed view of deposits, borrows, staking, and rewards
+- **USD Valuations** - position values calculated in USD
+- **Unified Schema** - identical response shape across EVM and Solana
+- **Single Integration** - the same filters and parameters across every supported chain
+
+---
+
+## Supported Protocols
+
+Coverage spans **thousands of EVM protocols** and the **top Solana protocols**:
+
+- **EVM** - 3,000+ protocols including Aave, Compound, Uniswap, Lido, Rocket Pool, Eigenlayer, and all forked Uniswap v2 protocols.
+- **Solana** - 10 of the most-used protocols, together covering roughly 90% of Solana DeFi TVL: Jito, Save (formerly Solend), Jupiter Lend, Jupiter Perpetual Exchange, Kamino Lend, Sanctum, Raydium, Orca, Drift, and Marinade.
+
+For the full, always-current list per chain, see [DeFi Protocols](/data-api/data-features/integrations/defi-protocols) or call the Get Supported DeFi Protocols endpoint with the `chain` parameter.
+
+---
+
+## Common Use Cases
+
+- **Portfolio Trackers** - show DeFi positions alongside tokens and NFTs
+- **Cross-Ecosystem Wallets** - display EVM and Solana DeFi positions side by side
+- **DeFi Dashboards** - aggregate positions across protocols and chains
+- **Risk Monitoring** - track lending health factors and exposure
+- **Yield Tracking** - monitor staking rewards and LP positions
+- **Tax Reporting** - calculate DeFi gains and income
+
+---
+
+## Popular Endpoints
+
+| Endpoint | Description |
+| --- | --- |
+| [Wallet Protocols](/data-api/universal/defi/wallet-protocols) | Summary of protocols a wallet uses |
+| [Wallet Positions](/data-api/universal/defi/wallet-positions) | Detailed positions per protocol |
+| [Detailed Positions](/data-api/universal/defi/wallet-positions-detailed) | Enhanced position breakdown |
+
+Each endpoint accepts the `chain` parameter to target an EVM chain or Solana.
+
+---
+
+## Get Started
+
+- [Get Wallet Protocols](/data-api/universal/defi/wallet-protocols)
+- [Get Wallet Positions](/data-api/universal/defi/wallet-positions)
+- [Get Detailed Positions](/data-api/universal/defi/wallet-positions-detailed)
+
+---
+
+## DeFi API Overview Video
+
+<iframe
+  src="https://www.youtube.com/embed/dLcoB3vFf38"
+  title="Moralis DeFi API Overview"
+  width="100%"
+  height="400"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+/>
