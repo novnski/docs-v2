@@ -126,3 +126,17 @@ All EVM Streams endpoints require the `x-api-key` header.
 6. Verify the [`x-signature` header](/streams/security-and-reliability/webhook-security) on every delivery
 7. Build dedupe logic keyed on `transactionHash` (or `transactionHash + logIndex` for logs) to handle the unconfirmed → confirmed transition
 8. Always return HTTP `200` from your handler, even when your own processing errors — Moralis retries on non-200 responses
+
+---
+
+## Monitor Onchain Events
+
+<iframe
+  src="https://www.youtube.com/embed/k_hk9Pchjc8"
+  title="Monitor Onchain Events"
+  width="100%"
+  height="400"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+/>
