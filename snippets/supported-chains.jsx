@@ -12,7 +12,6 @@ export const SupportedChains = ({ chains }) => {
     chiliz: { name: "Chiliz", chainId: "0x15b38", alias: "chiliz" },
     moonbeam: { name: "Moonbeam", chainId: "0x504", alias: "moonbeam" },
     moonriver: { name: "Moonriver", chainId: "0x505", alias: "moonriver" },
-    moonbase: { name: "Moonbase", chainId: "0x507", alias: "moonbase" },
     flow: { name: "Flow", chainId: "0x2eb", alias: "flow" },
     ronin: { name: "Ronin", chainId: "0x7e4", alias: "ronin" },
     lisk: { name: "Lisk", chainId: "0x46f", alias: "lisk" },
