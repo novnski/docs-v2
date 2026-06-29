@@ -1,0 +1,97 @@
+---
+title: "Quickstart: run your first recipe"
+description: "Get live, decoded onchain data flowing into your own database in about ten minutes. Start a recipe, watch it fill, and query your first rows."
+---
+
+This quickstart takes you from nothing to **live onchain data in your own database** in about ten minutes.
+You will start a **recipe** (we use ERC-20 transfers), let the **sink** fill your database, and run your first
+query. From there, the [Migration guides](/data-feeds/migration/overview) and other [recipes](https://docs.moralis.com/data-feeds/recipes/overview) follow
+the same pattern.
+
+## Before you begin
+
+- **Docker** and Docker Compose installed.
+- A **Data Feeds API key**. [Request access](https://moralis.com/data-feeds/request-access) if you do not have
+  one yet.
+- The **recipe bundle** (the `recipes` folder you were given with your access), which includes a
+  `docker-compose` for a local ClickHouse plus the sink.
+
+We will use **ClickHouse** as the destination, the recommended store for live data. See
+[Destinations](/data-feeds/concepts/destinations) for when to choose Postgres or MySQL instead.
+
+## Step 1: Add your key
+
+From the recipe bundle, copy the example environment file and add your key and the chain you want to index:
+
+```bash
+cd recipes
+cp .env.example .env
+```
+
+```bash
+# .env
+MORALIS_API_KEY=your_data_feeds_key      # the cm_live_... key from your access
+MORALIS_CHAIN_ID=1                        # 1 = Ethereum. See /get-started/chains
+```
+
+<Note>
+**Keep your key private.** It is a live credential. Never commit `.env` or paste the key into shared docs or
+chat.
+</Note>
+
+## Step 2: Start the stack
+
+Bring up the local ClickHouse and the sink:
+
+```bash
+docker compose -f docker-compose.recipes.yml up -d
+```
+
+## Step 3: Run the recipe
+
+Point the `tokenTransfers` recipe at ClickHouse and start it:
+
+```bash
+./run-recipe.sh tokenTransfers clickhouse
+```
+
+The sink backfills a window of history, then tails live blocks automatically (this is **hybrid** mode, see
+[Modes](/data-feeds/concepts/modes)). Within a minute or so it begins writing transfer rows.
+
+## Step 4: Query your first rows
+
+Ask ClickHouse for the most recent transfers of a token. This example uses USDC on Ethereum:
+
+```sql
+SELECT block_number, from_address, to_address, amount, tx_hash
+FROM recipe_token_transfers.fact_token_transfers FINAL
+WHERE chain_id = 1
+  AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+ORDER BY block_number DESC
+LIMIT 20;
+```
+
+You should see rows arriving and advancing as new blocks land. That is live, decoded onchain data in a store
+you own.
+
+<Note>
+**Why `FINAL`?** Near the chain tip a block can be replaced by a reorg. ClickHouse recipes write a correcting
+row when that happens, and `FINAL` applies the correction so you always read the canonical result. See
+[Reorgs](/data-feeds/concepts/reorgs).
+</Note>
+
+## What just happened
+
+- A **recipe** (`tokenTransfers`) defined which onchain data to pull and the table shape to write.
+- The **sink** ran it against your **ClickHouse** destination, backfilling history then staying live.
+- You queried a normal SQL table, no API quotas, no per-call limits, yours to join and shape freely.
+
+## Next steps
+
+- **Migrating an existing integration?** Find your endpoint in the [Migration guides](/data-feeds/migration/overview).
+- **Want a different dataset?** Browse the [recipes](https://docs.moralis.com/data-feeds/recipes/overview), swaps, balances, holders, prices,
+  NFT activity, and more. They all run the same way.
+- **Understand the model:** [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds),
+  [History & backfill](/data-feeds/concepts/history-and-backfill), and [Destinations](/data-feeds/concepts/destinations).
+- **Hit something surprising?** The [Troubleshooting](/data-feeds/migration/troubleshooting) page covers the common
+  first-run questions.

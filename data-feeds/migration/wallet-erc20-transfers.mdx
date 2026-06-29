@@ -1,0 +1,190 @@
+---
+title: "Wallet ERC-20 transfers"
+description: "Move /:address/erc20/transfers onto Moralis Data Feeds and serve a wallet's full ERC-20 transfer history from the same decoded onchain data lake that powers Moralis, in real time, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every ERC-20 transfer, as a
+real-time stream you own. This guide moves your `/:address/erc20/transfers` integration onto Data Feeds, so a
+wallet's transfer history comes straight from that data lake, with **no per-call limits** and full control over
+how you store, serve, query, and filter it.
+
+```
+GET /:address/erc20/transfers
+```
+
+This is a clean migration: Data Feeds has a **purpose-built transfers feed**, and every onchain detail (who sent
+what to whom, in which transaction) comes through exactly. The only things you assemble yourself are off-chain
+labels and display flags.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For a transfer history you query on demand, the **sink** is the smoothest path, so we'll use it here. Because
+transfers are events, [streaming](#other-ways-to-consume-this-data) is also a great fit if you want live alerts.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For transfers it's
+about as direct as it gets:
+
+**Comes through exactly**
+- **The transfer** (`from_address`, `to_address`, `value`) and the **token** it moved, straight from the chain.
+- **Provenance** (`transaction_hash`, `block_number`, `block_timestamp`, `transaction_index`, `log_index`), so
+  every row ties back to its exact place onchain.
+- **Token details** (`token_name`, `token_symbol`, `token_decimals`), from the token contract.
+
+**Yours to control**
+- **Direction and filters.** You get every transfer the wallet sent or received; derive direction by comparing
+  the wallet to `from`/`to`, and apply token, date, and ordering filters as plain query clauses (the same
+  `contract_addresses`, `from_block`/`to_block`, and `order` the old endpoint took).
+
+**Add the extras you want**
+- `token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity` /
+  `*_entity_logo` fields are off-chain signals layered on top of the chain, so they're not in the feed. Drop them,
+  bring your own lists, or layer in a token/label source, see [step 3](#step-3-add-the-extras-you-want).
+
+**Good to know**
+- There are **no USD prices** on this endpoint, a transfer carries one token and no price, so there's nothing to
+  reconcile; every onchain value comes through exactly. You also get a little **extra** the old endpoint omits
+  (a transfer type and the initiating address).
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill is your choice here.** Transfers are an *event list*, not current state, so you decide how much history
+to index. Want a live feed of new transfers? Run the recipe `realtime`. Need history? Backfill `historical` or
+`hybrid` back to whatever date or block you care about. There's no requirement to index from genesis. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every ERC-20 transfer (by token or by wallet) | `tokenTransfers` | `token_transfers` |
+| Token details (name, symbol, decimals) | `tokenMetadata` | `token_metadata` |
+
+Point both at the same database and start them, indexed over whatever window you chose above. The
+`tokenTransfers` recipe is built for this exact question and indexes both the `from` and `to` sides, so by-wallet
+lookups are fast.
+
+### Step 2: Query it from your app
+
+A wallet's transfers are the ones it **sent or received**, so match on either side. All the old endpoint's
+filters become plain query clauses:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletTransfers(
+  wallet: string,
+  opts: { tokens?: string[]; fromBlock?: number; limit?: number; before?: { block: number; logIndex: number } } = {},
+) {
+  const w = wallet.toLowerCase();
+  const { rows } = await pool.query(
+    `SELECT t.*,
+            t.amount / power(10, m.decimals) AS value_decimal,
+            CASE WHEN t.from_address = $1 THEN 'send' ELSE 'receive' END AS direction
+     FROM token_transfers t
+     LEFT JOIN token_metadata m ON m.token_address = t.token_address
+     WHERE (t.from_address = $1 OR t.to_address = $1)          -- sent or received
+       AND ($2::text[] IS NULL OR t.token_address = ANY($2))   -- contract_addresses filter
+       AND ($3::bigint IS NULL OR t.block_number >= $3)        -- from_block filter
+       AND ($4::bigint IS NULL OR t.block_number < $4)         -- keyset pagination
+     ORDER BY t.block_number DESC, t.log_index DESC
+     LIMIT $5`,
+    [w, opts.tokens ?? null, opts.fromBlock ?? null, opts.before?.block ?? null, opts.limit ?? 100],
+  );
+  return rows;
+}
+```
+
+That's it, you're serving a wallet's full ERC-20 transfer history from a dataset you own, in real time, with no
+per-call limits and the freedom to filter and order it any way you like.
+
+### Step 3: Add the extras you want
+
+`token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity`
+fields are off-chain signals, so they're not part of the onchain dataset. When you want them, you've got options:
+
+- **Skip them** if your app doesn't use them.
+- **Bring your own source**, a public token list for logos, or your own label/entity lists for addresses (your
+  exchange/contract directory) and spam.
+- **Layer them in** from a dedicated metadata source alongside your Data Feeds tables.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for an on-demand history, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  `tokenTransfers` stream and react to a wallet's transfers the moment they land, ideal for alerts, ledgers, and
+  bookkeeping without polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded `tokenTransfers` array the recipe projects from. Arrow Flight
+  (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query transfer history straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain) or **add
+yourself** (off-chain signal). There's no "calculated" tier, this endpoint has no prices.
+
+| `/:address/erc20/transfers` | Data Feeds | Fidelity |
+|---|---|---|
+| `address` (the token contract) | `token_transfers.token_address` | exact |
+| `from_address`, `to_address` | `token_transfers.from_address` / `to_address` | exact |
+| `value` (raw) | `token_transfers.amount` | exact |
+| `value_decimal` | derive: `amount / 10^decimals` | exact |
+| `transaction_hash` | `token_transfers.tx_hash` | exact |
+| `block_number`, `block_timestamp` | `token_transfers.block_number` / `block_timestamp` | exact |
+| `transaction_index`, `log_index` | `token_transfers.transaction_index` / `log_index` | exact |
+| `block_hash` | from the block stream (rarely needed) | exact |
+| `token_name`, `token_symbol`, `token_decimals` | `token_metadata.*` | exact |
+| `token_logo` | add yourself | off-chain |
+| `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
+| `from/to_address_label`, `*_entity`, `*_entity_logo` | add yourself | off-chain |
+
+## Good to know
+
+- **`address` is the token, not the wallet.** In each transfer the wallet is the `from` or the `to`; derive
+  direction by comparing it to those, as the query above does.
+- **Sent or received in one query.** Match `from_address` OR `to_address`, the recipe indexes both sides.
+- **No prices to reconcile.** Transfers carry one token and no USD, so every value is exact from the chain.
+- **You get a bit more than before.** The feed also carries a transfer type and the initiating address, handy
+  context the old endpoint didn't return.
+- **Filters are just SQL.** `contract_addresses`, date/block windows, and `order` map to `WHERE` / `ORDER BY` on
+  your own table, no fixed server limits.
+- **Freshness.** Run the recipe `realtime` for a live feed; ClickHouse is recommended for real-time and hybrid
+  modes (see the recipe README for the reorg caveat on Postgres/MySQL).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `tokenTransfers`, `tokenMetadata`
+- Related guide: [Wallet transaction history](/data-feeds/migration/wallet-history) (full decoded history, with USD)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

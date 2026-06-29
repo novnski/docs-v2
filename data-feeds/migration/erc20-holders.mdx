@@ -1,0 +1,196 @@
+---
+title: "Token holders summary"
+description: "Move /erc20/:tokenAddress/holders onto Moralis Data Feeds: own the complete holder set from the decoded onchain data lake and compute total holders, supply concentration, size tiers, and holder trends yourself, in real time and on your own definitions."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every holder of a token and
+their current balance, as a real-time stream you own. This guide moves your `/erc20/:tokenAddress/holders`
+summary onto Data Feeds, so the holder count, supply concentration, size distribution, and holder trends are
+computed from a holder set you control, in real time, with **no per-call limits** and your own definitions of what
+a "whale" is and how a holder was acquired.
+
+```
+GET /erc20/:tokenAddress/holders
+```
+
+<Note>
+This endpoint returns an **aggregate summary** for a token, not the list of individual holders. If you want the
+per-holder list (each address, balance, and percentage), see
+[Token owners (holder list)](/data-feeds/migration/erc20-owners). Both are built on the same holder data.
+</Note>
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+A holder summary is aggregation over a holder set, so the **sink** is the smoothest path: land every holder's
+balance once, then compute the summary in SQL. We'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged summary to the **holder data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. The upside is
+control: you own the holder set and decide how the summary is defined. Here's how each part maps:
+
+**Comes through exactly**
+- **Total holders** (`totalHolders`) is a `COUNT` over the holder table.
+- **Supply concentration** (`holderSupply.top10` … `top500`) is a top-N ranking by balance against total supply,
+  deterministic SQL, exact.
+
+**Yours to define**
+- **Size tiers** (`holderDistribution`: whales, sharks, dolphins, fish, octopus, crabs, shrimps) are buckets by
+  holder size. The tier boundaries are a convention, so you set them (by USD value or percentage of supply) to
+  match your product, the bucketing itself is exact once you pick thresholds.
+- **How holders were acquired** (`holdersByAcquisition`: swap, transfer, airdrop) is a classification of each
+  holder's first inbound transfer. You define the rule (was the first receipt a DEX swap, a plain transfer, or an
+  airdrop pattern?), giving you a split you fully understand.
+
+**Calculated from history**
+- **Holder trends** (`holderChange`: 5min, 1h, 6h, 24h, 3d, 7d, 30d) compare the holder count now with the count
+  one window ago. Index enough history (you already will, see below) and maintain a holder-count series to read
+  the deltas cheaply.
+
+**Good to know**
+- There are **no off-chain enrichment fields** on this endpoint (no logos, spam, or verification flags), so
+  there's nothing to re-source. Everything here is computed from the holder set you own.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history, from the token's first block.** A holder set is *current state*, the cumulative result
+of every transfer the token ever had, so to count holders correctly the `tokenHolders` recipe must backfill the
+token's **full history from its deployment block** (run it `historical` or `hybrid`). Start late and you'll
+undercount holders and skew every aggregate. This same history also powers the 30-day trend windows and the
+first-acquisition split. Because this is by-token, you only need history since the token deployed, not chain
+genesis. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every holder's current balance | `tokenHolders` | `token_holders` (latest balance per token + wallet) |
+| Total supply and decimals | `tokenMetadata` | `token_metadata` |
+
+Point both at the same database and start them, backfilled from the token's deploy block (see above).
+
+### Step 2: Compute the headline numbers
+
+`totalHolders`, supply concentration, and the size distribution are all aggregations over the holder table.
+Here's a Postgres example to adapt (take the latest balance per holder first, then aggregate):
+
+```sql
+CREATE VIEW token_holder_summary AS
+WITH holders AS (                                  -- latest non-zero balance per holder
+  SELECT DISTINCT ON (wallet_address)
+         wallet_address,
+         balance / power(10, m.decimals) AS units,
+         balance / power(10, m.decimals) * h.usd_price AS usd_value
+  FROM   token_holders h
+  CROSS  JOIN (SELECT decimals, total_supply FROM token_metadata
+               WHERE token_address = lower('0xA0b8...eB48')) m
+  WHERE  h.balance > 0
+  ORDER  BY wallet_address, h.block_number DESC
+),
+ranked AS (
+  SELECT *, row_number() OVER (ORDER BY units DESC) AS rnk,
+            sum(units) OVER () AS supply_held
+  FROM holders
+)
+SELECT
+  (SELECT count(*) FROM holders)                                   AS total_holders,
+  -- supply concentration (top-N share of held supply)
+  sum(units) FILTER (WHERE rnk <= 10)  / supply_held * 100         AS top10_percent,
+  sum(units) FILTER (WHERE rnk <= 100) / supply_held * 100         AS top100_percent,
+  sum(units) FILTER (WHERE rnk <= 500) / supply_held * 100         AS top500_percent,
+  -- size tiers (thresholds are YOUR definition, shown here by USD value)
+  count(*) FILTER (WHERE usd_value >= 1000000)                     AS whales,
+  count(*) FILTER (WHERE usd_value >= 100000 AND usd_value < 1000000) AS sharks,
+  count(*) FILTER (WHERE usd_value <  100)                         AS shrimps
+FROM ranked, (SELECT max(supply_held) AS supply_held FROM ranked) s
+GROUP BY supply_held;
+```
+
+The tier thresholds above are illustrative, set them (by USD value or percentage of supply) to match how your
+product defines a whale versus a shrimp. The counts are exact once your thresholds are fixed.
+
+### Step 3: Add the trend and acquisition splits
+
+These two draw on history rather than just the current snapshot:
+
+- **Holder trend (`holderChange`).** Maintain a small holder-count series (snapshot `total_holders` per block or
+  per interval), then each window is `count_now - count_window_ago`. Your full backfill already contains the
+  history; you're just recording the count over time so the deltas are a cheap lookup.
+- **Acquisition split (`holdersByAcquisition`).** Classify each holder's **first inbound** receipt of the token
+  from the `tokenTransfers` stream: if it coincides with a DEX `swaps` event, count it as a swap; a one-to-many
+  distribution from a single sender looks like an airdrop; otherwise a plain transfer. You define the rule, so the
+  split is one you can explain.
+
+That's it, you're serving a holder summary from a dataset you own, in real time, on definitions you control, with
+no per-call limits.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a materialized summary, but the **same feed** is available however you prefer
+to build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  `tokenTransfers` stream and keep `totalHolders` and the trend deltas updating live, no polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded arrays the recipes project from (`tokenTransfers`, `swaps`). Arrow
+  Flight (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, compute the whole summary straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data, a natural home
+  for this kind of aggregation.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (deterministic SQL on the
+chain data), **your definition** (a convention you set), or **calculated** (from history).
+
+| `/erc20/:tokenAddress/holders` | Data Feeds | Fidelity |
+|---|---|---|
+| `totalHolders` | `COUNT(*)` over `token_holders` (balance > 0) | exact |
+| `holderSupply.topN.supply` / `.supplyPercent` | top-N by balance, sum / total supply | exact |
+| `holderDistribution.{whales…shrimps}` | bucket holders by size | your definition |
+| `holdersByAcquisition.{swap,transfer,airdrop}` | classify each holder's first inbound | your definition |
+| `holderChange.{5min…30d}` | holder count now vs one window ago | calculated (from history) |
+
+## Good to know
+
+- **This is the summary, not the list.** For individual holders, use
+  [Token owners](/data-feeds/migration/erc20-owners), built on the same `tokenHolders` data.
+- **The foundation is exact, the analytics are yours.** Total holders and concentration are exact SQL; the size
+  tiers and acquisition split are definitions you own (a feature: no more black-box buckets).
+- **Materialize for large tokens.** A token like USDC has millions of holders, compute the summary on a schedule
+  into a `token_holder_summary` table rather than per request.
+- **Decimals matter for USD tiering.** The holder table's best-effort USD value assumes 18 decimals; recompute
+  with real `decimals` from `tokenMetadata` for non-18-decimal tokens.
+- **Freshness.** Current-state holders are served on Postgres or MySQL; see the recipe README for the realtime
+  reorg caveat and ClickHouse for real-time/hybrid modes.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `tokenHolders`, `tokenMetadata`
+- Related guide: [Token owners (holder list)](/data-feeds/migration/erc20-owners) (the per-holder list, same data)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

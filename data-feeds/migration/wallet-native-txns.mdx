@@ -1,0 +1,192 @@
+---
+title: "Wallet native transactions"
+description: "Move /:address onto Moralis Data Feeds and serve a wallet's native transaction history from the same decoded onchain data lake that powers Moralis, in real time, with no per-call limits and no wallet-size cap."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every transaction a wallet sent
+or received, as a real-time stream you own. This guide moves your `/:address` (native transactions) integration
+onto Data Feeds, so a wallet's transaction history comes straight from that data lake, with **no per-call limits**,
+no wallet-size cap, and full control over how you store, query, and filter it.
+
+```
+GET /:address
+```
+
+This is the **native-transaction slice** of a wallet's history: the raw transactions where the wallet is the
+sender or recipient. Every onchain field comes through exactly; the only things you add are off-chain address
+labels and a decoded method name.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For a wallet's transaction history you query on demand, the **sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For native
+transactions it's a direct one:
+
+**Comes through exactly**
+- **The transaction** (`from_address`, `to_address`, `value`, `input`, `nonce`) and its **gas and receipt** fields,
+  straight from the chain.
+- **Provenance** (`transaction_hash`, `block_number`, `block_timestamp`, `transaction_index`).
+- **Internal transactions**, the trace-derived value transfers, where requested.
+- **Logs**, the raw events emitted by each transaction.
+
+**Calculated for you**
+- `transaction_fee` is `receipt_gas_used x gas_price`.
+
+**Yours to control**
+- **Direction and filters.** You get every transaction the wallet sent or received; derive direction from
+  `from`/`to`, and apply the same date, block, and ordering filters as plain query clauses.
+
+**Add the extras you want**
+- `from/to_address_entity`, `*_label`, and `*_entity_logo` are off-chain address labels. `method_label` (a
+  human-readable function name) is decoded from the transaction's 4-byte selector. Bring your own label directory
+  and decode the selector from an ABI, or drop them.
+
+**Good to know**
+- The old endpoint can error on very large wallets; your own dataset has no such cap.
+- For the **full decoded history** (token transfers, swaps, NFT activity, approvals, not just native transactions),
+  see [Wallet transaction history](/data-feeds/migration/wallet-history), this guide is the native-transaction slice
+  of that.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipe below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill is your choice here.** Native transactions are an *event list*, not current state, so you decide how
+much history to index. Run the recipe `realtime` for a live feed of new transactions, or backfill `historical` /
+`hybrid` back to whatever date or block you care about (full history for a wallet's complete record, a recent
+window for recent activity). See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| The wallet's activity, native transfers + tx context + internal | `walletHistoryFull` | the wallet history table |
+
+`walletHistoryFull` is wallet-keyed and already flattens the wallet's native transfers, internal transactions, and
+transaction context, so a by-wallet lookup is fast. (It's the same recipe behind
+[Wallet transaction history](/data-feeds/migration/wallet-history); here you narrow it to native transactions.)
+
+<Note>
+**Strict transaction parity.** The legacy endpoint returns **every** transaction where the wallet is `from` or
+`to`, including `value=0` contract calls. Native value movements alone miss those, so if you need exact parity
+(every such transaction regardless of value), read the **transaction rows from the `block` array**, filtered on
+`transactionFrom` / `transactionTo` = your wallet (see [The `block` array](/data-feeds/concepts/the-block-array)). It carries
+the full raw tx fields (`nonce`, `gas`, `gas_price`, `input`, receipt fields).
+</Note>
+
+### Step 2: Query it from your app
+
+Query the wallet's native transactions, newest first, with the same filters the old endpoint took:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletNativeTxns(
+  wallet: string,
+  opts: { fromBlock?: number; limit?: number; before?: number } = {},
+) {
+  const w = wallet.toLowerCase();
+  const { rows } = await pool.query(
+    `SELECT t.*,
+            t.receipt_gas_used * t.gas_price AS transaction_fee,
+            CASE WHEN t.from_address = $1 THEN 'send' ELSE 'receive' END AS direction
+     FROM wallet_native_txns t                          -- a view you build from walletHistoryFull + block-array transaction rows (no single prebuilt table)
+     WHERE (t.from_address = $1 OR t.to_address = $1)
+       AND ($2::bigint IS NULL OR t.block_number >= $2) -- from_block filter
+       AND ($3::bigint IS NULL OR t.block_number < $3)  -- keyset pagination
+     ORDER BY t.block_number DESC, t.transaction_index DESC
+     LIMIT $4`,
+    [w, opts.fromBlock ?? null, opts.before ?? null, opts.limit ?? 100],
+  );
+  return rows;
+}
+```
+
+That's it, you're serving a wallet's native transaction history from a dataset you own, in real time, with no
+per-call limits or wallet-size cap.
+
+### Step 3: Add the extras you want
+
+`from/to_address_entity`, `*_label`, `*_entity_logo`, and `method_label` are off-chain or decoded signals, so
+they're not part of the raw onchain dataset. When you want them:
+
+- **Address labels and entities**, bring your own directory (your exchange/contract list) keyed by address.
+- **`method_label`**, decode the transaction's 4-byte selector (`input` prefix) from the contract ABI or a public
+  function-signature directory.
+- **Skip them** if your app doesn't use them.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a history, but the **same feed** is available however you prefer to build, all
+reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  feed and react the moment a transaction touches the wallet, live wallet monitoring without polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the raw transaction rows and the decoded `nativeTransfers` array. Arrow Flight
+  (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query transactions straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**decoded** (`method_label` from the selector), or **add yourself** (off-chain).
+
+| `/:address` | Data Feeds | Fidelity |
+|---|---|---|
+| `hash`, `nonce`, `transaction_index` | `block` array transaction row | exact |
+| `from_address`, `to_address`, `value`, `input` | transaction row / `nativeTransfers` | exact |
+| `gas`, `gas_price`, `receipt_*` | `block` array transaction row | exact |
+| `transaction_fee` | derive: `receipt_gas_used x gas_price` | exact |
+| `block_number`, `block_timestamp`, `block_hash` | block / transaction row | exact |
+| `logs[]` | `block` array log rows / `logsByContract` | exact |
+| `internal_transactions` | not delivered by a shipped recipe today (the `internalTransactions` data exists upstream but is not yet exposed) | gap |
+| `method_label` | decode the 4-byte selector | decoded |
+| `from/to_address_entity`, `*_label`, `*_entity_logo` | add yourself | off-chain |
+
+## Good to know
+
+- **It's the native slice of wallet history.** For the full decoded history across tokens, NFTs, and swaps, use
+  [Wallet transaction history](/data-feeds/migration/wallet-history).
+- **Strict parity includes `value=0` sends**, read the block-array transaction rows (filter `from`/`to`) when you
+  need every transaction, not just value movements.
+- **No wallet-size cap.** The old endpoint can error on very large wallets; your own dataset has none.
+- **Filters are just SQL.** Date/block windows and `order` map to `WHERE` / `ORDER BY` on your own table.
+- **Freshness.** Run the recipe `realtime` for a live feed; ClickHouse is recommended for real-time and hybrid
+  modes (see the recipe README).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `walletHistoryFull`, `walletHistory`; source array: `nativeTransfers`
+- Related guides: [Wallet transaction history](/data-feeds/migration/wallet-history) (full decoded history) ·
+  [Block by number or hash](/data-feeds/migration/block) (raw transaction rows)
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt

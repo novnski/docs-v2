@@ -1,0 +1,183 @@
+---
+title: "Wallet token approvals"
+description: "Move /wallets/:address/approvals onto Moralis Data Feeds and serve a wallet's active ERC-20 allowances, and the USD at risk, from the same decoded onchain data lake that powers Moralis, in real time and with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every approval a wallet grants,
+as a real-time stream you own. This guide moves your `/wallets/:address/approvals` integration onto Data Feeds, so
+a wallet's active ERC-20 allowances come straight from that data lake, in real time, with **no per-call limits**,
+ideal for an approvals dashboard or a security monitor that alerts the moment a risky allowance is granted.
+
+```
+GET /wallets/:address/approvals
+```
+
+This is a clean migration: there's a **purpose-built approvals feed** that mirrors this endpoint, so the active
+allowances come through exactly. You add the token and spender details on top, including the **USD at risk**.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For an approvals view you query on demand, the **sink** is the smoothest path; for live security alerts,
+[streaming](#other-ways-to-consume-this-data) is a natural fit.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For approvals:
+
+**Comes through exactly**
+- **The active allowance** (`value`), the **spender**, and the **token**, with the block and transaction where it
+  was granted, straight from the chain. The feed keeps the current allowance per token and spender (a later
+  `approve` overwrites it; a revoke is an approve to zero).
+- **The wallet's current balance** of each approved token.
+
+**Calculated for you, from real trades**
+- **USD price** and **USD at risk** come from live onchain DEX prices. `usd_at_risk` is `min(allowance, balance) x
+  price`, the realistic exposure (a spender can't take more than the wallet holds), very close to the old endpoint;
+  compare with a small tolerance.
+
+**Add the extras you want**
+- The token `logo`, `possible_spam`, `verified_contract`, and the address and spender labels and entities are
+  off-chain signals, bring your own lists or drop them.
+
+**Good to know**
+- An **unlimited approval** shows as a max-uint `value`; lead with `usd_at_risk` for a human number, it caps the
+  scary figure to what the wallet actually holds.
+- Revoked approvals drop out automatically (an approve to zero), so what you see is the live, active set.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history.** A wallet's active approvals are *current state*, the current allowance per token and
+spender is the latest `approve`, which can sit at any past block. So to list every active approval, the
+`tokenApprovals` recipe must backfill the **full history** of the chain (run it `historical` or `hybrid` from an
+early block). Start late and you'll miss or misstate allowances. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+The active allowances come from one purpose-built recipe; the token details reuse the balance and price recipes:
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Active allowances per token and spender | `tokenApprovals` | `token_allowances` |
+| Token name, symbol, decimals | `tokenMetadata` | `token_metadata` |
+| The wallet's current balance | `tokenBalancesByWalletAddress` | `token_balances` |
+| Token USD price | `tokenPriceHistory` | `token_price_updates` |
+
+`tokenApprovals` maintains `token_allowances`, the current allowance per `(owner, token, spender)`, with revoked
+(zero) allowances removed, so it mirrors this endpoint's active set directly.
+
+### Step 2: Query the active approvals with the USD at risk
+
+```sql
+CREATE VIEW wallet_approvals AS
+SELECT
+  a.owner_address                                AS wallet_address,
+  a.token_address,
+  a.spender_address,
+  m.name, m.symbol,
+  a.value                                        AS allowance,
+  a.value / power(10, m.decimals)                AS value_formatted,
+  b.balance                                      AS current_balance,
+  p.usd_price,
+  least(a.value, coalesce(b.balance, 0))
+    / power(10, m.decimals) * p.usd_price        AS usd_at_risk,
+  a.block_number, a.block_timestamp, a.tx_hash
+FROM token_allowances a
+LEFT JOIN token_metadata m ON m.token_address = a.token_address
+LEFT JOIN token_balances b ON b.token_address = a.token_address
+                          AND b.wallet_address = a.owner_address
+LEFT JOIN LATERAL (
+  SELECT usd_price FROM token_price_updates
+  WHERE token_address = a.token_address ORDER BY block_number DESC LIMIT 1
+) p ON true;
+```
+
+Query it for a wallet, sorted by exposure so the riskiest approvals surface first:
+
+```ts
+const { rows } = await pool.query(
+  `SELECT * FROM wallet_approvals WHERE wallet_address = $1 ORDER BY usd_at_risk DESC NULLS LAST`,
+  [wallet.toLowerCase()],
+);
+```
+
+That's it, you're serving a wallet's active approvals and their USD at risk from a dataset you own, in real time.
+
+### Step 3: Add the extras you want
+
+The token `logo`, `possible_spam`, `verified_contract`, and the token and spender labels and entities are
+off-chain signals, so they're not part of the onchain dataset. When you want them:
+
+- **Spender labels and entities**, bring your own directory (your known-protocol / exchange list) keyed by
+  address, especially useful for flagging unknown spenders.
+- **Token spam and verification**, your own allow/deny lists.
+- **Skip them** if your app doesn't use them.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for an approvals view, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients (great for security alerts).** Point a **Kafka**, **AMQP / RabbitMQ**, or
+  **Amazon SQS** consumer at the `tokenApprovals` feed and alert the moment a wallet grants a new or unlimited
+  allowance to an unknown spender, real-time approval monitoring without polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`. Arrow Flight (gRPC) is the high-throughput option.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query approvals straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain signal).
+
+| `/wallets/:address/approvals` | Data Feeds | Fidelity |
+|---|---|---|
+| `value` (allowance) | `token_allowances.value` | exact |
+| `value_formatted` | derive: `value / 10^decimals` | exact |
+| `block_number`, `block_timestamp`, `transaction_hash` | `token_allowances.*` | exact |
+| `spender.address` | `token_allowances.spender_address` | exact |
+| `token.address` | `token_allowances.token_address` | exact |
+| `token.name`, `token.symbol` | `token_metadata.*` | exact |
+| `token.current_balance(_formatted)` | `token_balances.balance` | exact |
+| `token.usd_price` | latest `token_price_updates.usd_price` | calculated |
+| `token.usd_at_risk` | derive: `min(allowance, balance) x price` | calculated |
+| `token.logo`, `possible_spam`, `verified_contract`, `address_label` | add yourself | off-chain |
+| `spender.address_label`, `entity`, `entity_logo` | add yourself | off-chain |
+
+## Good to know
+
+- **A purpose-built feed mirrors this endpoint.** `tokenApprovals` keeps the current allowance per token and
+  spender, so the active set is exact.
+- **`usd_at_risk` is the number to lead with**, it caps an unlimited approval to what the wallet actually holds.
+- **Revokes disappear automatically** (an approve to zero), so you always see the live, active set.
+- **Compare USD with a tolerance**, prices come from real DEX trades.
+- **Real-time is the strength here.** Stream the feed to alert on risky approvals as they happen.
+- **Freshness.** Current-state on Postgres or MySQL via the materialized view; ClickHouse is recommended for
+  real-time and hybrid modes.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `tokenApprovals`, `tokenMetadata`, `tokenBalancesByWalletAddress`, `tokenPriceHistory`
+- Related guide: [Wallet token balances & prices](/data-feeds/migration/wallet-tokens) (the balance and price feeds reused here)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

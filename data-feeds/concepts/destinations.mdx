@@ -1,0 +1,65 @@
+---
+title: "Destinations: ClickHouse, Postgres, and MySQL"
+description: "The sink writes recipe data into your own database. Each recipe ships for ClickHouse, Postgres, and MySQL. Here's how to choose, and what changes between them."
+---
+
+# Destinations
+
+Data Feeds land in **your own database**. You run the sink, point it at a recipe, and it writes rows into a
+schema you own. Every recipe ships three destination variants, ClickHouse, Postgres, and MySQL, built from
+the same source data. The recipe and the columns are the same across all three. What differs is how each
+store handles **live data, chain reorgs, and scale**, and that is what should drive your choice.
+
+## The short version
+
+> **Going live or going big, use ClickHouse. Backfilling into an existing relational app, Postgres or MySQL
+> are first-class.**
+
+## ClickHouse
+
+The recommended destination for **realtime, hybrid, and high-volume** workloads.
+
+- **Corrects reorgs automatically, at the block level.** ClickHouse recipes use a collapsing table that
+  emits a balancing row when a block is rolled back, so the corrected view is always available (see
+  [Reorgs](./reorgs)). This is why every live mode prefers ClickHouse.
+- **Columnar and fast for analytics.** Aggregations over millions of swaps, transfers, or logs stay quick,
+  which suits the event-list recipes and dashboards.
+- **One reading rule to remember:** add `FINAL` to a query (or use sign-aware sums) so reorg corrections are
+  applied. The recipe's example queries already show this.
+
+## Postgres and MySQL
+
+First-class for **historical backfills** and for slotting Data Feeds into an existing relational app.
+
+- **Familiar and transactional.** If your product already runs on Postgres or MySQL, a recipe table drops
+  straight in next to your other tables, with ordinary indexes and SQL.
+- **Best for current-state and backfill loads.** Balances, holders, metadata, and one-off history windows
+  map cleanly.
+- **Realtime has a constraint.** The live reorg path needs a single-column unique key on the block position,
+  but event-list recipes expand many rows per block, so they cannot carry that key. For those recipes the
+  Postgres and MySQL variants ship in `historical` mode, and live tailing should run on ClickHouse. (See the
+  realtime caveat in any event-list recipe.)
+
+## Quick reference
+
+| You want to… | Recommended destination |
+|---|---|
+| Run a recipe in `realtime` or `hybrid` | **ClickHouse** |
+| Index high-volume event lists (swaps, transfers, logs) and query analytics | **ClickHouse** |
+| Backfill current-state data (balances, holders, metadata) into an app DB | **Postgres** or **MySQL** |
+| Keep everything in the relational store your app already uses | **Postgres** or **MySQL** (historical) |
+
+## What stays the same
+
+Whichever you choose, the **recipe, the column names, and the meaning of each field are identical**. The
+schema variant only adapts storage details: ClickHouse uses a collapsing fact table plus skip indexes,
+Postgres and MySQL use plain tables with B-tree indexes. You can develop a query against one and port it with
+minimal change, the main difference being the `FINAL` / sign-aware reading rule that ClickHouse needs for
+reorg correctness.
+
+<Note>
+**Choosing by recipe type.** Current-state recipes (balances, holders, approvals) sit comfortably in any of
+the three. Live, high-volume event-list recipes (swaps, transfers, logs, prices) are best on ClickHouse,
+which is also where their `realtime` / `hybrid` modes are supported. See [Modes](./modes) and
+[History & backfill](./history-and-backfill).
+</Note>

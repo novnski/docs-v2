@@ -155,13 +155,6 @@
                 ]
               },
               {
-                "group": "Datashare Tutorials",
-                "pages": [
-                  "datashare/s3-bucket-setup",
-                  "get-started/tutorials/datashare/export-bulk-blockchain-data"
-                ]
-              },
-              {
                 "group": "Migration Guides",
                 "pages": [
                   "get-started/tutorials/migration-guides/migrating-from-alchemy-to-moralis",
@@ -947,42 +940,6 @@
         ]
       },
       {
-        "tab": "Datashare",
-        "pages": [
-          {
-            "group": "Introduction",
-            "pages": [
-              "datashare/overview",
-              "datashare/supported-data",
-              "datashare/supported-chains",
-              "datashare/credits-and-pricing"
-            ]
-          },
-          {
-            "group": "Getting Started",
-            "pages": [
-              "datashare/quickstart",
-              "datashare/s3-bucket-setup",
-              "datashare/early-access"
-            ]
-          },
-          {
-            "group": "Configuration",
-            "pages": [
-              "datashare/export-options",
-              "datashare/filters-and-scoping"
-            ]
-          },
-          {
-            "group": "Guides",
-            "pages": [
-              "get-started/tutorials/datashare/export-bulk-blockchain-data"
-            ]
-          },
-          "datashare/troubleshooting"
-        ]
-      },
-      {
         "tab": "Data Feeds",
         "pages": [
           {
@@ -1045,6 +1002,56 @@
                   "data-feeds/recipes/logs/logs-by-topic0"
                 ]
               }
+            ]
+          },
+          {
+            "group": "Migration Guides",
+            "pages": [
+              "data-feeds/migration/overview",
+              "data-feeds/migration/quickstart",
+              "data-feeds/migration/wallet-tokens",
+              "data-feeds/migration/erc20-owners",
+              "data-feeds/migration/wallet-history",
+              "data-feeds/migration/wallet-nfts",
+              "data-feeds/migration/wallet-erc20",
+              "data-feeds/migration/erc20-prices",
+              "data-feeds/migration/erc20-holders",
+              "data-feeds/migration/wallet-erc20-transfers",
+              "data-feeds/migration/nft-multiple",
+              "data-feeds/migration/wallet-nft-transfers",
+              "data-feeds/migration/wallet-nft-collections",
+              "data-feeds/migration/erc20-price",
+              "data-feeds/migration/transaction-verbose",
+              "data-feeds/migration/block",
+              "data-feeds/migration/wallet-native-txns",
+              "data-feeds/migration/wallet-networth",
+              "data-feeds/migration/wallet-approvals",
+              "data-feeds/migration/wallet-chains",
+              "data-feeds/migration/erc20-metadata",
+              "data-feeds/migration/pair-ohlcv",
+              "data-feeds/migration/token-pairs",
+              "data-feeds/migration/token-transfers",
+              "data-feeds/migration/holders-historical",
+              "data-feeds/migration/nft-collection-metadata",
+              "data-feeds/migration/token-analytics",
+              "data-feeds/migration/native-balance",
+              "data-feeds/migration/nfts-by-contract",
+              "data-feeds/migration/wallet-stats",
+              "data-feeds/migration/wallet-swaps",
+              "data-feeds/migration/nft-owners",
+              "data-feeds/migration/troubleshooting"
+            ]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "data-feeds/concepts/what-are-data-feeds",
+              "data-feeds/concepts/data-feeds-vs-the-legacy-api",
+              "data-feeds/concepts/the-block-array",
+              "data-feeds/concepts/history-and-backfill",
+              "data-feeds/concepts/modes",
+              "data-feeds/concepts/destinations",
+              "data-feeds/concepts/reorgs"
             ]
           },
           {

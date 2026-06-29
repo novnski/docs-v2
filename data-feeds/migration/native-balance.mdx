@@ -1,0 +1,115 @@
+---
+title: "Wallet native balance"
+description: "Move /:address/balance onto Moralis Data Feeds and serve a wallet's native (ETH) balance from the same decoded onchain data lake that powers Moralis, in real time and with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every wallet's native balance, as
+a real-time stream you own. This guide moves your `/:address/balance` integration onto Data Feeds, so a wallet's
+native (e.g. ETH) balance comes straight from that data lake, with **no per-call limits**.
+
+```
+GET /:address/balance
+```
+
+This is the simplest migration in the set: the balance is a single exact value from a purpose-built recipe.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For a wallet's native balance, the **sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged value to the **data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model.
+
+**Comes through exactly**
+- **The native balance** (`balance`, raw wei), straight from the chain. Divide by `1e18` for a human figure.
+
+**Good to know**
+- There's no off-chain data and nothing to price here; the balance is exact. For its USD value, multiply by the
+  native asset's price (see [wallet token balances & prices](/data-feeds/migration/wallet-tokens)).
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipe below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history.** A native balance is *current state*, the cumulative result of every transfer in and
+out, so the `nativeBalances` recipe needs to backfill the **full history** of the chain (run it `historical` /
+`hybrid` from an early block) for a correct figure. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Native balance per wallet | `nativeBalances` | `native_balances` |
+
+This is the same recipe that supplies the native balance in
+[wallet token balances & prices](/data-feeds/migration/wallet-tokens).
+
+### Step 2: Query it
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getNativeBalance(wallet: string) {
+  const { rows } = await pool.query(
+    `SELECT balance, balance / 1e18 AS balance_formatted
+     FROM native_balances WHERE wallet_address = $1`,
+    [wallet.toLowerCase()],
+  );
+  return rows[0] ?? { balance: '0', balance_formatted: 0 };
+}
+```
+
+That's it, you're serving a wallet's native balance from a dataset you own.
+
+## Other ways to consume this data
+
+The sink is the smoothest path, but the **same feed** is available however you prefer to build, all reading the one
+data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  native transfers and keep balances current as they change.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query balances straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+| `/:address/balance` | Data Feeds | Fidelity |
+|---|---|---|
+| `balance` (raw wei) | `native_balances.balance` | exact |
+| *(`balance_formatted`, optional)* | derive: `balance / 1e18` | exact |
+
+## Good to know
+
+- **Exact and single-valued.** No off-chain data, no pricing.
+- **Full-history backfill** for a correct current balance.
+- **For USD value**, multiply by the native asset's price (see [wallet net worth](/data-feeds/migration/wallet-networth)).
+- **Freshness.** Current-state on Postgres or MySQL; ClickHouse for real-time and hybrid modes.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `nativeBalances`
+- Related guides: [Wallet token balances & prices](/data-feeds/migration/wallet-tokens) · [Wallet net worth](/data-feeds/migration/wallet-networth)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

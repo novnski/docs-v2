@@ -1,0 +1,203 @@
+---
+title: "Wallet NFT transfers"
+description: "Move /:address/nft/transfers onto Moralis Data Feeds and serve a wallet's full NFT transfer history from the same decoded onchain data lake that powers Moralis, in real time, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every NFT transfer, as a
+real-time stream you own. This guide moves your `/:address/nft/transfers` integration onto Data Feeds, so a
+wallet's NFT transfer history comes straight from that data lake, with **no per-call limits** and full control
+over how you store, serve, query, and filter it.
+
+```
+GET /:address/nft/transfers
+```
+
+This is a clean migration: Data Feeds has a **purpose-built NFT transfers feed**, and every onchain detail (which
+NFT moved, from whom to whom, in which transaction) comes through exactly. The only things you assemble yourself
+are off-chain labels and display flags.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For an NFT transfer history you query on demand, the **sink** is the smoothest path, so we'll use it here. Because
+transfers are events, [streaming](#other-ways-to-consume-this-data) is also a great fit if you want live alerts.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For NFT transfers
+it's about as direct as it gets:
+
+**Comes through exactly**
+- **The transfer** (`from_address`, `to_address`, `amount`) and the **NFT** it moved (`token_address`,
+  `token_id`, `contract_type`), straight from the chain.
+- **Provenance** (`transaction_hash`, `block_number`, `block_timestamp`, `transaction_index`, `log_index`), so
+  every row ties back to its exact place onchain.
+- **Collection details** (`token_name`, `token_symbol`), from the token contract.
+- **Sale history** (`last_sale`), every time the NFT actually sold on a marketplace, from the `nftTrades` feed.
+
+**Calculated for you, from real trades**
+- **Sale values in USD** (`usd_price_at_sale`, `current_usd_value`) come from real onchain activity, very close,
+  compare with a small tolerance rather than expecting an identical figure.
+
+**Yours to control**
+- **Direction and filters.** You get every transfer the wallet sent or received; derive direction by comparing
+  the wallet to `from`/`to`, and apply collection, date, and ordering filters as plain query clauses (the same
+  `contract_addresses`, `from_block`/`to_block`, and `order` the old endpoint took).
+
+**Add the extras you want**
+- `possible_spam`, `verified_collection`, and the address `*_label` / `*_entity` / `*_entity_logo` fields are
+  off-chain signals layered on top of the chain, so they're not in the feed. Drop them, bring your own lists, or
+  layer in a label source, see [step 3](#step-3-add-the-extras-you-want).
+
+**Good to know**
+- A couple of transaction-level extras, the native `value` of the transaction (the marketplace price on a buy)
+  and the `transaction_type` (Single vs Batch for ERC-1155), live in the decoded transfer record but not in the
+  flat transfers table; read them from the Data Feeds API or, for sale price, join the `nftTrades` feed.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill is your choice here.** NFT transfers are an *event list*, not current state, so you decide how much
+history to index. Want a live feed of new transfers? Run the recipe `realtime`. Need history? Backfill
+`historical` or `hybrid` back to whatever date or block you care about. There's no requirement to index from
+genesis. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every NFT transfer (by collection, token, or wallet) | `nftTransfers` | `nft_transfers` |
+| Collection name / symbol | `nftCollectionMetadata` | `nft_collection_metadata` |
+| Realized sale history (`last_sale`) | `nftTrades` | marketplace trades per token |
+
+Point them at the same database and start them, indexed over whatever window you chose above. The `nftTransfers`
+recipe is built for this exact question and indexes both the `from` and `to` sides, so by-wallet lookups are fast.
+
+### Step 2: Query it from your app
+
+A wallet's NFT transfers are the ones it **sent or received**, so match on either side. All the old endpoint's
+filters become plain query clauses:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletNftTransfers(
+  wallet: string,
+  opts: { collections?: string[]; fromBlock?: number; limit?: number; before?: number } = {},
+) {
+  const w = wallet.toLowerCase();
+  const { rows } = await pool.query(
+    `SELECT t.*,
+            c.name AS token_name, c.symbol AS token_symbol,
+            CASE WHEN t.from_address = $1 THEN 'send' ELSE 'receive' END AS direction
+     FROM nft_transfers t
+     LEFT JOIN nft_collection_metadata c ON c.token_address = t.token_address
+     WHERE (t.from_address = $1 OR t.to_address = $1)          -- sent or received
+       AND ($2::text[] IS NULL OR t.token_address = ANY($2))   -- contract_addresses filter
+       AND ($3::bigint IS NULL OR t.block_number >= $3)        -- from_block filter
+       AND ($4::bigint IS NULL OR t.block_number < $4)         -- keyset pagination
+     ORDER BY t.block_number DESC, t.log_index DESC
+     LIMIT $5`,
+    [w, opts.collections ?? null, opts.fromBlock ?? null, opts.before ?? null, opts.limit ?? 100],
+  );
+  return rows;
+}
+```
+
+That's it, you're serving a wallet's full NFT transfer history from a dataset you own, in real time, with no
+per-call limits and the freedom to filter and order it any way you like. Join `nftTrades` when you want each
+transfer's realized sale context.
+
+### Step 3: Add the extras you want
+
+`possible_spam`, `verified_collection`, and the address `*_label` / `*_entity` fields are off-chain signals, so
+they're not part of the onchain dataset. When you want them, you've got options:
+
+- **Skip them** if your app doesn't use them.
+- **Bring your own source**, your own label/entity lists for addresses (your exchange/marketplace directory) and
+  spam, or a collection verification list.
+- **Layer them in** from a dedicated metadata source alongside your Data Feeds tables.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for an on-demand history, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  `nftTransfers` stream and react the moment a wallet's NFT changes hands, ideal for alerts, provenance tracking,
+  and portfolio updates without polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded `nftTokenTransfers` array the recipe projects from (it also carries
+  the transaction value and operator). Arrow Flight (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query transfer history straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain signal).
+
+| `/:address/nft/transfers` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `token_id` | `nft_transfers.token_address` / `token_id` | exact |
+| `contract_type` | `nft_transfers.contract_type` | exact |
+| `from_address`, `to_address` | `nft_transfers.from_address` / `to_address` | exact |
+| `amount` | `nft_transfers.amount` | exact |
+| `operator` | `nft_transfers.initiated_by` | exact |
+| `value` (tx native value) | in the `nftTransfers` source array (not the flat table), or `nftTrades` | exact |
+| `transaction_type` (Single/Batch) | in the `nftTransfers` source array (not the flat table) | exact |
+| `transaction_hash` | `nft_transfers.tx_hash` | exact |
+| `block_number`, `block_timestamp` | `nft_transfers.block_number` / `block_timestamp` | exact |
+| `transaction_index`, `log_index` | `nft_transfers.*` | exact |
+| `block_hash` | from the block stream (rarely needed) | exact |
+| `token_name`, `token_symbol` | `nft_collection_metadata.*` | exact |
+| `last_sale` (sale facts) | `nftTrades` | exact |
+| `last_sale` USD values | `nftTrades` + price feed | calculated |
+| `possible_spam`, `verified_collection` | add yourself | off-chain |
+| `from/to_address_label`, `*_entity`, `*_entity_logo` | add yourself | off-chain |
+
+## Good to know
+
+- **Sent or received in one query.** Match `from_address` OR `to_address`, the recipe indexes both sides.
+- **Direction is yours to derive** by comparing the wallet to `from`/`to`, as the query above does.
+- **A couple of tx-level extras come from the API.** The native `value` (sale price on a buy) and
+  `transaction_type` (Single/Batch) live in the decoded transfer record, not the flat table; read them from the
+  Data Feeds API, or get `value` from `nftTrades`.
+- **`token_id` is a uint256 string**, store and compare it as text, never as a number.
+- **ERC-1155** transfers carry a real `amount` and a Single/Batch `transaction_type`.
+- **Filters are just SQL.** `contract_addresses`, date/block windows, and `order` map to `WHERE` / `ORDER BY` on
+  your own table, no fixed server limits.
+- **Freshness.** Run the recipe `realtime` for a live feed; ClickHouse is recommended for real-time and hybrid
+  modes (see the recipe README for the reorg caveat on Postgres/MySQL).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `nftTransfers`, `nftCollectionMetadata`, `nftTrades`
+- Related guides: [Wallet ERC-20 transfers](/data-feeds/migration/wallet-erc20-transfers) (the fungible twin) ·
+  [Wallet NFTs](/data-feeds/migration/wallet-nfts) (current holdings)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

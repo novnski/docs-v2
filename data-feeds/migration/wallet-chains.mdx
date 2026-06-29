@@ -1,0 +1,167 @@
+---
+title: "Wallet active chains"
+description: "Move /wallets/:address/chains onto Moralis Data Feeds and report the chains a wallet is active on, with first and last activity, from the same decoded onchain data lake that powers Moralis, in real time and with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset for every chain you index, so you can tell
+which chains a wallet is active on, and when it first and last transacted, from data you own. This guide moves
+your `/wallets/:address/chains` integration onto Data Feeds, with **no per-call limits** and full control over the
+chains you cover.
+
+```
+GET /wallets/:address/chains
+```
+
+This is a **cross-chain roll-up**: for each chain you index, you check whether the wallet has any activity and
+report its first and last transaction. Every value is exact onchain data, the only scoping fact is which chains
+you run.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, **one feed per chain**, consume the
+**same data** however fits your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST /
+Arrow Flight**), **land it with the sink** into your own database, or **query it from your warehouse** (Snowflake,
+BigQuery, Spark, DuckDB, dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full
+picture.
+
+Active chains is a question you answer **across** those per-chain feeds: keep a small activity summary per wallet
+on each chain, then union them. The **sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For active chains:
+
+**Comes through exactly**
+- **The chains a wallet is active on**, and its **first** and **last** transaction on each (block number,
+  timestamp, and hash), all derived from onchain activity. There's no off-chain data and nothing to price, so
+  every value is exact.
+
+**Yours to control**
+- **Which chains you report.** Data Feeds has one feed per chain, so the active-chains answer covers exactly the
+  chains you index. That's your scope to set, a wallet active on a chain you don't run simply won't appear.
+
+**Good to know**
+- A wallet's **first** transaction can be years back (this guide's sample wallet first transacted on Ethereum in
+  2015), so an accurate first-seen needs full history on that chain; see the backfill note below.
+
+## Before you begin
+
+- A running Data Feeds **sink** on each chain you want to cover, see **Run a recipe** (quickstart).
+- A wallet-activity source per chain (see step 1).
+- Your `MORALIS_API_KEY` and the chains you're indexing.
+
+<Note>
+**First-seen needs full history; active and last-seen do not.** "Is the wallet active" and its **last**
+transaction only need a recent window, but an accurate **first** transaction needs the chain backfilled to an
+early block (a wallet's first activity can be genesis-era). Run `historical` / `hybrid` from an early block on each
+chain where you want a correct first-seen. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Track wallet activity per chain
+
+On each chain you index, you need to know when a wallet was active. The broadest source is
+[wallet history](/data-feeds/migration/wallet-history); a union of the transfer and native-transaction tables works
+too:
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| The wallet's activity on a chain | `walletHistoryFull` | the wallet history table |
+
+Maintain a small per-wallet, per-chain summary as events land, so the active-chains read is cheap:
+
+```sql
+CREATE VIEW wallet_chain_activity AS
+SELECT
+  wallet_address,
+  min(block_number) AS first_block,
+  max(block_number) AS last_block
+FROM wallet_activity               -- walletHistoryFull (or a union of transfer / native-tx tables)
+GROUP BY wallet_address;
+```
+
+### Step 2: Build the active-chains list
+
+For a wallet, the active chains are the ones where its activity summary is non-empty; attach the bounding
+transactions:
+
+```ts
+const CHAINS = [
+  { chain: 'eth', chainId: '0x1', db: ethPool },
+  { chain: 'base', chainId: '0x2105', db: basePool },
+  { chain: 'polygon', chainId: '0x89', db: polygonPool },
+  // ...one entry per chain you index
+];
+
+async function getActiveChains(wallet: string) {
+  const w = wallet.toLowerCase();
+  const results = await Promise.all(
+    CHAINS.map(async ({ chain, chainId, db }) => {
+      const { rows } = await db.query(
+        `SELECT first_block, last_block FROM wallet_chain_activity WHERE wallet_address = $1`,
+        [w],
+      );
+      if (!rows.length) return null;                 // not active on this chain
+      const a = rows[0];
+      return {
+        chain, chain_id: chainId,
+        first_transaction: await txAtBlock(db, w, a.first_block),
+        last_transaction: await txAtBlock(db, w, a.last_block),
+      };
+    }),
+  );
+  return { address: w, active_chains: results.filter(Boolean) };
+}
+```
+
+`txAtBlock` reads the wallet's transaction (hash, timestamp) at the first or last block from your activity table.
+That's it, you're reporting a wallet's active chains and its first and last activity from data you own, across
+exactly the chains you choose to cover.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a maintained summary, but the **same per-chain feeds** are available however
+you prefer to build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at each
+  chain's feed and update a wallet's last-seen the moment it transacts, no polling.
+- **REST / Arrow Flight.** Read each chain's decoded block stream directly
+  (`GET /api/v1/continuum/{namespace}/{topic}`); for Ethereum, namespace `0x1`, topic `master-4`.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, compute active chains across them straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt**, a natural home for a cross-chain
+  union.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint, everything here is **exact** (onchain
+presence and block facts).
+
+| `/wallets/:address/chains` | Data Feeds | Fidelity |
+|---|---|---|
+| `address` | the query | exact |
+| `active_chains[].chain`, `chain_id` | the indexed chains where the wallet is active | exact |
+| `first_transaction` (block, timestamp, hash) | `MIN` activity block per chain + the tx there | exact |
+| `last_transaction` (block, timestamp, hash) | `MAX` activity block per chain + the tx there | exact |
+
+## Good to know
+
+- **You report the chains you index.** Active chains is a union across your per-chain feeds, so coverage is yours
+  to set; add a chain by running its feed.
+- **First-seen needs full history; last-seen and active do not.** Backfill each chain to an early block where you
+  want a correct first transaction.
+- **It's all exact.** No prices, no off-chain data, just onchain presence and the bounding transactions.
+- **Keep it live.** Stream each chain's feed to update a wallet's last-seen as it transacts.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `walletHistoryFull` (per-chain wallet activity)
+- Related guide: [Wallet transaction history](/data-feeds/migration/wallet-history) (the per-chain activity this summarizes)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

@@ -1,0 +1,213 @@
+---
+title: "Wallet ERC-20 balances"
+description: "Move /:address/erc20 onto Moralis Data Feeds and serve a wallet's ERC-20 balances from the same decoded onchain data lake that powers Moralis, in real time, with no per-call limits and no wallet-size cap."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, every balance, transfer, and token
+detail, as a real-time stream you own. This guide moves your `/:address/erc20` integration onto Data Feeds, so a
+wallet's ERC-20 balances come straight from that data lake, with **no per-call limits**, no wallet-size cap, and
+full control over how you store, serve, and query them.
+
+```
+GET /:address/erc20
+```
+
+This is one of the most direct migrations in the set: the balances and token details come through **exactly** as
+they are onchain, and the only things you assemble yourself are a handful of off-chain display signals. No
+pricing, no portfolio math, just balances.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however
+fits your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**),
+**land it with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery,
+Spark, DuckDB, dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For a request/response need like wallet balances, the **sink** is the smoothest path, so we'll use it here.
+([Other ways to consume it](#other-ways-to-consume-this-data) are below.)
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. Here's how it
+applies to ERC-20 balances, and it's a clean one:
+
+**Comes through exactly**
+- **Balances** (`balance`), straight from the chain, the cumulative result of every transfer that touched the
+  wallet.
+- **Token details** (`name`, `symbol`, `decimals`, `total_supply`), from the token contract.
+- **Supply-relative math** (`total_supply_formatted`, `percentage_relative_to_total_supply`), simple ratios you
+  derive from those exact values. (Want a human `balance_formatted` too? It's a free `balance / 10^decimals`, the
+  old endpoint didn't even include it.)
+
+**Yours to control**
+- **Which tokens count.** You get every ERC-20 the wallet holds, then apply your own spam, dust, or verification
+  rules to match exactly your definition of a real holding (no more wrestling with fixed `exclude_spam` /
+  `exclude_unverified_contracts` filters).
+
+**Add the extras you want**
+- `logo`, `thumbnail`, `possible_spam`, `verified_contract`, and `security_score` are off-chain signals layered on
+  top of the chain, so they're not in the feed. Drop them, bring your own lists, or layer in a token list, see
+  [step 4](#step-4-add-the-extras-you-want).
+
+**Good to know**
+- This endpoint is **ERC-20 only**, it never returned a native (ETH) balance, and neither does this path. If you
+  also want native balances, add the `nativeBalances` recipe (that's the
+  [wallet token balances & prices](/data-feeds/migration/wallet-tokens) surface).
+- There are **no USD prices** here, so there's nothing to reconcile against a pricing engine, every value is
+  either exact from the chain or an off-chain extra you choose to add.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The two recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history.** A wallet's balances are *current state*, the cumulative result of every transfer that
+ever touched it, and a wallet can still hold a token it last moved years ago. So to return a complete balance
+set, the balances recipe needs to backfill **the full history** of the chain (run it `historical` or `hybrid`
+from an early block). Start late and you'll miss tokens the wallet hasn't moved recently. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+A wallet's ERC-20 balances draw on just two parts of the dataset, so you'll switch on two recipes, each a
+ready-to-run bundle that lands and maintains its table for you:
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| ERC-20 balances per wallet | `tokenBalancesByWalletAddress` | `token_balances` |
+| Token details (name, symbol, decimals, supply) | `tokenMetadata` | `token_metadata` |
+
+Point both recipes' bundles at the same database and start them.
+
+### Step 2: Bring it together in one view
+
+Join the two tables into a single view that also does the small bits of formatting the old endpoint did for you.
+Here's a Postgres example to adapt to your sink, every column here is **exact** (derived straight from onchain
+values):
+
+```sql
+CREATE VIEW wallet_erc20_balances AS
+SELECT
+  b.wallet_address,
+  b.token_address,
+  m.symbol,
+  m.name,
+  m.decimals,
+  b.balance                                          AS balance_raw,
+  b.balance / power(10, m.decimals)                  AS balance_formatted,
+  m.total_supply                                     AS total_supply,
+  m.total_supply / power(10, m.decimals)             AS total_supply_formatted,
+  b.balance / NULLIF(m.total_supply, 0) * 100        AS percentage_relative_to_total_supply
+FROM token_balances b
+LEFT JOIN token_metadata m ON m.token_address = b.token_address
+WHERE b.balance > 0;
+```
+
+Want to hide dust or spam? Add your own `WHERE` clause or join your token list here, you decide what counts as a
+holding (see [step 4](#step-4-add-the-extras-you-want)).
+
+### Step 3: Query it from your app
+
+Query the view directly. Because you own the data, you also get clean keyset pagination, something the old
+bare-array endpoint never offered:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletErc20(wallet: string, limit = 100, afterToken?: string) {
+  const { rows } = await pool.query(
+    `SELECT *
+     FROM wallet_erc20_balances
+     WHERE wallet_address = $1
+       AND ($2::text IS NULL OR token_address > $2)   -- keyset pagination
+     ORDER BY token_address
+     LIMIT $3`,
+    [wallet.toLowerCase(), afterToken ?? null, limit],
+  );
+
+  const nextCursor = rows.length === limit ? rows[rows.length - 1].token_address : null;
+  return { result: rows, nextCursor };
+}
+```
+
+That's it, you're serving a wallet's ERC-20 balances from a dataset you own, in real time, with no per-call
+limits, no wallet-size cap, and the freedom to query it any way you like.
+
+### Step 4: Add the extras you want
+
+`logo`, `thumbnail`, `possible_spam`, `verified_contract`, and `security_score` are off-chain signals, so they're
+not part of the onchain dataset. When you want them, you've got options:
+
+- **Skip them** if your app doesn't use them.
+- **Bring your own source**, a public token list for logos, or your own allow/deny lists for spam and
+  verification. The old `exclude_spam` / `exclude_unverified_contracts` filters become a `WHERE` against your list,
+  which means *your* rules, not a fixed heuristic.
+- **Layer them in** from a dedicated metadata source alongside your Data Feeds tables.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for balances, but the **same feed** is available however you prefer to build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at Data
+  Feeds and process blocks as they land, no client changes. Great for keeping balances fresh as transfers occur.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded arrays the recipes project from (`tokenTransfers`, the token
+  metadata reads). Arrow Flight (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query it straight from **Snowflake, BigQuery,
+  Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain) or **add
+yourself** (off-chain signal). Notice there's no "calculated" tier here, this endpoint has no prices, so every
+onchain value comes through exactly.
+
+| `/:address/erc20` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address` | `token_balances.token_address` | exact |
+| `balance` (raw) | `token_balances.balance` | exact |
+| `name`, `symbol`, `decimals` | `token_metadata.*` | exact |
+| `total_supply` | `token_metadata.total_supply` | exact |
+| `total_supply_formatted` | derive: `total_supply / 10^decimals` | exact |
+| `percentage_relative_to_total_supply` | derive: `balance / total_supply` | exact |
+| `balance_formatted` *(bonus, legacy omits it)* | derive: `balance / 10^decimals` | exact |
+| `logo`, `thumbnail` | add yourself | off-chain |
+| `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
+
+## Good to know
+
+- **Everything onchain is exact.** Balances and token details come straight from the chain, no pricing engine in
+  the loop, so nothing to reconcile with a tolerance.
+- **You decide what counts as a holding**, no fixed spam filter. Apply your own list or thresholds to hide dust
+  and spam whenever you want.
+- **No wallet-size limit.** The old endpoint returns a bare array and errors on very large wallets ("too many
+  ERC20 token balances"); your own dataset has no such cap, and you get real pagination on top.
+- **ERC-20 only.** This path returns ERC-20 balances, matching the legacy endpoint. For native (ETH) balance, add
+  the `nativeBalances` recipe, see [wallet token balances & prices](/data-feeds/migration/wallet-tokens).
+- **Freshness.** Balances are current-state on Postgres or MySQL. For real-time updates, follow the recipe README
+  (ClickHouse is recommended for real-time and hybrid modes).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `tokenBalancesByWalletAddress`, `tokenMetadata`
+- Related guide: [Wallet token balances & prices](/data-feeds/migration/wallet-tokens) (adds native + USD prices)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

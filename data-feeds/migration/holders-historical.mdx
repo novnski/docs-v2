@@ -1,0 +1,149 @@
+---
+title: "Historical token holders"
+description: "Move /erc20/:tokenAddress/holders/historical onto Moralis Data Feeds and build a token's holder-base time series from the decoded onchain data lake you own, on your own tier and acquisition definitions."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every holder's balance over time,
+so you can build a token's holder-base time series from data you own. This guide moves your
+`/erc20/:tokenAddress/holders/historical` integration onto Data Feeds, with **no per-call limits** and your own
+definitions of what a "whale" is and how a holder was acquired.
+
+```
+GET /erc20/:tokenAddress/holders/historical
+```
+
+<Note>
+This is the **time-series** view of a token's holder base (counts, net change, acquisition mix, and size-tier
+flows per bucket). For the current snapshot, see [Token holders summary](/data-feeds/migration/erc20-holders),
+built on the same holder data; this guide adds the time dimension.
+</Note>
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+A holder time series is aggregation over the holder history, so the **sink** is the smoothest path: land the
+balance history, then bucket it.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **holder data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model.
+
+**Comes through exactly**
+- **Holder count over time** (`totalHolders`), and its **net change** and **percent change** per bucket, are
+  counts and deltas over the holder history, exact.
+
+**Yours to define**
+- **Size-tier flows** (`holdersIn` / `holdersOut`: whales, sharks, ... shrimps) bucket holders by size, the tier
+  boundaries are a convention you set.
+- **Acquisition mix** (`newHoldersByAcquisition`: swap, transfer, airdrop) classifies how the bucket's new holders
+  first received the token, you define the rule.
+
+**Good to know**
+- There are **no off-chain fields** here; everything is computed from the holder history you own.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a database, see **Run a recipe** (quickstart). ClickHouse is recommended
+  for the historical-state queries.
+- The recipe below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history, from the token's first block.** To count holders at every past bucket, you need the
+token's complete transfer history, so the `historicalBalanceAtBlock` recipe must backfill the token's **full
+history from its deployment block** (run `historical` / `hybrid`). Start late and early buckets undercount. Because
+this is by-token, you only need history since the token deployed, not chain genesis. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every holder's balance over time | `historicalBalanceAtBlock` | `wallet_token_balance_history` |
+
+Unlike the latest-state holder recipe, `historicalBalanceAtBlock` retains **every** balance observation, so you can
+ask "who held this token, and how much, as of any past block", the basis for a holder time series.
+
+### Step 2: Build the holder count per bucket
+
+For each bucket, count the holders (balance greater than zero) as of the bucket's end block, then derive the
+changes:
+
+```sql
+-- holders as of a given block N (repeat per bucket, or drive from a calendar):
+WITH as_of AS (
+  SELECT DISTINCT ON (wallet_address) wallet_address, balance
+  FROM   wallet_token_balance_history
+  WHERE  token_address = lower(:token) AND block_number <= :block_at_bucket_end
+  ORDER  BY wallet_address, block_number DESC, log_index DESC
+)
+SELECT count(*) FILTER (WHERE balance > 0) AS total_holders FROM as_of;
+```
+
+Materialize `total_holders` per bucket into a small series, then `net_holder_change` and `holder_percent_change`
+are deltas between consecutive buckets. (Materialize rather than recompute, large tokens have millions of
+holders.)
+
+### Step 3: Add the tier flows and acquisition mix
+
+These use the same definitions as the [holders summary](/data-feeds/migration/erc20-holders), applied per bucket:
+
+- **Size-tier flows (`holdersIn` / `holdersOut`)**, bucket each holder by size (USD value or percentage of supply)
+  and count who crossed into or out of each tier during the bucket. You set the tier boundaries.
+- **Acquisition mix (`newHoldersByAcquisition`)**, for holders that are new in the bucket, classify their first
+  inbound transfer (a DEX swap, a plain transfer, or an airdrop pattern) over `tokenTransfers` and `swaps`. You
+  define the rule, so the split is one you can explain.
+
+That's it, you're serving a token's holder time series from a dataset you own, on definitions you control.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a materialized series, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  transfers and keep the latest bucket's holder count updating live.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, compute the whole series straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt**, a natural home for time-series work.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (counts and deltas over the
+holder history) or **your definition** (a convention you set).
+
+| `/erc20/:tokenAddress/holders/historical` | Data Feeds | Fidelity |
+|---|---|---|
+| `timestamp` | the time bucket | exact |
+| `totalHolders` | count of holders as of the bucket | exact |
+| `netHolderChange`, `holderPercentChange` | deltas between buckets | exact |
+| `newHoldersByAcquisition` (swap/transfer/airdrop) | classify new holders' first inbound | your definition |
+| `holdersIn`, `holdersOut` (whales…shrimps) | size-tier flows per bucket | your definition |
+
+## Good to know
+
+- **This is the time series; for the current snapshot use [Token holders summary](/data-feeds/migration/erc20-holders).**
+- **Counts and deltas are exact; tiers and acquisition are yours to define** (a feature, not a black box).
+- **Materialize for large tokens**, compute `total_holders` per bucket on a schedule rather than per request.
+- **Full history is required** to count holders at past buckets.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `historicalBalanceAtBlock`, `tokenMetadata`
+- Related guide: [Token holders summary](/data-feeds/migration/erc20-holders) (the current snapshot, same data)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

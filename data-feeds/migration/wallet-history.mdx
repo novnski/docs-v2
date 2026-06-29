@@ -1,0 +1,188 @@
+---
+title: "Wallet transaction history"
+description: "Move /wallets/:address/history onto Moralis Data Feeds and serve a wallet's full decoded event history, with USD value per event, from the same onchain data lake, in real time, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, every transfer, swap, approval, and
+price, as a real-time stream you own. This guide moves your `/wallets/:address/history` integration onto Data
+Feeds, so a wallet's full event history comes straight from that data lake, with **USD value on every event**,
+**no per-call limits**, and full control over how you shape and query it.
+
+```
+GET /wallets/:address/history
+```
+
+The closest fit is the **`walletHistoryFull`** recipe, which lands every event a wallet touches (transfers,
+native, NFT, swaps, approvals, LP changes) with a USD value per event. It's richer per event than the old
+endpoint, and shaped differently, so there's some assembly. We'll walk through it.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however
+fits your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**),
+**land it with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery,
+Spark, DuckDB, dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+A wallet history feed is a great fit for either the **sink** (a queryable table you own) or **streaming** (live
+wallet activity). We'll build it with the sink here.
+
+## What to expect
+
+You're moving from one pre-packaged response to the underlying data that produces it, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. The old endpoint
+is the most *enriched* one in the API, it's decoded, categorized, summarized, and entity-labeled, so here's
+exactly how that maps:
+
+**Comes through exactly**
+- **Every event and its onchain facts**, transfers, native moves, NFT moves, swaps, approvals, LP changes:
+  counterparties, raw amounts, token IDs, pair addresses, tx hash, block. Transaction fields (gas, nonce,
+  receipt, fee) are available too, from the raw block data.
+
+**Calculated for you, from real trades**
+- **USD value on every event** (`amount_usd`, swap in/out USD, LP USD), computed from live onchain DEX prices.
+  This is *more* than the old endpoint gave (it had no per-transfer USD). Compare with a small tolerance.
+
+**Yours to shape and control**
+- **Grouping and filtering.** The old endpoint returns one object per transaction with nested arrays;
+  `walletHistoryFull` gives one row per event. You group by transaction to match the old shape, or keep the
+  flat event feed, filter by event type, and page however you like.
+
+**Add the extras you want**
+- The endpoint's **decoded/curated layer isn't onchain data**, so it's not in the feed: ABI-`decoded_event`,
+  the human `summary`/`category`/`method_label`, address **labels** & **entities** (+logos), token/collection
+  **logos**, `possible_spam`/`verified_collection`. [Add these yourself](#step-3-add-the-extras-you-want) when
+  you need them. (Token name/symbol/decimals *are* available, via the `tokenMetadata` recipe.)
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The `walletHistoryFull` recipe applied to that database (add `tokenMetadata` for token names/symbols).
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Index as far back as the history you want to show.** A wallet history is an event feed, so backfill is your
+choice, `realtime` for new activity, or `historical`/`hybrid` from any start block for a window. To match the
+endpoint's "complete history", backfill the full chain; for "last 90 days", backfill that far. A partial window
+is still correct (unlike balances). See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every event a wallet touches (+ USD) | `walletHistoryFull` | `wallet_history_full` |
+| (Optional) token names / symbols / decimals | `tokenMetadata` | `token_metadata` |
+| (Lighter alternative) just "which transactions" | `walletHistory` | `wallet_tx_pointers` |
+
+`wallet_history_full` keeps one row per event, tagged with `event_type` (transfer / native / nft / swap /
+approval / lp), `direction`, counterparty, amounts, and USD value.
+
+### Step 2: Query it from your app
+
+**The flat event feed** (often all you need, newest first, optionally filtered by type):
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletHistory(wallet: string, limit = 100, afterKey?: { block: number; logIndex: number }) {
+  const { rows } = await pool.query(
+    `SELECT block_number, block_timestamp, tx_hash, event_type, direction,
+            counterparty, token_address, amount, amount_usd, token_id, pair_address
+     FROM wallet_history_full
+     WHERE wallet_address = $1
+       AND ($2::bigint IS NULL OR (block_number, log_index) < ($2, $3))   -- keyset pagination
+     ORDER BY block_number DESC, log_index DESC
+     LIMIT $4`,
+    [wallet.toLowerCase(), afterKey?.block ?? null, afterKey?.logIndex ?? null, limit],
+  );
+  return rows;
+}
+```
+
+**To match the endpoint's transaction-grouped shape**, group events by `tx_hash` and nest by `event_type`:
+
+```sql
+SELECT tx_hash,
+       max(block_number)   AS block_number,
+       max(block_timestamp) AS block_timestamp,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'transfer') AS erc20_transfers,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'nft')      AS nft_transfers,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'native')   AS native_transfers
+FROM wallet_history_full e
+WHERE wallet_address = lower($1)
+GROUP BY tx_hash
+ORDER BY block_number DESC
+LIMIT $2;
+```
+
+Attach transaction-level fields (gas, nonce, receipt, fee) by joining the raw transaction rows from the
+[Data Feeds API](#other-ways-to-consume-this-data) on `tx_hash` when you need them.
+
+### Step 3: Add the extras you want
+
+The old endpoint's decoded/curated layer comes from off-chain processing, so it isn't in the feed:
+
+- **Decoded events** (`decoded_event`), decode the raw logs yourself from the contract ABI.
+- **`category` / `summary` / `method_label`**, Moralis's transaction categorization and human summary; build
+  your own from the event types, or omit.
+- **Labels / entities / logos / spam flags**, bring your own label source (or a token list for logos).
+
+When you'd rather have these served for you, keep using the REST endpoint for that slice while you move the bulk
+of your reads to Data Feeds.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a queryable history, but the **same data** is available however you build, all reading the one data lake:
+
+- **Your existing message clients**, stream a wallet's events live via **Kafka**, **AMQP / RabbitMQ**, or
+  **Amazon SQS** (great for a real-time activity feed).
+- **REST / Arrow Flight**, read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`);
+  this is also where the raw transaction rows (gas/nonce/receipt) and raw logs live.
+- **Your warehouse / notebook**, every feed is an Iceberg table; build wallet histories in **Snowflake,
+  BigQuery, Spark, Trino, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg).
+
+## Field mapping reference
+
+The **Fidelity** column: **exact** (from the chain), **calculated** (from real trades), or **add yourself**
+(off-chain / decoded).
+
+| `/wallets/:address/history` | Data Feeds | Fidelity |
+|---|---|---|
+| `hash`, `block_number`, `block_timestamp`, `transaction_index`, `from`/`to`, `value` | `wallet_history_full.*` (+ raw tx row) | exact |
+| `nonce`, `gas`, `gas_price`, `input`, `receipt_*`, `transaction_fee` | raw `block` transaction row (join on `tx_hash`) | exact |
+| nested transfer `value` (raw) | `amount` / `amount_in/out` / `token0/1_amount` | exact |
+| `value_formatted` | derive: `amount / 10^decimals` | exact |
+| per-event USD value | `amount_usd`, `amount_in/out_usd`, `token0/1_amount_usd` | calculated *(new, endpoint had none)* |
+| token `name` / `symbol` / `decimals` | `token_metadata.*` | exact |
+| `direction` | `wallet_history_full.direction` | exact |
+| `internal_transactions[]` | not delivered by a shipped recipe today (the `internalTransactions` data exists upstream but is not yet exposed) | gap |
+| `logs[]` (raw) | raw `block` log rows | exact |
+| `logs[].decoded_event` | decode from ABI yourself | add yourself |
+| `category`, `summary`, `method_label` | build yourself / omit | add yourself |
+| `*_label`, `*_entity`, `*_entity_logo`, `token_logo`, `collection_*` | your own label/media source | add yourself |
+| `possible_spam`, `verified_collection` | your own curation | add yourself |
+
+## Good to know
+
+- **It's a reshape.** The biggest task is event-flat → transaction-grouped (a `GROUP BY tx_hash`); plan for it,
+  or just use the flat event feed if your UI prefers events.
+- **You get USD for free**, per-event USD that the old history didn't provide (compare with a tolerance; 0 for
+  unpriced tokens).
+- **Decoded/categorized/labeled is the off-chain part**, that's the "decoded, categorized, summarized" bit of
+  the old endpoint; it's yours to add or skip.
+- **Lighter need?** `walletHistory` gives one pointer per (wallet, tx) if you only need the transaction list.
+- **No per-call limit**, page a wallet's entire history with plain SQL.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `walletHistoryFull`, `walletHistory`, `tokenMetadata`
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array) · [History & backfill](/data-feeds/concepts/history-and-backfill)

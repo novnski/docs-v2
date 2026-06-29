@@ -1,0 +1,175 @@
+---
+title: "Block by number or hash"
+description: "Move /block/:block_number_or_hash onto Moralis Data Feeds: a block's header, transactions, and logs are the feed's native unit, read any block straight from the decoded onchain data lake, in real time and with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, delivered as **one row per block**, the
+block header, every transaction, and their logs, as a real-time stream you own. This guide moves your
+`/block/:block_number_or_hash` integration onto Data Feeds, so a full block comes straight from that data lake,
+with **no per-call limits** and full control over how you store, query, and process it.
+
+```
+GET /block/:block_number_or_hash
+```
+
+This is the most natural migration in the set: a Data Feed's native unit **is** a block, header plus transactions
+plus logs, so this endpoint's response maps almost one to one. Everything onchain comes through exactly; the only
+things you add are off-chain address labels.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+A Data Feed delivers one row per block, with the raw header, transactions, and logs in a flattened `block` array
+(see [The `block` array](/data-feeds/concepts/the-block-array)). For reading a whole block, the **read API** returns exactly
+that, so we'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For a block it's a
+near-exact structural match:
+
+**Comes through exactly**
+- **The block header** (`number`, `hash`, `parent_hash`, `timestamp`, `miner`, `gas_limit`, `gas_used`,
+  `base_fee_per_gas`, `size`, the state/transactions/receipts roots, ...).
+- **Every transaction** (`from`, `to`, `value`, `input`, `nonce`, gas and receipt fields), and their **logs**
+  (emitter `address`, `topic0`..`topic3`, raw `data`, indices).
+- **Internal transactions**, the trace-derived value transfers, where available.
+
+**Calculated for you**
+- `transaction_fee` is `receipt_gas_used x gas_price`.
+
+**Add the extras you want**
+- The per-transaction `from/to_address_entity`, `*_label`, and `*_entity_logo` are off-chain address labels, bring
+  your own directory or drop them.
+
+**Good to know**
+- This endpoint returns **raw** logs (no ABI decoding); if you also want decoded events, use the typed feeds
+  (`tokenTransfers`, `tokenSwaps`, ...) or decode from the contract ABI, see
+  [Decoded transaction by hash](/data-feeds/migration/transaction-verbose).
+
+## Before you begin
+
+- Access to the Data Feeds **read API** for whole-block reads (and optionally a **sink** running the logs recipe
+  below if you want logs in your own database), see **Run a recipe** (quickstart).
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Index the blocks you'll read.** A by-block lookup is a point read into block history, so the block must be
+available. The read API serves any block in the feed's range directly; if you also land data with the sink,
+backfill `historical` or `hybrid` across the range you need (full history to read any block, a recent window for
+recent blocks only). See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Read a block
+
+### By number, a direct positional read
+
+In Data Feeds, a block's **position is its block number**, so reading a block by number is a direct call to the
+read API. For Ethereum, namespace `0x1`, topic `master-4`:
+
+```ts
+const NS = '0x1', TOPIC = 'master-4';
+
+async function getBlock(blockNumber: number) {
+  const res = await fetch(
+    `${process.env.CONTINUUM_URL}/api/v1/continuum/read/${NS}/${TOPIC}/json` +
+      `?from=${blockNumber}&to=${blockNumber}`,
+    { headers: { 'x-api-key': process.env.CONTINUUM_API_KEY! } },
+  );
+  const [block] = await res.json();          // one row = one block
+  return block;                              // the `block` array: header + transaction + log rows
+}
+```
+
+The returned `block` array carries the header row, one row per transaction, and one row per log, discriminated by
+`itemType`. Split them, and join each log to its transaction on `transaction_index` (raw log rows carry the index,
+not the tx hash, see [the block array](/data-feeds/concepts/the-block-array)):
+
+```ts
+function shapeBlock(rows: any[]) {
+  const header = rows.find((r) => r.itemType === 'block');
+  const txs = rows.filter((r) => r.itemType === 'transaction');
+  const logs = rows.filter((r) => r.itemType === 'log');
+  return {
+    ...header,
+    transactions: txs.map((t) => ({
+      ...t,
+      transaction_fee: BigInt(t.receiptGasUsed) * BigInt(t.gasPrice),
+      logs: logs.filter((l) => l.transactionIndex === t.transactionIndex),
+    })),
+  };
+}
+```
+
+### By hash, resolve to a number first
+
+The feed is positioned by block number, so to read by hash, resolve the hash to its number, then read by position.
+If you land the logs recipe (next section), `contract_logs` carries `block_hash` and `block_number`, so a single
+lookup gives you the number; or keep your own `block_hash` to `block_number` index as you ingest.
+
+### Want logs in your own database?
+
+Turn on the `logsByContract` recipe and it maintains a flat `contract_logs` table (`block_number`, `tx_hash`,
+`log_index`, emitter `contract_address`, `topic0`..`topic3`, raw `data`), queryable by block or transaction
+without reading the whole block array.
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every log, queryable by block / transaction | `logsByContract` | `contract_logs` |
+
+## Other ways to consume this data
+
+The read API is the direct path for whole-block reads, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  feed to process each block as it finalizes, block-by-block pipelines with no polling.
+- **Arrow Flight.** The gRPC, high-throughput option for pulling many blocks at once.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query blocks, transactions, and logs straight
+  from **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference**, the [block array concept](/data-feeds/concepts/the-block-array), and the **protocol
+guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain) or **add
+yourself** (off-chain). There's no decode tier (this endpoint returns raw logs) and no price tier.
+
+| `/block/:block_number_or_hash` | Data Feeds | Fidelity |
+|---|---|---|
+| Header (`number`, `hash`, `parent_hash`, `timestamp`, `miner`, `gas_*`, `base_fee_per_gas`, roots, ...) | `block` array block row | exact |
+| `transaction_count` | count of transaction rows | exact |
+| `transactions[]` (hash, from, to, value, input, gas, receipt_*) | `block` array transaction rows | exact |
+| `transaction_fee` | derive: `receipt_gas_used x gas_price` | exact |
+| `logs[]` (address, topics, data, indices) | `block` array log rows / `contract_logs` | exact |
+| `internal_transactions` | not delivered by a shipped recipe today (`internalTransactions` exists upstream but is not yet exposed; it is not carried in the `block` array) | gap |
+| `from/to_address_entity`, `*_label`, `*_entity_logo` | add yourself | off-chain |
+
+## Good to know
+
+- **The response is the feed's native unit.** A Data Feed row is a block, so by-number is a direct positional
+  read.
+- **By-hash resolves to a number** first (the feed is positioned by number); `contract_logs` or your own index
+  does the resolve.
+- **Raw logs join on `transaction_index`** (a raw log row has no tx hash); the `logsByContract` recipe attaches
+  `tx_hash` for you.
+- **Want decoded events?** This endpoint is raw; use the typed feeds (`tokenTransfers`, `tokenSwaps`, ...) or
+  decode from the ABI, see [Decoded transaction by hash](/data-feeds/migration/transaction-verbose).
+- **Busy blocks are large** (a megabyte or two of JSON), read by position and process the array.
+- **Just need an occasional block?** An RPC node or the hosted API is a simpler fit for that one narrow job; Data
+  Feeds is about owning and streaming the full block data at scale.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `logsByContract`, `logsByTopic0`; typed feeds: `tokenTransfers`, `tokenSwaps`
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array) (how header, transactions, and logs are laid out)
+- Related guide: [Decoded transaction by hash](/data-feeds/migration/transaction-verbose) (single tx + ABI decoding)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt

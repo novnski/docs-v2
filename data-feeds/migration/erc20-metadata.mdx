@@ -1,0 +1,175 @@
+---
+title: "ERC-20 token metadata"
+description: "Move /erc20/metadata onto Moralis Data Feeds and serve token name, symbol, decimals, and supply from the same decoded onchain data lake that powers Moralis, in real time, with no per-call limits and no batch cap."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including the identity of every token, as a
+real-time stream you own. This guide moves your `/erc20/metadata` integration onto Data Feeds, so a token's
+name, symbol, decimals, and supply come straight from that data lake, with **no per-call limits** and **no batch
+cap**, and you add the editorial and market extras you want on top.
+
+```
+GET /erc20/metadata
+```
+
+This is a clean migration on the onchain core: there's a **purpose-built metadata feed** that mirrors this
+endpoint, so name, symbol, decimals, and supply come through exactly. Being a metadata endpoint, it also carries
+an off-chain layer (logos, categories, links, market data) that you bring yourself.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For looking up token metadata by contract, the **sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For token metadata:
+
+**Comes through exactly**
+- **Token identity** (`name`, `symbol`, `decimals`) and **supply** (`total_supply`), from the token contract,
+  with the **deploy** block and timestamp (`block_number`, `created_at`).
+
+**Calculated for you, from real trades**
+- **Fully diluted valuation** (`fully_diluted_valuation`) is `total_supply x price`, using live onchain DEX
+  prices, very close to the old endpoint; compare with a small tolerance.
+
+**Add the extras you want**
+- `logo`, `logo_hash`, `thumbnail`, `possible_spam`, `verified_contract`, `validated`, `security_score`,
+  `description`, `categories`, and the social `links` are off-chain signals, bring your own token list or drop
+  them.
+- `market_cap` and `circulating_supply` are off-chain too (there's no onchain "circulating supply"); supply
+  `circulating_supply` from your own source if you need market cap, or use `fully_diluted_valuation` as the
+  onchain-derivable alternative.
+- `implementations` (the same token on other chains) you assemble across the chains you index, or from a
+  multichain token list.
+
+**Good to know**
+- `total_supply` is live, it tracks mint and burn, so keep the feed current for an up-to-date figure.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipe below applied to that database (plus `tokenPriceHistory` if you want FDV).
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill from the token's deploy block.** Token metadata is recorded when the contract is deployed, so the
+`tokenMetadata` recipe needs the token's **deploy block** indexed (run `historical` / `hybrid` from an early
+block; for arbitrary tokens, full history). Supply tracks mint and burn, so keep the feed current for a live
+`total_supply`. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Token name, symbol, decimals, supply | `tokenMetadata` | `token_metadata` |
+| Token USD price (for FDV), optional | `tokenPriceHistory` | `token_price_updates` |
+
+`tokenMetadata` lands one row per token (from its deployment), mirroring this endpoint's onchain fields.
+
+### Step 2: Query metadata by contract
+
+Look up any set of contracts in one query, with no batch cap, and derive the formatted supply and FDV:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getTokenMetadata(addresses: string[]) {
+  const { rows } = await pool.query(
+    `SELECT m.token_address AS address,
+            m.name, m.symbol, m.decimals,
+            m.total_supply,
+            m.total_supply / power(10, m.decimals)            AS total_supply_formatted,
+            m.block_number,                                    -- deploy block (created_at timestamp lives on token_metadata_observations)
+            m.total_supply / power(10, m.decimals) * p.usd_price AS fully_diluted_valuation
+     FROM token_metadata m
+     LEFT JOIN LATERAL (
+       SELECT usd_price FROM token_price_updates
+       WHERE token_address = m.token_address ORDER BY block_number DESC LIMIT 1
+     ) p ON true
+     WHERE m.token_address = ANY($1)`,
+    [addresses.map((a) => a.toLowerCase())],
+  );
+  return rows;
+}
+```
+
+That's it, you're serving token metadata from a dataset you own, in real time, with no batch cap.
+
+### Step 3: Add the extras you want
+
+The logo, spam and verification flags, categories, links, description, market cap, circulating supply, and
+cross-chain implementations are off-chain, so layer them in alongside your Data Feeds tables:
+
+- **Logos, categories, links, description**, a token list or your own editorial source keyed by address.
+- **Spam, verified, security score**, your own allow/deny lists.
+- **Market cap and circulating supply**, supply `circulating_supply` from your source (use FDV as the
+  onchain-derivable alternative).
+- **Implementations**, match the token across the chains you index, or use a multichain token list.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for metadata lookups, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  feed and keep a metadata table fresh as tokens deploy and supply changes, no polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`. Arrow Flight (gRPC) is the high-throughput option.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query metadata straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades), or **add yourself** (off-chain signal).
+
+| `/erc20/metadata` | Data Feeds | Fidelity |
+|---|---|---|
+| `address` | `token_metadata.token_address` | exact |
+| `name`, `symbol`, `decimals` | `token_metadata.*` | exact |
+| `total_supply` | `token_metadata.total_supply` | exact |
+| `total_supply_formatted` | derive: `total_supply / 10^decimals` | exact |
+| `block_number` (deploy) | `token_metadata.block_number` | exact |
+| `created_at` (deploy timestamp) | `token_metadata_observations.block_timestamp` (not on the `token_metadata` view) | exact |
+| `fully_diluted_valuation` | derive: `total_supply x price` | calculated |
+| `market_cap` | derive: `circulating_supply x price` | calculated |
+| `circulating_supply` | add yourself | off-chain |
+| `implementations` | match across indexed chains, or a token list | derived / off-chain |
+| `logo`, `logo_hash`, `thumbnail` | add yourself | off-chain |
+| `possible_spam`, `verified_contract`, `validated`, `security_score` | add yourself | off-chain |
+| `categories`, `links`, `description`, `address_label` | add yourself | off-chain |
+
+## Good to know
+
+- **A purpose-built feed mirrors this endpoint** on the onchain core, name, symbol, decimals, and supply are
+  exact.
+- **`total_supply` is live**, it tracks mint and burn; keep the feed current.
+- **FDV vs market cap**, FDV is a clean onchain derive (`total_supply x price`); market cap needs an off-chain
+  circulating supply.
+- **No batch cap.** Look up as many contracts as you like in one query.
+- **Freshness.** Metadata is current-state on Postgres or MySQL; ClickHouse is recommended for real-time and
+  hybrid modes.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `tokenMetadata`, `tokenPriceHistory`
+- Related guides: [Wallet token balances & prices](/data-feeds/migration/wallet-tokens) ·
+  [Wallet ERC-20 balances](/data-feeds/migration/wallet-erc20) (both reuse `tokenMetadata`)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

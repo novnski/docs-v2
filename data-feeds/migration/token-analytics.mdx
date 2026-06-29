@@ -1,0 +1,139 @@
+---
+title: "Token trading analytics"
+description: "Move /tokens/:tokenAddress/analytics onto Moralis Data Feeds and compute a token's buy/sell volume, traders, price change, liquidity, and FDV from the same decoded onchain DEX trades that power Moralis, at any window you choose."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every DEX trade, so you can build
+a token's trading analytics from data you own. This guide moves your `/tokens/:tokenAddress/analytics` integration
+onto Data Feeds, with **no per-call limits** and the freedom to compute any window and any metric.
+
+```
+GET /tokens/:tokenAddress/analytics
+```
+
+These analytics are aggregations of a token's trades, so on Data Feeds you own the trade-level data and compute
+the dashboard yourself, the same rolling windows the old endpoint returns, plus any others you want.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+Token analytics is aggregation over trades, so the **sink** is the smoothest path: land the trades, then compute
+the windows.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **trades that produce it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model.
+
+**Calculated for you, from real trades**
+- **Volume, buyers, sellers, trade counts, unique wallets, and price change** per window are aggregations of the
+  token's onchain DEX trades, the same trades the old endpoint uses, very close, compare with a small tolerance.
+- **Current price, liquidity, and FDV** come from live prices, the token's pool reserves, and `total_supply x
+  price`.
+
+**Yours to control**
+- **Any window, any metric.** The old endpoint returns 5m / 1h / 6h / 24h; because you own the trade-level data,
+  you compute those plus any other window or metric (buy/sell ratio, VWAP, ...).
+
+**Good to know**
+- There are **no off-chain fields**; everything is computed from trades, prices, and supply you own.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a database, see **Run a recipe** (quickstart). ClickHouse is recommended
+  for real-time analytics.
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill the windows you need.** The analytics come from trades, an *event list*, so index enough history to
+cover your longest window (a day or more for the 24h figures, plus price history for the price-change). Run
+`realtime` for live numbers, or backfill `historical` / `hybrid` for a longer lookback. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| The token's trades (volume, sides, traders) | `swapsByToken` | `swaps` |
+| Price + price change | `tokenPriceHistory` | `token_price_updates` |
+| Liquidity (pool reserves) | `pairReserves` | `pair_reserves` |
+| Supply (for FDV) | `tokenMetadata` | `token_metadata` |
+
+### Step 2: Compute a window
+
+Aggregate the token's trades over the window (here 24h); run it per window (300 / 3600 / 21600 / 86400 seconds):
+
+```sql
+SELECT
+  sum(notional_usd) FILTER (WHERE side = 'buy')             AS total_buy_volume,
+  sum(notional_usd) FILTER (WHERE side = 'sell')            AS total_sell_volume,
+  count(DISTINCT trader_address) FILTER (WHERE side='buy')  AS total_buyers,
+  count(DISTINCT trader_address) FILTER (WHERE side='sell') AS total_sellers,
+  count(*) FILTER (WHERE side = 'buy')                      AS total_buys,
+  count(*) FILTER (WHERE side = 'sell')                     AS total_sells,
+  count(DISTINCT trader_address)                            AS unique_wallets
+FROM swaps
+WHERE pool_address = ANY($1)                                -- the token's pools
+  AND block_timestamp >= extract(epoch FROM now()) - 86400;
+```
+
+Add `usdPrice` (latest price), `pricePercentChange` (price now vs window-ago), `totalLiquidityUsd` (sum the
+token's pool reserves valued at price, see [token pairs](/data-feeds/migration/token-pairs)), and
+`totalFullyDilutedValuation` (`total_supply x price`, see [token metadata](/data-feeds/migration/erc20-metadata)).
+Materialize per token and window if you serve many.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for the dashboard, but the **same feeds** are available however you prefer to build,
+all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  trades and keep the latest window live, no polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, compute analytics straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt**, a natural home for windowed aggregation.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint, everything here is **calculated**
+(aggregated from real trades, prices, reserves, and supply), so compare with a tolerance.
+
+| `/tokens/:tokenAddress/analytics` | Data Feeds | Fidelity |
+|---|---|---|
+| `totalBuyVolume`, `totalSellVolume` (per window) | `sum(swaps.notional_usd)` by side | calculated |
+| `totalBuyers`, `totalSellers` | distinct traders by side | calculated |
+| `totalBuys`, `totalSells` | trade counts by side | calculated |
+| `uniqueWallets` | distinct traders | calculated |
+| `pricePercentChange` | price now vs window-ago | calculated |
+| `usdPrice` | latest `token_price_updates.usd_price` | calculated |
+| `totalLiquidityUsd` | sum of the token's pool reserves x price | calculated |
+| `totalFullyDilutedValuation` | `total_supply x price` | calculated |
+
+## Good to know
+
+- **You own the trades**, so the 5m / 1h / 6h / 24h windows are a query, and so is any other window or metric.
+- **All calculated** from real DEX trades, compare with a tolerance; thin tokens have sparse windows.
+- **Materialize for scale**, compute per token and window on a schedule rather than per request.
+- **Liquidity and FDV** reuse the [token pairs](/data-feeds/migration/token-pairs) and
+  [token metadata](/data-feeds/migration/erc20-metadata) building blocks.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `swapsByToken`, `tokenPriceHistory`, `pairReserves`, `tokenMetadata`
+- Related guides: [Pair OHLCV](/data-feeds/migration/pair-ohlcv) · [Token pairs](/data-feeds/migration/token-pairs) · [ERC-20 token prices](/data-feeds/migration/erc20-prices)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

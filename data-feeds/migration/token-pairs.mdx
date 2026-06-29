@@ -1,0 +1,182 @@
+---
+title: "Token trading pairs"
+description: "Move /erc20/:token_address/pairs onto Moralis Data Feeds and list a token's DEX pools, with price, liquidity, and 24h volume, from the same decoded onchain data lake that powers Moralis, in real time and with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every DEX pool and trade, so you
+can list a token's trading pairs and their live numbers from data you own. This guide moves your
+`/erc20/:token_address/pairs` integration onto Data Feeds, in real time, with **no per-call limits** and full
+control over how you store, query, and enrich the pool list.
+
+```
+GET /erc20/:token_address/pairs
+```
+
+The "which pools trade this token" core comes through **exactly** from a purpose-built pool registry. On top of
+it you compose the live figures, price, liquidity, and 24h volume, which are computed from the same onchain trades
+the old endpoint uses.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+A token's pairs draw on a few feeds (the pool registry, plus price, reserves, and trades), so the **sink** is the
+smoothest path: land them, then join.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For token pairs:
+
+**Comes through exactly**
+- **The pools** that trade the token (`pair_address`), the **exchange** (`exchange_address`, `exchange_name`),
+  the **two tokens**, and their **symbols and decimals**, straight from the chain. `pair_label` (e.g. "WETH/USDC")
+  is a simple derive from the symbols.
+
+**Calculated for you, from real trades**
+- **Price and 24h change** (`usd_price`, `usd_price_24hr*`) come from live onchain DEX prices.
+- **Liquidity** (`liquidity_usd`, `liquidity_skew`) is the pool's current reserves valued at those prices.
+- **24h volume** (`volume_24h_usd`, `volume_24h_native`) and **`inactive_pair`** come from aggregating the pool's
+  trades over the last day.
+  All of these track the old endpoint closely; compare with a small tolerance.
+
+**Add the extras you want**
+- `exchange_logo` and the per-token `token_logo` are off-chain images, bring your own or drop them.
+
+**Good to know**
+- A token can trade in **many** pools (fee tiers, DEXes); the registry has one row per pool, you list a token's
+  pools by matching either side.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill is mixed here.** The **pool list** is current-state, to enumerate *every* pool that trades the token
+you need history far enough back to see each pool's deployment (full history for completeness, since a pool can be
+old). The **live numbers** (price, liquidity, 24h volume) only need recent data, run those feeds `realtime` plus a
+24-hour window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Which pools contain the token (the list) | `pairAddressLookup` | `pair_address_lookup_observations` |
+| Token name and symbol | `tokenMetadata` | `token_metadata` |
+| Price + 24h change | `tokenPriceHistory` | `token_price_updates` |
+| Pool liquidity (reserves) | `pairReserves` | `pair_reserves` |
+| Trades (for 24h volume) | `swapsByPair` | `swaps` |
+
+`pairAddressLookup` is the registry that backs this endpoint, one row per pool, carrying the exchange, protocol,
+fee, and both tokens. The others supply the live numbers.
+
+### Step 2: Compose the pairs in one view
+
+List the token's pools and join in the symbols, price, liquidity, and 24h volume:
+
+```sql
+CREATE VIEW token_pairs AS
+SELECT
+  r.pair_address,
+  r.exchange_address,
+  r.protocol                                   AS exchange_name,
+  m0.symbol || '/' || m1.symbol                AS pair_label,
+  r.token0_address                             AS base_token,
+  r.token1_address                             AS quote_token,
+  p.usd_price,
+  (res.reserve0 / power(10, r.token0_decimals) * p0.usd_price)
+    + (res.reserve1 / power(10, r.token1_decimals) * p1.usd_price) AS liquidity_usd,
+  v.volume_24h_usd,
+  (v.volume_24h_usd IS NULL)                   AS inactive_pair
+FROM pair_address_lookup_observations r
+LEFT JOIN token_metadata m0 ON m0.token_address = r.token0_address
+LEFT JOIN token_metadata m1 ON m1.token_address = r.token1_address
+LEFT JOIN pair_reserves res ON res.pair_address = r.pair_address
+LEFT JOIN LATERAL (SELECT usd_price FROM token_price_updates
+                   WHERE token_address = r.token0_address ORDER BY block_number DESC LIMIT 1) p0 ON true
+LEFT JOIN LATERAL (SELECT usd_price FROM token_price_updates
+                   WHERE token_address = r.token1_address ORDER BY block_number DESC LIMIT 1) p1 ON true
+LEFT JOIN LATERAL (SELECT usd_price FROM token_price_updates
+                   WHERE token_address = r.token0_address ORDER BY block_number DESC LIMIT 1) p ON true
+LEFT JOIN LATERAL (
+  SELECT sum(notional_usd) AS volume_24h_usd FROM swaps
+  WHERE pool_address = r.pair_address
+    AND block_timestamp >= extract(epoch FROM now()) - 86400
+) v ON true;
+```
+
+Query a token's pairs by matching either side:
+
+```sql
+SELECT * FROM token_pairs WHERE base_token = $1 OR quote_token = $1 ORDER BY liquidity_usd DESC NULLS LAST;
+```
+
+That's it, you're listing a token's pools with live price, liquidity, and volume from a dataset you own.
+
+### Step 3: Add the extras you want
+
+`exchange_logo` and the per-token `token_logo` are off-chain images, so layer them in from your own source keyed by
+address, or skip them if your app doesn't use them.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for the composed view, but the **same feeds** are available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  trades and reserves and keep each pool's price, liquidity, and volume live, no polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`. Arrow Flight (gRPC) is the high-throughput option.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, compose the pair list straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain signal).
+
+| `/erc20/:token_address/pairs` | Data Feeds | Fidelity |
+|---|---|---|
+| `pair_address` | `pair_address_lookup_observations.pair_address` | exact |
+| `exchange_address` | `.exchange_address` | exact |
+| `exchange_name` | `.protocol` | exact |
+| `base_token`, `quote_token` | `.token0_address` / `.token1_address` | exact |
+| `pair_label` | derive from the two symbols | exact |
+| `pair[].token_name`, `token_symbol`, `token_decimals` | `token_metadata.*` / registry | exact |
+| `usd_price`, `usd_price_24hr*` | `token_price_updates` | calculated |
+| `liquidity_usd`, `liquidity_skew` | `pair_reserves` x price | calculated |
+| `volume_24h_usd`, `volume_24h_native` | `sum(swaps.notional_usd)` over 24h | calculated |
+| `inactive_pair` | no trades in the window | calculated |
+| `exchange_logo`, `pair[].token_logo` | add yourself | off-chain |
+
+## Good to know
+
+- **The pool list is exact** (a purpose-built registry backs this endpoint); the price, liquidity, and volume are
+  computed from the same DEX trades the old endpoint uses, compare with a tolerance.
+- **A token has many pools**, list them by matching either side of the registry; sort by liquidity for the
+  meaningful ones.
+- **Mixed backfill**, full history to enumerate every pool, recent data for the live numbers.
+- **Logos are off-chain**, layer them in from your own source.
+- **Freshness.** ClickHouse is recommended for real-time price, liquidity, and volume; Postgres and MySQL carry
+  the tables (with the realtime reorg caveat).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `pairAddressLookup`, `tokenMetadata`, `tokenPriceHistory`, `pairReserves`, `swapsByPair`
+- Related guides: [Pair OHLCV candlesticks](/data-feeds/migration/pair-ohlcv) ·
+  [ERC-20 token prices](/data-feeds/migration/erc20-prices)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

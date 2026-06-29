@@ -1,0 +1,206 @@
+---
+title: "NFT metadata (batch)"
+description: "Move /nft/getMultipleNFTs onto Moralis Data Feeds: own the onchain truth for any set of NFTs (ownership, mint provenance, collection identity, realized sales) in real time, and pair it with your metadata layer for the JSON, media, rarity, and floor."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including everything the chain knows about
+an NFT: who owns it now, when and by whom it was minted, what collection it belongs to, and every time it has
+sold. This guide moves the onchain side of your `/nft/getMultipleNFTs` integration onto Data Feeds, so that truth
+comes straight from a data lake you own, in real time, with **no per-call limits** and **no 25-NFT batch cap**.
+
+```
+POST /nft/getMultipleNFTs
+```
+
+<Note>
+**Read this first, it shapes the whole migration.** This endpoint is mostly a **metadata** product, and metadata
+lives off-chain. Data Feeds owns the **onchain** layer perfectly (ownership, mint, contract type, collection
+identity, sales). The resolved token JSON, media, rarity, and floor/listing prices are built by separate indexers
+and aren't in the data lake, you pair Data Feeds with a **metadata-resolution layer** for those. If resolved JSON
+metadata is the *entire* job, keep a metadata indexer for that part; Data Feeds complements it by giving you
+ownership and provenance you can own and stream.
+</Note>
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For looking up specific NFTs by `(collection, token_id)`, the **sink** is the smoothest path, so we'll use it for
+the onchain layer here.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. For this endpoint
+the split is unusually clean: Data Feeds owns the onchain half exactly, and the metadata half is yours to bring.
+
+**Comes through exactly (from Data Feeds)**
+- **Ownership** (`owner_of`, `amount`), the current owner of each token_id, straight from transfer history.
+- **Mint provenance** (`block_number_minted`, `minter_address`) and the **last transfer block** (`block_number`).
+- **Identity** (`contract_type`, collection `name`/`symbol`).
+- **Realized sales** (the `last_sale` idea), every time the NFT actually sold on a marketplace, from the
+  `nftTrades` feed.
+
+**Calculated for you, from real trades**
+- **Sale values in USD** (`usd_price_at_sale`, `current_usd_value`) come from real onchain activity, very close,
+  compare with a small tolerance rather than expecting an identical figure.
+
+**Bring your metadata layer (off-chain)**
+- `token_uri`, `metadata`, `normalized_metadata`, and `media` are resolved by fetching each token's URI and its
+  JSON/media, a metadata-resolver job that sits next to Data Feeds.
+- `rarity_rank` / `rarity_percentage` / `rarity_label` come from a rarity tool over the collection's traits.
+- `floor_price*` and `list_price` come from a marketplace/pricing source.
+- `possible_spam`, `verified_collection`, the collection logo/banner/category, and social links are off-chain
+  lists and editorial data.
+
+**Good to know**
+- ERC-1155 token_ids can have **many owners**; for those you get a set of `(owner, amount)` rows rather than a
+  single `owner_of`.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- A **metadata-resolution** path for the off-chain fields you need (see [step 3](#step-3-bring-your-metadata-layer)).
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history, from each collection's first block.** A token_id's current owner is *current state*, the
+cumulative result of every transfer of that collection, so the `nftOwnersByContract` recipe must backfill the
+collection's **full history from its deployment block** (run it `historical` or `hybrid`). Start late and you'll
+return a stale or missing owner. Mint provenance and realized sales come from that same history. Because this is
+by-collection, you only need history since each collection deployed, not chain genesis. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+The onchain layer draws on a few feeds, each a ready-to-run bundle:
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Current owner of each token_id | `nftOwnersByContract` | `nft_owners` |
+| Collection name / symbol | `nftCollectionMetadata` | `nft_collection_metadata` |
+| Mint provenance (minted block, minter) | `nftTransfers` | the transfer log (mint = `from` is the zero address) |
+| Realized sale history (`last_sale`) | `nftTrades` | marketplace trades per token |
+
+Point them at the same database and start them, backfilled from each collection's deploy block (see above).
+
+### Step 2: Query the onchain facts
+
+Look up any set of NFTs by `(token_address, token_id)`, with no 25-NFT cap. Current owner plus collection
+identity:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getNftsOnchain(keys: { token: string; id: string }[]) {
+  const pairs = keys.map((k) => [k.token.toLowerCase(), k.id]);
+  const { rows } = await pool.query(
+    `SELECT o.token_address, o.token_id, o.contract_type,
+            o.wallet_address AS owner_of, o.amount, o.block_number,
+            c.name, c.symbol
+     FROM nft_owners o
+     LEFT JOIN nft_collection_metadata c ON c.token_address = o.token_address
+     WHERE (o.token_address, o.token_id) = ANY($1::text[][])
+       AND o.amount > 0`,                       -- current holders only
+    [pairs],
+  );
+  return rows;
+}
+```
+
+Join `nftTrades` for each NFT's realized sale history, and `nftTransfers` (first transfer, where `from` is the
+zero address) for `block_number_minted` and `minter_address`. That's the complete onchain picture, owned by you
+and updating in real time.
+
+### Step 3: Bring your metadata layer
+
+The resolved metadata, media, rarity, and floor are off-chain, so layer them in alongside your Data Feeds tables:
+
+- **Token URI, metadata, media.** Resolve each token's `tokenURI(token_id)` (a contract read) and fetch and
+  normalize the JSON and media. Cache the result keyed by `(token_address, token_id)` next to your onchain tables.
+  If you already run a metadata indexer, keep it for this part, Data Feeds doesn't replace it.
+- **Rarity.** Compute it with a rarity tool over the collection's trait distribution.
+- **Floor and listings.** Pull `floor_price*` and `list_price` from a marketplace/pricing source.
+- **Spam, verification, editorial.** Bring your own allow/deny lists and a collection directory for logos,
+  categories, and social links.
+
+Joining your metadata cache to the onchain query in step 2 reproduces the full `getMultipleNFTs` item, with the
+onchain half owned and real-time and the metadata half on sources you control.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for on-demand lookups, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  NFT transfer and trade streams to react the moment an NFT changes hands or sells, live "who owns it now" and
+  "it just sold" signals without polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded arrays the recipes project from (`nftTokenTransfers`,
+  `tradeTransactions`). Arrow Flight (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query ownership and sales straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain, your metadata layer).
+
+| `/nft/getMultipleNFTs` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `token_id` | the lookup key | exact |
+| `contract_type` | `nft_owners.contract_type` | exact |
+| `owner_of` | `nft_owners.wallet_address` (amount > 0) | exact |
+| `amount` | `nft_owners.amount` | exact |
+| `block_number` | `nft_owners.block_number` | exact |
+| `block_number_minted`, `minter_address` | `nftTransfers` (mint = from zero address) | exact |
+| `name`, `symbol` | `nft_collection_metadata.*` | exact |
+| `token_hash` | derive (hash of contract + id) | exact |
+| `last_sale` (sale facts) | `nftTrades` | exact |
+| `last_sale` USD values | `nftTrades` + price feed | calculated |
+| `token_uri`, `metadata`, `normalized_metadata`, `media` | add yourself (resolve token URI) | off-chain |
+| `rarity_rank`, `rarity_percentage`, `rarity_label` | add yourself (rarity tool) | off-chain |
+| `floor_price*`, `list_price` | add yourself (pricing/marketplace) | off-chain |
+| `possible_spam`, `verified_collection` | add yourself | off-chain |
+| `collection_logo`/`banner`/`category`, social links | add yourself | off-chain |
+| `last_token_uri_sync`, `last_metadata_sync` | add yourself | off-chain |
+
+## Good to know
+
+- **Data Feeds owns the onchain truth.** Ownership, mint, contract type, collection identity, and realized sales
+  are exact and real-time, no sync lag, no 25-NFT cap.
+- **Metadata is a layer, not a feed.** Resolved JSON, media, rarity, and floor are off-chain by nature; pair Data
+  Feeds with a metadata resolver and your pricing/rarity sources.
+- **Owner recipe differs from a wallet view.** This uses `nftOwnersByContract` (owner per token_id); the
+  [wallet NFTs](/data-feeds/migration/wallet-nfts) guide uses `walletNfts` (NFTs per wallet).
+- **`token_id` is a uint256 string**, store and compare it as text, never as a number.
+- **ERC-1155** token_ids can have many owners, you get `(owner, amount)` rows rather than one `owner_of`.
+- **`name`/`symbol`** may be null for some 1155 collections (no on-chain name), expected, not an error.
+- **Freshness.** Run the recipes on ClickHouse for real-time/hybrid; Postgres and MySQL target historical
+  backfill (see the recipe README for the reorg caveat).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `nftOwnersByContract`, `nftCollectionMetadata`, `nftTrades`, `nftTransfers`
+- Related guide: [Wallet NFTs](/data-feeds/migration/wallet-nfts) (NFTs a wallet holds, same enrichment story)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

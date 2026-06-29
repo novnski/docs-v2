@@ -1,0 +1,190 @@
+---
+title: "Wallet NFT collections"
+description: "Move /:address/nft/collections onto Moralis Data Feeds: roll up a wallet's NFT holdings into the collections it holds, with counts, from the same decoded onchain data lake that powers Moralis, in real time and with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every NFT a wallet holds, as a
+real-time stream you own. This guide moves your `/:address/nft/collections` integration onto Data Feeds, so the
+list of collections a wallet holds (and how many from each) comes straight from that data lake, with **no
+per-call limits** and full control over how you store, serve, and query it.
+
+```
+GET /:address/nft/collections
+```
+
+This is one of the simplest migrations in the set: the collection list and counts are a **rollup of the wallet's
+NFT holdings**, a one-line `GROUP BY` over data Data Feeds gives you exactly. The only things you assemble
+yourself are off-chain collection details like floor price and artwork.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For a holdings rollup you query on demand, the **sink** is the smoothest path, so we'll use it here.
+
+<Note>
+This is the **collection-level** view of a wallet's NFTs. For the per-NFT list (each `token_id` the wallet
+holds), see [Wallet NFTs](/data-feeds/migration/wallet-nfts), built on the same holdings data. This guide just
+groups that data by collection.
+</Note>
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. Here it's a clean
+split:
+
+**Comes through exactly**
+- **The collections held** (`token_address`, `contract_type`) and the **count** per collection, a `GROUP BY` over
+  the wallet's NFT holdings.
+- **Collection details** (`name`, `symbol`), from the token contract.
+
+**Calculated for you, from real trades**
+- **Last sale in USD** (`last_sale`'s `usd_price_at_sale`, `current_usd_value`) comes from real onchain activity,
+  very close, compare with a small tolerance rather than expecting an identical figure.
+
+**Yours to control**
+- **Which collections count.** You get every collection the wallet holds, then apply your own spam rules to match
+  exactly your definition of a real holding (the old `exclude_spam` becomes your own `WHERE`).
+
+**Add the extras you want**
+- `possible_spam`, `verified_collection`, `collection_logo`, `collection_banner_image`, and `floor_price*` are
+  off-chain signals layered on top of the chain, so they're not in the feed. Drop them, bring your own lists, or
+  layer in a collection source, see [step 3](#step-3-add-the-extras-you-want).
+
+**Good to know**
+- For ERC-1155, decide what `count` means to you: the number of distinct token_ids held (matches the old
+  endpoint) or the total number of units, both are a one-word change in the query.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history.** A wallet's NFT holdings are *current state*, the cumulative result of every transfer,
+and a wallet can still hold an NFT from a collection it last touched years ago. So to return the complete
+collection set, the `walletNfts` recipe needs to backfill the **full history** of the chain (run it `historical`
+or `hybrid` from an early block). Start late and you'll miss collections. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| The wallet's NFT holdings (to group) | `walletNfts` | `wallet_nfts` |
+| Collection name / symbol | `nftCollectionMetadata` | `nft_collection_metadata` |
+| Realized sale history (`last_sale`), optional | `nftTrades` | marketplace trades per token |
+
+Point them at the same database and start them, backfilled from an early block (see above). If you've already
+built [Wallet NFTs](/data-feeds/migration/wallet-nfts), you have these tables already, this guide is just a
+different query over them.
+
+### Step 2: Query it from your app
+
+Group the holdings by collection and join in the collection name and symbol:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletNftCollections(wallet: string) {
+  const { rows } = await pool.query(
+    `SELECT n.token_address,
+            n.contract_type,
+            m.name,
+            m.symbol,
+            count(*) AS count                       -- token_ids held in this collection
+     FROM nft_collection_metadata m
+     RIGHT JOIN wallet_nfts n ON m.token_address = n.token_address
+     WHERE n.wallet_address = $1
+       AND n.balance > 0
+     GROUP BY n.token_address, n.contract_type, m.name, m.symbol
+     ORDER BY count DESC`,
+    [wallet.toLowerCase()],
+  );
+  return rows;
+}
+```
+
+That's it, you're serving a wallet's NFT collections and counts from a dataset you own, in real time, with no
+per-call limits and the freedom to sort and filter however you like. For ERC-1155, swap `count(*)` for
+`sum(balance)` if you'd rather count units than distinct token_ids.
+
+### Step 3: Add the extras you want
+
+`possible_spam`, `verified_collection`, `collection_logo`, `collection_banner_image`, and `floor_price*` are
+off-chain signals, so they're not part of the onchain dataset. When you want them, you've got options:
+
+- **Skip them** if your app doesn't use them.
+- **Bring your own source**, a collection directory for logos and banners, your own spam/verification lists, and a
+  marketplace/pricing source for floor prices.
+- **Layer them in** from a dedicated metadata source alongside your Data Feeds tables, keyed by `token_address`.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for an on-demand rollup, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  NFT transfer stream and keep the holdings (and therefore the collection counts) current as NFTs move, no
+  polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded `nftTokenTransfers` array the `walletNfts` recipe projects from.
+  Arrow Flight (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, compute the rollup straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain signal).
+
+| `/:address/nft/collections` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address` | `wallet_nfts.token_address` (grouped) | exact |
+| `contract_type` | `wallet_nfts.contract_type` | exact |
+| `count` | `count(*)` over held token_ids | exact |
+| `name`, `symbol` | `nft_collection_metadata.*` | exact |
+| `last_sale` (sale facts) | `nftTrades` | exact |
+| `last_sale` USD values | `nftTrades` + price feed | calculated |
+| `possible_spam`, `verified_collection` | add yourself | off-chain |
+| `collection_logo`, `collection_banner_image` | add yourself | off-chain |
+| `floor_price`, `floor_price_usd`, `floor_price_currency` | add yourself | off-chain |
+
+## Good to know
+
+- **It's a rollup of your NFT holdings.** The collection list, counts, and identity are exact, derived with a
+  `GROUP BY`; if you've built [Wallet NFTs](/data-feeds/migration/wallet-nfts), you're a query away.
+- **You decide what counts as held**, no fixed spam filter, so apply your own list to hide spam collections.
+- **`count` for ERC-1155** is distinct token_ids by default (matching the old endpoint); use `sum(balance)` for
+  total units.
+- **`name`/`symbol`** may be null for some 1155 collections (no on-chain name), expected, not an error.
+- **Floor, logo, banner are off-chain**, layer them in from your own sources keyed by `token_address`.
+- **Freshness.** Holdings are current-state on Postgres or MySQL; ClickHouse is recommended for real-time and
+  hybrid modes (see the recipe README for the reorg caveat).
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `walletNfts`, `nftCollectionMetadata`, `nftTrades`
+- Related guide: [Wallet NFTs](/data-feeds/migration/wallet-nfts) (the per-NFT holdings this rolls up)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

@@ -1,0 +1,139 @@
+---
+title: "NFT collection metadata"
+description: "Move /nft/:address/metadata onto Moralis Data Feeds and serve an NFT collection's name, symbol, and type from the same decoded onchain data lake that powers Moralis, in real time, with the editorial and floor extras layered on yourself."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including the identity of every NFT
+collection, as a real-time stream you own. This guide moves your `/nft/:address/metadata` integration onto Data
+Feeds, so a collection's name, symbol, and type come straight from that data lake, with **no per-call limits**, and
+you add the editorial and floor extras you want on top.
+
+```
+GET /nft/:address/metadata
+```
+
+This is the NFT-collection version of [ERC-20 token metadata](/data-feeds/migration/erc20-metadata): a purpose-built
+feed mirrors the endpoint's onchain fields, and the off-chain layer (logos, categories, links, floor) is yours to
+bring.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For collection metadata by contract, the **sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model.
+
+**Comes through exactly**
+- **Collection identity** (`name`, `symbol`, `contract_type`), straight from the contract.
+
+**Calculated for you, from real trades**
+- **Last sale in USD** (if you join sale history) comes from real onchain activity, compare with a small tolerance.
+
+**Add the extras you want**
+- `collection_logo`, `collection_banner_image`, `collection_category`, `description`, the social links,
+  `possible_spam`, `verified_collection`, `floor_price*`, and the `synced_at` / `created_date` timestamps are
+  off-chain, bring your own collection directory and floor source, or drop them.
+
+**Good to know**
+- `name` / `symbol` can be null for some ERC-1155 collections (no onchain name), expected, not an error.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a database, see **Run a recipe** (quickstart).
+- The recipe below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Backfill from the collection's deploy block.** Collection metadata is recorded at deployment, so the
+`nftCollectionMetadata` recipe needs the collection's **deploy block** indexed (run `historical` / `hybrid` from an
+early block; for arbitrary collections, full history). See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Collection name, symbol, type | `nftCollectionMetadata` | `nft_collection_metadata` |
+| Realized sale history (`last_sale`), optional | `nftTrades` | marketplace trades per token |
+
+`nftCollectionMetadata` lands one row per collection (from its deployment), mirroring this endpoint's onchain
+fields. It's the same recipe behind the collection name and symbol in the [wallet NFTs](/data-feeds/migration/wallet-nfts)
+and [NFT metadata](/data-feeds/migration/nft-multiple) guides.
+
+### Step 2: Query a collection's metadata
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getCollectionMetadata(contract: string) {
+  const { rows } = await pool.query(
+    `SELECT token_address, name, symbol, contract_type
+     FROM nft_collection_metadata WHERE token_address = $1`,
+    [contract.toLowerCase()],
+  );
+  return rows[0] ?? null;
+}
+```
+
+### Step 3: Add the extras you want
+
+The logo, banner, category, description, social links, spam and verification flags, and floor price are off-chain,
+so layer them in from your own source keyed by `token_address`, and join `nftTrades` for the last-sale history.
+
+## Other ways to consume this data
+
+The sink is the smoothest path, but the **same feed** is available however you prefer to build, all reading the one
+data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at the
+  feed and keep a collection registry fresh as new collections deploy.
+- **REST / Arrow Flight.** Read the decoded block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`),
+  for Ethereum, namespace `0x1`, topic `master-4`.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query collection metadata straight from
+  **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades), or **add yourself** (off-chain).
+
+| `/nft/:address/metadata` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `name`, `symbol`, `contract_type` | `nft_collection_metadata.*` | exact |
+| `last_sale` (facts) | `nftTrades` | exact |
+| `last_sale` USD | `nftTrades` + price feed | calculated |
+| `collection_logo`, `banner`, `category`, `description`, social links | add yourself | off-chain |
+| `possible_spam`, `verified_collection` | add yourself | off-chain |
+| `floor_price`, `floor_price_usd`, `floor_price_currency` | add yourself | off-chain |
+| `synced_at`, `created_date` | add yourself | off-chain |
+
+## Good to know
+
+- **A purpose-built feed mirrors this endpoint** on the onchain core; the editorial and floor layer is off-chain
+  (the same handling as [ERC-20 metadata](/data-feeds/migration/erc20-metadata) and the NFT guides).
+- **`name`/`symbol` can be null** for some 1155 collections.
+- **Backfill from the collection's deploy block.**
+- **Freshness.** Current-state on Postgres or MySQL; ClickHouse for real-time and hybrid modes.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `nftCollectionMetadata`, `nftTrades`
+- Related guides: [NFT metadata (batch)](/data-feeds/migration/nft-multiple) · [Wallet NFTs](/data-feeds/migration/wallet-nfts) · [ERC-20 token metadata](/data-feeds/migration/erc20-metadata)
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

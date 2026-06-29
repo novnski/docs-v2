@@ -1,0 +1,222 @@
+---
+title: "Wallet token balances & prices"
+description: "Move /wallets/:address/tokens onto Moralis Data Feeds and serve a wallet's balances and prices from the same decoded onchain data lake that powers Moralis, in real time, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, every balance, transfer, swap, and
+price, as a real-time stream you own. This guide moves your `/wallets/:address/tokens` integration onto Data
+Feeds, so a wallet's balances and prices come straight from that data lake, with **no per-call limits** and full
+control over how you store, serve, and query them.
+
+```
+GET /wallets/:address/tokens
+```
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however
+fits your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**),
+**land it with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery,
+Spark, DuckDB, dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For a request/response need like wallet balances, the **sink** is the smoothest path, so we'll use it here.
+([Other ways to consume it](#other-ways-to-consume-this-data) are below.)
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. Here's how it
+applies to wallet balances, so you can plan with confidence:
+
+**Comes through exactly**
+- **Balances** (`balance`, `balance_formatted`), straight from the chain.
+- **Token details** (`name`, `symbol`, `decimals`, `total_supply`), from the token contract.
+
+**Calculated for you, from real trades**
+- **Prices and USD values** (`usd_price`, `usd_value`, `portfolio_percentage`, 24-hour changes) come from live
+  onchain DEX activity. They track the old endpoint closely; because the pricing source is real trades rather
+  than the legacy pricing engine, compare with a small tolerance rather than expecting an exact match.
+
+**Yours to control**
+- **Which tokens count.** You get every token the wallet holds, then apply your own spam, dust, or liquidity
+  rules to match exactly your definition of a real holding (no more wrestling with fixed filters).
+
+**Add the extras you want**
+- `logo`, `thumbnail`, `possible_spam`, `verified_contract`, `security_score` are off-chain signals layered on
+  top of the chain, so they're not in the feed. Drop them, bring your own lists, or layer in a token list, see
+  [step 4](#step-4-add-the-extras-you-want).
+
+**Good to know**
+- Prices come from DEX activity, so a token that hasn't traded recently may not have a price yet.
+
+## Before you begin
+
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- The four recipes below applied to that database.
+- Your `MORALIS_API_KEY` and the chain you're indexing.
+
+<Note>
+**Plan for full history.** A wallet's balances are *current state*, the cumulative result of every transfer
+that ever touched it, and a wallet can still hold a token it last moved years ago. So to return a complete
+balance set, the balance recipes need to backfill **the full history** of the chain (run them `historical` or
+`hybrid` from an early block). Prices, by contrast, only need as far back as you want price history. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipes
+
+A wallet's enriched balances draw on four parts of the dataset, so you'll switch on four recipes, each a
+ready-to-run bundle that lands and maintains its table for you:
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| ERC-20 balances per wallet | `tokenBalancesByWalletAddress` | `token_balances` |
+| Native (e.g. ETH) balance | `nativeBalances` | `native_balances` |
+| Token details (name, symbol, decimals, supply) | `tokenMetadata` | `token_metadata` |
+| Live USD price | `tokenPriceHistory` | `token_price_updates` |
+
+Point each recipe's bundle at the same database and start it.
+
+<Note>
+You assemble this from the four recipes above, joined in a view (Step 2), which gives you full control over
+filtering and pricing today. A single pre-joined recipe could collapse it into one step in future, but the
+composition is the supported path now.
+</Note>
+
+### Step 2: Bring it together in one view
+
+Join the four tables into a single view that also does the math the old endpoint did for you. Here's a Postgres
+example to adapt to your sink (the USD columns are calculated, as noted in [What to expect](#what-to-expect)):
+
+```sql
+CREATE VIEW wallet_token_balances_price AS
+WITH latest_price AS (
+  SELECT DISTINCT ON (token_address)
+         token_address, usd_price
+  FROM   token_price_updates
+  ORDER  BY token_address, block_number DESC      -- newest price per token
+)
+SELECT
+  b.wallet_address,
+  b.token_address,
+  m.symbol,
+  m.name,
+  m.decimals,
+  b.balance                                          AS balance_raw,
+  b.balance / power(10, m.decimals)                  AS balance_formatted,
+  p.usd_price,
+  (b.balance / power(10, m.decimals)) * p.usd_price  AS usd_value,
+  m.total_supply,
+  b.balance / NULLIF(m.total_supply, 0)              AS percentage_relative_to_total_supply
+FROM token_balances b
+LEFT JOIN token_metadata m ON m.token_address = b.token_address
+LEFT JOIN latest_price   p ON p.token_address = b.token_address
+WHERE b.balance > 0;
+```
+
+A few finishing touches to match the old response shape:
+
+- **Portfolio percentage**, add `usd_value / SUM(usd_value)` per wallet at query time (next step).
+- **Native token**, `UNION` the `native_balances` table, priced with the native asset's USD mark.
+- **24-hour change**, compare each token's current price with its price ~24 hours ago in `token_price_updates`.
+- **Spam / dust**, apply your own list or thresholds whenever you want to hide them.
+
+### Step 3: Query it from your app
+
+Query the view directly, with keyset pagination on `token_address`, the same idea as the old cursor:
+
+```ts
+import { Pool } from 'pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+async function getWalletTokens(wallet: string, limit = 100, afterToken?: string) {
+  const { rows } = await pool.query(
+    `SELECT *,
+            usd_value / NULLIF(SUM(usd_value) OVER (), 0) * 100 AS portfolio_percentage
+     FROM wallet_token_balances_price
+     WHERE wallet_address = $1
+       AND ($2::text IS NULL OR token_address > $2)   -- keyset pagination
+     ORDER BY token_address
+     LIMIT $3`,
+    [wallet.toLowerCase(), afterToken ?? null, limit],
+  );
+
+  const nextCursor = rows.length === limit ? rows[rows.length - 1].token_address : null;
+  return { result: rows, nextCursor };
+}
+```
+
+That's it, you're serving wallet balances and prices from a dataset you own, in real time, with no per-call
+limits and the freedom to query it any way you like.
+
+### Step 4: Add the extras you want
+
+`logo`, `thumbnail`, `possible_spam`, `verified_contract`, and `security_score` are off-chain signals, so
+they're not part of the onchain dataset. When you want them, you've got options:
+
+- **Skip them** if your app doesn't use them.
+- **Bring your own source**, a public token list for logos, or your own allow/deny lists for spam and
+  verification.
+- **Layer them in** from a dedicated metadata source alongside your Data Feeds tables.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for balances, but the **same feed** is available however you prefer to build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at Data
+  Feeds and process blocks as they land, no client changes. Great for event-driven balance updates.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Ethereum, namespace `0x1`, topic
+  `master-4`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded arrays the recipes project from (`tokenTransfers`,
+  `tokenPriceUpdates`, …). Arrow Flight (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query it straight from **Snowflake, BigQuery,
+  Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+See the **Data Feeds API reference** and **protocol guides** (Kafka / AMQP / SQS / Arrow Flight / Iceberg) for
+connection details.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain signal).
+
+| `/wallets/:address/tokens` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address` | `token_balances.token_address` | exact |
+| `balance` (raw) | `token_balances.balance` | exact |
+| `balance_formatted` | derive: `balance / 10^decimals` | exact |
+| `name`, `symbol`, `decimals` | `token_metadata.*` | exact |
+| `total_supply(_formatted)` | `token_metadata.total_supply` | exact |
+| `usd_price` | latest `token_price_updates.usd_price` | calculated |
+| `usd_value` | derive: `balance_formatted × usd_price` | calculated |
+| `usd_price_24hr_*` | derive from price history | calculated |
+| `portfolio_percentage` | derive: `usd_value / Σ usd_value` | calculated |
+| `percentage_relative_to_total_supply` | derive: `balance / total_supply` | exact |
+| `native_token` + native balance | `native_balances` | exact |
+| `logo`, `thumbnail` | add yourself | off-chain |
+| `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
+
+## Good to know
+
+- **USD values come from real trades** on DEXes, very close to the old endpoint, best compared with a
+  tolerance; a thinly-traded token may not have a price yet.
+- **You decide what counts as a holding**, no fixed spam filter, so add your own rules to hide dust.
+- **Freshness**, balances are current-state on Postgres or MySQL. For real-time updates, follow the recipe
+  README (ClickHouse is recommended for real-time and hybrid modes).
+- **Native value**, `native_balances` gives the raw native balance; price it with the native asset's USD mark.
+- **No wallet-size limit**, the old endpoint caps very large wallets; your own dataset has none.
+
+## Related
+
+- Run a recipe, quickstart
+- Recipe reference: `tokenBalancesByWalletAddress`, `nativeBalances`, `tokenMetadata`, `tokenPriceHistory`
+- Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
+- Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

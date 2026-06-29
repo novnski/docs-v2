@@ -1,0 +1,65 @@
+---
+title: "History & backfill: how far back do you need to index?"
+description: "Some Data Feeds answers need full history to be correct (balances, holders); others only need as much history as you want to show (swaps, logs, prices). Here's how to tell, and how to scope your backfill."
+---
+
+When you move an endpoint onto Data Feeds, one early decision shapes your setup cost: **how far back does the
+sink need to index?** Get it right and you avoid both wasted backfill and, more importantly, silently wrong
+results. The answer depends on whether the endpoint returns **current state** or an **event list**.
+
+## The rule of thumb
+
+> **Current-state answers need full history. Event-list answers need only as much history as you want to show.**
+
+### Current state → needs full history
+Balances, holders, approvals, native balances, total supply, token metadata, these describe **what is true
+right now**, and "right now" is the cumulative result of **every past event**. You can't know a wallet's current
+balance without its most recent transfer, and that transfer could have happened at any point since the token
+launched.
+
+Data Feeds make this efficient, each transfer carries the **absolute balance after it** (`*PostBalance`), so a
+recipe just keeps the *latest* observation per holder rather than replaying every delta. But "latest" still
+means you must have **seen** each holder's most recent transfer. Start indexing too late and you simply **miss**
+every holder whose last activity predates your start, an incomplete, quietly wrong result.
+
+So for correctness, backfill from the beginning of the relevant history:
+
+- **By a single token** (e.g. all holders of token X) → from **that token's first block** (its deployment).
+  You don't need chain genesis, just everything since the token existed. Much cheaper.
+- **By a wallet across all tokens** (e.g. a wallet's full balance set) → effectively **full history**, because
+  the wallet may still hold something it last touched years ago.
+
+### Event list → your choice
+Swaps, transfers, raw logs, price history, NFT trades, a wallet's activity feed, these are **append-only
+streams of past events**. Each event is independent, so there's no cumulative state to reconstruct. Backfill is
+purely a **product decision**: how much history do you want to display or analyze?
+
+- Only need new activity from now on? Run **realtime** with no backfill.
+- Want the last 90 days, or since a token launched, or everything? Backfill to that point.
+- Either way the data is correct, you're just choosing the window.
+
+## Quick reference
+
+| If the endpoint returns… | Type | Backfill you need |
+|---|---|---|
+| Token holders / balances **by token** | current state | from the **token's first block** |
+| Wallet token balances / net worth **by wallet** | current state | **full history** |
+| Native balance, approvals, total supply | current state | full history (or token's first block, if token-scoped) |
+| Token metadata (name/symbol/decimals) | current state | back to the **token's deployment** (or read from chain) |
+| Swaps / transfers / logs / prices / trades / wallet activity | event list | **your choice** (realtime, or any window) |
+
+## How to set it
+
+Recipes run in three modes, **historical** (backfill a window), **realtime** (live tail), or **hybrid**
+(backfill then hand off to live). For current-state answers, use historical or hybrid with the start block set
+to the beginning of the relevant history (`MORALIS_HISTORICAL_FROM_BLOCK`); for event lists, pick whatever
+window your product needs, or realtime-only.
+
+<Note>
+**Scope your backfill to save time.** Indexing a single token's holders from its deployment block is far
+cheaper than indexing the whole chain from genesis. Only the broad, by-wallet/chain-wide current-state cases
+truly need full history.
+</Note>
+
+Each migration guide states the specific answer for its endpoint up front, so you can size the backfill before
+you start.
