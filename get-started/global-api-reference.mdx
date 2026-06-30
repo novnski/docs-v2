@@ -84,16 +84,12 @@ The most powerful Token API in Web3 — fetch, analyse, and monitor ERC-20 token
 
 | Endpoint | Description |
 | :--- | :--- |
-| [Filtered Tokens](/data-api/evm/token/discovery/filtered-tokens) | Search tokens with advanced filters. |
 | [Token Categories](/data-api/evm/token/discovery/token-categories) | Get available token categories. |
-| [Top Gainers](/data-api/evm/token/discovery/top-gainers) | Get tokens with the highest price gains. |
-| [Top Losers](/data-api/evm/token/discovery/top-losers) | Get tokens with the largest price drops. |
 
 #### Signals
 
 | Endpoint | Description |
 | :--- | :--- |
-| [Snipers](/data-api/evm/token/signals/snipers) | Detect sniper activity on a token. |
 | [Top Traders](/data-api/evm/token/signals/top-traders) | Get top profitable traders for a token. |
 
 ### EVM NFT API
@@ -156,13 +152,6 @@ Everything needed to build NFT experiences: metadata, ownership, transfers, sale
 | [NFTs by Traits](/data-api/evm/nft/traits/nfts-by-traits) | Filter NFTs by trait values. |
 | [Traits by Collection](/data-api/evm/nft/traits/traits-by-collection) | Get all traits for a collection. |
 | [Traits by Collection (Paginated)](/data-api/evm/nft/traits/traits-by-collection-paginated) | Paginated trait data for a collection. |
-
-#### Discovery
-
-| Endpoint | Description |
-| :--- | :--- |
-| [NFTs by Market Cap](/data-api/evm/nft/discovery/nfts-by-market-cap) | Top NFT collections by market cap. |
-| [NFTs by Volume](/data-api/evm/nft/discovery/nfts-by-volume) | Top NFT collections by trading volume. |
 
 #### Utilities
 
@@ -272,19 +261,10 @@ Core block-level data, logs, and internal transactions for EVM chains.
 | Endpoint | Description |
 | :--- | :--- |
 | [Token Search](/data-api/solana/token/search-and-discovery/token-search) | Search for Solana tokens by name or symbol. |
-| [Filtered Tokens](/data-api/solana/token/search-and-discovery/filtered-tokens) | Search tokens with advanced filters. |
-| [Top Gainers](/data-api/solana/token/search-and-discovery/top-gainers) | Get tokens with the highest price gains. |
-| [Top Losers](/data-api/solana/token/search-and-discovery/top-losers) | Get tokens with the largest price drops. |
 | [Pump.fun New Tokens](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) | Get newly created Pump.fun tokens. |
 | [Pump.fun Bonding Tokens](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) | Get Pump.fun tokens in bonding phase. |
 | [Pump.fun Bonding Status](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status) | Get bonding status for a Pump.fun token. |
 | [Pump.fun Graduated Tokens](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) | Get graduated Pump.fun tokens. |
-
-**Signals**
-
-| Endpoint | Description |
-| :--- | :--- |
-| [Snipers](/data-api/solana/token/advanced-signals/snipers) | Detect sniper activity on a Solana token. |
 
 #### Solana NFT API
 
@@ -314,10 +294,7 @@ Cross-chain data covering token analytics, entity data, and market metrics.
 | [Token Score](/data-api/universal/token/score/token-score) | Get cross-chain safety / quality score. |
 | [Token Score Timeseries](/data-api/universal/token/score/token-score-timeseries) | Historical token score data. |
 | [Token Search](/data-api/universal/token/search/token-search) | Search tokens across all chains. |
-| [Filtered Tokens](/data-api/universal/token/filtered-tokens) | Search tokens with advanced filters. |
 | [Trending Tokens](/data-api/universal/token/trending-tokens) | Get currently trending tokens. |
-| [Top Gainers](/data-api/universal/token/top-gainers) | Get top gaining tokens across chains. |
-| [Top Losers](/data-api/universal/token/top-losers) | Get top losing tokens across chains. |
 
 #### Entity API
 
@@ -327,15 +304,6 @@ Cross-chain data covering token analytics, entity data, and market metrics.
 | [Entity by ID](/data-api/universal/entity/endpoints/entity-by-id) | Get entity details by ID. |
 | [Entity by Category](/data-api/universal/entity/endpoints/entity-by-category) | Get entities filtered by category. |
 | [Entity Categories](/data-api/universal/entity/endpoints/entity-categories) | List all entity categories. |
-
-#### Trading Stats API
-
-| Endpoint | Description |
-| :--- | :--- |
-| [Trading Stats](/data-api/universal/global/endpoints/trading-stats) | Get global trading statistics. |
-| [Trading Stats by Category](/data-api/universal/global/endpoints/trading-stats-category) | Get trading stats filtered by category. |
-| [Trading Stats Timeseries](/data-api/universal/global/endpoints/trading-stats-timeseries) | Historical global trading data. |
-| [Trading Stats Category Timeseries](/data-api/universal/global/endpoints/trading-stats-category-timeseries) | Historical trading data by category. |
 
 ### Streams API
 
@@ -390,11 +358,3 @@ Real-time blockchain event streaming via webhooks. Create and manage streams tha
 | :--- | :--- |
 | [Get Webhook Data by Block](/streams/api-reference/streams/get-webhook-data-by-block-number) | Get webhook payload for a specific block. |
 | [Send Webhook Data by Block](/streams/api-reference/streams/send-webhook-data-by-block-number) | Manually trigger webhook for a block. |
-
-### Cortex API
-
-AI-powered blockchain data query engine.
-
-| Endpoint | Description |
-| :--- | :--- |
-| [Chat](/data-api/cortex-api/chat) | Query blockchain data using natural language. |
