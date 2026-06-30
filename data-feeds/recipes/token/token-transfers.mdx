@@ -3,6 +3,15 @@ title: "Token Transfers"
 description: "Sync every ERC-20 token transfer — by token or by wallet — as a flat, ordered event log into your own database."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /erc20/{address}/transfers", guide: "token-transfers", label: "Token transfers (by contract)" },
+    { path: "GET /{address}/erc20/transfers", guide: "wallet-erc20-transfers", label: "Wallet ERC-20 transfers" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every ERC-20 transfer — all transfers of token **0x…**, or every transfer wallet **0x…** sent or received."

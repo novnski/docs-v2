@@ -3,6 +3,16 @@ title: "Token Holders"
 description: "Sync the full holder list of a token — every non-zero wallet, its current balance, and a best-effort USD value — as a continuously updated table in your own database. Mirrors the Moralis GET /erc20/{address}/owners endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /erc20/{address}/owners", guide: "erc20-owners", label: "Token owners (holders)" },
+    { path: "GET /erc20/{address}/holders", guide: "erc20-holders", label: "Token holders summary" },
+    { path: "GET /erc20/{address}/holders/historical", guide: "holders-historical", label: "Historical token holders" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Who holds token **0x…** — with their current balance and USD value? Give me the full holder list, biggest first."

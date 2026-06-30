@@ -3,6 +3,16 @@ title: "Wallet History"
 description: "Reconstruct a wallet's full chronological event feed — every transfer, swap, NFT move, approval, and LP change, with USD value per event — as a continuous sync into your own database."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /wallets/{address}/history", guide: "wallet-history", label: "Wallet transaction history" },
+    { path: "GET /{address}", guide: "wallet-native-txns", label: "Wallet native transactions" },
+    { path: "GET /{address}/erc20/transfers", guide: "wallet-erc20-transfers", label: "Wallet ERC-20 transfers" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Show me the full chronological event feed for wallet **0x…**, newest first. Each row is one event with its actual payload — counterparty, amounts, token IDs, pair address, USD value — and I can filter by event type."

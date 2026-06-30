@@ -3,6 +3,14 @@ title: "Token Metadata"
 description: "Sync ERC-20 token metadata — name, symbol, decimals, total supply, and deployer — captured at deploy time into your own database. Mirrors the Moralis GET /erc20/metadata endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /erc20/metadata", guide: "erc20-metadata", label: "ERC-20 token metadata" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me the ERC-20 metadata — `name` / `symbol` / `decimals` / `total_supply` — for token **0x…**." Mirrors Moralis `GET /erc20/metadata`.

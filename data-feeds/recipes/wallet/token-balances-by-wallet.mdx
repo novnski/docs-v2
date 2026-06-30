@@ -3,6 +3,16 @@ title: "Token Balances by Wallet"
 description: "Sync every ERC-20 token a wallet holds, with its current non-zero balance, into your own database — a portfolio lookup that's a single prefix scan."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /wallets/{address}/tokens", guide: "wallet-tokens", label: "Wallet token balances & prices" },
+    { path: "GET /{address}/erc20", guide: "wallet-erc20", label: "Wallet ERC-20 balances" },
+    { path: "GET /wallets/{address}/net-worth", guide: "wallet-networth", label: "Wallet net worth" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every token wallet **0x…** holds, with its current non-zero balance."

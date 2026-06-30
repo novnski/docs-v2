@@ -3,6 +3,14 @@ title: "NFT Transfers"
 description: "Sync every ERC-721 / ERC-1155 transfer — by contract, by wallet, or for a single (contract, token_id) — as a flat event log into your own database."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /{address}/nft/transfers", guide: "wallet-nft-transfers", label: "Wallet NFT transfers" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every NFT transfer — by contract **0x…**, by wallet **0x…**, or for a single `(contract, token_id)`."

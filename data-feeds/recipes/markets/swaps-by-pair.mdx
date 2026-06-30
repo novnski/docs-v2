@@ -3,6 +3,14 @@ title: "Swaps by Pair"
 description: "Sync every DEX trade on a pool/pair — direct pool fills and aggregator-routed trades, USD-enriched in-block — keyed by pool address so a pair's trade feed is a prefix scan, into your own database."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /pairs/{address}/ohlcv", guide: "pair-ohlcv", label: "Pair OHLCV candlesticks" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every DEX trade on pool/pair **0x…**, newest first — each row is one trade with both token legs, the side, the protocol, and a USD notional."

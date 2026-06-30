@@ -3,6 +3,15 @@ title: "Token Prices"
 description: "Sync a token's full USD / native mark price history — every in-block price update for each pair and protocol — as a continuous feed into your own database, with a carry-forward latest mark for valuing quiet positions."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /erc20/{address}/price", guide: "erc20-price", label: "ERC-20 token price" },
+    { path: "GET /erc20/prices", guide: "erc20-prices", label: "ERC-20 token prices (batch)" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me the USD / native mark price history for token **0x…**, newest first — and the freshest mark right now so I can value a position that hasn't traded recently."

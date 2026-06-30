@@ -3,6 +3,14 @@ title: "Native Balances"
 description: "Sync each wallet's current native-asset (ETH/MATIC/…) balance into your own database, kept current from per-block onchain data. Mirrors the Moralis GET /{address}/balance and GET /wallets/balances endpoints."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /{address}/balance", guide: "native-balance", label: "Wallet native balance" },
+  ]}
+/>
+
 ### Question it answers
 
 > "What is wallet **0x…**'s current native-asset (ETH / MATIC / …) balance?"

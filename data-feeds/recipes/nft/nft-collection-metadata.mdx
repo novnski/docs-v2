@@ -3,6 +3,15 @@ title: "NFT Collection Metadata"
 description: "Sync the on-chain metadata of every NFT collection — name, symbol, and contract type (ERC-721 / ERC-1155) — keyed by collection address, into your own database. Mirrors the Moralis GET /nft/{address}/metadata endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /nft/{address}/metadata", guide: "nft-collection-metadata", label: "NFT collection metadata" },
+    { path: "GET /nft/{address}", guide: "nfts-by-contract", label: "NFTs by contract" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me the collection metadata — name, symbol, contract type — for NFT collection **0x…**." Mirrors Moralis `GET /nft/{address}/metadata`.

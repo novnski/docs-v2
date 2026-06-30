@@ -3,6 +3,15 @@ title: "NFTs by Wallet"
 description: "Sync every NFT a wallet currently holds — collection, token ID, contract type, and balance — as a continuously updated holdings table in your own database. Mirrors the Moralis GET /{address}/nft endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /{address}/nft", guide: "wallet-nfts", label: "Wallet NFTs" },
+    { path: "GET /{address}/nft/collections", guide: "wallet-nft-collections", label: "Wallet NFT collections" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every NFT wallet **0x…** currently holds — each row is a `(collection, token_id)` it owns, with the ERC-721/ERC-1155 contract type and current balance."

@@ -3,6 +3,15 @@ title: "NFT Owners by Contract"
 description: "Sync the current owner set for an NFT collection — every wallet holding a token_id, with live counts for ERC-1155 editions — into your own database. Mirrors the Moralis GET /nft/{address}/owners endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /nft/{address}/owners", guide: "nft-owners", label: "NFT owners by contract" },
+    { path: "GET /nft/{address}", guide: "nfts-by-contract", label: "NFTs by contract" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every current owner of NFT collection **0x…** — each `token_id`, the wallet that holds it, and how many (ERC-1155 editions)." Mirrors Moralis `GET /nft/{address}/owners`.

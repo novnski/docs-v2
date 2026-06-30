@@ -3,6 +3,14 @@ title: "Token Approvals"
 description: "Sync the current ERC-20 allowances a wallet has granted — and to whom — as a continuous, reorg-safe feed into your own database. Mirrors the Moralis GET /wallets/{address}/approvals endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /wallets/{address}/approvals", guide: "wallet-approvals", label: "Wallet token approvals" },
+  ]}
+/>
+
 ### Question it answers
 
 > "What ERC-20 allowances has wallet **0x…** granted, and to whom?" Mirrors Moralis `GET /wallets/{address}/approvals`.

@@ -3,6 +3,14 @@ title: "Pair OHLCV"
 description: "Sync time-bucketed OHLCV candles — open, high, low, close, volume, and trade count per DEX pair — built by aggregating on-chain swaps, into your own database. Mirrors the Moralis GET /pairs/{address}/ohlcv endpoint."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /pairs/{address}/ohlcv", guide: "pair-ohlcv", label: "Pair OHLCV candlesticks" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me 1-hour OHLCV candles for pool/pair **0x…** — open, high, low, close, volume, and trade count per hour." Mirrors Moralis `GET /pairs/{address}/ohlcv`.

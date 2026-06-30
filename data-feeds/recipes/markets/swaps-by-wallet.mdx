@@ -3,6 +3,14 @@ title: "Swaps by Wallet"
 description: "Sync every DEX trade made by a wallet — pool fills and aggregator-routed trades, USD-enriched at block time — keyed for by-trader lookups in your own database."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /wallets/{address}/swaps", guide: "wallet-swaps", label: "Wallet swaps" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me every DEX trade made by wallet **0x…**, newest first — direct pool fills and aggregator-routed trades alike, each with its USD notional, side, and protocol."

@@ -3,6 +3,15 @@ title: "Token Balances by Token"
 description: "Sync the current non-zero balance of every wallet that holds a given token into your own database — the holder list behind a token, latest-wins per wallet."
 ---
 
+import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
+
+<RecipeMigrationCallout
+  items={[
+    { path: "GET /erc20/{address}/owners", guide: "erc20-owners", label: "Token owners (holders)" },
+    { path: "GET /erc20/{address}/holders", guide: "erc20-holders", label: "Token holders summary" },
+  ]}
+/>
+
 ### Question it answers
 
 > "Give me the non-zero balance of every wallet that holds token **0x…**, largest first."
