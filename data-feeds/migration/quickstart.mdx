@@ -1,96 +1,138 @@
 ---
-title: "Quickstart: run your first recipe"
-description: "Get live, decoded onchain data flowing into your own database in about ten minutes. Start a recipe, watch it fill, and query your first rows."
+title: "Quickstart: run your first sink"
+description: "Get live, decoded onchain data flowing into your own database in about ten minutes. Generate a sink starter pack, run it with Docker, and query your first rows."
 ---
 
 This quickstart takes you from nothing to **live onchain data in your own database** in about ten minutes.
-You will start a **recipe** (we use ERC-20 transfers), let the **sink** fill your database, and run your first
-query. From there, the [Migration guides](/data-feeds/migration/overview) and other [recipes](https://docs.moralis.com/data-feeds/recipes/overview) follow
-the same pattern.
+You generate a **sink starter pack** in the Admin Panel, run it with Docker, and query your first rows. Every
+[recipe](https://docs.moralis.com/data-feeds/recipes/overview) and [migration guide](/data-feeds/migration/overview)
+then follows the same pattern.
 
 ## Before you begin
 
-- **Docker** and Docker Compose installed.
-- A **Data Feeds API key**. [Request access](https://moralis.com/data-feeds/request-access) if you do not have
-  one yet.
-- The **recipe bundle** (the `recipes` folder you were given with your access), which includes a
-  `docker-compose` for a local ClickHouse plus the sink.
+- **Docker** and Docker Compose installed and running.
+- A **Data Feeds API key** (`cm_live_...`). [Request access](https://moralis.com/data-feeds/request-access) if
+  you do not have one.
+- Access to the **Moralis Admin Panel**, where you generate the sink config.
 
-We will use **ClickHouse** as the destination, the recommended store for live data. See
-[Destinations](/data-feeds/concepts/destinations) for when to choose Postgres or MySQL instead.
+## Step 1: Generate your sink starter pack
 
-## Step 1: Add your key
+In the Admin Panel, configure a sink — pick your **chain**, **topic**, and **destination database** — and
+download the **starter pack** (`continuum-sink-starter.zip`). Unzip it. You get:
 
-From the recipe bundle, copy the example environment file and add your key and the chain you want to index:
-
-```bash
-cd recipes
-cp .env.example .env
-```
-
-```bash
-# .env
-MORALIS_API_KEY=your_data_feeds_key      # the cm_live_... key from your access
-MORALIS_CHAIN_ID=1                        # 1 = Ethereum. See /get-started/chains
-```
+| File | What it is |
+|---|---|
+| `sink-config.yaml` | The sink config you generated — Continuum URL, `namespace` (chain), `topic`, and destination. |
+| `docker-compose.yml` | Brings up the sink (`moralisweb3/continuum-sink`) plus a local PostgreSQL. |
+| `.env` | Your API key and DB password. **Do not commit or share it.** |
+| `schema.sql` | DDL for the destination table(s), auto-applied to Postgres on first start. |
+| `README.txt` | The same steps you are reading here. |
 
 <Note>
-**Keep your key private.** It is a live credential. Never commit `.env` or paste the key into shared docs or
-chat.
+**`namespace` is the chain, as a hex chain ID.** For example `0x1` is Ethereum, `0xa4b1` is Arbitrum One. See
+the [chain reference](#chain-reference) below. `topic` (e.g. `master-3`) is the master block stream the sink
+reads.
 </Note>
 
-## Step 2: Start the stack
+## Step 2: Add your API key
 
-Bring up the local ClickHouse and the sink:
-
-```bash
-docker compose -f docker-compose.recipes.yml up -d
-```
-
-## Step 3: Run the recipe
-
-Point the `tokenTransfers` recipe at ClickHouse and start it:
+Open `.env` and confirm your key is set — the generated file sometimes ships with a **blank or placeholder**
+key:
 
 ```bash
-./run-recipe.sh tokenTransfers clickhouse
+# .env  (do not commit)
+MORALIS_API_KEY=cm_live_...      # your full key — the sink fails with "api_key is required" if blank
+SINK_PG_PASSWORD=...             # already set for the bundled Postgres
 ```
 
-The sink backfills a window of history, then tails live blocks automatically (this is **hybrid** mode, see
-[Modes](/data-feeds/concepts/modes)). Within a minute or so it begins writing transfer rows.
+<Warning>
+**Keep your key private.** It is a live credential. Never commit `.env` or paste the key into shared docs or
+chat. If a key leaks, rotate it.
+</Warning>
+
+## Step 3: Start the stack
+
+From the unzipped directory:
+
+```bash
+docker compose up -d
+```
+
+This starts PostgreSQL (with `schema.sql` applied) and the sink. The sink reads a backfill window from the
+upstream S3 store, then tails live blocks. Watch it work:
+
+```bash
+docker compose logs -f sink
+```
+
+<Tip>
+**Querying from your own app on the host?** The bundled Postgres is only reachable inside the Docker network
+by default. Add a port mapping to the `postgres` service so you can connect from your machine:
+
+```yaml
+  postgres:
+    ports:
+      - "5544:5432"
+```
+
+Then connect to `localhost:5544` (user/db `sdf`, password from `.env`).
+</Tip>
 
 ## Step 4: Query your first rows
 
-Ask ClickHouse for the most recent transfers of a token. This example uses USDC on Ethereum:
+The default `tokenTransfers` config writes to a table named after your sink (here, `sdf`):
+
+```bash
+docker compose exec postgres psql -U sdf -d sdf -c \
+  "SELECT count(*), max(position) AS latest_block FROM public.sdf;"
+```
 
 ```sql
-SELECT block_number, from_address, to_address, amount, tx_hash
-FROM recipe_token_transfers.fact_token_transfers FINAL
-WHERE chain_id = 1
-  AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
-ORDER BY block_number DESC
+-- the most recent transfers
+SELECT position, tokenaddress, fromaddress, toaddress, value
+FROM public.sdf
+ORDER BY position DESC
 LIMIT 20;
 ```
 
-You should see rows arriving and advancing as new blocks land. That is live, decoded onchain data in a store
-you own.
+You should see the count climb as new blocks land. That is live, decoded onchain data in a store you own — no
+API quotas, no per-call limits.
 
-<Note>
-**Why `FINAL`?** Near the chain tip a block can be replaced by a reorg. ClickHouse recipes write a correcting
-row when that happens, and `FINAL` applies the correction so you always read the canonical result. See
-[Reorgs](/data-feeds/concepts/reorgs).
-</Note>
+## If no rows arrive
+
+The pipe has a few moving parts. Work down this list:
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `continuum.api_key is required` in sink logs | `MORALIS_API_KEY` blank in `.env` | Paste your full `cm_live_...` key, `docker compose up -d --force-recreate sink`. |
+| Sink logs stop after `s3-proxy reachable` and rows stay at 0 | Upstream S3 backfill stalled (e.g. "Partition not found") | Not your setup — confirm the chain/topic backfill is healthy with the team, then it resumes automatically. |
+| Can connect but app can't reach Postgres | No host port mapping | Add the `ports` block from Step 3. |
+
+## Chain reference
+
+`namespace` in `sink-config.yaml` is the chain's ID in hex:
+
+| Chain | Chain ID | `namespace` |
+|---|---|---|
+| Ethereum | 1 | `0x1` |
+| Optimism | 10 | `0xa` |
+| BNB Chain | 56 | `0x38` |
+| Polygon | 137 | `0x89` |
+| Base | 8453 | `0x2105` |
+| Arbitrum One | 42161 | `0xa4b1` |
+| Avalanche | 43114 | `0xa86a` |
 
 ## What just happened
 
-- A **recipe** (`tokenTransfers`) defined which onchain data to pull and the table shape to write.
-- The **sink** ran it against your **ClickHouse** destination, backfilling history then staying live.
-- You queried a normal SQL table, no API quotas, no per-call limits, yours to join and shape freely.
+- The **starter pack** carried a generated `sink-config.yaml` (chain, topic, destination) and a matching schema.
+- The **sink** (`moralisweb3/continuum-sink`) read the master block stream, backfilled history, then stayed live.
+- You queried a normal SQL table, yours to join and shape freely.
 
 ## Next steps
 
 - **Migrating an existing integration?** Find your endpoint in the [Migration guides](/data-feeds/migration/overview).
-- **Want a different dataset?** Browse the [recipes](https://docs.moralis.com/data-feeds/recipes/overview), swaps, balances, holders, prices,
-  NFT activity, and more. They all run the same way.
+- **Want a different dataset?** Browse the [recipes](https://docs.moralis.com/data-feeds/recipes/overview) — swaps, balances, holders, prices,
+  NFT activity. They all run the same way; swap the transform and schema.
 - **Understand the model:** [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds),
   [History & backfill](/data-feeds/concepts/history-and-backfill), and [Destinations](/data-feeds/concepts/destinations).
 - **Hit something surprising?** The [Troubleshooting](/data-feeds/migration/troubleshooting) page covers the common
