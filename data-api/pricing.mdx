@@ -22,9 +22,6 @@ These endpoints support both EVM and Solana chains.
 | [getTokenAnalytics](/data-api/universal/token/analytics/token-analytics) | 80 |
 | [getMultipleTokenAnalytics](/data-api/universal/token/analytics/token-analytics-multi) | 150 |
 | [getTimeSeriesTokenAnalytics](/data-api/universal/token/analytics/token-analytics-timeseries) | 200 |
-| [getFilteredTokens](/data-api/universal/token/filtered-tokens) | 250 |
-| [getTopGainersTokens](/data-api/universal/token/top-gainers) | 250 |
-| [getTopLosersTokens](/data-api/universal/token/top-losers) | 250 |
 | [getTrendingTokens](/data-api/universal/token/trending-tokens) | 150 |
 
 ### Entity API
@@ -35,15 +32,6 @@ These endpoints support both EVM and Solana chains.
 | [getEntity](/data-api/universal/entity/endpoints/entity-by-id) | 50 |
 | [getEntitiesByCategory](/data-api/universal/entity/endpoints/entity-by-category) | 50 |
 | [getEntityCategories](/data-api/universal/entity/endpoints/entity-categories) | 10 |
-
-### Volume & Market Data
-
-| Method | CU Cost |
-| --- | --- |
-| [getVolumeStatsByChain](/data-api/universal/global/endpoints/trading-stats) | 150 |
-| [getVolumeStatsByCategory](/data-api/universal/global/endpoints/trading-stats-category) | 150 |
-| [getTimeSeriesVolume](/data-api/universal/global/endpoints/trading-stats-timeseries) | 150 |
-| [getTimeSeriesVolumeByCategory](/data-api/universal/global/endpoints/trading-stats-category-timeseries) | 150 |
 
 ---
 
@@ -131,12 +119,8 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getSwapsByTokenAddress](/data-api/evm/token/swaps/token-swaps) | 50 |
 | [getSwapsByPairAddress](/data-api/evm/token/swaps/pair-swaps) | 50 |
 | [getPairStats](/data-api/evm/token/swaps/pair-stats) | 100 |
-| [getSnipersByPairAddress](/data-api/evm/token/signals/snipers) | 50 |
 | [getTopProfitableWalletPerToken](/data-api/evm/token/signals/top-traders) | 50 |
 | [getTokenCategories](/data-api/evm/token/discovery/token-categories) | 10 |
-| [getFilteredTokens](/data-api/evm/token/discovery/filtered-tokens) | 250 |
-| [getTopGainersTokens](/data-api/evm/token/discovery/top-gainers) | 250 |
-| [getTopLosersTokens](/data-api/evm/token/discovery/top-losers) | 250 |
 
 ### EVM NFT API
 
@@ -161,8 +145,6 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getNFTTraitsByCollection](/data-api/evm/nft/traits/traits-by-collection) | 50 |
 | [getNFTTraitsByCollectionPaginate](/data-api/evm/nft/traits/traits-by-collection-paginated) | 10 |
 | [getNFTByContractTraits](/data-api/evm/nft/traits/nfts-by-traits) | 50 |
-| [getTopNFTCollectionsByMarketCap](/data-api/evm/nft/discovery/nfts-by-market-cap) | 200 |
-| [getHottestNFTCollectionsByTradingVolume](/data-api/evm/nft/discovery/nfts-by-volume) | 200 |
 | [reSyncMetadata](/data-api/evm/nft/utilities/resync-nft-metadata) | 50 |
 | [resyncNFTRarity](/data-api/evm/nft/utilities/resync-nft-traits) | 10 |
 
@@ -232,7 +214,6 @@ Bitcoin endpoint costs mirror the closest Web3 API endpoint where applicable. Pe
 | [getSwapsByPairAddress](/data-api/solana/token/pairs/pair-swaps) | 50 |
 | [getPairStats](/data-api/solana/token/pairs/pair-stats) | 100 |
 | [getAggregatedTokenPairStats](/data-api/solana/token/market-metrics/token-analytics) | 80 |
-| [getSnipersByPairAddress](/data-api/solana/token/advanced-signals/snipers) | 50 |
 | [getNewTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) | 50 |
 | [getGraduatedTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) | 50 |
 | [getBondingTokensByExchange](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) | 50 |

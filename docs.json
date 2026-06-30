@@ -409,16 +409,12 @@
                     "group": "Search & Discovery",
                     "pages": [
                       "data-api/universal/token/search/token-search",
-                      "data-api/evm/token/discovery/filtered-tokens",
-                      "data-api/evm/token/discovery/top-gainers",
-                      "data-api/evm/token/discovery/top-losers",
                       "data-api/evm/token/discovery/token-categories"
                     ]
                   },
                   {
                     "group": "Advanced Signals",
                     "pages": [
-                      "data-api/evm/token/signals/snipers",
                       "data-api/evm/token/signals/top-traders"
                     ]
                   }
@@ -483,13 +479,6 @@
                       "data-api/evm/nft/traits/traits-by-collection",
                       "data-api/evm/nft/traits/traits-by-collection-paginated",
                       "data-api/evm/nft/traits/nfts-by-traits"
-                    ]
-                  },
-                  {
-                    "group": "Discovery",
-                    "pages": [
-                      "data-api/evm/nft/discovery/nfts-by-market-cap",
-                      "data-api/evm/nft/discovery/nfts-by-volume"
                     ]
                   },
                   {
@@ -614,19 +603,10 @@
                     "group": "Search & Discovery",
                     "pages": [
                       "data-api/solana/token/search-and-discovery/token-search",
-                      "data-api/solana/token/search-and-discovery/filtered-tokens",
-                      "data-api/solana/token/search-and-discovery/top-gainers",
-                      "data-api/solana/token/search-and-discovery/top-losers",
                       "data-api/solana/token/search-and-discovery/pump-fun-new-tokens",
                       "data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens",
                       "data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens",
                       "data-api/solana/token/search-and-discovery/pump-fun-bonding-status"
-                    ]
-                  },
-                  {
-                    "group": "Advanced Signals",
-                    "pages": [
-                      "data-api/solana/token/advanced-signals/snipers"
                     ]
                   }
                 ]
@@ -710,10 +690,7 @@
                   "data-api/universal/token/search/token-search",
                   "data-api/universal/token/score/token-score",
                   "data-api/universal/token/score/token-score-timeseries",
-                  "data-api/universal/token/filtered-tokens",
                   "data-api/universal/token/trending-tokens",
-                  "data-api/universal/token/top-gainers",
-                  "data-api/universal/token/top-losers",
                   "data-api/universal/token/analytics/token-analytics",
                   "data-api/universal/token/analytics/token-analytics-multi",
                   "data-api/universal/token/analytics/token-analytics-timeseries"
@@ -733,11 +710,7 @@
               {
                 "group": "Market Metrics API",
                 "pages": [
-                  "data-api/universal/market-metrics/overview",
-                  "data-api/universal/global/endpoints/trading-stats",
-                  "data-api/universal/global/endpoints/trading-stats-category",
-                  "data-api/universal/global/endpoints/trading-stats-timeseries",
-                  "data-api/universal/global/endpoints/trading-stats-category-timeseries"
+                  "data-api/universal/market-metrics/overview"
                 ]
               },
               {
@@ -750,13 +723,6 @@
                   "data-api/universal/entity/endpoints/entity-categories"
                 ]
               }
-            ]
-          },
-          {
-            "group": "Cortex API",
-            "pages": [
-              "data-api/cortex-api/overview",
-              "data-api/cortex-api/chat"
             ]
           },
           {
@@ -1877,7 +1843,26 @@
     { "source": "/rpc-nodes/index", "destination": "/rpc-nodes/overview" },
     { "source": "/data-api/universal/entity/index", "destination": "/data-api/universal/entity/overview" },
     { "source": "/data-api/universal/market-metrics/index", "destination": "/data-api/universal/market-metrics/overview" },
-    { "source": "/reference/weights-and-rate-limits", "destination": "/data-api/pricing" }
+    { "source": "/reference/weights-and-rate-limits", "destination": "/data-api/pricing" },
+    { "source": "/data-api/cortex-api/overview", "destination": "/changelog" },
+    { "source": "/data-api/cortex-api/chat", "destination": "/changelog" },
+    { "source": "/data-api/universal/token/top-gainers", "destination": "/changelog" },
+    { "source": "/data-api/universal/token/top-losers", "destination": "/changelog" },
+    { "source": "/data-api/universal/token/filtered-tokens", "destination": "/changelog" },
+    { "source": "/data-api/universal/global/endpoints/trading-stats", "destination": "/changelog" },
+    { "source": "/data-api/universal/global/endpoints/trading-stats-category", "destination": "/changelog" },
+    { "source": "/data-api/universal/global/endpoints/trading-stats-timeseries", "destination": "/changelog" },
+    { "source": "/data-api/universal/global/endpoints/trading-stats-category-timeseries", "destination": "/changelog" },
+    { "source": "/data-api/evm/token/discovery/top-gainers", "destination": "/changelog" },
+    { "source": "/data-api/evm/token/discovery/top-losers", "destination": "/changelog" },
+    { "source": "/data-api/evm/token/discovery/filtered-tokens", "destination": "/changelog" },
+    { "source": "/data-api/evm/token/signals/snipers", "destination": "/changelog" },
+    { "source": "/data-api/evm/nft/discovery/nfts-by-market-cap", "destination": "/changelog" },
+    { "source": "/data-api/evm/nft/discovery/nfts-by-volume", "destination": "/changelog" },
+    { "source": "/data-api/solana/token/advanced-signals/snipers", "destination": "/changelog" },
+    { "source": "/data-api/solana/token/search-and-discovery/top-gainers", "destination": "/changelog" },
+    { "source": "/data-api/solana/token/search-and-discovery/top-losers", "destination": "/changelog" },
+    { "source": "/data-api/solana/token/search-and-discovery/filtered-tokens", "destination": "/changelog" }
   ],
   "footer": {
     "links": [
