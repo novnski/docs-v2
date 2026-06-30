@@ -1,0 +1,77 @@
+---
+title: "Endpoint migration list"
+description: "Every covered Moralis REST API endpoint, mapped to its Data Feeds migration guide. Find the endpoint you call today and follow its guide field by field."
+---
+
+This is the full list of Moralis REST endpoints covered by a migration guide. Find the one you call today and
+open its guide — each one answers the same question: what happens to your exact response, field by field.
+
+New to Data Feeds first? Read the [migration overview](/data-feeds/migration/overview) for how the API and
+Data Feeds differ, then come back here to pick your endpoint.
+
+<Note>
+One endpoint often maps to **more than one recipe**. The "Headline fidelity" column tells you what to expect:
+**exact** comes straight from the chain, **calculated** is derived from live onchain activity (best compared
+with a small tolerance), and **add yourself** is an off-chain signal you bring or drop.
+</Note>
+
+## Wallet endpoints
+
+| Legacy endpoint | Guide | Headline fidelity |
+|---|---|---|
+| `GET /wallets/:address/tokens` | [Wallet token balances & prices](/data-feeds/migration/wallet-tokens) | balances exact, prices calculated |
+| `GET /:address/erc20` | [Wallet ERC-20 balances](/data-feeds/migration/wallet-erc20) | exact |
+| `GET /:address/balance` | [Wallet native balance](/data-feeds/migration/native-balance) | exact |
+| `GET /wallets/:address/history` | [Wallet transaction history](/data-feeds/migration/wallet-history) | exact, decode-yourself + off-chain labels |
+| `GET /:address` (native txns) | [Wallet native transactions](/data-feeds/migration/wallet-native-txns) | exact |
+| `GET /:address/erc20/transfers` | [Wallet ERC-20 transfers](/data-feeds/migration/wallet-erc20-transfers) | exact |
+| `GET /wallets/:address/swaps` | [Wallet swaps](/data-feeds/migration/wallet-swaps) | onchain exact, USD calculated |
+| `GET /wallets/:address/net-worth` | [Wallet net worth](/data-feeds/migration/wallet-networth) | calculated |
+| `GET /wallets/:address/approvals` | [Wallet token approvals](/data-feeds/migration/wallet-approvals) | exact, USD-at-risk calculated |
+| `GET /wallets/:address/chains` | [Wallet active chains](/data-feeds/migration/wallet-chains) | exact |
+| `GET /wallets/:address/stats` | [Wallet stats](/data-feeds/migration/wallet-stats) | exact |
+| `GET /:address/nft` | [Wallet NFTs](/data-feeds/migration/wallet-nfts) | onchain exact, metadata add-yourself |
+| `GET /:address/nft/transfers` | [Wallet NFT transfers](/data-feeds/migration/wallet-nft-transfers) | exact |
+| `GET /:address/nft/collections` | [Wallet NFT collections](/data-feeds/migration/wallet-nft-collections) | exact |
+
+## Token endpoints
+
+| Legacy endpoint | Guide | Headline fidelity |
+|---|---|---|
+| `GET /erc20/metadata` | [ERC-20 token metadata](/data-feeds/migration/erc20-metadata) | exact, market data calculated |
+| `GET /erc20/:address/price` | [ERC-20 token price](/data-feeds/migration/erc20-price) | calculated |
+| `GET /erc20/prices` | [ERC-20 token prices (batch)](/data-feeds/migration/erc20-prices) | calculated |
+| `GET /erc20/:token_address/owners` | [Token owners (holders)](/data-feeds/migration/erc20-owners) | exact |
+| `GET /erc20/:tokenAddress/holders` | [Token holders summary](/data-feeds/migration/erc20-holders) | counts exact, tiers your-definition |
+| `GET /erc20/:tokenAddress/holders/historical` | [Historical token holders](/data-feeds/migration/holders-historical) | exact + calculated |
+| `GET /erc20/:address/transfers` | [Token transfers (by contract)](/data-feeds/migration/token-transfers) | exact |
+| `GET /erc20/:token_address/pairs` | [Token trading pairs](/data-feeds/migration/token-pairs) | pools exact, market data calculated |
+| `GET /tokens/:tokenAddress/analytics` | [Token trading analytics](/data-feeds/migration/token-analytics) | calculated |
+
+## Swaps & markets endpoints
+
+| Legacy endpoint | Guide | Headline fidelity |
+|---|---|---|
+| `GET /pairs/:address/ohlcv` | [Pair OHLCV candlesticks](/data-feeds/migration/pair-ohlcv) | calculated from real trades |
+
+## NFT endpoints
+
+| Legacy endpoint | Guide | Headline fidelity |
+|---|---|---|
+| `POST /nft/getMultipleNFTs` | [NFT metadata (batch)](/data-feeds/migration/nft-multiple) | onchain exact, metadata add-yourself |
+| `GET /nft/:address/metadata` | [NFT collection metadata](/data-feeds/migration/nft-collection-metadata) | exact, off-chain extras |
+| `GET /nft/:address` | [NFTs by contract](/data-feeds/migration/nfts-by-contract) | onchain exact, metadata add-yourself |
+| `GET /nft/:address/owners` | [NFT owners by contract](/data-feeds/migration/nft-owners) | onchain exact |
+
+## Block & transaction endpoints
+
+| Legacy endpoint | Guide | Headline fidelity |
+|---|---|---|
+| `GET /transaction/:hash/verbose` | [Decoded transaction by hash](/data-feeds/migration/transaction-verbose) | raw exact, ABI decode-yourself |
+| `GET /block/:block_number_or_hash` | [Block by number or hash](/data-feeds/migration/block) | exact |
+
+## Not covered yet
+
+- **Solana endpoints** are parked while the Solana recipe and replica story is confirmed.
+- **Search and discovery endpoints** (`/tokens/search`, `/discovery/*`) are a search product, not an indexed feed.
+- **RPC node methods** (`eth_*`) belong to the node product, not Data Feeds.

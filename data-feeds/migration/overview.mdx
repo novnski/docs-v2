@@ -1,27 +1,56 @@
 ---
 title: "Migrating from the Moralis REST API"
-description: "Already using Moralis REST API endpoints? These guides move each endpoint onto Data Feeds, the same decoded onchain data lake that powers Moralis, served from a database you own with no per-call limits."
+description: "Already using Moralis REST API endpoints? This is the background you need before you move an endpoint onto Data Feeds: how the two differ, why the schema is not a copy, and the gotchas to plan for."
 ---
 
-If you already call the Moralis Web3 Data API, these guides take you endpoint by endpoint onto **Data Feeds**.
-You move from a pre-packaged REST response to the **underlying decoded data that produces it**, served from a
+If you already call the Moralis Web3 Data API, you can move endpoint by endpoint onto **Data Feeds**.
+You go from a pre-packaged REST response to the **underlying decoded data that produces it**, served from a
 database you own, in real time, with no per-call limits and full control over how you store and query it.
 
-Each guide is built around **one endpoint you already use**, and answers the only question that matters when
-you switch: what happens to your exact response, field by field.
+This page is the background to read **once**. When you are ready to move a specific endpoint, go to the
+[endpoint list](/data-feeds/migration/endpoints) and pick the one you call today.
+
+## API vs. Data Feeds: why they are different
+
+The Data API hands you a **finished answer**. A single call returns a wallet's tokens, already joined to
+prices, metadata, and spam flags, shaped into one JSON response.
+
+Data Feeds hand you the **decoded onchain data that answer is built from**, streamed into a database you own.
+You assemble the answer yourself, which is what gives you no per-call limits, full history, and control over
+filtering and pricing.
+
+That trade has one consequence worth internalizing before you start:
+
+<Note>
+**A Data Feed reconstructs an endpoint, it is not a byte-for-byte copy of the old response.** The same facts
+are there, but they arrive as raw rows across a few datasets rather than one pre-joined object. You do the
+join (usually one SQL view), and you decide what to do about the off-chain extras.
+</Note>
 
 ## Start with the model, once
 
-Two concept pages explain how Data Feeds work, so every guide can link here instead of repeating it. Read
-these first and the individual guides go quickly:
+Two concept pages explain how Data Feeds work, so every guide links here instead of repeating it. Read these
+first and the individual guides go quickly:
 
 - [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the ways to consume it (your
   Kafka / AMQP / SQS clients, REST / Arrow Flight, the sink into your own database, or query engines via
   Iceberg).
 - [Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) The fidelity model: a Data Feed
-  **reconstructs** an endpoint from raw onchain data, it is not a byte-for-byte copy of the old response.
+  reconstructs an endpoint from raw onchain data, it is not a byte-for-byte copy of the old response.
 
-## How to read the fidelity of a migration
+## The schema gotchas to plan for
+
+These are the differences that surprise people first. Each migration guide states the answer for its own
+endpoint, but the pattern is always one of these:
+
+| You had in the API response | Where it comes from in Data Feeds |
+|---|---|
+| **One pre-joined object** (e.g. a wallet token with balance, price, metadata) | Several datasets you join yourself, usually in one SQL view. One endpoint often maps to **more than one recipe**. |
+| **A derived USD value** (price, net worth, USD-at-risk) | **Calculated** from live DEX trades. Very close to the old value, best compared with a small tolerance, not byte-equality. |
+| **An off-chain signal** (logos, spam flags, security scores) | **Not in the lake.** Bring your own source, or drop the field. |
+| **A field that needs full history to be correct** (balances, holders, approvals) | Correct only once you backfill. Decide your [backfill](/data-feeds/concepts/history-and-backfill) before you start. |
+
+### How to read the fidelity of a migration
 
 Every guide classifies each output value so you can plan with confidence. Throughout, you will see three
 labels:
@@ -32,65 +61,14 @@ labels:
 | **calculated** | Derived from real onchain activity, for example USD prices from live DEX trades. Very close to the old value, best compared with a small tolerance. |
 | **add yourself** | An off-chain signal (logos, spam flags, security scores) that is not in the lake. Bring your own source, or skip it. |
 
-<Note>
-**Decide your backfill before you start.** Some answers need full history to be correct (balances, holders,
-approvals), others are correct at any window (swaps, transfers, logs, prices). Each guide states the answer
-for its endpoint up front. See [History & backfill](/data-feeds/concepts/history-and-backfill).
-</Note>
-
 ## Find your endpoint
 
-The guides are ordered by how widely each endpoint is used. Pick the one you call today.
+When you are ready, the **[endpoint list](/data-feeds/migration/endpoints)** maps every covered Moralis REST
+endpoint to its migration guide, grouped by wallet, token, NFT, and block & transaction. Pick the one you
+call today.
 
-### Wallet endpoints
-
-| Legacy endpoint | Guide | Headline fidelity |
-|---|---|---|
-| `GET /wallets/:address/tokens` | [Wallet token balances & prices](/data-feeds/migration/wallet-tokens) | balances exact, prices calculated |
-| `GET /:address/erc20` | [Wallet ERC-20 balances](/data-feeds/migration/wallet-erc20) | exact |
-| `GET /wallets/:address/history` | [Wallet transaction history](/data-feeds/migration/wallet-history) | exact, decode-yourself + off-chain labels |
-| `GET /:address` (native txns) | [Wallet native transactions](/data-feeds/migration/wallet-native-txns) | exact |
-| `GET /:address/balance` | [Wallet native balance](/data-feeds/migration/native-balance) | exact |
-| `GET /:address/erc20/transfers` | [Wallet ERC-20 transfers](/data-feeds/migration/wallet-erc20-transfers) | exact |
-| `GET /:address/nft` | [Wallet NFTs](/data-feeds/migration/wallet-nfts) | onchain exact, metadata add-yourself |
-| `GET /:address/nft/transfers` | [Wallet NFT transfers](/data-feeds/migration/wallet-nft-transfers) | exact |
-| `GET /:address/nft/collections` | [Wallet NFT collections](/data-feeds/migration/wallet-nft-collections) | exact |
-| `GET /wallets/:address/net-worth` | [Wallet net worth](/data-feeds/migration/wallet-networth) | calculated |
-| `GET /wallets/:address/approvals` | [Wallet token approvals](/data-feeds/migration/wallet-approvals) | exact, USD-at-risk calculated |
-| `GET /wallets/:address/chains` | [Active chains by wallet](/data-feeds/migration/wallet-chains) | exact |
-| `GET /wallets/:address/stats` | [Wallet stats](/data-feeds/migration/wallet-stats) | exact |
-| `GET /wallets/:address/swaps` | [Wallet swaps](/data-feeds/migration/wallet-swaps) | onchain exact, USD calculated |
-
-### Token endpoints
-
-| Legacy endpoint | Guide | Headline fidelity |
-|---|---|---|
-| `GET /erc20/:token_address/owners` | [ERC-20 owners](/data-feeds/migration/erc20-owners) | exact |
-| `GET /erc20/:tokenAddress/holders` | [ERC-20 holder summary](/data-feeds/migration/erc20-holders) | counts exact, tiers your-definition |
-| `GET /erc20/:tokenAddress/holders/historical` | [Historical holders](/data-feeds/migration/holders-historical) | exact + calculated |
-| `GET /erc20/prices` | [ERC-20 prices (batch)](/data-feeds/migration/erc20-prices) | calculated |
-| `GET /erc20/:address/price` | [ERC-20 price (single)](/data-feeds/migration/erc20-price) | calculated |
-| `GET /erc20/metadata` | [ERC-20 metadata](/data-feeds/migration/erc20-metadata) | exact, market data calculated |
-| `GET /erc20/:address/transfers` | [Token transfers (by contract)](/data-feeds/migration/token-transfers) | exact |
-| `GET /erc20/:token_address/pairs` | [Token pairs](/data-feeds/migration/token-pairs) | pools exact, market data calculated |
-| `GET /tokens/analytics` | [Token analytics](/data-feeds/migration/token-analytics) | calculated |
-| `GET /pairs/:address/ohlcv` | [Pair OHLCV](/data-feeds/migration/pair-ohlcv) | calculated from real trades |
-
-### NFT endpoints
-
-| Legacy endpoint | Guide | Headline fidelity |
-|---|---|---|
-| `POST /nft/getMultipleNFTs` | [NFT metadata (batch)](/data-feeds/migration/nft-multiple) | onchain exact, metadata add-yourself |
-| `GET /nft/:address/metadata` | [NFT collection metadata](/data-feeds/migration/nft-collection-metadata) | exact, off-chain extras |
-| `GET /nft/:address` | [NFTs by contract](/data-feeds/migration/nfts-by-contract) | onchain exact, metadata add-yourself |
-| `GET /nft/:address/owners` | [NFT owners by contract](/data-feeds/migration/nft-owners) | onchain exact |
-
-### Block & transaction endpoints
-
-| Legacy endpoint | Guide | Headline fidelity |
-|---|---|---|
-| `GET /transaction/:hash/verbose` | [Decoded transaction by hash](/data-feeds/migration/transaction-verbose) | raw exact, ABI decode-yourself |
-| `GET /block/:block_number_or_hash` | [Block by number or hash](/data-feeds/migration/block) | exact |
+New to Data Feeds entirely? Start with the **[quickstart](/data-feeds/migration/quickstart)** to get live data
+flowing into your own database in about ten minutes, then come back and migrate your endpoints.
 
 ## Not yet covered
 
