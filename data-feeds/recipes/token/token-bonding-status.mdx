@@ -34,14 +34,14 @@ The recipe reads the master-block `launchpadEvents` array and lands two surfaces
 | `launchpad_platform` | Friendly name — `pumpfun`, `raydium_launchlab` |
 | `event_type` | `created` · `traded` · `migrated` (**migrated = graduated**) |
 | `progress_percentage` | Bonding-curve progress 0–100 (sparse — set on trading activity) |
-| `pool_address` | The DEX pool a token migrated into (on `migrated`) — *not populated on the Solana feed today* |
+| `pool_address` | The DEX pool a token migrated into — populated on the `migrated` event (take `max(pool_address)`) |
 | `token_name`, `token_symbol`, `token_uri` | Emitted on the `created` event only |
 | `trade_direction`, `token_amount`, `native_amount` | On `traded` events — native price = `native_amount / token_amount` |
 | `block_number`, `log_index`, `event_ts`, `tx_hash` | On-chain ordering + provenance |
 
 ### Source
 
-The transform reads one per-block array — `launchpadEvents` — one row per event. `event_type` distinguishes `created` (a new token, carries name/symbol/uri), `traded` (a bonding-curve fill, carries `progress_percentage` and trade amounts), and `migrated` (graduation to a DEX pool). On the Solana feed today the `pool_address` and price fields are **not populated** — see [Fidelity gaps](#fidelity-gaps). The `exchange_address` (launchpad program) is shared by every token on a platform.
+The transform reads one per-block array — `launchpadEvents` — one row per event. `event_type` distinguishes `created` (a new token, carries name/symbol/uri), `traded` (a bonding-curve fill, carries `progress_percentage` and trade amounts), and `migrated` (graduation to a DEX pool, carries `pool_address`). On the Solana feed today the price field (`current_price`) is **not populated** — see [Fidelity gaps](#fidelity-gaps). The `exchange_address` (launchpad program) is shared by every token on a platform.
 
 ### Destination
 
@@ -178,12 +178,12 @@ ORDER BY bonding_progress DESC
 LIMIT 50;
 ```
 
-**Graduated tokens** — tokens with a `migrated` event (`pool_address` is empty on the Solana feed today, so drop it or resolve the pool from your own source):
+**Graduated tokens** — tokens with a `migrated` event, plus the DEX pool they migrated into (`max` grabs the non-empty `pool_address`, since a graduation can emit more than one `migrated` row):
 
 ```sql
 SELECT token_address,
        minIf(event_ts, event_type = 'migrated') AS graduated_at,
-       anyLast(pool_address)                    AS pool_address
+       max(pool_address)                        AS pool_address
 FROM recipe_token_bonding_status.fact_launchpad_events FINAL
 WHERE exchange_address = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P'
 GROUP BY token_address
@@ -227,10 +227,11 @@ Launchpad activity is densest on **Solana** (pump.fun, Raydium LaunchLab) and **
 
 - **`name` / `symbol`** ride on the `created` event; a token seen only via `traded` events carries none until you join [Token Metadata](/data-feeds/recipes/token/token-metadata) (also the source of `decimals`).
 - **`progress_percentage` is sparse** — `created` events carry no curve progress (0 is coerced to null), so a freshly-created token has null progress until its first trade.
-- **No price in the feed.** The Solana `launchpadEvents` carry no price — the `current_price` and `pool_address` columns exist but land **empty on Solana today**. Derive the **native price** per token from `traded` events (`native_amount / token_amount`), and convert to **USD** with a SOL/USD mark (e.g. wrapped SOL from a [Token Prices](/data-feeds/recipes/token/token-prices) sync). **Liquidity** (cumulative curve `native_amount`, or post-graduation [Pair Reserves](/data-feeds/recipes/markets/pair-reserves)) and **FDV** (`token_metadata.total_supply` × price) are derive-or-omit.
+- **No price in the feed.** `current_price` lands **empty on the Solana feed today** (0 populated in live sampling). Derive the **native price** per token from `traded` events (`native_amount / token_amount`), and convert to **USD** with a SOL/USD mark (e.g. wrapped SOL from a [Token Prices](/data-feeds/recipes/token/token-prices) sync). **Liquidity** (cumulative curve `native_amount`, or post-graduation [Pair Reserves](/data-feeds/recipes/markets/pair-reserves)) and **FDV** (`token_metadata.total_supply` × price) are derive-or-omit.
+- **`pool_address` arrives on the `migrated` event** — the DEX pool the token graduated into (verified live). A graduation can emit **more than one** `migrated` row, so take the non-empty value with `max(pool_address)` rather than `anyLast`.
 - **`logo`** and other off-chain metadata aren't in the feed.
 
-Core fields — `token_address`, `exchange_address`, `event_type`, `progress_percentage`, graduation (the `migrated` event), token name/symbol (on `created`), trade amounts, and timestamps — are sourced from `launchpadEvents`.
+Core fields — `token_address`, `exchange_address`, `event_type`, `progress_percentage`, graduation (the `migrated` event, with `pool_address`), token name/symbol (on `created`), trade amounts, and timestamps — are sourced from `launchpadEvents`.
 
 ### Related
 

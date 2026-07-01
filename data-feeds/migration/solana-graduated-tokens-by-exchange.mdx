@@ -31,7 +31,7 @@ You're moving from a pre-packaged response to the **underlying data that produce
 
 **Comes through exactly**
 - **The token** (`tokenAddress`) and **when it graduated** (`graduatedAt`), from its `migrated` launchpad event on
-  the chain.
+  the chain. You also get the **DEX pool it migrated into** (`pool_address`), which the old endpoint didn't expose.
 - **The launchpad**, and the token's **name** and **symbol**.
 
 **Calculated for you, from real trades**
@@ -85,17 +85,17 @@ SELECT
   token_address,
   exchange_address,
   minIf(event_ts, event_type = 'migrated') AS graduated_at,
-  anyLast(pool_address)                    AS pool_address   -- empty on the Solana feed today; see note below
+  max(pool_address)                        AS pool_address   -- the migrated DEX pool (max grabs the non-empty row)
 FROM recipe_token_bonding_status.fact_launchpad_events FINAL
 GROUP BY token_address, exchange_address
 HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 -- query it per launchpad: WHERE exchange_address = :exchange ORDER BY graduated_at DESC
 ```
 
-`graduatedAt` maps to `graduated_at` (the migration time). `pool_address` is **empty on the Solana feed today**, so
-drop it or resolve the pool from your own source. Price post-graduation tokens with
-[Token Prices](/data-feeds/recipes/token/token-prices) once they're trading on a DEX pool (calculated, as noted in
-[What to expect](#what-to-expect)).
+`graduatedAt` maps to `graduated_at` (the migration time), and `pool_address` carries the DEX pool the token
+migrated into. A graduation can emit more than one `migrated` row, so `max(pool_address)` grabs the non-empty pool.
+Price post-graduation tokens with [Token Prices](/data-feeds/recipes/token/token-prices) once they're trading on
+that pool (calculated, as noted in [What to expect](#what-to-expect)).
 
 ### Step 3: Query it from your app
 
@@ -155,13 +155,13 @@ The **same feed** is available however you build, all reading the one data lake:
 | `liquidity` | [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) × price | calculated |
 | `fullyDilutedValuation` | `token_metadata.total_supply` × price | calculated |
 | `logo` | add yourself | off-chain |
-| `poolAddress` | not populated on the Solana feed today — resolve from your own source | add yourself |
+| `poolAddress` | `max(pool_address)` over the token's `migrated` events | exact |
 
 ## Good to know
 
 - **Graduation = `migrated`.** Presence of that event is the signal; `graduated_at` is the migration time.
-- **Post-graduation pricing** comes from the token's normal DEX pool (Token Prices / Pair Reserves) once it's
-  trading there. Note `pool_address` is empty on the Solana feed today.
+- **Post-graduation pricing** comes from the token's normal DEX pool (Token Prices / Pair Reserves), keyed on the
+  migrated `pool_address`.
 - **You pick the launchpad** via `exchange_address` (the old `:exchange`) or `launchpad_platform`.
 - **No per-call limit**; page with a keyset on `graduated_at`.
 
