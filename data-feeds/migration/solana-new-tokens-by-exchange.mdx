@@ -1,0 +1,208 @@
+---
+title: "New tokens by exchange (Solana launchpads)"
+description: "Move /token/:network/exchange/:exchange/new onto Moralis Data Feeds and stream brand-new pump.fun launches from the same decoded onchain data that powers Moralis, in real time, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including every Solana launchpad event,
+the `created`, `traded`, and `migrated` moments behind pump.fun and Raydium LaunchLab tokens, as a real-time
+stream you own. This guide moves your `/token/:network/exchange/:exchange/new` integration onto Data Feeds, so you
+see new tokens the instant they launch, straight from that data lake, with **no per-call limits** and full control
+over how you store, serve, and query them.
+
+```
+GET /token/:network/exchange/:exchange/new
+```
+
+This is a direct migration: the launchpad data the old endpoint returns is decoded for you in the feed as a
+**`launchpadEvents`** stream, and a token's appearance in "new" is simply its **`created`** event on that
+launchpad, newest first. It's served by the [`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status)
+recipe.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** (Snowflake, BigQuery, Spark, DuckDB,
+dbt) via Iceberg. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture.
+
+For an on-demand "new tokens" list, the **sink** is the smoothest path, so we'll use it here. Because launches are
+events, [streaming](#other-ways-to-consume-this-data) is an equally natural fit if you want a live feed of new
+tokens as they're created.
+
+## What to expect
+
+You're moving from a single pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) for the general model. Here's how it
+applies to new-token discovery:
+
+**Comes through exactly**
+- **The token** (`tokenAddress`) and **when it launched** (`createdAt`), straight from its `created` launchpad
+  event on the chain.
+- **The launchpad** it was created on (the exchange), and the token's **name** and **symbol** as emitted on
+  creation.
+
+**Calculated for you, from real trades**
+- **Prices** (`priceUsd`, `priceNative`) come from live onchain DEX activity, the same trades the old endpoint
+  used. They track it closely; because you're computing the mark yourself, compare with a small tolerance rather
+  than expecting an identical figure.
+- **Liquidity** and **fully diluted valuation** come from price combined with pool reserves and supply, add a
+  pair recipe and the token's supply to derive them (or omit them).
+
+**Yours to control**
+- **What counts as "new."** "New" is the set of `created` events on the launchpad you pick. You choose the
+  launchpad (pump.fun, Raydium LaunchLab), the time window, and the page size, your "new tokens" list is exactly
+  the rule you define.
+
+**Add the extras you want**
+- `logo` is an off-chain signal layered on top of the chain, so it's not in the feed. Drop it, bring your own
+  token list, or layer one in, see [step 4](#step-4-add-the-extras-you-want).
+
+**Good to know**
+- The **`:exchange`** in the old URL is the launchpad's onchain **program address** (pump.fun is
+  `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`); in the feed each event carries that `exchange_address` plus a
+  friendly `launchpad_platform` (`pumpfun`, `raydium_launchlab`) so you can filter on either.
+
+## Before you begin
+
+- A running Data Feeds **sink** on **Solana**, writing to a database, see the [quickstart](/data-feeds/migration/quickstart). ClickHouse is recommended here for real-time launch discovery.
+- The [`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status) recipe applied to that database (it carries the full launchpad event log), plus `tokenMetadata` if you want authoritative decimals.
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+<Note>
+**Backfill is your choice here.** New launches are an *event list*, not current state, so you decide how much
+history to index. For "show me tokens as they launch" (the live use case), run the recipe **realtime**, you don't
+need any backfill. Only index further back if you want to list tokens created before you started. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+One recipe carries the launchpad data behind all of pump.fun's new / bonding / graduated surfaces:
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Launchpad events (created / traded / migrated) per launchpad | `tokenBondingStatus` | `fact_launchpad_events` (ClickHouse) / `launchpad_events` (Postgres, MySQL) |
+| Token decimals (authoritative), optional | `tokenMetadata` | `token_metadata` |
+
+Point the recipe at **Solana** in the Admin Panel wizard and start it. It lands one row per launchpad event,
+keyed so "events on launchpad E" is a fast prefix scan.
+
+### Step 2: Bring it together in one view
+
+"New tokens" is the set of **`created`** events on a launchpad, newest first. Here's a ClickHouse example to adapt
+(the launchpad's program address is the old `:exchange` value):
+
+```sql
+CREATE VIEW new_tokens_by_exchange AS
+SELECT
+  token_address,
+  exchange_address,
+  argMax(token_name,   (block_number, log_index)) AS name,
+  argMax(token_symbol, (block_number, log_index)) AS symbol,
+  min(event_ts)                                   AS created_at
+FROM recipe_token_bonding_status.fact_launchpad_events FINAL
+WHERE event_type = 'created'
+GROUP BY token_address, exchange_address;
+-- query it per launchpad:  WHERE exchange_address = :exchange ORDER BY created_at DESC
+```
+
+Want decimals or a price? Join `token_metadata` for `decimals`, and your price recipe for `priceUsd` / `priceNative`
+(those are calculated, as noted in [What to expect](#what-to-expect)).
+
+### Step 3: Query it from your app
+
+List the newest tokens on a launchpad, paginated, with no per-call cap:
+
+```ts
+import { createClient } from '@clickhouse/client';
+
+const ch = createClient({ url: process.env.CLICKHOUSE_URL });
+
+// pump.fun program address; swap in any launchpad you index
+const PUMPFUN = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P';
+
+async function getNewTokens(exchange = PUMPFUN, limit = 50, before?: string) {
+  const { rows } = await ch.query({
+    query: `
+      SELECT token_address, name, symbol, created_at
+      FROM new_tokens_by_exchange
+      WHERE exchange_address = {exchange:String}
+        ${before ? 'AND created_at < {before:DateTime64}' : ''}
+      ORDER BY created_at DESC
+      LIMIT {limit:UInt32}`,
+    query_params: { exchange, limit, before },
+    format: 'JSONEachRow',
+  }).then((r) => r.json());
+  return rows;
+}
+```
+
+That's it, you're discovering new launches from a dataset you own, in real time, the moment they're created, with
+no per-call limit and the freedom to query it any way you like.
+
+### Step 4: Add the extras you want
+
+`logo` is an off-chain signal, so it's not part of the onchain dataset. When you want it, you've got options:
+
+- **Skip it** if your app doesn't need a logo.
+- **Bring your own source**, a public Solana token list keyed by mint.
+- **Layer it in** from a metadata source alongside your Data Feeds tables.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for an on-demand list, but the **same feed** is available however you prefer to
+build, all reading the one data lake:
+
+- **Your existing message clients.** Point a **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** consumer at Data
+  Feeds and react to `launchpadEvents` as they land, perfect for a live "new tokens" feed without polling.
+- **REST / Arrow Flight.** Read the decoded block stream directly, for Solana, namespace `solana-mainnet`, topic
+  `master-3`:
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record is a block carrying the decoded `launchpadEvents` array the recipe projects from. Arrow Flight
+  (gRPC) is the high-throughput option for large pulls.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query launch history straight from **Snowflake,
+  BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, or dbt** without moving data.
+
+## Field mapping reference
+
+The **Fidelity** column shows how each value compares to the old endpoint: **exact** (from the chain),
+**calculated** (from real trades, very close), or **add yourself** (off-chain signal).
+
+| `/token/:network/exchange/:exchange/new` | Data Feeds | Fidelity |
+|---|---|---|
+| `tokenAddress` | `fact_launchpad_events.token_address` | exact |
+| `createdAt` | `min(event_ts)` over the token's `created` event | exact |
+| `name`, `symbol` | `fact_launchpad_events` (created event) / `token_metadata` | exact |
+| `decimals` | `token_metadata.decimals` | exact |
+| `priceUsd`, `priceNative` | your price recipe (`tokenPriceHistory`), newest per token | calculated |
+| `liquidity` | pair reserves x price | calculated |
+| `fullyDilutedValuation` | total supply x price | calculated |
+| `logo` | add yourself | off-chain |
+
+## Good to know
+
+- **Same source as the old endpoint.** Both read pump.fun / LaunchLab launchpad activity; "new" is the `created`
+  event, so the list lines up directly.
+- **You pick the launchpad.** Filter by `exchange_address` (the program address, the old `:exchange`) or by the
+  friendly `launchpad_platform` (`pumpfun`, `raydium_launchlab`), whichever you index on.
+- **No per-call limit.** Querying your own table has no batch or rate cap; page with a keyset on `created_at`.
+- **Real-time by nature.** Run the recipe realtime (or stream `launchpadEvents`) and new tokens surface the instant
+  they're created onchain.
+
+## Related
+
+- [Quickstart: run your first sink](/data-feeds/migration/quickstart)
+- Recipe reference: [`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status), `tokenMetadata`
+- Related guides: [Bonding tokens by exchange](/data-feeds/migration/solana-bonding-tokens-by-exchange) ·
+  [Graduated tokens by exchange](/data-feeds/migration/solana-graduated-tokens-by-exchange) ·
+  [Token bonding status](/data-feeds/migration/solana-token-bonding-status) (all from the same recipe)
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

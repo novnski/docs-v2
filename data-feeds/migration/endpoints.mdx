@@ -53,8 +53,8 @@ with a small tolerance), and **add yourself** is an off-chain signal you bring o
 
 ## Solana endpoints
 
-The sunsetting Solana token-holder endpoints map onto the same holder recipes, pointed at Solana (the feed's SPL
-`tokenTransfers` carry absolute post-balances, so the recipes run unchanged):
+The sunsetting Solana **token-holder** endpoints map onto the same holder recipes, pointed at Solana (the feed's
+SPL `tokenTransfers` carry absolute post-balances, so the recipes run unchanged):
 
 | Legacy endpoint | Guide | Headline fidelity |
 |---|---|---|
@@ -62,9 +62,18 @@ The sunsetting Solana token-holder endpoints map onto the same holder recipes, p
 | `GET /token/:network/holders/:address` | [Solana token holder metrics](/data-feeds/migration/solana-token-holders) | totalHolders exact, tiers your-definition |
 | `GET /token/:network/holders/:address/historical` | [Solana historical token holders](/data-feeds/migration/solana-historical-holders) | per-bucket totals exact, change calculated |
 
+The sunsetting **launchpad / discovery** endpoints (pump.fun, Raydium LaunchLab) are all served by the one
+[`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status) recipe over the `launchpadEvents` feed:
+
+| Legacy endpoint | Guide | Headline fidelity |
+|---|---|---|
+| `GET /token/:network/exchange/:exchange/new` | [New tokens by exchange](/data-feeds/migration/solana-new-tokens-by-exchange) | exact, price calculated |
+| `GET /token/:network/exchange/:exchange/bonding` | [Bonding tokens by exchange](/data-feeds/migration/solana-bonding-tokens-by-exchange) | progress exact, price calculated |
+| `GET /token/:network/exchange/:exchange/graduated` | [Graduated tokens by exchange](/data-feeds/migration/solana-graduated-tokens-by-exchange) | exact (+ DEX pool) |
+| `GET /token/:network/:address/bonding-status` | [Token bonding status](/data-feeds/migration/solana-token-bonding-status) | exact |
+
 ## Not covered yet
 
-- **Solana launchpad / discovery** (`/token/:network/exchange/*`, `/token/:network/:address/bonding-status`) — migration guides in progress.
 - **Other Solana endpoints** (prices, swaps, portfolio, metadata) are not yet covered.
 - **Search and discovery endpoints** (`/tokens/search`, `/discovery/*`) are a search product, not an indexed feed.
 - **RPC node methods** (`eth_*`) belong to the node product, not Data Feeds.

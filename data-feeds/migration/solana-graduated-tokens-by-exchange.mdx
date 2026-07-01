@@ -1,0 +1,172 @@
+---
+title: "Graduated tokens by exchange (Solana launchpads)"
+description: "Move /token/:network/exchange/:exchange/graduated onto Moralis Data Feeds and track pump.fun tokens that completed their bonding curve and migrated to a DEX, from the same decoded onchain data that powers Moralis."
+---
+
+Moralis **Data Feeds** give you the complete, decoded onchain dataset, including the moment a Solana launchpad
+token completes its bonding curve and **migrates to a DEX pool**, as a real-time stream you own. This guide moves
+your `/token/:network/exchange/:exchange/graduated` integration onto Data Feeds, so you track graduations straight
+from that data lake, with **no per-call limits**.
+
+```
+GET /token/:network/exchange/:exchange/graduated
+```
+
+This is a direct migration and a sibling of [New tokens by exchange](/data-feeds/migration/solana-new-tokens-by-exchange):
+the same [`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status) recipe carries the launchpad events,
+and **graduation is the `migrated` event**, the point a token leaves the bonding curve for a real DEX pool.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** via Iceberg. See
+[What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture. For a ranked, on-demand list the
+**sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api). Applied to graduated tokens:
+
+**Comes through exactly**
+- **The token** (`tokenAddress`) and **when it graduated** (`graduatedAt`), from its `migrated` launchpad event on
+  the chain. You also get the **DEX pool it migrated into** (`poolAddress`), which the old endpoint didn't expose.
+- **The launchpad**, and the token's **name** and **symbol**.
+
+**Calculated for you, from real trades**
+- **Prices** (`priceUsd`, `priceNative`), **liquidity**, and **fully diluted valuation**, after graduation these
+  come from the token's normal DEX pool. Compare with a small tolerance, or omit what you don't need.
+
+**Yours to control**
+- **What counts as "graduated."** It's the set of tokens with a `migrated` event on the launchpad you pick,
+  ordered by graduation time, your list, your rule.
+
+**Add the extras you want**
+- `logo` is off-chain, so it's not in the feed, bring your own token list or omit it.
+
+**Good to know**
+- **Graduation is a single, decisive event.** `migrated` means the bonding curve completed and the token moved to
+  a DEX, so the presence of that event is the signal, no separate flag to interpret.
+
+## Before you begin
+
+- A running Data Feeds **sink** on **Solana** (ClickHouse recommended), see the [quickstart](/data-feeds/migration/quickstart).
+- The [`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status) recipe applied to that database; `tokenMetadata` optional for decimals.
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+<Note>
+**Backfill is your choice here.** Graduations are an *event list*, so run the recipe **realtime** to catch them as
+they happen. Index further back only if you want graduations from before you started. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Launchpad events incl. migrations | `tokenBondingStatus` | `fact_launchpad_events` (ClickHouse); `launchpad_events` (Postgres, MySQL) |
+| Token decimals (authoritative), optional | `tokenMetadata` | `token_metadata` |
+
+### Step 2: Bring it together in one view
+
+"Graduated" tokens are those with a `migrated` event, newest graduation first:
+
+```sql
+CREATE VIEW graduated_tokens_by_exchange AS
+SELECT
+  token_address,
+  exchange_address,
+  minIf(event_ts, event_type = 'migrated') AS graduated_at,
+  anyLast(pool_address)                    AS pool_address   -- the DEX pool it migrated to
+FROM recipe_token_bonding_status.fact_launchpad_events FINAL
+GROUP BY token_address, exchange_address
+HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
+-- query it per launchpad: WHERE exchange_address = :exchange ORDER BY graduated_at DESC
+```
+
+`graduatedAt` maps to `graduated_at` (the migration time). Join `token_metadata` for decimals and your price
+recipe for post-graduation prices, those are calculated, as noted in [What to expect](#what-to-expect).
+
+### Step 3: Query it from your app
+
+```ts
+import { createClient } from '@clickhouse/client';
+
+const ch = createClient({ url: process.env.CLICKHOUSE_URL });
+const PUMPFUN = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P';
+
+async function getGraduatedTokens(exchange = PUMPFUN, limit = 50, before?: string) {
+  const { rows } = await ch.query({
+    query: `
+      SELECT token_address, graduated_at, pool_address
+      FROM graduated_tokens_by_exchange
+      WHERE exchange_address = {exchange:String}
+        ${before ? 'AND graduated_at < {before:DateTime64}' : ''}
+      ORDER BY graduated_at DESC
+      LIMIT {limit:UInt32}`,
+    query_params: { exchange, limit, before },
+    format: 'JSONEachRow',
+  }).then((r) => r.json());
+  return rows;
+}
+```
+
+You're now tracking graduations live, and you know the exact DEX pool each token moved into.
+
+### Step 4: Add the extras you want
+
+`logo` is off-chain, skip it, bring your own Solana token list, or layer one in.
+
+## Other ways to consume this data
+
+The **same feed** is available however you build, all reading the one data lake:
+
+- **Your existing message clients.** Point **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS** at Data Feeds and
+  react to graduations the moment they happen.
+- **REST / Arrow Flight.** Read the decoded block stream directly (Solana, namespace `solana-mainnet`, topic
+  `master-3`):
+  ```
+  GET /api/v1/continuum/{namespace}/{topic}            # records by position range
+  GET /api/v1/continuum/{namespace}/{topic}/schema     # the topic's Arrow schema
+  ```
+  Each record carries the decoded `launchpadEvents` array (including `migrated`) the recipe projects from.
+- **Your warehouse / notebook.** Every feed is an Iceberg table, query from Snowflake, BigQuery, Spark, DuckDB,
+  dbt without moving data.
+
+## Field mapping reference
+
+| `/token/:network/exchange/:exchange/graduated` | Data Feeds | Fidelity |
+|---|---|---|
+| `tokenAddress` | `token_address` | exact |
+| `graduatedAt` | `minIf(event_ts, event_type='migrated')` | exact |
+| `name`, `symbol` | `fact_launchpad_events` / `token_metadata` | exact |
+| `decimals` | `token_metadata.decimals` | exact |
+| `priceUsd`, `priceNative` | your price recipe (post-graduation DEX pool) | calculated |
+| `liquidity` | pool reserves x price | calculated |
+| `fullyDilutedValuation` | total supply x price | calculated |
+| `logo` | add yourself | off-chain |
+| *(bonus)* the DEX pool it migrated to | `pool_address` | exact (not in the old endpoint) |
+
+## Good to know
+
+- **Graduation = `migrated`.** Presence of that event is the signal; `graduated_at` is the migration time.
+- **Post-graduation pricing** comes from the token's normal DEX pool (your price and pair recipes), keyed on the
+  migrated `pool_address`.
+- **You pick the launchpad** via `exchange_address` (the old `:exchange`) or `launchpad_platform`.
+- **No per-call limit**; page with a keyset on `graduated_at`.
+
+## Related
+
+- [Quickstart: run your first sink](/data-feeds/migration/quickstart)
+- Recipe reference: [`tokenBondingStatus`](/data-feeds/recipes/token/token-bonding-status), `tokenMetadata`
+- Related guides: [New tokens by exchange](/data-feeds/migration/solana-new-tokens-by-exchange) ·
+  [Bonding tokens by exchange](/data-feeds/migration/solana-bonding-tokens-by-exchange) ·
+  [Token bonding status](/data-feeds/migration/solana-token-bonding-status)
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array)

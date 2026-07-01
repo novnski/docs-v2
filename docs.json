@@ -940,7 +940,8 @@
                   "data-feeds/recipes/token/token-balances-by-token",
                   "data-feeds/recipes/token/token-transfers",
                   "data-feeds/recipes/token/token-stats",
-                  "data-feeds/recipes/token/token-metadata"
+                  "data-feeds/recipes/token/token-metadata",
+                  "data-feeds/recipes/token/token-bonding-status"
                 ]
               },
               {
