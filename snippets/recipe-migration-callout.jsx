@@ -45,21 +45,15 @@ export const RecipeMigrationCallout = ({ items = [] }) => {
               --mc-border: #c7e9d6;
               --mc-bg: #f0faf4;
               --mc-text: #1f2937;
+              color: var(--mc-text);
+            }
+            .migration-callout strong {
+              color: var(--mc-text) !important;
             }
             .migration-callout a {
               color: #0e7f4f !important;
               text-decoration: underline;
               font-weight: 600;
-            }
-            @media (prefers-color-scheme: dark) {
-              .migration-callout {
-                --mc-border: #1f5138 !important;
-                --mc-bg: #102a1d !important;
-                --mc-text: #e5e7eb !important;
-              }
-              .migration-callout a {
-                color: #34d399 !important;
-              }
             }
             html.dark .migration-callout,
             [data-theme="dark"] .migration-callout {

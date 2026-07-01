@@ -60,6 +60,10 @@ exactly how that maps:
 - Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key) and the chain you're indexing.
 - The backfill window you want, set with `MORALIS_HISTORICAL_FROM_BLOCK` (e.g. `tip-1000`), see the note below.
 
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
 <Note>
 **Index as far back as the history you want to show.** A wallet history is an event feed, so backfill is your
 choice, `realtime` for new activity, or `historical`/`hybrid` from any start block for a window. To match the

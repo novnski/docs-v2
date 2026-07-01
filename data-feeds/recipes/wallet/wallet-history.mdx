@@ -1,6 +1,6 @@
 ---
 title: "Wallet History"
-description: "Reconstruct. a wallet's full chronological event feed — every transfer, swap, NFT move, approval, and LP change, with USD value per event — as a continuous sync into your own database."
+description: "Reconstruct a wallet's full chronological event feed — every transfer, swap, NFT move, approval, and LP change, with USD value per event — as a continuous sync into your own database."
 ---
 
 import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
@@ -161,6 +161,10 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 - A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
 - The **recipe bundle** you receive with access (includes a `docker-compose` for a local database plus the sink).
 
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
 **Start the sink**
 
 ```bash
@@ -204,7 +208,7 @@ SELECT block_number, event_type, token_in_address, amount_in,
        token_out_address, amount_out, amount_in_usd, amount_out_usd
 FROM recipe_wallet_history_full.fact_wallet_history_full FINAL
 WHERE chain_id = 1
-  AND wallet_address = lower('0xd8dA…96045')
+  AND wallet_address = lower('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045')
   AND event_type IN ('swap', 'token_transfer')
 ORDER BY block_number DESC, log_index DESC;
 ```
@@ -214,7 +218,7 @@ Per-event-type breakdown (sign-aware, cheaper than `FINAL`):
 ```sql
 SELECT event_type, sum(sign) AS events
 FROM recipe_wallet_history_full.fact_wallet_history_full
-WHERE chain_id = 1 AND wallet_address = lower('0xd8dA…96045')
+WHERE chain_id = 1 AND wallet_address = lower('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045')
 GROUP BY event_type
 ORDER BY events DESC;
 ```
@@ -254,7 +258,7 @@ The recipe is chain-parametrized via the `chain` setting — point it at any sup
   <Card title="Accounting & Tax" href="/data-feeds/use-cases/accounting" icon="calculator">
     The chronological, USD-valued event feed behind a ledger.
   </Card>
-  <Card title="Compliance & AML" icon="shield-check">
+  <Card title="Compliance & AML" href="/data-feeds/use-cases/compliance-aml" icon="shield-check">
     Full counterparty and transfer trail per address.
   </Card>
 </Columns>
