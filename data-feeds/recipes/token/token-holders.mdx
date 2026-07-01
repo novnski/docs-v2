@@ -151,6 +151,29 @@ MySQL is the same shape with `DECIMAL(76,0)` / `DECIMAL(38,18)`, and replaces th
 
 </Accordion>
 
+### Run it
+
+Everything runs in **your** infrastructure: the sink writes into a database you own and you query it with plain SQL, no API and no per-call limits.
+
+**Prerequisites**
+
+- **Docker** and Docker Compose.
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+**Start the sink**
+
+Generate a **starter pack** for `tokenHolders` in the [Moralis Admin Panel](https://admin.moralis.com), pick your chain and destination database, then run it with Docker. The [quickstart](/data-feeds/migration/quickstart) walks through it end to end. Set the backfill window (`MORALIS_HISTORICAL_FROM_BLOCK`) as noted below.
+
+<Note>
+**Backfill from the token's first block for a complete holder set.** A holder list is *current state* — the latest transfer-derived balance per `(token, wallet)` — so to return **every** holder you need the token's full transfer history. The good news: that's history since the **token launched**, not chain genesis, so set `MORALIS_HISTORICAL_FROM_BLOCK` to around the token's deployment block. A recent-only window would miss holders who haven't moved the token lately. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+Then run the example reads below to confirm rows are landing.
+
 ### Example reads
 
 All current non-zero holders of a token with balance and best-effort `usd_value` — `FINAL` collapses reorg `±1` pairs before `argMax` (ClickHouse). The example assumes 18 decimals; substitute the token's real decimals to be exact:
@@ -163,7 +186,7 @@ SELECT wallet_address,
          (toFloat64OrZero(argMax(balance, (block_number, log_index))) / pow(10, 18))
          * toFloat64OrZero(argMax(usd_price, (block_number, log_index))), 18)) AS usd_value
 FROM recipe_token_holders.fact_token_holders FINAL
-WHERE chain_id = 1 AND token_address = lower('0xA0b8...')
+WHERE chain_id = 1 AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
 GROUP BY wallet_address
 HAVING current_balance != '0' AND current_balance != ''
 ORDER BY toFloat64OrZero(current_balance) DESC
@@ -177,7 +200,7 @@ SELECT countDistinct(wallet_address) FROM (
   SELECT wallet_address,
          argMax(balance, (block_number, log_index)) AS bal
   FROM recipe_token_holders.fact_token_holders FINAL
-  WHERE chain_id = 1 AND token_address = lower('0xA0b8...')
+  WHERE chain_id = 1 AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
   GROUP BY wallet_address
   HAVING bal != '0' AND bal != '');
 ```
@@ -188,9 +211,19 @@ The same read on Postgres after refreshing the view (the partial index serves it
 REFRESH MATERIALIZED VIEW CONCURRENTLY token_holders;
 
 SELECT wallet_address, balance, usd_price, usd_value FROM public.token_holders
-WHERE token_address = lower('0xA0b8...') AND balance > 0
+WHERE token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48') AND balance > 0
 ORDER BY balance DESC LIMIT 100;
 ```
+
+### Other ways to consume this data
+
+The sink is the way to get **this pre-aggregated table** (`token_holders`) — recommended for a holder list you own. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather maintain holder state yourself:
+
+- **Your existing message clients** — stream it with **Kafka / AMQP / SQS**.
+- **REST / Arrow Flight** — pull the decoded block stream directly.
+- **Your warehouse** — query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
+
+Those give you the **source array** (`tokenTransfers`, which carries absolute post-transfer balances) to compute the holder set yourself, not this pre-aggregated table. All of them read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
 
 ### Modes
 

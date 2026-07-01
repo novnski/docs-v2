@@ -936,6 +936,7 @@
                 "pages": [
                   "data-feeds/recipes/token/token-prices",
                   "data-feeds/recipes/token/token-holders",
+                  "data-feeds/recipes/token/historical-balances",
                   "data-feeds/recipes/token/token-balances-by-token",
                   "data-feeds/recipes/token/token-transfers",
                   "data-feeds/recipes/token/token-stats",
