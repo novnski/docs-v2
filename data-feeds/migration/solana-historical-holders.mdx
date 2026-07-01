@@ -1,0 +1,124 @@
+---
+title: "Solana historical token holders"
+description: "Move /token/:network/holders/:address/historical onto Moralis Data Feeds and reconstruct a Solana token's holder count and distribution over time from a retained balance log in your own database, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded Solana onchain dataset, every SPL transfer with its
+absolute post-transfer balance, as a real-time stream you own. This guide moves your
+`/token/:network/holders/:address/historical` integration onto Data Feeds, so a token's holder count and
+distribution over time come from a retained balance log you own, at any interval you choose, with **no per-call
+limits**.
+
+```
+GET /token/:network/holders/:address/historical
+```
+
+Where the top-holders and metrics endpoints are *current state*, this one is a **time series**. The
+**`historicalBalanceAtBlock`** recipe, pointed at Solana, keeps **every** balance observation, so the holder set at
+any past point, and how it changed, is a query.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** via Iceberg. See
+[What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture. For a holder time series the
+**sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a pre-bucketed series to the **retained balance log that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api). Applied to historical holders:
+
+**Comes through exactly**
+- **`totalHolders` per bucket**, the count of wallets with a non-zero balance as of that point in time, from the
+  retained observations on the chain.
+
+**Calculated for you**
+- **`netHolderChange` and `holderPercentChange`** are the difference between adjacent buckets, you compute them
+  from the per-bucket totals.
+
+**Yours to control**
+- **The interval and the tiers.** You pick the bucket size (`timeFrame`) and define the `holdersIn` / `holdersOut`
+  distribution tiers (whales … shrimps) by your own balance / USD thresholds.
+
+**Add the extras you want**
+- **`newHoldersByAcquisition`** (swap / transfer / airdrop) needs each new holder's first acquiring event
+  classified from the transfer / swap feeds, layer it in when you need the acquisition split.
+
+## Before you begin
+
+- A running Data Feeds **sink** on **Solana**, writing to your database, see the [quickstart](/data-feeds/migration/quickstart).
+- The `historicalBalanceAtBlock` recipe applied to that database.
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+<Note>
+**Backfill from the token's first block.** A point-in-time holder count is only correct if the observation log
+reaches back far enough, a holder may have last moved the token long before the bucket you're querying. Backfill
+`historicalBalanceAtBlock` from around the mint's deployment. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Every holder's balance over time | `historicalBalanceAtBlock` | `wallet_token_balance_history` |
+
+Point it at **Solana** in the Admin Panel wizard. The Solana feed's `tokenTransfers` carry absolute post-balances,
+so the recipe retains a per-`(owner, token)` balance history, identical in shape to EVM.
+
+### Step 2: Query it from your app
+
+**Holder set as of a past block** (ClickHouse, the building block for each bucket):
+
+```sql
+SELECT wallet_address,
+       argMax(balance, (block_number, log_index)) AS balance_at_n
+FROM recipe_historical_balance_at_block.fact_balance_observations FINAL
+WHERE token_address = lower('<MINT>') AND block_number <= {N:UInt64}
+GROUP BY wallet_address
+HAVING balance_at_n != '0' AND balance_at_n != '';
+```
+
+**Total holders per time bucket** — resolve each interval boundary to a block, then count the as-of set. In
+Postgres, `DISTINCT ON (wallet_address, token_address) … WHERE block_number <= :n` gives the as-of holders for
+bucket `:n`; wrap it per boundary and `COUNT`, then diff adjacent buckets for `netHolderChange` and
+`holderPercentChange`.
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a holder time series, but the **same data** is available however you build:
+your existing **Kafka / AMQP / SQS** clients, **REST / Arrow Flight** direct reads of the decoded Solana stream,
+or your **warehouse** via Iceberg (Snowflake, BigQuery, Spark, DuckDB).
+
+## Field mapping reference
+
+| `/token/:network/holders/:address/historical` | Data Feeds | Fidelity |
+|---|---|---|
+| `timestamp` (bucket) | your chosen interval boundary | your definition |
+| `totalHolders` (per bucket) | count of the as-of-block holder set (`historicalBalanceAtBlock`) | exact |
+| `netHolderChange` | diff of adjacent buckets' totals | calculated |
+| `holderPercentChange` | percent diff of adjacent buckets | calculated |
+| `holdersIn` / `holdersOut` (tiers) | your own bucket definition over the as-of balances | your definition |
+| `newHoldersByAcquisition` (swap / transfer / airdrop) | classify each new holder's first acquiring event | add yourself |
+
+## Good to know
+
+- **Any interval you like.** You retain every observation, so the same log serves hourly, daily, or custom
+  windows, no fixed `timeFrame`.
+- **Backfill depth is correctness.** A short window gives wrong historical counts; backfill from the mint's
+  deployment.
+- **SPL account model.** Counts are over owner wallets; sum a wallet's token accounts for a per-owner balance.
+
+## Related
+
+- [Quickstart: run your first sink](/data-feeds/migration/quickstart)
+- Recipe reference: [`historicalBalanceAtBlock`](/data-feeds/recipes/token/historical-balances)
+- Related guides: [Solana token holder metrics](/data-feeds/migration/solana-token-holders) · [Solana top token holders](/data-feeds/migration/solana-top-holders)
+- Concept: [History & backfill](/data-feeds/concepts/history-and-backfill)

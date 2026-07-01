@@ -1,0 +1,124 @@
+---
+title: "Solana token holder metrics"
+description: "Move /token/:network/holders/:address onto Moralis Data Feeds and compute a Solana token's holder count and distribution from the decoded onchain data lake in your own database, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded Solana onchain dataset, every SPL transfer with its
+absolute post-transfer balance, as a real-time stream you own. This guide moves your
+`/token/:network/holders/:address` integration onto Data Feeds, so a token's holder count and distribution come
+straight from that data lake, bucketed exactly the way you define them, with **no per-call limits**.
+
+```
+GET /token/:network/holders/:address
+```
+
+The holder set comes from the **`tokenHolders`** recipe pointed at Solana; the summary metrics (total,
+distribution tiers, acquisition split) are aggregates you compute over it.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** via Iceberg. See
+[What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture. For holder metrics the **sink**
+is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a pre-packaged summary to the **holder set that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api). Applied to holder metrics:
+
+**Comes through exactly**
+- **`totalHolders`**, a `COUNT` of wallets with a non-zero balance over the `tokenHolders` set, straight from the
+  chain.
+
+**Yours to control**
+- **The distribution tiers** (`holderDistribution`: whales, sharks, dolphins, … shrimps). The old endpoint used
+  fixed cut-offs; with your own copy you define the buckets (by balance or USD value), so "whale" means exactly
+  what your product means.
+
+**Calculated for you**
+- **Acquisition split** (`holdersByAcquisition`: swap / transfer / airdrop) and **holder-count change over time**
+  are derivable, classify each holder's first acquiring event from the transfer/swap feeds, or track counts across
+  a window. See the [historical guide](/data-feeds/migration/solana-historical-holders) for the time series.
+
+**Add the extras you want**
+- Off-chain labels (which owners are exchanges, funds) aren't in the holder data. Bring your own label source.
+
+## Before you begin
+
+- A running Data Feeds **sink** on **Solana**, writing to your database, see the [quickstart](/data-feeds/migration/quickstart).
+- The `tokenHolders` recipe applied to that database.
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+<Note>
+**Index from the token's first block.** Holder counts are *current state*, the cumulative result of every SPL
+transfer, so an accurate total needs the token's full transfer history, from around the mint's deployment. A
+recent-only window undercounts. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| The current holder set (per token, per wallet) | `tokenHolders` | `token_holders` |
+
+Point it at **Solana** in the Admin Panel wizard. The Solana feed's `tokenTransfers` carry absolute post-balances,
+so `tokenHolders` maintains one current balance per `(token, owner)` — the set these metrics aggregate.
+
+### Step 2: Query it from your app
+
+**Total holders** (Postgres):
+
+```sql
+SELECT count(*) AS total_holders
+FROM token_holders
+WHERE token_address = lower($1) AND balance > 0;
+```
+
+**Distribution tiers** — define the buckets your product uses (this example splits by USD value; swap in your own
+thresholds or use `balance`):
+
+```sql
+SELECT count(*) FILTER (WHERE usd_value >= 1000000)                       AS whales,
+       count(*) FILTER (WHERE usd_value >= 100000 AND usd_value < 1000000) AS sharks,
+       count(*) FILTER (WHERE usd_value >= 10000  AND usd_value < 100000)  AS dolphins,
+       count(*) FILTER (WHERE usd_value <  10000)                          AS shrimps
+FROM token_holders
+WHERE token_address = lower($1) AND balance > 0;
+```
+
+## Other ways to consume this data
+
+The sink is the smoothest path for holder metrics, but the **same data** is available however you build: your
+existing **Kafka / AMQP / SQS** clients, **REST / Arrow Flight** direct reads of the decoded Solana stream, or your
+**warehouse** via Iceberg (Snowflake, BigQuery, Spark, DuckDB).
+
+## Field mapping reference
+
+| `/token/:network/holders/:address` | Data Feeds | Fidelity |
+|---|---|---|
+| `totalHolders` | `COUNT(*)` over `token_holders WHERE balance > 0` | exact |
+| `holderDistribution` (whales … shrimps) | your own bucket definition over `balance` / `usd_value` | your definition |
+| `holdersByAcquisition` (swap / transfer / airdrop) | classify each holder's first acquiring event | calculated |
+| `holderChange` (over time) | count across a window (see historical guide) | calculated |
+
+## Good to know
+
+- **You define "whale."** The old tiers used fixed cut-offs; your buckets are yours to set and change.
+- **SPL account model.** Holders resolve to owner wallets; sum a wallet's token accounts for a per-owner balance.
+- **Backfill drives accuracy.** A complete count needs history from the mint's deployment; a partial window
+  undercounts.
+
+## Related
+
+- [Quickstart: run your first sink](/data-feeds/migration/quickstart)
+- Recipe reference: [`tokenHolders`](/data-feeds/recipes/token/token-holders)
+- Related guides: [Solana top token holders](/data-feeds/migration/solana-top-holders) · [Solana historical token holders](/data-feeds/migration/solana-historical-holders)
+- Concept: [History & backfill](/data-feeds/concepts/history-and-backfill)

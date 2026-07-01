@@ -1,0 +1,147 @@
+---
+title: "Solana top token holders"
+description: "Move /token/:network/:address/top-holders onto Moralis Data Feeds and serve a Solana token's biggest holders, with balances and USD value, from the decoded onchain data lake in your own database, with no per-call limits."
+---
+
+Moralis **Data Feeds** give you the complete, decoded Solana onchain dataset, every SPL transfer with its
+absolute post-transfer balance, as a real-time stream you own. This guide moves your
+`/token/:network/:address/top-holders` integration onto Data Feeds, so a token's biggest holders come straight
+from that data lake, ranked and paged however you like, with **no per-call limits**.
+
+```
+GET /token/:network/:address/top-holders
+```
+
+This is a direct migration: the **`tokenHolders`** recipe, pointed at Solana, maintains one current balance per
+`(token, wallet)`; the top-holders list is `ORDER BY balance DESC`.
+
+## How Data Feeds works
+
+Data Feeds is a single service over one data lake of decoded onchain data, consume the **same data** however fits
+your stack: stream it with your existing **Kafka / AMQP / SQS** clients (or **REST / Arrow Flight**), **land it
+with the sink** into your own database, or **query it from your warehouse** via Iceberg. See
+[What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the full picture. For a ranked holder list the
+**sink** is the smoothest path, so we'll use it here.
+
+## What to expect
+
+You're moving from a pre-packaged response to the **underlying data that produces it**, see
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api). Applied to top holders:
+
+**Comes through exactly**
+- **The holder and balance** (`ownerAddress`, `balance`), from the SPL transfer's absolute post-balance on the
+  chain. With token decimals (one extra recipe), `balanceFormatted` and `percentageRelativeToTotalSupply` too.
+
+**Calculated for you, from real trades**
+- **USD value** (`usdValue`) comes from live onchain DEX prices, valued in-block. Compare with a small tolerance;
+  a token with no recent trades may value at 0.
+
+**Yours to control**
+- **Ranking and paging.** The old endpoint returns biggest-first; with your own table you rank by `balance` or
+  `usdValue`, set any minimum, and page however you like.
+
+**Add the extras you want**
+- `isContract` (is the owner a program-owned account) is a chain-derived signal, not in the holder data. Derive it
+  from your own account-type source when you need it.
+
+## Before you begin
+
+- A running Data Feeds **sink** on **Solana**, writing to your database, see the [quickstart](/data-feeds/migration/quickstart).
+- The `tokenHolders` recipe applied to that database (add `tokenMetadata` for formatted balances / percentages).
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+<Note>
+**Index from the token's first block.** A holder list is *current state*, the cumulative result of every SPL
+transfer of the token, so to return **every** holder you need the token's full transfer history, from around the
+mint's deployment. A recent-only window misses holders who haven't moved the token lately. See
+[History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+## Build it with the sink (recommended)
+
+### Step 1: Turn on the recipe
+
+| What you need | Recipe | Table it keeps up to date |
+|---|---|---|
+| Holders + balance + USD value, per token | `tokenHolders` | `token_holders` |
+| (Optional) decimals + total supply for formatting | `tokenMetadata` | `token_metadata` |
+
+Point the recipe at **Solana** in the Admin Panel wizard. The Solana feed's `tokenTransfers` carry the same
+absolute post-balances as EVM, so `tokenHolders` produces an identically-shaped holder table; addresses are
+Solana base58 mints and owner accounts, stored as text.
+
+### Step 2: Query it from your app
+
+Biggest holders first, the way the endpoint returned them (Postgres):
+
+```sql
+SELECT wallet_address AS owner_address,
+       balance,
+       usd_value
+FROM token_holders
+WHERE token_address = lower($1)
+  AND balance > 0
+ORDER BY balance DESC
+LIMIT $2 OFFSET $3;
+```
+
+Want the human-readable balance and percentage of supply? Join `token_metadata` for `decimals` and
+`total_supply` (SPL decimals vary by token):
+
+```sql
+SELECT h.wallet_address AS owner_address,
+       h.balance,
+       h.balance / power(10, m.decimals)     AS balance_formatted,
+       h.usd_value,
+       h.balance / NULLIF(m.total_supply, 0) AS percentage_relative_to_total_supply
+FROM token_holders h
+LEFT JOIN token_metadata m ON m.token_address = h.token_address
+WHERE h.token_address = lower($1)
+ORDER BY h.balance DESC
+LIMIT $2 OFFSET $3;
+```
+
+## Other ways to consume this data
+
+The sink is the smoothest path for a ranked holder list, but the **same data** is available however you build:
+
+- **Your existing message clients**, stream SPL transfers via **Kafka**, **AMQP / RabbitMQ**, or **Amazon SQS**
+  and maintain your own holder state.
+- **REST / Arrow Flight**, read the decoded Solana block stream directly (`GET /api/v1/continuum/{namespace}/{topic}`).
+- **Your warehouse / notebook**, every feed is an Iceberg table; compute top holders in Snowflake, BigQuery,
+  Spark, DuckDB, or dbt without moving data.
+
+## Field mapping reference
+
+The **Fidelity** column: **exact** (from the chain), **calculated** (from real trades), or **add yourself**
+(off-chain / chain-derived).
+
+| `/token/:network/:address/top-holders` | Data Feeds | Fidelity |
+|---|---|---|
+| `ownerAddress` | `token_holders.wallet_address` | exact |
+| `balance` (raw) | `token_holders.balance` | exact |
+| `balanceFormatted` | derive: `balance / 10^decimals` (`token_metadata`) | exact |
+| `usdValue` | `token_holders.usd_value` | calculated |
+| `percentageRelativeToTotalSupply` | derive: `balance / total_supply` (`token_metadata`) | exact |
+| `totalSupply` (envelope) | `token_metadata.total_supply` | exact |
+| `isContract` | derive from your own account-type source | add yourself |
+
+## Good to know
+
+- **SPL account model.** A Solana holder is a token account with an owner; the decoded feed resolves transfers to
+  owner wallets, so `wallet_address` is the owner. One owner can hold across multiple token accounts, sum them if
+  you want a per-owner total.
+- **USD value comes from real trades**, best compared with a tolerance; a thinly-traded token may value at 0.
+- **Decimals vary on SPL.** Format against the token's real `decimals` from `tokenMetadata`, not a fixed 18.
+- **No per-call limit**, page through every holder with plain SQL.
+
+## Related
+
+- [Quickstart: run your first sink](/data-feeds/migration/quickstart)
+- Recipe reference: [`tokenHolders`](/data-feeds/recipes/token/token-holders), `tokenMetadata`
+- Related guide: [Solana token holder metrics](/data-feeds/migration/solana-token-holders) (the aggregate summary, same data)
+- Concept: [The `block` array](/data-feeds/concepts/the-block-array) · [History & backfill](/data-feeds/concepts/history-and-backfill)
