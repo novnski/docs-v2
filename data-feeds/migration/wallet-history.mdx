@@ -55,9 +55,10 @@ exactly how that maps:
 
 ## Before you begin
 
-- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see the [`walletHistoryFull` recipe](/data-feeds/recipes/wallet/wallet-history#run-it) for the one-command setup.
 - The `walletHistoryFull` recipe applied to that database (add `tokenMetadata` for token names/symbols).
-- Your `MORALIS_API_KEY` and the chain you're indexing.
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key) and the chain you're indexing.
+- The backfill window you want, set with `MORALIS_HISTORICAL_FROM_BLOCK` (e.g. `tip-1000`), see the note below.
 
 <Note>
 **Index as far back as the history you want to show.** A wallet history is an event feed, so backfill is your
@@ -76,8 +77,8 @@ is still correct (unlike balances). See [History & backfill](/data-feeds/concept
 | (Optional) token names / symbols / decimals | `tokenMetadata` | `token_metadata` |
 | (Lighter alternative) just "which transactions" | `walletHistory` | `wallet_tx_pointers` |
 
-`wallet_history_full` keeps one row per event, tagged with `event_type` (transfer / native / nft / swap /
-approval / lp), `direction`, counterparty, amounts, and USD value.
+`wallet_history_full` keeps one row per event, tagged with `event_type` (`token_transfer` / `native_transfer` /
+`nft_transfer` / `swap` / `approval` / `liquidity_change`), `direction`, counterparty, amounts, and USD value.
 
 ### Step 2: Query it from your app
 
@@ -109,9 +110,9 @@ async function getWalletHistory(wallet: string, limit = 100, afterKey?: { block:
 SELECT tx_hash,
        max(block_number)   AS block_number,
        max(block_timestamp) AS block_timestamp,
-       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'transfer') AS erc20_transfers,
-       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'nft')      AS nft_transfers,
-       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'native')   AS native_transfers
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'token_transfer')  AS erc20_transfers,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'nft_transfer')    AS nft_transfers,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'native_transfer') AS native_transfers
 FROM wallet_history_full e
 WHERE wallet_address = lower($1)
 GROUP BY tx_hash
@@ -181,7 +182,7 @@ The **Fidelity** column: **exact** (from the chain), **calculated** (from real t
 
 ## Related
 
-- Run a recipe, quickstart
+- [Run the `walletHistoryFull` recipe](/data-feeds/recipes/wallet/wallet-history#run-it), one-command setup
 - Recipe reference: `walletHistoryFull`, `walletHistory`, `tokenMetadata`
 - Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
 - Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt

@@ -27,7 +27,7 @@ The recipe lands **one row per wallet-bearing event**. A wallet is "involved" if
 
 | `event_type` | Rows per event | Populated columns | USD value |
 | --- | --- | --- | --- |
-| `token_transfer` | 2 (from + to) | `token_address`, `amount` | ✅ inline |
+| `token_transfer` | 2 (from + to) | `token_address`, `amount` | ✅ inline (unscaled) |
 | `native_transfer` | 2 (from + to) | `amount` | — |
 | `nft_transfer` | 2 (from + to) | `token_address`, `token_id`, `amount` | — |
 | `swap` | 1 (the wallet) | `pair_address`, `token_in/out_address`, `amount_in/out` | ✅ inline |
@@ -151,6 +151,38 @@ MySQL is the same shape with `DECIMAL(65,18)` for the USD columns. `position` is
 
 </Accordion>
 
+### Run it
+
+Everything runs in **your** infrastructure: the sink writes into a database you own and you query it with plain SQL, no API and no per-call limits.
+
+**Prerequisites**
+
+- **Docker** and Docker Compose.
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+- The **recipe bundle** you receive with access (includes a `docker-compose` for a local database plus the sink).
+
+**Start the sink**
+
+```bash
+cd recipes
+cp .env.example .env      # set MORALIS_API_KEY (cm_live), MORALIS_CHAIN_ID, MORALIS_HISTORICAL_FROM_BLOCK
+docker compose -f docker-compose.recipes.yml up -d
+./run-recipe.sh walletHistoryFull clickhouse   # or: postgres | mysql
+```
+
+It backfills the window you choose, then (on ClickHouse) tails live blocks. Set the window in `.env`:
+
+```bash
+MORALIS_HISTORICAL_FROM_BLOCK=tip-1000   # last ~1000 blocks, a fast first run
+# tip-43200 ≈ 1 day on a 2s chain, or an absolute block number for a fixed window
+```
+
+<Note>
+**Size the window deliberately.** This recipe lands one row per event across six event types, so history adds up fast, `tip-1000` on Ethereum is roughly 3M rows. The 9-branch transform is memory-hungry: on chain-heavy windows raise the sink's ClickHouse memory ceiling (`CLICKHOUSE_MAX_MEMORY_USAGE`, default 4 GiB). See [Modes](#modes) for backfill vs realtime.
+</Note>
+
+Then run the example reads below to confirm rows are landing.
+
 ### Example reads
 
 A wallet's full feed, newest first (ClickHouse):
@@ -186,6 +218,16 @@ WHERE chain_id = 1 AND wallet_address = lower('0xd8dA…96045')
 GROUP BY event_type
 ORDER BY events DESC;
 ```
+
+### Other ways to consume this data
+
+The sink is the way to get **this pre-shaped table** (`wallet_history_full`) — recommended for a queryable history you own. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather shape it yourself:
+
+- **Your existing message clients** — stream it with **Kafka / AMQP / SQS**.
+- **REST / Arrow Flight** — pull the decoded block stream directly.
+- **Your warehouse** — query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
+
+Those give you the **source arrays** (`tokenTransfers`, `tokenSwaps`, …) to assemble yourself, not this pre-stitched wallet table. All of them read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
 
 ### USD valuation and fidelity gaps
 
