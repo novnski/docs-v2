@@ -55,7 +55,7 @@ exactly how that maps:
 
 ## Before you begin
 
-- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see the [`walletHistoryFull` recipe](/data-feeds/recipes/wallet/wallet-history#run-it) for the one-command setup.
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see the [`walletHistoryFull` recipe](/data-feeds/recipes/wallet/wallet-history#run-it) for setup.
 - The `walletHistoryFull` recipe applied to that database (add `tokenMetadata` for token names/symbols).
 - Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key) and the chain you're indexing.
 - The backfill window you want, set with `MORALIS_HISTORICAL_FROM_BLOCK` (e.g. `tip-1000`), see the note below.
@@ -186,7 +186,7 @@ The **Fidelity** column: **exact** (from the chain), **calculated** (from real t
 
 ## Related
 
-- [Run the `walletHistoryFull` recipe](/data-feeds/recipes/wallet/wallet-history#run-it), one-command setup
+- [Run the `walletHistoryFull` recipe](/data-feeds/recipes/wallet/wallet-history#run-it)
 - Recipe reference: `walletHistoryFull`, `walletHistory`, `tokenMetadata`
 - Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
 - Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt

@@ -159,7 +159,6 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 
 - **Docker** and Docker Compose.
 - A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
-- The **recipe bundle** you receive with access (includes a `docker-compose` for a local database plus the sink).
 
 <Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
   Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
@@ -167,19 +166,7 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 
 **Start the sink**
 
-```bash
-cd recipes
-cp .env.example .env      # set MORALIS_API_KEY (cm_live), MORALIS_CHAIN_ID, MORALIS_HISTORICAL_FROM_BLOCK
-docker compose -f docker-compose.recipes.yml up -d
-./run-recipe.sh walletHistoryFull clickhouse   # or: postgres | mysql
-```
-
-It backfills the window you choose, then (on ClickHouse) tails live blocks. Set the window in `.env`:
-
-```bash
-MORALIS_HISTORICAL_FROM_BLOCK=tip-1000   # last ~1000 blocks, a fast first run
-# tip-43200 ≈ 1 day on a 2s chain, or an absolute block number for a fixed window
-```
+Generate a **starter pack** for `walletHistoryFull` in the [Moralis Admin Panel](https://admin.moralis.com), pick your chain and destination database, then run it with Docker. The [quickstart](/data-feeds/migration/quickstart) walks through it end to end. Choose the backfill window (`MORALIS_HISTORICAL_FROM_BLOCK`, e.g. `tip-1000`) as noted below.
 
 <Note>
 **Size the window deliberately.** This recipe lands one row per event across six event types, so history adds up fast, `tip-1000` on Ethereum is roughly 3M rows. The 9-branch transform is memory-hungry: on chain-heavy windows raise the sink's ClickHouse memory ceiling (`CLICKHOUSE_MAX_MEMORY_USAGE`, default 4 GiB). See [Modes](#modes) for backfill vs realtime.

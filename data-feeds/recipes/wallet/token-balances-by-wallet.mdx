@@ -138,6 +138,29 @@ Refresh the view on a schedule: `REFRESH MATERIALIZED VIEW CONCURRENTLY token_ba
 
 </Accordion>
 
+### Run it
+
+Everything runs in **your** infrastructure: the sink writes into a database you own and you query it with plain SQL, no API and no per-call limits.
+
+**Prerequisites**
+
+- **Docker** and Docker Compose.
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+**Start the sink**
+
+Generate a **starter pack** for `tokenBalancesByWalletAddress` in the [Moralis Admin Panel](https://admin.moralis.com), pick your chain and destination database, then run it with Docker. The [quickstart](/data-feeds/migration/quickstart) walks through it end to end. Set the backfill window (`MORALIS_HISTORICAL_FROM_BLOCK`) as noted below.
+
+<Note>
+**Backfill full history for complete balances.** A balance is *current state* — the latest transfer-derived observation per `(wallet, token)` — and a wallet can still hold a token it last moved years ago. To return a wallet's *complete* holdings, backfill from an early block (`MORALIS_HISTORICAL_FROM_BLOCK=0`, or a token's deploy block if you scope to one token). A recent-only window like `tip-1000` captures only tokens that moved in that window, so balances would be incomplete — unlike an event feed, a partial window is **not** correct here. Full-chain backfill on a busy chain is large; plan for it. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+Then run the example reads below to confirm rows are landing.
+
 ### Example reads
 
 Every token a wallet holds, current non-zero balance only (ClickHouse — `argMax` over `FINAL` picks the latest observation per token):
@@ -167,6 +190,16 @@ SELECT token_address, balance FROM token_balances
 WHERE wallet_address = LOWER('0x...') AND balance > 0
 ORDER BY balance DESC;
 ```
+
+### Other ways to consume this data
+
+The sink is the way to get **this pre-shaped table** (`token_balances`) — recommended for a portfolio lookup you own. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather derive balances yourself:
+
+- **Your existing message clients** — stream it with **Kafka / AMQP / SQS**.
+- **REST / Arrow Flight** — pull the decoded block stream directly.
+- **Your warehouse** — query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
+
+Those give you the **source array** (`tokenTransfers`, which carries absolute post-transfer balances) to compute balances yourself, not this pre-computed table. All of them read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
 
 ### Modes
 

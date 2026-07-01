@@ -51,9 +51,13 @@ applies to wallet balances, so you can plan with confidence:
 
 ## Before you begin
 
-- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see **Run a recipe** (quickstart).
+- A running Data Feeds **sink** writing to a Postgres (or MySQL) database, see the [`tokenBalancesByWalletAddress` recipe](/data-feeds/recipes/wallet/token-balances-by-wallet#run-it) for setup.
 - The four recipes below applied to that database.
-- Your `MORALIS_API_KEY` and the chain you're indexing.
+- Your **Data Feeds key** (a `cm_live_…` key with `continuum:read`, *not* your legacy Web3 API key) and the chain you're indexing.
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
 
 <Note>
 **Plan for full history.** A wallet's balances are *current state*, the cumulative result of every transfer
@@ -215,7 +219,7 @@ The **Fidelity** column shows how each value compares to the old endpoint: **exa
 
 ## Related
 
-- Run a recipe, quickstart
+- [Run the `tokenBalancesByWalletAddress` recipe](/data-feeds/recipes/wallet/token-balances-by-wallet#run-it)
 - Recipe reference: `tokenBalancesByWalletAddress`, `nativeBalances`, `tokenMetadata`, `tokenPriceHistory`
 - Consume it your way: Kafka · AMQP/RabbitMQ · Amazon SQS · REST/HTTP · Arrow Flight (gRPC)
 - Query engines via Iceberg: Snowflake · BigQuery · Spark · Trino · DuckDB · dbt
