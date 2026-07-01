@@ -31,12 +31,13 @@ You're moving from a pre-packaged response to the **underlying data that produce
 
 **Comes through exactly**
 - **The token** (`tokenAddress`) and **when it graduated** (`graduatedAt`), from its `migrated` launchpad event on
-  the chain. You also get the **DEX pool it migrated into** (`poolAddress`), which the old endpoint didn't expose.
+  the chain.
 - **The launchpad**, and the token's **name** and **symbol**.
 
 **Calculated for you, from real trades**
-- **Prices** (`priceUsd`, `priceNative`), **liquidity**, and **fully diluted valuation**, after graduation these
-  come from the token's normal DEX pool. Compare with a small tolerance, or omit what you don't need.
+- **Prices**, **liquidity**, and **FDV** aren't fields in the launchpad feed. After graduation the token trades on
+  a normal DEX pool, so price it with [Token Prices](/data-feeds/recipes/token/token-prices) and
+  [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) like any DEX token, or omit them.
 
 **Yours to control**
 - **What counts as "graduated."** It's the set of tokens with a `migrated` event on the launchpad you pick,
@@ -84,15 +85,17 @@ SELECT
   token_address,
   exchange_address,
   minIf(event_ts, event_type = 'migrated') AS graduated_at,
-  anyLast(pool_address)                    AS pool_address   -- the DEX pool it migrated to
+  anyLast(pool_address)                    AS pool_address   -- empty on the Solana feed today; see note below
 FROM recipe_token_bonding_status.fact_launchpad_events FINAL
 GROUP BY token_address, exchange_address
 HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 -- query it per launchpad: WHERE exchange_address = :exchange ORDER BY graduated_at DESC
 ```
 
-`graduatedAt` maps to `graduated_at` (the migration time). Join `token_metadata` for decimals and your price
-recipe for post-graduation prices, those are calculated, as noted in [What to expect](#what-to-expect).
+`graduatedAt` maps to `graduated_at` (the migration time). `pool_address` is **empty on the Solana feed today**, so
+drop it or resolve the pool from your own source. Price post-graduation tokens with
+[Token Prices](/data-feeds/recipes/token/token-prices) once they're trading on a DEX pool (calculated, as noted in
+[What to expect](#what-to-expect)).
 
 ### Step 3: Query it from your app
 
@@ -118,7 +121,7 @@ async function getGraduatedTokens(exchange = PUMPFUN, limit = 50, before?: strin
 }
 ```
 
-You're now tracking graduations live, and you know the exact DEX pool each token moved into.
+You're now tracking graduations live, the moment each token migrates off the bonding curve.
 
 ### Step 4: Add the extras you want
 
@@ -148,17 +151,17 @@ The **same feed** is available however you build, all reading the one data lake:
 | `graduatedAt` | `minIf(event_ts, event_type='migrated')` | exact |
 | `name`, `symbol` | `fact_launchpad_events` / `token_metadata` | exact |
 | `decimals` | `token_metadata.decimals` | exact |
-| `priceUsd`, `priceNative` | your price recipe (post-graduation DEX pool) | calculated |
-| `liquidity` | pool reserves x price | calculated |
-| `fullyDilutedValuation` | total supply x price | calculated |
+| `priceUsd`, `priceNative` | [Token Prices](/data-feeds/recipes/token/token-prices) once on a DEX pool (post-graduation) | calculated |
+| `liquidity` | [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) × price | calculated |
+| `fullyDilutedValuation` | `token_metadata.total_supply` × price | calculated |
 | `logo` | add yourself | off-chain |
-| *(bonus)* the DEX pool it migrated to | `pool_address` | exact (not in the old endpoint) |
+| `poolAddress` | not populated on the Solana feed today — resolve from your own source | add yourself |
 
 ## Good to know
 
 - **Graduation = `migrated`.** Presence of that event is the signal; `graduated_at` is the migration time.
-- **Post-graduation pricing** comes from the token's normal DEX pool (your price and pair recipes), keyed on the
-  migrated `pool_address`.
+- **Post-graduation pricing** comes from the token's normal DEX pool (Token Prices / Pair Reserves) once it's
+  trading there. Note `pool_address` is empty on the Solana feed today.
 - **You pick the launchpad** via `exchange_address` (the old `:exchange`) or `launchpad_platform`.
 - **No per-call limit**; page with a keyset on `graduated_at`.
 

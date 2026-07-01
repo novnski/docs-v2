@@ -41,12 +41,12 @@ applies to new-token discovery:
 - **The launchpad** it was created on (the exchange), and the token's **name** and **symbol** as emitted on
   creation.
 
-**Calculated for you, from real trades**
-- **Prices** (`priceUsd`, `priceNative`) come from live onchain DEX activity, the same trades the old endpoint
-  used. They track it closely; because you're computing the mark yourself, compare with a small tolerance rather
-  than expecting an identical figure.
-- **Liquidity** and **fully diluted valuation** come from price combined with pool reserves and supply, add a
-  pair recipe and the token's supply to derive them (or omit them).
+**Calculated for you, from the token's own trades**
+- **Prices** aren't a field in the launchpad feed. Once a token starts trading, derive its **native price** from a
+  `traded` event (`native_amount / token_amount`) and convert to **USD** with a SOL/USD mark (wrapped SOL via a
+  [Token Prices](/data-feeds/recipes/token/token-prices) sync). A brand-new token has no price until its first trade.
+- **Liquidity** and **fully diluted valuation** are further derivations (curve/pool reserves × price, supply ×
+  price), add them or omit them.
 
 **Yours to control**
 - **What counts as "new."** "New" is the set of `created` events on the launchpad you pick. You choose the
@@ -112,8 +112,9 @@ GROUP BY token_address, exchange_address;
 -- query it per launchpad:  WHERE exchange_address = :exchange ORDER BY created_at DESC
 ```
 
-Want decimals or a price? Join `token_metadata` for `decimals`, and your price recipe for `priceUsd` / `priceNative`
-(those are calculated, as noted in [What to expect](#what-to-expect)).
+Want decimals or a price? Join `token_metadata` for `decimals`; derive the native price from the token's `traded`
+events (`native_amount / token_amount`) and multiply by a SOL/USD mark for USD (both calculated, as noted in
+[What to expect](#what-to-expect)).
 
 ### Step 3: Query it from your app
 
@@ -183,9 +184,10 @@ The **Fidelity** column shows how each value compares to the old endpoint: **exa
 | `createdAt` | `min(event_ts)` over the token's `created` event | exact |
 | `name`, `symbol` | `fact_launchpad_events` (created event) / `token_metadata` | exact |
 | `decimals` | `token_metadata.decimals` | exact |
-| `priceUsd`, `priceNative` | your price recipe (`tokenPriceHistory`), newest per token | calculated |
-| `liquidity` | pair reserves x price | calculated |
-| `fullyDilutedValuation` | total supply x price | calculated |
+| `priceNative` | derive: `native_amount / token_amount` from the token's `traded` events (after first trade) | calculated |
+| `priceUsd` | `priceNative` × a SOL/USD mark (wrapped SOL via [Token Prices](/data-feeds/recipes/token/token-prices)) | calculated |
+| `liquidity` | curve/pool reserves × price, or omit | calculated |
+| `fullyDilutedValuation` | `token_metadata.total_supply` × price, or omit | calculated |
 | `logo` | add yourself | off-chain |
 
 ## Good to know

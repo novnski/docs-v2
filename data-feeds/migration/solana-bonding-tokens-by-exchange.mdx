@@ -35,9 +35,11 @@ You're moving from a pre-packaged response to the **underlying data that produce
   launchpad's `traded` events on the chain.
 - **The launchpad** it's bonding on, and the token's **name** and **symbol**.
 
-**Calculated for you, from real trades**
-- **Prices** (`priceUsd`, `priceNative`), **liquidity**, and **fully diluted valuation** come from live DEX
-  activity plus reserves and supply, compare with a small tolerance, or omit what you don't need.
+**Calculated for you, from the token's own trades**
+- **Prices** aren't a field in the feed. Derive the **native price** from a `traded` event
+  (`native_amount / token_amount`) and convert to **USD** with a SOL/USD mark (wrapped SOL via a
+  [Token Prices](/data-feeds/recipes/token/token-prices) sync). **Liquidity** and **FDV** are further derivations
+  (reserves/supply × price), or omit them.
 
 **Yours to control**
 - **What counts as "bonding."** You define it as tokens with curve progress below 100 that haven't migrated, on
@@ -94,8 +96,8 @@ HAVING maxIf(1, event_type = 'migrated') = 0   -- still bonding (not graduated)
 ```
 
 `bondingCurveProgress` maps to `bonding_progress` (the latest curve reading per token). Join `token_metadata` for
-decimals and your price recipe for prices, those are calculated, as noted in
-[What to expect](#what-to-expect).
+decimals; derive the native price from `traded` events (`native_amount / token_amount`), × a SOL/USD mark for USD
+(calculated, as noted in [What to expect](#what-to-expect)).
 
 ### Step 3: Query it from your app
 
@@ -151,9 +153,10 @@ The **same feed** is available however you build, all reading the one data lake:
 | `bondingCurveProgress` | latest `progress_percentage` per token | exact |
 | `name`, `symbol` | `fact_launchpad_events` / `token_metadata` | exact |
 | `decimals` | `token_metadata.decimals` | exact |
-| `priceUsd`, `priceNative` | your price recipe, newest per token | calculated |
-| `liquidity` | pair reserves x price | calculated |
-| `fullyDilutedValuation` | total supply x price | calculated |
+| `priceNative` | derive: `native_amount / token_amount` from `traded` events | calculated |
+| `priceUsd` | `priceNative` × a SOL/USD mark (wrapped SOL via [Token Prices](/data-feeds/recipes/token/token-prices)) | calculated |
+| `liquidity` | cumulative curve `native_amount` × price, or omit | calculated |
+| `fullyDilutedValuation` | `token_metadata.total_supply` × price, or omit | calculated |
 | `logo` | add yourself | off-chain |
 
 ## Good to know
