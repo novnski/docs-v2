@@ -1,8 +1,12 @@
 ---
 title: "Token Scores"
-description: "The Moralis Token Score is a unified 0-100 rating that evaluates the onchain quality of a token using six weighted metrics, supported across all EVM chains and Solana mainnet. "
+description: "The Moralis Token Score is a unified 0-100 rating that evaluates the onchain quality of a token using six weighted metrics, supported across all EVM chains."
 tag: "New"
 ---
+
+<Info>
+  **Token Score is becoming an EVM-only feature.** Solana support is deprecated and will be removed on **July 31, 2026** — after that date, Token Score and the embedded Solana `score` field are no longer available for Solana tokens. Token Score remains fully supported on all EVM chains. See the [changelog](/changelog) for details.
+</Info>
 
 ## What is the Token Score?
 
@@ -266,4 +270,8 @@ Example response:
 
 ## Supported Chains
 
-The Token Score is available on all mainnet chains, for **both EVM and Solana tokens**. This allows you to **compare token quality across EVM chains and Solana using a unified metric**, while still respecting chain-specific data structures under the hood.
+The Token Score is available on all **EVM mainnet chains**, giving you a unified metric to **compare token quality across EVM chains**.
+
+<Note>
+  Solana support for Token Score is deprecated and will be removed on **July 31, 2026**. After that date, Token Score is an EVM-only feature. See the [changelog](/changelog) for details.
+</Note>

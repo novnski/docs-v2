@@ -6,7 +6,7 @@ description: "New releases and improvements"
 <Update label="June 30, 2026" tags={["Deprecation"]}>
   ## Token Holders and Solana Token Discovery Endpoints Sunsetting
 
-  The following endpoints are now deprecated and will be removed on **July 31, 2026** (30 days from today). If you rely on any of them, please migrate before that date. [Reach out to the team](https://admin.moralis.com/) (via chat widget) if you need help identifying replacements.
+  The following endpoints are now deprecated and will be removed on **July 31, 2026**. If you rely on any of them, please migrate before that date. [Reach out to the team](https://admin.moralis.com/) (via chat widget) if you need help identifying replacements.
 
   **Solana token holders (all sunset):**
 
@@ -26,6 +26,21 @@ description: "New releases and improvements"
   - [`GET /token/{network}/exchange/{exchange}/bonding`](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) — Bonding tokens by exchange
   - [`GET /token/{network}/exchange/{exchange}/graduated`](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) — Graduated tokens by exchange
   - [`GET /token/{network}/{address}/bonding-status`](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status) — Token bonding status
+</Update>
+
+<Update label="June 30, 2026" tags={["Deprecation"]}>
+  ## Token Score Becoming EVM-Only (Solana Support Sunsetting)
+
+  Token Score is becoming an **EVM-only** feature. Solana support for Token Score is now deprecated and will be removed on **July 31, 2026**. Token Score remains fully supported on all EVM chains — nothing changes there.
+
+  **What's changing on Solana:**
+
+  - The Token Score and Historical Token Score endpoints — [`GET /tokens/{tokenAddress}/score`](/data-api/universal/token/score/token-score) and [`GET /tokens/{tokenAddress}/score/historical`](/data-api/universal/token/score/token-score-timeseries) — will no longer return data for Solana tokens. They remain available for EVM.
+  - The embedded `score` field is being removed from Solana token responses: Solana token price, token metadata, and wallet token balances.
+
+  The Solana `score` field is now marked deprecated in the API reference and will stop being returned on July 31, 2026. Remove any code that reads it before then. EVM Token Score — including the `securityScore` field on EVM token price — is unaffected.
+
+  [Reach out to the team](https://admin.moralis.com/) (via chat widget) if you need help.
 </Update>
 
 <Update label="June 15, 2026" tags={["Deprecation"]}>
@@ -288,7 +303,7 @@ description: "New releases and improvements"
 <Update label="May 5, 2026" tags={["Deprecation"]}>
   ## Cortex API and legacy Data API Endpoints Sunsetting
 
-  The following endpoints and APIs are now deprecated and will be removed on **June 4, 2026** (30 days from today):
+  The following endpoints and APIs are now deprecated and will be removed on **June 4, 2026**:
 
   **Cortex API:**
 
