@@ -925,7 +925,7 @@
             ]
           },
           {
-            "group": "Data API",
+            "group": "Data APIs & Migration Guides",
             "pages": [
               "data-feeds/recipes/overview",
               "data-feeds/migration/overview",
