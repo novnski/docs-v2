@@ -81,31 +81,32 @@ Any "what is this worth in USD" question — a transfer's value, a portfolio's w
 
 ### Recipe catalogue
 
-Recipes are grouped by the kind of data they serve. ⭐ marks the most popular endpoints.
+Recipes are grouped by the API product they replace, so you can start from the API you use today. ⭐ marks
+the most popular endpoints.
 
-| Domain | Recipe | Answers |
+| API | Recipe | Answers |
 | --- | --- | --- |
-| **Wallet** | [Wallet History](/data-feeds/recipes/wallet/wallet-history) ⭐ | Every event a wallet was involved in |
+| **Wallet API** | [Wallet History](/data-feeds/recipes/wallet/wallet-history) ⭐ | Every event a wallet was involved in |
 | | [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet) ⭐ | Every token a wallet holds, with balance |
 | | [Native Balances](/data-feeds/recipes/wallet/native-balances) | Native-asset balance per wallet |
 | | [NFTs by Wallet](/data-feeds/recipes/wallet/nfts-by-wallet) ⭐ | Every NFT a wallet holds |
 | | [Token Approvals](/data-feeds/recipes/wallet/token-approvals) | Current allowances a wallet has granted |
-| **Token** | [Token Prices](/data-feeds/recipes/token/token-prices) ⭐ | USD/native mark history for a token |
-| | [Token Holders](/data-feeds/recipes/token/token-holders) ⭐ | All non-zero holders of a token |
+| **Token API** | [Token Holders](/data-feeds/recipes/token/token-holders) ⭐ | All non-zero holders of a token |
 | | [Token Balances by Token](/data-feeds/recipes/token/token-balances-by-token) | Holder balances, keyed by token |
 | | [Token Transfers](/data-feeds/recipes/token/token-transfers) | Every transfer of a token |
 | | [Token Stats](/data-feeds/recipes/token/token-stats) | Per-token transfer counters |
 | | [Token Metadata](/data-feeds/recipes/token/token-metadata) | Name, symbol, decimals, supply |
-| **Swaps & Markets** | [Swaps by Wallet](/data-feeds/recipes/markets/swaps-by-wallet) ⭐ | Every DEX trade made by a wallet |
+| **Price API** | [Token Prices](/data-feeds/recipes/token/token-prices) ⭐ | USD/native mark history for a token |
+| | [Pair OHLCV](/data-feeds/recipes/markets/pair-ohlcv) | Candles per pool |
+| **DeFi API** | [Swaps by Wallet](/data-feeds/recipes/markets/swaps-by-wallet) ⭐ | Every DEX trade made by a wallet |
 | | [Swaps by Token](/data-feeds/recipes/markets/swaps-by-token) ⭐ | Every DEX trade touching a token |
 | | [Swaps by Pair](/data-feeds/recipes/markets/swaps-by-pair) | Every DEX trade on a pool/pair |
-| | [Pair OHLCV](/data-feeds/recipes/markets/pair-ohlcv) | Candles per pool |
 | | [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) | Current reserves per pool |
-| **NFT** | [NFT Trades](/data-feeds/recipes/nft/nft-trades) | Marketplace trades per collection / token / wallet |
+| **NFT API** | [NFT Trades](/data-feeds/recipes/nft/nft-trades) | Marketplace trades per collection / token / wallet |
 | | [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) | Every NFT movement |
 | | [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) | Current owners of a collection |
 | | [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) | Collection-level metadata |
-| **Logs & Events** | [Contract Logs](/data-feeds/recipes/logs/contract-logs) | Every raw event log emitted by a contract |
+| **Blockchain API** | [Contract Logs](/data-feeds/recipes/logs/contract-logs) | Every raw event log emitted by a contract |
 | | [Logs by Event Signature](/data-feeds/recipes/logs/logs-by-topic0) | One event signature (`topic0`) across all contracts |
 
 <Note>

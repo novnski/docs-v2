@@ -922,7 +922,7 @@
             "pages": [
               "data-feeds/recipes/overview",
               {
-                "group": "Wallet",
+                "group": "Wallet API",
                 "pages": [
                   "data-feeds/recipes/wallet/wallet-history",
                   "data-feeds/recipes/wallet/token-balances-by-wallet",
@@ -932,9 +932,8 @@
                 ]
               },
               {
-                "group": "Token",
+                "group": "Token API",
                 "pages": [
-                  "data-feeds/recipes/token/token-prices",
                   "data-feeds/recipes/token/token-holders",
                   "data-feeds/recipes/token/historical-balances",
                   "data-feeds/recipes/token/token-balances-by-token",
@@ -945,17 +944,23 @@
                 ]
               },
               {
-                "group": "Swaps & Markets",
+                "group": "Price API",
+                "pages": [
+                  "data-feeds/recipes/token/token-prices",
+                  "data-feeds/recipes/markets/pair-ohlcv"
+                ]
+              },
+              {
+                "group": "DeFi API",
                 "pages": [
                   "data-feeds/recipes/markets/swaps-by-wallet",
                   "data-feeds/recipes/markets/swaps-by-token",
                   "data-feeds/recipes/markets/swaps-by-pair",
-                  "data-feeds/recipes/markets/pair-ohlcv",
                   "data-feeds/recipes/markets/pair-reserves"
                 ]
               },
               {
-                "group": "NFT",
+                "group": "NFT API",
                 "pages": [
                   "data-feeds/recipes/nft/nft-transfers",
                   "data-feeds/recipes/nft/nft-trades",
@@ -964,7 +969,7 @@
                 ]
               },
               {
-                "group": "Logs & Events",
+                "group": "Blockchain API",
                 "pages": [
                   "data-feeds/recipes/logs/contract-logs",
                   "data-feeds/recipes/logs/logs-by-topic0"
@@ -973,12 +978,90 @@
             ]
           },
           {
-            "group": "Migration Guides",
+            "group": "Data API → Data Feeds",
             "pages": [
               "data-feeds/migration/overview",
-              "data-feeds/migration/endpoints",
               "data-feeds/migration/quickstart",
-              "data-feeds/migration/troubleshooting"
+              "data-feeds/migration/endpoints",
+              "data-feeds/migration/troubleshooting",
+              {
+                "group": "Wallet API",
+                "pages": [
+                  "data-feeds/migration/wallet-tokens",
+                  "data-feeds/migration/wallet-history",
+                  "data-feeds/migration/wallet-nfts",
+                  "data-feeds/migration/wallet-erc20",
+                  "data-feeds/migration/wallet-erc20-transfers",
+                  "data-feeds/migration/wallet-nft-transfers",
+                  "data-feeds/migration/wallet-nft-collections",
+                  "data-feeds/migration/wallet-native-txns",
+                  "data-feeds/migration/wallet-networth",
+                  "data-feeds/migration/wallet-approvals",
+                  "data-feeds/migration/wallet-chains",
+                  "data-feeds/migration/native-balance",
+                  "data-feeds/migration/wallet-stats",
+                  "data-feeds/migration/wallet-swaps"
+                ]
+              },
+              {
+                "group": "Token API",
+                "pages": [
+                  "data-feeds/migration/erc20-owners",
+                  "data-feeds/migration/erc20-holders",
+                  "data-feeds/migration/erc20-metadata",
+                  "data-feeds/migration/token-transfers",
+                  "data-feeds/migration/holders-historical",
+                  "data-feeds/migration/token-analytics"
+                ]
+              },
+              {
+                "group": "Price API",
+                "pages": [
+                  "data-feeds/migration/erc20-prices",
+                  "data-feeds/migration/erc20-price",
+                  "data-feeds/migration/pair-ohlcv"
+                ]
+              },
+              {
+                "group": "DeFi API",
+                "pages": [
+                  "data-feeds/migration/token-pairs"
+                ]
+              },
+              {
+                "group": "NFT API",
+                "pages": [
+                  "data-feeds/migration/nft-multiple",
+                  "data-feeds/migration/nft-collection-metadata",
+                  "data-feeds/migration/nfts-by-contract",
+                  "data-feeds/migration/nft-owners"
+                ]
+              },
+              {
+                "group": "Blockchain API",
+                "pages": [
+                  "data-feeds/migration/transaction-verbose",
+                  "data-feeds/migration/block"
+                ]
+              },
+              {
+                "group": "Solana",
+                "pages": [
+                  "data-feeds/migration/solana-top-holders",
+                  "data-feeds/migration/solana-token-holders",
+                  "data-feeds/migration/solana-historical-holders",
+                  "data-feeds/migration/solana-new-tokens-by-exchange",
+                  "data-feeds/migration/solana-bonding-tokens-by-exchange",
+                  "data-feeds/migration/solana-graduated-tokens-by-exchange",
+                  "data-feeds/migration/solana-token-bonding-status"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Streams → Data Feeds",
+            "pages": [
+              "data-feeds/migration/streams-overview"
             ]
           },
           {
