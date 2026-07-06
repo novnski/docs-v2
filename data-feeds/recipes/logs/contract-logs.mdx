@@ -142,6 +142,82 @@ Contract Logs extracts EVM event logs (`topic0…3` + `data`). Solana program lo
 
 Raw on-chain log primitives — emitter, all topics, raw data, block, tx hash, on-chain ordering — are fully covered. Fields with no onchain source are omitted: `decoded_event` (needs the contract ABI — decode in your app) and transaction receipt fields beyond `tx_hash`.
 
+## Migrating from the REST API
+
+This recipe is the landing point for the two legacy **Blockchain API** endpoints. Neither maps 1:1 to a single recipe: both responses are assembled from the raw `block` array — the flattened header / transaction / log rows this recipe already reads (see [The block array](/data-feeds/concepts/the-block-array)). This recipe lands the **log** rows in a queryable table; the transaction and header fields come from the sibling rows in the same array. The subsections below cover each endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **decoded** = you decode from the ABI or a typed recipe covers it, **gap** = not delivered today, **off-chain** = add yourself), and the gotchas specific to that endpoint.
+
+### GET /transaction/:transaction_hash/verbose
+
+The decoded-transaction-by-hash endpoint. Replaced by reading the transaction's logs from this recipe's table and its raw fields from the transaction row of [the block array](/data-feeds/concepts/the-block-array) — the "verbose" ABI decoding becomes a step you own.
+
+<Warning>
+This is **not** a 1:1 table swap — it's a three-part workflow. **Logs** come from this recipe's table, keyed by `tx_hash`. **The transaction's own fields** (`from`, `to`, `value`, `input`, gas, receipt) come from the sibling `itemType = 'transaction'` row in the block array — the matching log rows give you its `block_number`. **Decoding** is yours: standard events are already typed rows in the decoded recipes ([Token Transfers](/data-feeds/recipes/token/token-transfers), [NFT Transfers](/data-feeds/recipes/nft/nft-transfers), [Swaps by Pair](/data-feeds/recipes/markets/swaps-by-pair)); custom events and `decoded_call` decode from the contract ABI.
+</Warning>
+
+| `/transaction/:hash/verbose` | Data Feeds | Fidelity |
+|---|---|---|
+| `hash`, `nonce`, `transaction_index`, `from/to_address`, `value`, `input`, `gas*`, `receipt_*` | `block` array transaction row | exact |
+| `transaction_fee` | derive: `receipt_gas_used × gas_price` | exact |
+| `block_number`, `block_timestamp`, `block_hash` | transaction row / this recipe's table | exact |
+| `logs[]` (address, topics, data, indices) | this recipe (`fact_logs` / `contract_logs`) | exact |
+| `logs[].decoded_event` (standard events) | decoded recipes (Token Transfers, NFT Transfers, Swaps) | decoded |
+| `logs[].decoded_event` (custom), `decoded_call` | decode topics/`data`/`input` with the contract ABI | decoded |
+| `internal_transactions` | not carried in the `block` array today | gap |
+| `from/to_address_entity`, `*_label`, `*_entity_logo` | add yourself | off-chain |
+
+A transaction's logs by hash (Postgres — same shape on ClickHouse with `FINAL`):
+
+```sql
+SELECT block_number, transaction_index, log_index, contract_address,
+       topic0, topic1, topic2, topic3, data
+FROM contract_logs
+WHERE tx_hash = lower('0x...')
+ORDER BY log_index;
+```
+
+**Gotchas**
+
+- **By-hash is a point lookup, but the shipped keys are contract-first.** Add an index on `tx_hash` (or keep your own hash-to-block map) — the shipped `(contract_address, block_number, …)` ordering doesn't serve it.
+- **Index the history you'll look up.** Arbitrary historical hashes need a `historical`/`hybrid` backfill across the range; recent-only lookups need only a recent window — see [History & backfill](/data-feeds/concepts/history-and-backfill).
+- `internal_transactions` is a gap today — it isn't carried in the `block` array.
+- The `*_entity` / `*_label` / `*_entity_logo` fields are off-chain address labels; bring your own directory or drop them.
+
+### GET /block/:block_number_or_hash
+
+The whole-block endpoint. Replaced by reading the block directly from the feed — a feed row's native unit **is** a block, so the header, transactions, and logs arrive together in [the block array](/data-feeds/concepts/the-block-array) and a by-number read is a direct positional read (a block's position is its block number).
+
+<Warning>
+This recipe's table alone does **not** reconstruct the response — it holds only the log rows. The header and transaction rows come from the block array itself (`itemType = 'block'` / `'transaction'` / `'log'`): read the block's row from the feed, split the array by `itemType`, and join each log to its transaction on `transaction_index`. Keep this recipe running alongside to make logs queryable by block without re-reading whole blocks — and to resolve `block_hash → block_number` for by-hash reads.
+</Warning>
+
+| `/block/:block_number_or_hash` | Data Feeds | Fidelity |
+|---|---|---|
+| Header (`number`, `hash`, `parent_hash`, `timestamp`, `miner`, `gas_*`, `base_fee_per_gas`, roots, …) | `block` array block row | exact |
+| `transaction_count` | count of transaction rows | exact |
+| `transactions[]` (hash, from, to, value, input, gas, receipt_*) | `block` array transaction rows | exact |
+| `transaction_fee` | derive: `receipt_gas_used × gas_price` | exact |
+| `logs[]` (address, topics, data, indices) | `block` array log rows / this recipe | exact |
+| `internal_transactions` | not carried in the `block` array today | gap |
+| `from/to_address_entity`, `*_label`, `*_entity_logo` | add yourself | off-chain |
+
+Resolve a by-hash read to a position, then all of that block's logs (ClickHouse):
+
+```sql
+SELECT block_number, transaction_index, log_index, tx_hash,
+       contract_address, topic0, topic1, topic2, topic3, data
+FROM recipe_logs_by_contract.fact_logs FINAL
+WHERE chain_id = 1 AND block_hash = lower('0x...')
+ORDER BY transaction_index, log_index;
+```
+
+**Gotchas**
+
+- **By-hash resolves to a number first** — the feed is positioned by block number; this recipe's `block_hash` column (or your own index) does the resolve.
+- **Raw log rows carry no tx hash** — they join to their transaction on `(block_number, transaction_index)`; this recipe already attaches `tx_hash` for you.
+- **Busy blocks are large** (a megabyte or two of JSON) — read by position and process the array.
+- Legacy responses return **raw** logs, matching this recipe exactly; if you also want decoded events, add the decoded recipes or decode from the ABI.
+- `internal_transactions` and address labels: same gaps as above.
+
 ### Related
 
 <Columns cols={2}>

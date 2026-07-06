@@ -3,15 +3,6 @@ title: "Token Prices"
 description: "Sync a token's full USD / native mark price history — every in-block price update for each pair and protocol — as a continuous feed into your own database, with a carry-forward latest mark for valuing quiet positions."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /erc20/{address}/price", guide: "erc20-price", label: "ERC-20 token price" },
-    { path: "GET /erc20/prices", guide: "erc20-prices", label: "ERC-20 token prices (batch)" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me the USD / native mark price history for token **0x…**, newest first — and the freshest mark right now so I can value a position that hasn't traded recently."
@@ -188,6 +179,84 @@ The recipe is chain-parametrized via the `chain` setting — point it at any sup
 - **Precision.** `usd_price` and `native_price` are carried as strings end-to-end to preserve full precision; cast at read time (`toDecimal*` on ClickHouse, the `NUMERIC` / `DECIMAL` columns on Postgres / MySQL).
 - **Multiple marks per block.** A token priced on several pairs/protocols lands one row per `(pair, protocol)` per block. Pick a venue (filter `pair_address` / `protocol`) or aggregate (`argMax`) depending on whether you want a specific venue's mark or a representative one.
 - **Carry-forward staleness.** The `latest_token_price_dict` refreshes every 30–60s, so a quiet token's mark is at most ~a minute stale without needing a fresh price event — but it does not interpolate between updates.
+
+## Migrating from the REST API
+
+This recipe replaces both legacy price endpoints. Their responses were **not 1:1 rows in one table**: prices, token details, and pair liquidity came bundled in a single payload, but they live in different parts of the dataset here.
+
+<Note>
+  Rebuilding the full legacy response takes a **combination of recipes**: this one for the marks, plus [Token Metadata](/data-feeds/recipes/token/token-metadata) for `tokenName` / `tokenSymbol` / `tokenDecimals` and [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) if you need `pairTotalLiquidityUsd` (reserves × price). Join them at read time on `token_address` / `pair_address`.
+</Note>
+
+Two workflow changes to plan for:
+
+- **USD prices are calculated from DEX trades** — the same trades the legacy endpoints priced from, so marks track closely, but compare with a small tolerance rather than expecting identical figures.
+- **You pick the reference pair.** The legacy endpoints chose one pair (typically deepest liquidity) as "the price"; this table keeps every `(pair, protocol)` mark, so you define the rule — filter by `pair_address`, or `argMax` for the newest overall.
+
+Both endpoints returned the same shape, so one field mapping covers them:
+
+| Legacy field | Data Feeds | Fidelity |
+| --- | --- | --- |
+| `tokenAddress` | `token_address` | exact |
+| `usdPrice` / `usdPriceFormatted` | latest `usd_price` per token | calculated |
+| `nativePrice` | latest `native_price` — a scalar, not the legacy object | calculated |
+| `pairAddress`, `exchangeName` | `pair_address`, `protocol` | exact |
+| `priceLastChangedAtBlock`, `blockTimestamp` | `block_number`, `event_ts` (`block_timestamp` on Postgres / MySQL, in **seconds**, not ms) | exact |
+| `tokenName`, `tokenSymbol`, `tokenDecimals` | [Token Metadata](/data-feeds/recipes/token/token-metadata) recipe | exact |
+| `24hrPercentChange`, `usdPrice24hr*` | derive: mark ~24h ago vs latest, from this table's history | calculated |
+| `pairTotalLiquidityUsd` | [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) recipe — reserves × price | calculated |
+| `exchangeAddress` | not in these recipes — `protocol` names the venue; bring a factory list if you need the address | add yourself |
+| `tokenLogo`, `possibleSpam`, `verifiedContract`, `securityScore` | off-chain signals — bring your own token / allow / deny lists | add yourself |
+
+### GET /erc20/:address/price — single token price
+
+```
+GET /erc20/:address/price
+```
+
+Replaced by the newest mark for one token in this recipe's table, joined to [Token Metadata](/data-feeds/recipes/token/token-metadata) for the token details the endpoint bundled in. On Postgres:
+
+```sql
+SELECT DISTINCT ON (p.token_address)
+       p.token_address, m.symbol, m.name, m.decimals,
+       p.usd_price, p.native_price, p.pair_address,
+       p.protocol      AS exchange_name,
+       p.block_number  AS price_last_changed_at_block,
+       p.block_timestamp
+FROM token_price_updates p
+LEFT JOIN token_metadata m ON m.token_address = p.token_address
+WHERE p.token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+ORDER BY p.token_address, p.block_number DESC;   -- newest mark
+```
+
+- On ClickHouse, skip the scan for "price now": `latest_token_price_dict` is the O(1) carry-forward lookup (see [Example reads](#example-reads)).
+- For "price now" you only need the feed running recently — backfill only if you want historical prices (the old `to_block` behavior) or a 24h-change window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- A token that hasn't traded recently carries an older mark; the dictionary carries it forward but does not interpolate.
+
+### POST /erc20/prices — batch token prices
+
+```
+POST /erc20/prices
+```
+
+Replaced by the same newest-mark-per-token read over a set of tokens — one query, **no 100-token batch cap**. On ClickHouse:
+
+```sql
+SELECT token_address,
+       argMax(usd_price,    (block_number, event_ts)) AS usd_price,
+       argMax(native_price, (block_number, event_ts)) AS native_price,
+       argMax(pair_address, (block_number, event_ts)) AS pair_address,
+       max(block_number)                              AS price_last_changed_at_block
+FROM recipe_token_price_history.fact_token_price_update FINAL
+WHERE chain_id = 1
+  AND sign = 1
+  AND token_address IN (lower('0xA0b8…'), lower('0xC02a…'), lower('0x6B17…'))
+GROUP BY token_address;
+```
+
+- The legacy 24h-change fields (`24hrPercentChange`, `usdPrice24hr*`) aren't stored — derive them by comparing each token's latest mark against its mark ~24 hours earlier from this same table.
+- Pin the reference pair per token (filter `pair_address` or order by your liquidity column) before `argMax`, or the "price" can flip between venues call to call.
+- Tokens with no recent DEX activity return their last mark, not `null` — check `price_last_changed_at_block` if staleness matters.
 
 ### Related
 

@@ -3,14 +3,6 @@ title: "Pair OHLCV"
 description: "Sync time-bucketed OHLCV candles — open, high, low, close, volume, and trade count per DEX pair — built by aggregating on-chain swaps, into your own database. Mirrors the Moralis GET /pairs/{address}/ohlcv endpoint."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /pairs/{address}/ohlcv", guide: "pair-ohlcv", label: "Pair OHLCV candlesticks" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me 1-hour OHLCV candles for pool/pair **0x…** — open, high, low, close, volume, and trade count per hour." Mirrors Moralis `GET /pairs/{address}/ohlcv`.
@@ -264,6 +256,51 @@ The recipe is chain-parametrized — point it at any supported EVM chain or Sola
 - **ClickHouse `candles` high/low under reorg.** The fast accelerator's `high`/`low` are monotonic state functions; a reorg `−1` row cannot retract an extreme, so if a reorg removes an hour's all-time high/low, `candles` may stay slightly wide until the next canonical trade re-establishes the range. Read **`candles_exact`** when post-reorg precision matters. `volume` and `trades` are sign-weighted and always exact on both surfaces.
 - **`volume` is absolute traded USD.** `notional_usd` carries the **signed** token1 delta (V3/V4 report signed swap amounts — negative when the token leaves the pool), so `volume` uses `abs(notional_usd)` (×reorg-sign on ClickHouse) — otherwise buy/sell legs cancel and volume goes negative. This is the canonical OHLCV "traded value" definition.
 - **Missing-decimals volume outliers.** A handful of exotic tokens arrive with `token1` decimals absent/0 (coalesced to 0 in the shared swap transform); their raw amount isn't decimal-scaled and `notional_usd` is wildly inflated, producing an implausibly large candle `volume`. OHLC prices are unaffected (they use per-unit `price_usd`). Filter `volume < 1e12` for a clean volume distribution; a production deployment should source token decimals from a metadata table rather than the in-event field.
+
+## Migrating from the REST API
+
+This recipe replaces the legacy pair-OHLCV endpoint, and it's the closest to 1:1 in the swaps family: the shipped candle surface mirrors the endpoint at a 1-hour timeframe, and because the underlying `swaps` table is trade-level, any other timeframe is a `GROUP BY` you own rather than a fixed parameter. Fidelity labels: **exact** = straight from the chain, **calculated** = aggregated from real DEX trades (very close, compare with a tolerance).
+
+### GET /pairs/:address/ohlcv
+
+Candlestick data for a pool/pair. Replaced by this recipe's `candles` surface for 1-hour candles, or a bucket query over `swaps` for any other timeframe.
+
+| `/pairs/:address/ohlcv` | Data Feeds | Fidelity |
+|---|---|---|
+| `timestamp` | `candles.bucket_start` / your time bucket | exact |
+| `open`, `high`, `low`, `close` | first / max / min / last `price_usd` in the bucket | calculated |
+| `volume` | `sum(abs(notional_usd))` | calculated |
+| `trades` | count of priced fills in the bucket | exact |
+| `pairAddress` | `pool_address` | exact |
+| `tokenAddress` (priced leg) | the bought leg (`token1`), priced in USD | exact |
+| `timeframe`, `currency` | your `GROUP BY` bucket + price leg | your choice |
+
+The legacy `timeframe` parameter becomes the bucket expression. A 5-minute example over `swaps` (Postgres — use 60 / 3600 / 86400 for 1m / 1h / 1d):
+
+```sql
+SELECT
+  to_timestamp(floor(block_timestamp / 300) * 300)                              AS timestamp,
+  (array_agg(price_usd ORDER BY block_timestamp, vendor_event_id))[1]           AS open,
+  max(price_usd)                                                                AS high,
+  min(price_usd)                                                                AS low,
+  (array_agg(price_usd ORDER BY block_timestamp DESC, vendor_event_id DESC))[1] AS close,
+  sum(abs(notional_usd))                                                        AS volume,  -- abs: notional is signed on V3/V4
+  count(*)                                                                      AS trades
+FROM swaps
+WHERE pool_address = lower($1)
+  AND price_usd IS NOT NULL
+  AND block_timestamp BETWEEN $2 AND $3
+GROUP BY 1
+ORDER BY 1;
+```
+
+**Gotchas**
+
+- OHLC is trade-reconstructed, not exchange-reported — it tracks the old endpoint closely, but compare with a tolerance rather than expecting identical figures.
+- The legacy `currency` parameter has no direct analog: candles here are priced in the bought leg's in-block USD price, so be explicit about which token the OHLC is quoted in.
+- Thinly-traded pairs produce sparse candles — gaps where no priced trade occurred, not flat carry-forward candles (see [Fidelity gaps](#fidelity-gaps)).
+- `volume` must be `sum(abs(notional_usd))` — the notional is signed on V3/V4 pools, so a plain `sum` lets buy and sell legs cancel.
+- For live charts, run the recipe `realtime` on ClickHouse and read `candles` (or `candles_exact` after a reorg); for historical candles back to a date, backfill `historical` / `hybrid` from that date — no need to index from genesis. See [History & backfill](/data-feeds/concepts/history-and-backfill).
 
 ### Related
 

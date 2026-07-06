@@ -22,7 +22,12 @@
     "format": "woff2"
   },
   "contextual": {
-    "options": ["chatgpt", "claude", "copy", "view"]
+    "options": [
+      "chatgpt",
+      "claude",
+      "copy",
+      "view"
+    ]
   },
   "navigation": {
     "tabs": [
@@ -909,18 +914,22 @@
         "tab": "Data Feeds",
         "pages": [
           {
-            "group": "Introduction",
+            "group": "Getting Started",
             "pages": [
               "data-feeds/overview",
+              "data-feeds/concepts/what-are-data-feeds",
               "data-feeds/features",
               "data-feeds/how-it-works",
-              "data-feeds/early-access"
+              "data-feeds/early-access",
+              "data-feeds/migration/quickstart"
             ]
           },
           {
-            "group": "Recipes",
+            "group": "Data API",
             "pages": [
               "data-feeds/recipes/overview",
+              "data-feeds/migration/overview",
+              "data-feeds/migration/endpoints",
               {
                 "group": "Wallet API",
                 "pages": [
@@ -978,96 +987,20 @@
             ]
           },
           {
-            "group": "Data API → Data Feeds",
-            "pages": [
-              "data-feeds/migration/overview",
-              "data-feeds/migration/quickstart",
-              "data-feeds/migration/endpoints",
-              "data-feeds/migration/troubleshooting",
-              {
-                "group": "Wallet API",
-                "pages": [
-                  "data-feeds/migration/wallet-tokens",
-                  "data-feeds/migration/wallet-history",
-                  "data-feeds/migration/wallet-nfts",
-                  "data-feeds/migration/wallet-erc20",
-                  "data-feeds/migration/wallet-erc20-transfers",
-                  "data-feeds/migration/wallet-nft-transfers",
-                  "data-feeds/migration/wallet-nft-collections",
-                  "data-feeds/migration/wallet-native-txns",
-                  "data-feeds/migration/wallet-networth",
-                  "data-feeds/migration/wallet-approvals",
-                  "data-feeds/migration/wallet-chains",
-                  "data-feeds/migration/native-balance",
-                  "data-feeds/migration/wallet-stats",
-                  "data-feeds/migration/wallet-swaps"
-                ]
-              },
-              {
-                "group": "Token API",
-                "pages": [
-                  "data-feeds/migration/erc20-owners",
-                  "data-feeds/migration/erc20-holders",
-                  "data-feeds/migration/erc20-metadata",
-                  "data-feeds/migration/token-transfers",
-                  "data-feeds/migration/holders-historical",
-                  "data-feeds/migration/token-analytics"
-                ]
-              },
-              {
-                "group": "Price API",
-                "pages": [
-                  "data-feeds/migration/erc20-prices",
-                  "data-feeds/migration/erc20-price",
-                  "data-feeds/migration/pair-ohlcv"
-                ]
-              },
-              {
-                "group": "DeFi API",
-                "pages": [
-                  "data-feeds/migration/token-pairs"
-                ]
-              },
-              {
-                "group": "NFT API",
-                "pages": [
-                  "data-feeds/migration/nft-multiple",
-                  "data-feeds/migration/nft-collection-metadata",
-                  "data-feeds/migration/nfts-by-contract",
-                  "data-feeds/migration/nft-owners"
-                ]
-              },
-              {
-                "group": "Blockchain API",
-                "pages": [
-                  "data-feeds/migration/transaction-verbose",
-                  "data-feeds/migration/block"
-                ]
-              },
-              {
-                "group": "Solana",
-                "pages": [
-                  "data-feeds/migration/solana-top-holders",
-                  "data-feeds/migration/solana-token-holders",
-                  "data-feeds/migration/solana-historical-holders",
-                  "data-feeds/migration/solana-new-tokens-by-exchange",
-                  "data-feeds/migration/solana-bonding-tokens-by-exchange",
-                  "data-feeds/migration/solana-graduated-tokens-by-exchange",
-                  "data-feeds/migration/solana-token-bonding-status"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Streams → Data Feeds",
+            "group": "Streams",
             "pages": [
               "data-feeds/migration/streams-overview"
             ]
           },
           {
+            "group": "Gotchas & Troubleshooting",
+            "pages": [
+              "data-feeds/migration/troubleshooting"
+            ]
+          },
+          {
             "group": "Concepts",
             "pages": [
-              "data-feeds/concepts/what-are-data-feeds",
               "data-feeds/concepts/data-feeds-vs-the-legacy-api",
               "data-feeds/concepts/the-block-array",
               "data-feeds/concepts/history-and-backfill",
@@ -1901,53 +1834,342 @@
     }
   },
   "redirects": [
-    { "source": "/data-api/index", "destination": "/data-api/overview" },
-    { "source": "/data-api/evm/index", "destination": "/data-api/evm/overview" },
-    { "source": "/data-api/evm/wallet/index", "destination": "/data-api/evm/wallet/overview" },
-    { "source": "/data-api/evm/token/index", "destination": "/data-api/evm/token/overview" },
-    { "source": "/data-api/evm/nft/index", "destination": "/data-api/evm/nft/overview" },
-    { "source": "/data-api/evm/price/index", "destination": "/data-api/evm/price/overview" },
-    { "source": "/data-api/evm/defi/index", "destination": "/data-api/evm/defi/overview" },
-    { "source": "/data-api/evm/blockchain/index", "destination": "/data-api/evm/blockchain/overview" },
-    { "source": "/data-api/solana/wallet/index", "destination": "/data-api/solana/wallet/overview" },
-    { "source": "/data-api/solana/token/index", "destination": "/data-api/solana/token/overview" },
-    { "source": "/data-api/solana/nft/index", "destination": "/data-api/solana/nft/overview" },
-    { "source": "/data-api/solana/price/index", "destination": "/data-api/solana/price/overview" },
-    { "source": "/data-api/solana/solana-index", "destination": "/data-api/solana/overview" },
-    { "source": "/data-api/bitcoin/bitcoin-index", "destination": "/data-api/bitcoin/overview" },
-    { "source": "/data-api/universal/index", "destination": "/data-api/universal/overview" },
-    { "source": "/streams/index", "destination": "/streams/overview" },
-    { "source": "/datashare/index", "destination": "/datashare/overview" },
-    { "source": "/data-feeds/index", "destination": "/data-feeds/overview" },
-    { "source": "/data-indexer", "destination": "/data-feeds/overview" },
-    { "source": "/data-indexer/index", "destination": "/data-feeds/overview" },
-    { "source": "/data-indexer/overview", "destination": "/data-feeds/overview" },
-    { "source": "/data-indexer/features", "destination": "/data-feeds/features" },
-    { "source": "/data-indexer/how-it-works", "destination": "/data-feeds/how-it-works" },
-    { "source": "/data-indexer/early-access", "destination": "/data-feeds/early-access" },
-    { "source": "/rpc-nodes/index", "destination": "/rpc-nodes/overview" },
-    { "source": "/data-api/universal/entity/index", "destination": "/data-api/universal/entity/overview" },
-    { "source": "/data-api/universal/market-metrics/index", "destination": "/data-api/universal/market-metrics/overview" },
-    { "source": "/reference/weights-and-rate-limits", "destination": "/data-api/pricing" },
-    { "source": "/data-api/cortex-api/overview", "destination": "/changelog" },
-    { "source": "/data-api/cortex-api/chat", "destination": "/changelog" },
-    { "source": "/data-api/universal/token/top-gainers", "destination": "/changelog" },
-    { "source": "/data-api/universal/token/top-losers", "destination": "/changelog" },
-    { "source": "/data-api/universal/token/filtered-tokens", "destination": "/changelog" },
-    { "source": "/data-api/universal/global/endpoints/trading-stats", "destination": "/changelog" },
-    { "source": "/data-api/universal/global/endpoints/trading-stats-category", "destination": "/changelog" },
-    { "source": "/data-api/universal/global/endpoints/trading-stats-timeseries", "destination": "/changelog" },
-    { "source": "/data-api/universal/global/endpoints/trading-stats-category-timeseries", "destination": "/changelog" },
-    { "source": "/data-api/evm/token/discovery/top-gainers", "destination": "/changelog" },
-    { "source": "/data-api/evm/token/discovery/top-losers", "destination": "/changelog" },
-    { "source": "/data-api/evm/token/discovery/filtered-tokens", "destination": "/changelog" },
-    { "source": "/data-api/evm/token/signals/snipers", "destination": "/changelog" },
-    { "source": "/data-api/evm/nft/discovery/nfts-by-market-cap", "destination": "/changelog" },
-    { "source": "/data-api/evm/nft/discovery/nfts-by-volume", "destination": "/changelog" },
-    { "source": "/data-api/solana/token/advanced-signals/snipers", "destination": "/changelog" },
-    { "source": "/data-api/solana/token/search-and-discovery/top-gainers", "destination": "/changelog" },
-    { "source": "/data-api/solana/token/search-and-discovery/top-losers", "destination": "/changelog" },
-    { "source": "/data-api/solana/token/search-and-discovery/filtered-tokens", "destination": "/changelog" }
+    {
+      "source": "/data-api/index",
+      "destination": "/data-api/overview"
+    },
+    {
+      "source": "/data-api/evm/index",
+      "destination": "/data-api/evm/overview"
+    },
+    {
+      "source": "/data-api/evm/wallet/index",
+      "destination": "/data-api/evm/wallet/overview"
+    },
+    {
+      "source": "/data-api/evm/token/index",
+      "destination": "/data-api/evm/token/overview"
+    },
+    {
+      "source": "/data-api/evm/nft/index",
+      "destination": "/data-api/evm/nft/overview"
+    },
+    {
+      "source": "/data-api/evm/price/index",
+      "destination": "/data-api/evm/price/overview"
+    },
+    {
+      "source": "/data-api/evm/defi/index",
+      "destination": "/data-api/evm/defi/overview"
+    },
+    {
+      "source": "/data-api/evm/blockchain/index",
+      "destination": "/data-api/evm/blockchain/overview"
+    },
+    {
+      "source": "/data-api/solana/wallet/index",
+      "destination": "/data-api/solana/wallet/overview"
+    },
+    {
+      "source": "/data-api/solana/token/index",
+      "destination": "/data-api/solana/token/overview"
+    },
+    {
+      "source": "/data-api/solana/nft/index",
+      "destination": "/data-api/solana/nft/overview"
+    },
+    {
+      "source": "/data-api/solana/price/index",
+      "destination": "/data-api/solana/price/overview"
+    },
+    {
+      "source": "/data-api/solana/solana-index",
+      "destination": "/data-api/solana/overview"
+    },
+    {
+      "source": "/data-api/bitcoin/bitcoin-index",
+      "destination": "/data-api/bitcoin/overview"
+    },
+    {
+      "source": "/data-api/universal/index",
+      "destination": "/data-api/universal/overview"
+    },
+    {
+      "source": "/streams/index",
+      "destination": "/streams/overview"
+    },
+    {
+      "source": "/datashare/index",
+      "destination": "/datashare/overview"
+    },
+    {
+      "source": "/data-feeds/index",
+      "destination": "/data-feeds/overview"
+    },
+    {
+      "source": "/data-indexer",
+      "destination": "/data-feeds/overview"
+    },
+    {
+      "source": "/data-indexer/index",
+      "destination": "/data-feeds/overview"
+    },
+    {
+      "source": "/data-indexer/overview",
+      "destination": "/data-feeds/overview"
+    },
+    {
+      "source": "/data-indexer/features",
+      "destination": "/data-feeds/features"
+    },
+    {
+      "source": "/data-indexer/how-it-works",
+      "destination": "/data-feeds/how-it-works"
+    },
+    {
+      "source": "/data-indexer/early-access",
+      "destination": "/data-feeds/early-access"
+    },
+    {
+      "source": "/rpc-nodes/index",
+      "destination": "/rpc-nodes/overview"
+    },
+    {
+      "source": "/data-api/universal/entity/index",
+      "destination": "/data-api/universal/entity/overview"
+    },
+    {
+      "source": "/data-api/universal/market-metrics/index",
+      "destination": "/data-api/universal/market-metrics/overview"
+    },
+    {
+      "source": "/reference/weights-and-rate-limits",
+      "destination": "/data-api/pricing"
+    },
+    {
+      "source": "/data-api/cortex-api/overview",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/cortex-api/chat",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/token/top-gainers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/token/top-losers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/token/filtered-tokens",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/global/endpoints/trading-stats",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/global/endpoints/trading-stats-category",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/global/endpoints/trading-stats-timeseries",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/universal/global/endpoints/trading-stats-category-timeseries",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/evm/token/discovery/top-gainers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/evm/token/discovery/top-losers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/evm/token/discovery/filtered-tokens",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/evm/token/signals/snipers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/evm/nft/discovery/nfts-by-market-cap",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/evm/nft/discovery/nfts-by-volume",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/advanced-signals/snipers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/top-gainers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/top-losers",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/filtered-tokens",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-history",
+      "destination": "/data-feeds/recipes/wallet/wallet-history"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-native-txns",
+      "destination": "/data-feeds/recipes/wallet/wallet-history"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-chains",
+      "destination": "/data-feeds/recipes/wallet/wallet-history"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-stats",
+      "destination": "/data-feeds/recipes/wallet/wallet-history"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-tokens",
+      "destination": "/data-feeds/recipes/wallet/token-balances-by-wallet"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-erc20",
+      "destination": "/data-feeds/recipes/wallet/token-balances-by-wallet"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-networth",
+      "destination": "/data-feeds/recipes/wallet/token-balances-by-wallet"
+    },
+    {
+      "source": "/data-feeds/migration/native-balance",
+      "destination": "/data-feeds/recipes/wallet/native-balances"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-approvals",
+      "destination": "/data-feeds/recipes/wallet/token-approvals"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-nfts",
+      "destination": "/data-feeds/recipes/wallet/nfts-by-wallet"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-nft-collections",
+      "destination": "/data-feeds/recipes/wallet/nfts-by-wallet"
+    },
+    {
+      "source": "/data-feeds/migration/erc20-price",
+      "destination": "/data-feeds/recipes/token/token-prices"
+    },
+    {
+      "source": "/data-feeds/migration/erc20-prices",
+      "destination": "/data-feeds/recipes/token/token-prices"
+    },
+    {
+      "source": "/data-feeds/migration/erc20-owners",
+      "destination": "/data-feeds/recipes/token/token-holders"
+    },
+    {
+      "source": "/data-feeds/migration/erc20-holders",
+      "destination": "/data-feeds/recipes/token/token-holders"
+    },
+    {
+      "source": "/data-feeds/migration/solana-token-holders",
+      "destination": "/data-feeds/recipes/token/token-holders"
+    },
+    {
+      "source": "/data-feeds/migration/solana-top-holders",
+      "destination": "/data-feeds/recipes/token/token-holders"
+    },
+    {
+      "source": "/data-feeds/migration/holders-historical",
+      "destination": "/data-feeds/recipes/token/historical-balances"
+    },
+    {
+      "source": "/data-feeds/migration/solana-historical-holders",
+      "destination": "/data-feeds/recipes/token/historical-balances"
+    },
+    {
+      "source": "/data-feeds/migration/token-transfers",
+      "destination": "/data-feeds/recipes/token/token-transfers"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-erc20-transfers",
+      "destination": "/data-feeds/recipes/token/token-transfers"
+    },
+    {
+      "source": "/data-feeds/migration/erc20-metadata",
+      "destination": "/data-feeds/recipes/token/token-metadata"
+    },
+    {
+      "source": "/data-feeds/migration/solana-token-bonding-status",
+      "destination": "/data-feeds/recipes/token/token-bonding-status"
+    },
+    {
+      "source": "/data-feeds/migration/solana-new-tokens-by-exchange",
+      "destination": "/data-feeds/recipes/token/token-bonding-status"
+    },
+    {
+      "source": "/data-feeds/migration/solana-bonding-tokens-by-exchange",
+      "destination": "/data-feeds/recipes/token/token-bonding-status"
+    },
+    {
+      "source": "/data-feeds/migration/solana-graduated-tokens-by-exchange",
+      "destination": "/data-feeds/recipes/token/token-bonding-status"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-swaps",
+      "destination": "/data-feeds/recipes/markets/swaps-by-wallet"
+    },
+    {
+      "source": "/data-feeds/migration/token-analytics",
+      "destination": "/data-feeds/recipes/markets/swaps-by-token"
+    },
+    {
+      "source": "/data-feeds/migration/token-pairs",
+      "destination": "/data-feeds/recipes/markets/swaps-by-pair"
+    },
+    {
+      "source": "/data-feeds/migration/pair-ohlcv",
+      "destination": "/data-feeds/recipes/markets/pair-ohlcv"
+    },
+    {
+      "source": "/data-feeds/migration/wallet-nft-transfers",
+      "destination": "/data-feeds/recipes/nft/nft-transfers"
+    },
+    {
+      "source": "/data-feeds/migration/nft-owners",
+      "destination": "/data-feeds/recipes/nft/nft-owners-by-contract"
+    },
+    {
+      "source": "/data-feeds/migration/nfts-by-contract",
+      "destination": "/data-feeds/recipes/nft/nft-owners-by-contract"
+    },
+    {
+      "source": "/data-feeds/migration/nft-collection-metadata",
+      "destination": "/data-feeds/recipes/nft/nft-collection-metadata"
+    },
+    {
+      "source": "/data-feeds/migration/nft-multiple",
+      "destination": "/data-feeds/recipes/nft/nft-collection-metadata"
+    },
+    {
+      "source": "/data-feeds/migration/transaction-verbose",
+      "destination": "/data-feeds/recipes/logs/contract-logs"
+    },
+    {
+      "source": "/data-feeds/migration/block",
+      "destination": "/data-feeds/recipes/logs/contract-logs"
+    }
   ],
   "footer": {
     "links": [

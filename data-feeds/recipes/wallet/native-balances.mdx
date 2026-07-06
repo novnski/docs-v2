@@ -3,14 +3,6 @@ title: "Native Balances"
 description: "Sync each wallet's current native-asset (ETH/MATIC/…) balance into your own database, kept current from per-block onchain data. Mirrors the Moralis GET /{address}/balance and GET /wallets/balances endpoints."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /{address}/balance", guide: "native-balance", label: "Wallet native balance" },
-  ]}
-/>
-
 ### Question it answers
 
 > "What is wallet **0x…**'s current native-asset (ETH / MATIC / …) balance?"
@@ -180,6 +172,30 @@ The recipe is chain-parametrized via the `chain` setting — point it at any sup
 
 - **No USD value.** Moralis `GET /{address}/balance` can return a USD-valued balance; that needs the native-asset/USD price at the block, which is not carried on `nativeTransfers`. Join against a native-price source (e.g. the wrapped-native pair from a [Token Prices](/data-feeds/recipes/token/token-prices) sync) to add it.
 - **Raw wei, no decimals scaling.** `balance` is the raw `uint256` in wei; divide by `10^18` in your app to read whole native units.
+
+## Migrating from the REST API
+
+```
+GET /:address/balance
+```
+
+This recipe replaces the endpoint on its own: the latest observation per wallet **is** the response's `balance`, exact and straight from the chain — no other recipe required. `GET /wallets/balances` is the same read across many wallets.
+
+Two workflow changes: you query your own table instead of calling an endpoint, and you must **backfill history first** — a wallet only has a row once it appears in a native transfer within your indexed range, so run the recipe `historical` or `hybrid` from an early block (see [History & backfill](/data-feeds/concepts/history-and-backfill)). Set up the sink via the [quickstart](/data-feeds/migration/quickstart), then read the current balance as shown in [Example reads](#example-reads) above.
+
+**Field mapping**
+
+| `/:address/balance` | Data Feeds | Fidelity |
+|---|---|---|
+| `balance` (raw wei) | `native_balances.balance` | exact |
+| `balance_formatted` | derive: `balance / 1e18` | exact |
+
+**Good to know**
+
+- **Exact and single-valued.** Nothing off-chain and nothing to price here.
+- **Raw wei.** Divide by `10^18` in your app for whole native units.
+- **USD value is not included.** Multiply by the native asset's price — e.g. the wrapped-native pair from a [Token Prices](/data-feeds/recipes/token/token-prices) sync.
+- **Freshness.** Postgres / MySQL configs target one-shot `historical` state; use ClickHouse for realtime / `hybrid`.
 
 ### Related
 

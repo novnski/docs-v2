@@ -3,14 +3,6 @@ title: "NFT Transfers"
 description: "Sync every ERC-721 / ERC-1155 transfer — by contract, by wallet, or for a single (contract, token_id) — as a flat event log into your own database."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /{address}/nft/transfers", guide: "wallet-nft-transfers", label: "Wallet NFT transfers" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me every NFT transfer — by contract **0x…**, by wallet **0x…**, or for a single `(contract, token_id)`."
@@ -184,6 +176,51 @@ The recipe lands only what the `nftTokenTransfers` array carries. Fields a Moral
 - **Address labels / entity tags** (`from_address_label`, `to_address_entity`, …) — off-chain labels from a separate labelling service, not on-chain data.
 - **`value`** — the native value attached to the transfer transaction isn't carried on the transfer event; omitted. `amount` (the ERC-1155 quantity) is present.
 - **Pre/post NFT balances** — the recipe omits the balance surface to stay a flat event stream.
+
+## Migrating from the REST API
+
+This recipe replaces the legacy wallet NFT transfers endpoint. Data Feeds are **not** 1:1 replicas of the old responses — you land the underlying data in your own database and reconstruct the response shape with a query. Below: what replaces the endpoint, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+
+### GET /:address/nft/transfers
+
+A wallet's NFT transfer history. Replaced by this recipe's `nft_transfers` table — a wallet's transfers are the rows where it appears on either side, and the old endpoint's `contract_addresses`, `from_block`/`to_block`, and `order` parameters become plain `WHERE` / `ORDER BY` clauses.
+
+<Warning>
+Reproducing the full legacy response needs **three recipes**, not one. The transfer event carries no collection metadata or sale context — run this recipe plus [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`token_name` / `token_symbol`) and [NFT Trades](/data-feeds/recipes/nft/nft-trades) (`last_sale`) against the same database and join them.
+</Warning>
+
+| `/:address/nft/transfers` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `token_id`, `contract_type` | `nft_transfers.*` | exact |
+| `from_address`, `to_address`, `amount` | `nft_transfers.*` | exact |
+| `operator` | `nft_transfers.initiated_by` | exact |
+| `transaction_hash`, `block_number`, `block_timestamp`, `transaction_index`, `log_index` | `nft_transfers.tx_hash` / `nft_transfers.*` | exact |
+| `value` (tx native value), `transaction_type` (Single/Batch) | the `nftTokenTransfers` source array, not the flat table — or `nftTrades` for sale price | exact |
+| `token_name`, `token_symbol` | `nft_collection_metadata.*` | exact |
+| `last_sale` (sale facts) | `nftTrades` | exact |
+| `last_sale` USD values | `nftTrades` + price feed | calculated |
+| `possible_spam`, `verified_collection` | add yourself | off-chain |
+| `from/to_address_label`, `*_entity`, `*_entity_logo` | add yourself | off-chain |
+
+The reconstruction query (Postgres — adapt to your destination):
+
+```sql
+SELECT t.*,
+       c.name AS token_name, c.symbol AS token_symbol,
+       CASE WHEN t.from_address = lower('0xWALLET') THEN 'send' ELSE 'receive' END AS direction
+FROM nft_transfers t
+LEFT JOIN nft_collection_metadata c ON c.token_address = t.token_address
+WHERE (t.from_address = lower('0xWALLET') OR t.to_address = lower('0xWALLET'))
+ORDER BY t.block_number DESC, t.log_index DESC
+LIMIT 100;
+```
+
+**Gotchas**
+
+- **Direction is yours to derive** — the feed has no `send`/`receive` flag; compare the wallet to `from_address`/`to_address` as above. The recipe indexes both sides, so the OR match stays fast.
+- The address labels and spam/verification flags are off-chain signals with no onchain source — drop them, bring your own lists, or layer in a label source.
+- `token_id` is a `uint256` stored as text — compare as strings, never as numbers.
+- Backfill depth is your choice: transfers are an event list, not current state, so index only as much history as your app serves.
 
 ### Related
 

@@ -10,10 +10,20 @@ then follows the same pattern.
 
 ## Before you begin
 
+<Warning>
+**Data Feeds is a technical product — you run the infrastructure.** Unlike the REST API, the data lands in a
+database **you own and operate**: you run the Docker sink, you provision Postgres/ClickHouse (locally for this
+quickstart; on your own servers in production), and you are responsible for storing, sizing, and backing up
+the decompressed data. Decoded onchain data expands significantly from its compressed transport size — budget
+disk accordingly.
+</Warning>
+
 - **Docker** and Docker Compose installed and running.
 - A **Data Feeds API key** (`cm_live_...`). [Request access](https://moralis.com/data-feeds/request-access) if
   you do not have one.
 - Access to the **Moralis Admin Panel**, where you generate the sink config.
+- A machine with enough **disk headroom** for your backfill window — start small (`tip-500`) and widen once
+  you've seen the per-block footprint for your chain.
 
 ## Step 1: Generate your sink starter pack
 

@@ -29,8 +29,8 @@ join (usually one SQL view), and you decide what to do about the off-chain extra
 
 ## Start with the model, once
 
-Two concept pages explain how Data Feeds work, so every guide links here instead of repeating it. Read these
-first and the individual guides go quickly:
+Two concept pages explain how Data Feeds work, so every recipe links here instead of repeating it. Read these
+first and the per-endpoint migration sections go quickly:
 
 - [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the ways to consume it (your
   Kafka / AMQP / SQS clients, REST / Arrow Flight, the sink into your own database, or query engines via
@@ -40,8 +40,8 @@ first and the individual guides go quickly:
 
 ## The schema gotchas to plan for
 
-These are the differences that surprise people first. Each migration guide states the answer for its own
-endpoint, but the pattern is always one of these:
+These are the differences that surprise people first. Each recipe's migration section states the answer for
+its own endpoint(s), but the pattern is always one of these:
 
 | You had in the API response | Where it comes from in Data Feeds |
 |---|---|
@@ -52,8 +52,8 @@ endpoint, but the pattern is always one of these:
 
 ### How to read the fidelity of a migration
 
-Every guide classifies each output value so you can plan with confidence. Throughout, you will see three
-labels:
+Every field-mapping table classifies each output value so you can plan with confidence. Throughout, you will
+see three labels:
 
 | Label | Meaning |
 |---|---|
@@ -63,33 +63,34 @@ labels:
 
 ## Find your endpoint
 
-When you are ready, the **[endpoint list](/data-feeds/migration/endpoints)** maps every covered Moralis REST
-endpoint to its migration guide, ordered by usage. The sidebar groups the same guides by the API they belong
-to — Wallet, Token, Price, DeFi, NFT, Blockchain, and Solana — so you can also jump straight to the one you
-call today.
+When you are ready, the **[endpoint → recipe lookup](/data-feeds/migration/endpoints)** maps every covered
+Moralis REST endpoint to the recipe — or **combination of recipes** — that replaces it, ordered by usage.
+Migration details live **on the recipe pages themselves**: each recipe has a "Migrating from the REST API"
+section with the field-by-field mapping, the required recipe combination, one reconstruction query, and the
+endpoint-specific gotchas. One page per dataset — the recipe is the single source of truth.
 
 New to Data Feeds entirely? Start with the **[quickstart](/data-feeds/migration/quickstart)** to get live data
-flowing into your own database in about ten minutes, then come back and migrate your endpoints.
+flowing into your own database in about ten minutes, then come back and migrate your endpoints. And skim
+[Gotchas & troubleshooting](/data-feeds/migration/troubleshooting) before your first run — it lists every
+known failure point with the fix.
 
 ## Not yet covered
 
 These are intentionally out of this set for now:
 
-- **Solana endpoints** are parked while the Solana recipe and replica story is confirmed. The data exists on
-  the Solana feed, but the recipes are not shipped yet.
+- **Other Solana endpoints** (prices, swaps, portfolio, metadata) — the sunsetting holder and launchpad
+  endpoints are covered; the rest are not yet.
 - **Search and discovery endpoints** (`/tokens/search`, `/discovery/*`) are a search product rather than an
   indexed feed, so they are out of scope for a data-lake migration.
 - **RPC node methods** (`eth_*`) belong to the node product, not Data Feeds.
 
-## How each guide is structured
+## How each migration section is structured
 
-Every guide follows the same shape, so once you have read one you can skim the rest:
+Every recipe's "Migrating from the REST API" section follows the same shape, so once you have read one you
+can skim the rest:
 
-1. **How Data Feeds works**, and the best-fit way to consume this endpoint's data.
-2. **What to expect**, your outputs grouped as comes-through-exactly, calculated-for-you, yours-to-control,
-   and add-the-extras.
-3. **Before you begin**, prerequisites and the backfill decision for this endpoint.
-4. **Build it with the sink**, turn on the recipe(s), join them in a view, query from your app.
-5. **Other ways to consume this data**, the same feed via Kafka / AMQP / SQS, REST / Arrow Flight, or Iceberg.
-6. **Field mapping reference**, the per-field table with the fidelity label.
-7. **Good to know**, the gotchas worth knowing before you ship.
+1. **The legacy endpoint(s)** it replaces, and whether you need this recipe alone or a **combination** —
+   stated up front, with links to the other recipes you need.
+2. **Field mapping reference**, the per-field table with the fidelity label.
+3. **One reconstruction query**, the SQL view that rebuilds the old response shape.
+4. **Good to know**, the endpoint-specific gotchas worth knowing before you ship.

@@ -3,15 +3,6 @@ title: "NFTs by Wallet"
 description: "Sync every NFT a wallet currently holds — collection, token ID, contract type, and balance — as a continuously updated holdings table in your own database. Mirrors the Moralis GET /{address}/nft endpoint."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /{address}/nft", guide: "wallet-nfts", label: "Wallet NFTs" },
-    { path: "GET /{address}/nft/collections", guide: "wallet-nft-collections", label: "Wallet NFT collections" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me every NFT wallet **0x…** currently holds — each row is a `(collection, token_id)` it owns, with the ERC-721/ERC-1155 contract type and current balance."
@@ -187,6 +178,97 @@ The recipe is chain-parametrized via the `chain` setting — point it at any sup
 - `block_number_minted`, `minter_address`, `possible_spam`, `verified_collection`, `collection_logo`, `floor_price*`, `rarity*` — enrichment from separate indexers / pricing services, with no per-block source.
 
 Core holding fields — `token_address`, `token_id`, `contract_type`, `balance`, owner (via `wallet_address`), and block coordinates — are fully populated.
+
+## Migrating from the REST API
+
+This recipe is the landing point for two legacy wallet-NFT endpoints. In both cases the onchain holding is exact; the metadata, spam, and pricing layers the API bundled in are separate recipes or your own sources.
+
+### GET /:address/nft
+
+```
+GET /:address/nft
+```
+
+This recipe replaces it directly: one current row per `(wallet, token_address, token_id)` with a non-zero balance is exactly the holdings list the endpoint returned.
+
+<Note>
+**Not 1:1** — the full response spans two recipes. This recipe supplies the holdings; join [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`nft_collection_metadata`, keyed by `token_address`) for `name`/`symbol`. Token-level metadata (`token_uri`, `metadata`, media) is resolved off-chain from each token's URI and is not in any per-block feed — you fetch it yourself or layer in a metadata source.
+</Note>
+
+| `/:address/nft` field | Here | Fidelity |
+| --- | --- | --- |
+| `token_address`, `token_id`, `contract_type` | same columns | exact |
+| `amount` | `balance` | exact |
+| `owner_of` | `wallet_address` (the query key) | exact |
+| `block_number` | `block_number` | exact |
+| `name`, `symbol` | `nft_collection_metadata.*` | exact |
+| `token_hash` | derive (hash of contract + token_id) | exact |
+| `token_uri`, `metadata`, `normalized_metadata`, `media` | resolve from the token URI | add yourself |
+| `rarity_*`, `floor_price*`, `last_sale`, `list_price` | marketplace/rarity data ([NFT Trades](/data-feeds/recipes/nft/nft-trades) for realized sales) | add yourself |
+| `possible_spam`, `verified_collection`, collection art | your own lists / sources | add yourself |
+| `block_number_minted`, `minter_address`, `*_sync` | indexer-derived | add yourself |
+
+The endpoint response, as one query (Postgres table names; keyset pagination on `(token_address, token_id)` replaces the old cursor):
+
+```sql
+SELECT n.token_address, n.token_id, n.contract_type,
+       n.balance AS amount, m.name, m.symbol
+FROM wallet_nfts n
+LEFT JOIN nft_collection_metadata m ON m.token_address = n.token_address
+WHERE n.wallet_address = lower('0x...')
+  AND n.balance > 0
+ORDER BY n.token_address, n.token_id
+LIMIT 100;
+```
+
+Gotchas:
+
+- **Backfill full history.** Holdings are current state — a wallet can still hold an NFT it last moved years ago, so run `historical`/`hybrid` from an early block. Only tracking specific collections? Filter to those `token_addresses` and start from each collection's first block. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- **No fixed spam filter.** The old `exclude_spam` was off-chain curation; it becomes your own `WHERE` against your own lists.
+- **ERC-1155 `amount` is a real count**, not always `1` — the `balance` column carries it.
+- **Empty `name`/`symbol` is normal** for many ERC-1155 (and some ERC-721) collections; it isn't an error.
+
+### GET /:address/nft/collections
+
+```
+GET /:address/nft/collections
+```
+
+There is no separate collections dataset — this endpoint is a **`GROUP BY` rollup of this recipe's holdings table**. If you've built the per-NFT query above, the collection list is one more query over the same tables.
+
+<Note>
+**Not 1:1** — combine this recipe (holdings to group) with [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) for `name`/`symbol`, and optionally [NFT Trades](/data-feeds/recipes/nft/nft-trades) if you want `last_sale` from realized onchain sales.
+</Note>
+
+| `/:address/nft/collections` field | Here | Fidelity |
+| --- | --- | --- |
+| `token_address`, `contract_type` | same columns (grouped) | exact |
+| `count` | `count(*)` over held token_ids | exact |
+| `name`, `symbol` | `nft_collection_metadata.*` | exact |
+| `last_sale` (sale facts) | `nft_trades` | exact |
+| `last_sale` USD values | `nft_trades` + price feed | calculated |
+| `possible_spam`, `verified_collection` | your own lists | add yourself |
+| `collection_logo`, `collection_banner_image`, `floor_price*` | your own sources | add yourself |
+
+The rollup:
+
+```sql
+SELECT n.token_address, n.contract_type, m.name, m.symbol,
+       count(*) AS count               -- token_ids held in this collection
+FROM wallet_nfts n
+LEFT JOIN nft_collection_metadata m ON m.token_address = n.token_address
+WHERE n.wallet_address = lower('0x...')
+  AND n.balance > 0
+GROUP BY n.token_address, n.contract_type, m.name, m.symbol
+ORDER BY count DESC;
+```
+
+Gotchas:
+
+- **ERC-1155 `count`.** `count(*)` counts distinct token_ids (matches the old endpoint); swap in `sum(balance)` to count units instead — a one-word change.
+- **Same full-history requirement** as the per-NFT endpoint: start the backfill late and the rollup silently misses collections.
+- **`last_sale` USD is calculated** from real trades plus a price feed — compare with a small tolerance, not an identical figure.
+- **Floor price, logo, banner are off-chain** — layer them in from your own sources keyed by `token_address`, or drop them.
 
 ### Related
 

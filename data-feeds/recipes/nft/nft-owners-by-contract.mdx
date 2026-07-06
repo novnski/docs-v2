@@ -3,15 +3,6 @@ title: "NFT Owners by Contract"
 description: "Sync the current owner set for an NFT collection — every wallet holding a token_id, with live counts for ERC-1155 editions — into your own database. Mirrors the Moralis GET /nft/{address}/owners endpoint."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /nft/{address}/owners", guide: "nft-owners", label: "NFT owners by contract" },
-    { path: "GET /nft/{address}", guide: "nfts-by-contract", label: "NFTs by contract" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me every current owner of NFT collection **0x…** — each `token_id`, the wallet that holds it, and how many (ERC-1155 editions)." Mirrors Moralis `GET /nft/{address}/owners`.
@@ -187,6 +178,57 @@ This recipe returns on-chain ownership only. Fields a Moralis `/nft/{address}/ow
 - `block_number_minted` and historical mint provenance beyond the backfill window.
 
 `amount` is the raw on-chain holding count, not a marketplace listing. The core access key — `token_address` → owners with `token_id`, `amount`, `contract_type` — is fully sourced from `nftTokenTransfers`.
+
+## Migrating from the REST API
+
+This recipe replaces the by-collection ownership endpoints of the legacy Web3 API. Data Feeds are **not** 1:1 replicas of those responses — you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+
+### GET /nft/:address/owners
+
+Every owner of every token in a collection. Replaced by this recipe's owner surface (`nft_owners` on Postgres/MySQL, `argMax` over the ClickHouse fact table) — one row per `(token_id, owner)` with `amount > 0`.
+
+<Warning>
+Reproducing the full legacy response needs **three recipes**, not one. Run this recipe plus [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`name` / `symbol`) and [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) (mint provenance — the mint is the transfer from the zero address) against the same database. The resolved token metadata is a different story entirely: `token_uri`, `metadata`, and `normalized_metadata` are derived from each token's `tokenURI` off-chain — pair the recipe with your own metadata resolver, or drop those fields.
+</Warning>
+
+| `/nft/:address/owners` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `token_id`, `contract_type`, `owner_of`, `amount` | `nft_owners.*` (`owner_of` = `wallet_address`) | exact |
+| `block_number` | `nft_owners.block_number` | exact |
+| `block_number_minted`, `minter_address` | `nft_transfers` (mint = from the zero address) | exact |
+| `name`, `symbol` | `nft_collection_metadata.*` | exact |
+| `token_hash` | derive (hash of contract + id) | exact |
+| `last_sale` USD | `nftTrades` + price feed | calculated |
+| `token_uri`, `metadata`, `normalized_metadata` | add yourself (resolve token URI) | off-chain |
+| `rarity_*`, `floor_price*`, `list_price` | add yourself (rarity tool / marketplace source) | off-chain |
+| `possible_spam`, `verified_collection`, `*_sync` timestamps | add yourself | off-chain |
+
+The reconstruction query (Postgres — adapt to your destination):
+
+```sql
+SELECT o.token_id, o.wallet_address AS owner_of, o.amount, o.contract_type,
+       c.name, c.symbol, o.block_number
+FROM nft_owners o
+LEFT JOIN nft_collection_metadata c ON c.token_address = o.token_address
+WHERE o.token_address = lower('0x...') AND o.amount > 0
+ORDER BY o.token_id, o.wallet_address;
+```
+
+**Gotchas**
+
+- **Backfill from the collection's deploy block.** Ownership is current state — the cumulative result of every transfer — so a late start returns stale or missing owners. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- **ERC-1155** token_ids can have many owners — you get a row per `(token_id, owner)`; ERC-721 has one owner per id.
+- Big collections paginate heavily — keyset on `(token_id, wallet_address)` instead of offset pages.
+
+### GET /nft/:address
+
+Every NFT in a collection with its current owner. Same recipe, same tables, same joins as `/nft/:address/owners` above — the two endpoints are one read ordered differently (`ORDER BY o.token_id` for the collection listing). The field mapping is identical, plus the listing's extra enrichment fields: `media`, the collection editorial fields (logo, banner, category, social links), and `floor_price*` are all off-chain — **add yourself** from your metadata resolver and marketplace sources, or drop them.
+
+**Gotchas**
+
+- The legacy endpoint was mostly a metadata product; the chain only carries ownership, mint, and identity. If resolved JSON metadata and media are the entire job, keep a metadata indexer for that layer — this recipe supplies the ownership and provenance to pair with it.
+- The legacy `totalRanges` / `range` parallel-scan pagination has no equivalent — it's your table now; scan or keyset on `token_id`.
+- Backfill from the collection's deploy block, as above.
 
 ### Related
 

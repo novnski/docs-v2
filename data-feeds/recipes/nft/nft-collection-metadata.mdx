@@ -3,15 +3,6 @@ title: "NFT Collection Metadata"
 description: "Sync the on-chain metadata of every NFT collection — name, symbol, and contract type (ERC-721 / ERC-1155) — keyed by collection address, into your own database. Mirrors the Moralis GET /nft/{address}/metadata endpoint."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /nft/{address}/metadata", guide: "nft-collection-metadata", label: "NFT collection metadata" },
-    { path: "GET /nft/{address}", guide: "nfts-by-contract", label: "NFTs by contract" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me the collection metadata — name, symbol, contract type — for NFT collection **0x…**." Mirrors Moralis `GET /nft/{address}/metadata`.
@@ -188,6 +179,81 @@ This recipe is EVM-shaped: it reads EVM contract deploys. Solana NFT (Metaplex) 
 - `synced_at` (wall-clock) — this recipe carries on-chain `block_number` / `block_timestamp` instead.
 
 The core on-chain fields — `token_address`, `name`, `symbol`, `contract_type`, plus `block_number` and `deployer_address` — are fully sourced.
+
+## Migrating from the REST API
+
+This recipe replaces the collection-metadata side of the legacy NFT endpoints. Data Feeds are **not** 1:1 replicas of those responses — you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+
+### GET /nft/:address/metadata
+
+A collection's identity. Replaced directly by this recipe's `nft_collection_metadata` table — `name`, `symbol`, and `contract_type` land from the contract's deploy, keyed by `token_address`. Optionally add [NFT Trades](/data-feeds/recipes/nft/nft-trades) for `last_sale`. The editorial layer (logo, banner, category, description, social links) and floor price are off-chain — bring your own collection directory and floor source, or drop them.
+
+| `/nft/:address/metadata` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `name`, `symbol`, `contract_type` | `nft_collection_metadata.*` | exact |
+| `last_sale` (sale facts) | `nftTrades` | exact |
+| `last_sale` USD | `nftTrades` + price feed | calculated |
+| `collection_logo`, `collection_banner_image`, `collection_category`, `description`, social links | add yourself | off-chain |
+| `possible_spam`, `verified_collection` | add yourself | off-chain |
+| `floor_price`, `floor_price_usd`, `floor_price_currency` | add yourself | off-chain |
+| `synced_at`, `created_date` | add yourself (on-chain `block_number` / `block_timestamp` carried instead) | off-chain |
+
+The lookup (Postgres — adapt to your destination):
+
+```sql
+SELECT token_address, name, symbol, contract_type
+FROM nft_collection_metadata
+WHERE token_address = lower('0x...');
+```
+
+**Gotchas**
+
+- **`name`/`symbol` can be empty** for some ERC-1155 collections (no on-chain name) — expected, not an error.
+- **Backfill from the collection's deploy block** — metadata is recorded at deployment, so the deploy block must be in your indexed window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- `contract_type` may be the `NFT` fallback when a contract advertises neither EIP-165 interface; the legacy endpoint made a similar best-effort call.
+
+### POST /nft/getMultipleNFTs
+
+Batch NFT lookup by `(token_address, token_id)`. The onchain half — ownership, mint provenance, contract type, collection identity, realized sales — is replaced by a composition of recipes, with no 25-NFT batch cap.
+
+<Warning>
+This endpoint needs **multiple recipes**, and it is *mostly a metadata product*. Run [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) (current owner per token_id) plus this recipe (collection `name` / `symbol`), [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) (mint provenance), and [NFT Trades](/data-feeds/recipes/nft/nft-trades) (`last_sale`) against the same database. The resolved token JSON, media, rarity, and floor/listing prices are built off-chain from each token's `tokenURI` and marketplace data — pair the recipes with your own metadata resolver and pricing sources, or drop those fields. If resolved metadata is the entire job, keep a metadata indexer for that layer; the recipes supply the ownership and provenance to pair with it.
+</Warning>
+
+| `/nft/getMultipleNFTs` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `token_id` | the lookup key | exact |
+| `contract_type`, `owner_of`, `amount`, `block_number` | `nft_owners.*` (`owner_of` = `wallet_address`, `amount > 0`) | exact |
+| `block_number_minted`, `minter_address` | `nft_transfers` (mint = from the zero address) | exact |
+| `name`, `symbol` | `nft_collection_metadata.*` | exact |
+| `token_hash` | derive (hash of contract + id) | exact |
+| `last_sale` (sale facts) | `nftTrades` | exact |
+| `last_sale` USD values | `nftTrades` + price feed | calculated |
+| `token_uri`, `metadata`, `normalized_metadata`, `media` | add yourself (resolve token URI) | off-chain |
+| `rarity_rank`, `rarity_percentage`, `rarity_label` | add yourself (rarity tool) | off-chain |
+| `floor_price*`, `list_price` | add yourself (pricing/marketplace) | off-chain |
+| `possible_spam`, `verified_collection`, collection editorial, `*_sync` timestamps | add yourself | off-chain |
+
+The batch lookup (Postgres — adapt to your destination):
+
+```sql
+SELECT o.token_address, o.token_id, o.contract_type,
+       o.wallet_address AS owner_of, o.amount, o.block_number,
+       c.name, c.symbol
+FROM nft_owners o
+LEFT JOIN nft_collection_metadata c ON c.token_address = o.token_address
+WHERE (o.token_address, o.token_id) IN (VALUES
+        (lower('0x...'), '1234'),
+        (lower('0x...'), '5678'))
+  AND o.amount > 0;
+```
+
+**Gotchas**
+
+- **Backfill each collection from its deploy block** — a token's current owner is the cumulative result of every transfer, so a late start returns stale or missing owners.
+- **ERC-1155** token_ids can have many owners — you get `(owner, amount)` rows rather than a single `owner_of`.
+- `token_id` is a `uint256` stored as text — compare as strings, never as numbers.
+- No batch cap and no per-call limits — the 25-NFT ceiling disappears; batch size is just the length of your `IN` list.
 
 ### Related
 

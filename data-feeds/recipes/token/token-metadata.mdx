@@ -3,14 +3,6 @@ title: "Token Metadata"
 description: "Sync ERC-20 token metadata — name, symbol, decimals, total supply, and deployer — captured at deploy time into your own database. Mirrors the Moralis GET /erc20/metadata endpoint."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /erc20/metadata", guide: "erc20-metadata", label: "ERC-20 token metadata" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me the ERC-20 metadata — `name` / `symbol` / `decimals` / `total_supply` — for token **0x…**." Mirrors Moralis `GET /erc20/metadata`.
@@ -188,6 +180,52 @@ The core on-chain fields — `token_address`, `name`, `symbol`, `decimals`, `tot
 - `created_at` (wall-clock) — this recipe carries on-chain `block_number` / `block_timestamp` instead.
 
 Also note `total_supply` is the **raw** `uint256` with no decimals applied — divide by `10^decimals` for the human-readable supply.
+
+## Migrating from the REST API
+
+### `GET /erc20/metadata` — ERC-20 token metadata
+
+This recipe replaces the endpoint's on-chain core — `name`, `symbol`, `decimals`, `total_supply`, and the deploy position come through exactly, with no batch cap on how many contracts you look up per query.
+
+<Note>
+  **Not 1:1.** `fully_diluted_valuation` needs a price join — pair this recipe with [Token Prices](/data-feeds/recipes/token/token-prices) and multiply. The endpoint's editorial layer (`logo` / `thumbnail`, `possible_spam` / `verified_contract` / `validated` / `security_score`, `categories`, `links`, `description`) is off-chain: bring your own token list and allow/deny lists, or drop those fields. `market_cap` needs an off-chain `circulating_supply` — there is no on-chain equivalent; FDV is the on-chain-derivable alternative.
+</Note>
+
+| `/erc20/metadata` | Data Feeds | Fidelity |
+| --- | --- | --- |
+| `address`, `name`, `symbol`, `decimals` | `token_metadata.*` | exact |
+| `total_supply` (raw) | `token_metadata.total_supply` | exact |
+| `total_supply_formatted` | `total_supply / 10^decimals` | calculated |
+| `block_number` (deploy) | `token_metadata.block_number` | exact |
+| `created_at` (deploy time) | `token_metadata_observations.block_timestamp` (not on the `token_metadata` view) | exact |
+| `fully_diluted_valuation` | `total_supply_formatted × usd_price` via [Token Prices](/data-feeds/recipes/token/token-prices) | calculated |
+| `market_cap` | `circulating_supply × price` — needs off-chain circulating supply | add yourself |
+| `circulating_supply` | — | add yourself |
+| `implementations` | match the token across the chains you index, or a multichain token list | add yourself |
+| `logo`, `logo_hash`, `thumbnail` | — | add yourself |
+| `possible_spam`, `verified_contract`, `validated`, `security_score` | — | add yourself |
+| `categories`, `links`, `description`, `address_label` | — | add yourself |
+
+Any set of contracts in one query, with formatted supply and FDV (Postgres):
+
+```sql
+SELECT m.token_address AS address,
+       m.name, m.symbol, m.decimals,
+       m.total_supply,
+       m.total_supply / power(10, m.decimals)               AS total_supply_formatted,
+       m.total_supply / power(10, m.decimals) * p.usd_price AS fully_diluted_valuation
+FROM token_metadata m
+LEFT JOIN LATERAL (
+  SELECT usd_price FROM token_price_updates
+  WHERE token_address = m.token_address ORDER BY block_number DESC LIMIT 1
+) p ON true
+WHERE m.token_address = ANY($1);   -- lowercased addresses, no batch cap
+```
+
+- **Backfill from the deploy block.** Metadata is captured at contract deployment, so a token only appears if its deploy block is indexed — for arbitrary token lookups, run `historical` / `hybrid` over full history.
+- `total_supply` is **raw and live**: no decimals applied (scale at read time), and it tracks mint/burn, so keep the feed current for an up-to-date figure.
+- `created_at` isn't on the `token_metadata` view — read `block_timestamp` from `token_metadata_observations` (Postgres) or `event_ts` on the ClickHouse fact table.
+- The recipe is **EVM-shaped**: SPL token metadata doesn't flow through `deployedContracts` (see [Multichain](#multichain)).
 
 ### Related
 

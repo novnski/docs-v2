@@ -3,14 +3,11 @@ title: "Token Balances by Token"
 description: "Sync the current non-zero balance of every wallet that holds a given token into your own database — the holder list behind a token, latest-wins per wallet."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /erc20/{address}/owners", guide: "erc20-owners", label: "Token owners (holders)" },
-    { path: "GET /erc20/{address}/holders", guide: "erc20-holders", label: "Token holders summary" },
-  ]}
-/>
+<Note>
+**Coming from `GET /erc20/{address}/owners` or `GET /erc20/{address}/holders`?** The field-by-field migration
+for those endpoints lives on the [Token Holders](/data-feeds/recipes/token/token-holders#migrating-from-the-rest-api)
+recipe — this page is the same balance data in its raw by-token shape.
+</Note>
 
 ### Question it answers
 

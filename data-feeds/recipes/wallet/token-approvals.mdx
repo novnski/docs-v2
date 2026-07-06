@@ -3,14 +3,6 @@ title: "Token Approvals"
 description: "Sync the current ERC-20 allowances a wallet has granted — and to whom — as a continuous, reorg-safe feed into your own database. Mirrors the Moralis GET /wallets/{address}/approvals endpoint."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /wallets/{address}/approvals", guide: "wallet-approvals", label: "Wallet token approvals" },
-  ]}
-/>
-
 ### Question it answers
 
 > "What ERC-20 allowances has wallet **0x…** granted, and to whom?" Mirrors Moralis `GET /wallets/{address}/approvals`.
@@ -176,6 +168,75 @@ On-chain primitives — owner, spender, token, raw allowance value, block, and t
 - `value_formatted` — needs token `decimals`; scale `value` by `10^token_decimals` using a Token Metadata sync.
 - `token.name` / `token.symbol` / `token.logo` / `token.decimals` — token metadata, not in `tokenApprovals`.
 - `spender.entity` / `spender.entity_logo` / `spender.address_label` — off-chain spender labelling.
+
+## Migrating from the REST API
+
+```
+GET /wallets/:address/approvals
+```
+
+The **active allowance set** — allowance value, spender, token address, block and tx — comes from this recipe directly: the latest approve per `(owner, token, spender)` wins, and revokes (approve-to-zero) drop out. The rest of the endpoint's response (token metadata, wallet balance, USD figures) does not live on the `Approval` log — you rebuild it with joins.
+
+<Note>
+  **This endpoint needs four recipes.** Data Feeds are not 1:1 endpoint replicas — to reproduce the full response, run these together and join their tables yourself (query below):
+
+  - **Token Approvals** (this page) — allowance, spender, token address, block / tx
+  - [Token Metadata](/data-feeds/recipes/token/token-metadata) — `token.name`, `token.symbol`, `decimals` for `value_formatted`
+  - [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet) — the wallet's current balance of each approved token
+  - [Token Prices](/data-feeds/recipes/token/token-prices) — `usd_price`, and `usd_at_risk` derived from it
+</Note>
+
+**Field mapping** — **exact** comes from the chain, **calculated** is derived from real onchain trades (very close; compare with a small tolerance), **add yourself** is an off-chain signal:
+
+| `/wallets/:address/approvals` | Data Feeds | Fidelity |
+|---|---|---|
+| `value` (allowance) | `token_allowances.value` | exact |
+| `value_formatted` | derive: `value / 10^decimals` | exact |
+| `block_number`, `block_timestamp`, `transaction_hash` | `token_allowances.*` | exact |
+| `spender.address` | `token_allowances.spender_address` | exact |
+| `token.address` | `token_allowances.token_address` | exact |
+| `token.name`, `token.symbol` | token metadata sync | exact |
+| `token.current_balance(_formatted)` | token balances sync | exact |
+| `token.usd_price` | latest price update | calculated |
+| `token.usd_at_risk` | derive: `min(allowance, balance) × price` | calculated |
+| `token.logo`, `possible_spam`, `verified_contract`, `address_label` | add yourself | off-chain |
+| `spender.address_label`, `entity`, `entity_logo` | add yourself | off-chain |
+
+**The join** (Postgres; table names follow each recipe's default schema) — one view that reproduces the response, with `usd_at_risk` computed the realistic way (`min(allowance, balance) × price` — a spender can't take more than the wallet holds):
+
+```sql
+CREATE VIEW wallet_approvals AS
+SELECT
+  a.owner_address                                AS wallet_address,
+  a.token_address,
+  a.spender_address,
+  m.name, m.symbol,
+  a.value                                        AS allowance,
+  a.value / power(10, m.decimals)                AS value_formatted,
+  b.balance                                      AS current_balance,
+  p.usd_price,
+  least(a.value, coalesce(b.balance, 0))
+    / power(10, m.decimals) * p.usd_price        AS usd_at_risk,
+  a.block_number, a.block_timestamp, a.tx_hash
+FROM token_allowances a
+LEFT JOIN token_metadata m ON m.token_address = a.token_address
+LEFT JOIN token_balances b ON b.token_address = a.token_address
+                          AND b.wallet_address = a.owner_address
+LEFT JOIN LATERAL (
+  SELECT usd_price FROM token_price_updates
+  WHERE token_address = a.token_address ORDER BY block_number DESC LIMIT 1
+) p ON true;
+```
+
+Query it per wallet with `ORDER BY usd_at_risk DESC NULLS LAST` so the riskiest approvals surface first.
+
+**Good to know**
+
+- **Backfill full history first.** The latest approve for a triple can sit at any past block — run `historical` / `hybrid` from an early block or you'll miss or misstate allowances ([History & backfill](/data-feeds/concepts/history-and-backfill)).
+- **Unlimited approvals** show as a max-uint `value` (78 digits, stored as text). Lead with `usd_at_risk` — it caps the scary figure to what the wallet actually holds.
+- **Revokes disappear automatically** (an approve to zero), so you always see the live, active set.
+- **Compare USD figures with a tolerance** — prices come from real DEX trades, not the legacy API's pricing.
+- **Real-time is the strength here.** Stream the `tokenApprovals` feed (Kafka / AMQP / SQS) to alert the moment a risky allowance is granted, instead of polling.
 
 ### Related
 

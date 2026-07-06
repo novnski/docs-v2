@@ -3,16 +3,6 @@ title: "Wallet History"
 description: "Reconstruct a wallet's full chronological event feed — every transfer, swap, NFT move, approval, and LP change, with USD value per event — as a continuous sync into your own database."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /wallets/{address}/history", guide: "wallet-history", label: "Wallet transaction history" },
-    { path: "GET /{address}", guide: "wallet-native-txns", label: "Wallet native transactions" },
-    { path: "GET /{address}/erc20/transfers", guide: "wallet-erc20-transfers", label: "Wallet ERC-20 transfers" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Show me the full chronological event feed for wallet **0x…**, newest first. Each row is one event with its actual payload — counterparty, amounts, token IDs, pair address, USD value — and I can filter by event type."
@@ -249,3 +239,156 @@ The recipe is chain-parametrized via the `chain` setting — point it at any sup
     Full counterparty and transfer trail per address.
   </Card>
 </Columns>
+
+## Migrating from the REST API
+
+Coming from the legacy Web3 Data API? This recipe replaces the wallet-activity endpoints below. Data Feeds are **not 1:1 replicas** of REST responses — you own the table and reshape it with SQL — so each subsection states exactly what maps, what's calculated for you, and what you add yourself. For the general model see [Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api); for the full endpoint index see the [endpoint map](/data-feeds/migration/endpoints).
+
+### Wallet transaction history
+
+`GET /wallets/{address}/history`
+
+Replaced by this recipe's `wallet_history_full` table — the same activity, flattened to **one row per event** instead of one object per transaction, with a per-event USD value the old endpoint never had.
+
+<Note>
+**Not a 1:1 swap.** The old response nests events under each transaction and layers on a decoded/curated layer. You need **this recipe** for the events, plus [Token Metadata](/data-feeds/recipes/token/token-metadata) for token names/symbols/decimals, plus a `GROUP BY tx_hash` reshape if your UI expects the transaction-grouped shape. Transaction-level fields (gas, nonce, receipt) come from the raw `block` transaction rows — see [The `block` array](/data-feeds/concepts/the-block-array).
+</Note>
+
+| `/wallets/{address}/history` | Data Feeds | Fidelity |
+|---|---|---|
+| `hash`, `block_number`, `block_timestamp`, `transaction_index`, `from`/`to`, `value` | `wallet_history_full.*` | exact |
+| `nonce`, `gas`, `gas_price`, `input`, `receipt_*`, `transaction_fee` | raw `block` transaction row (join on `tx_hash`) | exact |
+| nested transfer `value` (raw) / `value_formatted` | `amount`, `amount_in/out`, `token0/1_amount`; formatted = `amount / 10^decimals` | exact |
+| per-event USD value | `amount_usd`, `amount_in/out_usd`, `token0/1_amount_usd` | calculated *(new — the endpoint had none)* |
+| token `name` / `symbol` / `decimals` | `token_metadata.*` ([Token Metadata](/data-feeds/recipes/token/token-metadata)) | exact |
+| `direction` | `wallet_history_full.direction` | exact |
+| `internal_transactions[]` | not delivered by a shipped recipe today | gap |
+| `logs[]` (raw) / `logs[].decoded_event` | raw `block` log rows / decode from the ABI yourself | exact / add yourself |
+| `category`, `summary`, `method_label` | build yourself, or omit | add yourself |
+| `*_label`, `*_entity`, logos, `possible_spam`, `verified_collection` | your own label / curation source | add yourself |
+
+To reproduce the endpoint's transaction-grouped shape, group events by `tx_hash` (Postgres):
+
+```sql
+SELECT tx_hash,
+       max(block_number)   AS block_number,
+       max(block_timestamp) AS block_timestamp,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'token_transfer')  AS erc20_transfers,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'nft_transfer')    AS nft_transfers,
+       jsonb_agg(to_jsonb(e) ORDER BY log_index) FILTER (WHERE event_type = 'native_transfer') AS native_transfers
+FROM wallet_history_full e
+WHERE wallet_address = lower($1)
+GROUP BY tx_hash
+ORDER BY block_number DESC
+LIMIT $2;
+```
+
+**Good to know**
+
+- The biggest migration task is the reshape: event-flat → transaction-grouped is a `GROUP BY tx_hash`. Skip it entirely if your UI prefers an event feed.
+- You gain per-event USD the endpoint never provided — compare with a tolerance, and expect `NULL`/0 for unpriced tokens.
+- The decoded/categorized/labeled layer is off-chain processing, not onchain data — add it yourself or drop it.
+- Only need "which transactions touched this wallet"? Use the [lightweight pointer variant](#lightweight-variant-transaction-pointers) instead of the full feed.
+- No per-call limit — page a wallet's entire history with plain SQL.
+
+### Wallet native transactions
+
+`GET /{address}`
+
+Replaced by this recipe filtered to `event_type = 'native_transfer'` — the native slice of the same event feed. Direction, date, block, and ordering filters become plain `WHERE` / `ORDER BY` clauses.
+
+<Note>
+**Not a 1:1 swap for strict parity.** The legacy endpoint returns *every* transaction where the wallet is `from` or `to`, including `value = 0` contract calls — native value movements alone miss those. For exact parity, and for gas/nonce/receipt fields, read the raw transaction rows from the `block` array (filter `transactionFrom` / `transactionTo` = your wallet) alongside this recipe — see [The `block` array](/data-feeds/concepts/the-block-array).
+</Note>
+
+| `/{address}` | Data Feeds | Fidelity |
+|---|---|---|
+| `hash`, `nonce`, `transaction_index` | `block` array transaction row | exact |
+| `from_address`, `to_address`, `value`, `input` | transaction row / `nativeTransfers` | exact |
+| `gas`, `gas_price`, `receipt_*` | `block` array transaction row | exact |
+| `transaction_fee` | derive: `receipt_gas_used × gas_price` | exact |
+| `block_number`, `block_timestamp`, `block_hash` | block / transaction row | exact |
+| `logs[]` | `block` array log rows | exact |
+| `internal_transactions` | not delivered by a shipped recipe today | gap |
+| `method_label` | decode the 4-byte selector from the ABI | add yourself |
+| `from/to_address_entity`, `*_label`, `*_entity_logo` | your own label directory | add yourself |
+
+**Good to know**
+
+- No wallet-size cap — the old endpoint can error on very large wallets; your own table has no such limit.
+- Strict parity includes `value = 0` sends — use the block-array transaction rows when you need every transaction, not just value movements.
+- Run the recipe `realtime` (ClickHouse recommended) for a live feed of new transactions.
+
+### Wallet active chains
+
+`GET /wallets/{address}/chains`
+
+Replaced by a roll-up you build: run this recipe on **each chain** you cover, keep a `min`/`max` activity summary per wallet per chain, and union the results in your app.
+
+<Note>
+**Not a 1:1 swap** — Data Feeds are one feed per chain. This endpoint needs this recipe running on every chain you want to report, plus a small cross-chain union in your application layer. A wallet active on a chain you don't index simply won't appear; that coverage is yours to set.
+</Note>
+
+| `/wallets/{address}/chains` | Data Feeds | Fidelity |
+|---|---|---|
+| `address` | the query | exact |
+| `active_chains[].chain`, `chain_id` | the indexed chains where the wallet has rows | exact |
+| `first_transaction` (block, timestamp, hash) | `MIN` activity block per chain + the tx there | exact |
+| `last_transaction` (block, timestamp, hash) | `MAX` activity block per chain + the tx there | exact |
+
+Keep the per-chain read cheap with a summary view over the recipe's table:
+
+```sql
+CREATE VIEW wallet_chain_activity AS
+SELECT
+  wallet_address,
+  min(block_number) AS first_block,
+  max(block_number) AS last_block
+FROM wallet_history_full
+GROUP BY wallet_address;
+```
+
+**Good to know**
+
+- First-seen needs full history; "active" and last-seen do not. Backfill each chain to an early block where you want a correct first transaction — a wallet's first activity can be genesis-era.
+- Every value is exact — no prices, no off-chain data, just onchain presence and the bounding transactions.
+- Stream each chain's feed to keep last-seen live as the wallet transacts.
+
+### Wallet stats
+
+`GET /wallets/{address}/stats`
+
+Replaced by plain `COUNT`s: three of the five stats come straight from this recipe's table; the NFT holdings counts need a second recipe.
+
+<Note>
+**Not a 1:1 swap** — you need this recipe **plus** [NFTs by Wallet](/data-feeds/recipes/wallet/nfts-by-wallet). `transactions`, `token_transfers`, and `nft_transfers` are `event_type` counts over `wallet_history_full`; `nfts` and `collections` are counts over the wallet-NFT holdings table.
+</Note>
+
+| `/wallets/{address}/stats` | Data Feeds | Fidelity |
+|---|---|---|
+| `nfts` | `count` over `wallet_nfts` where `balance > 0` ([NFTs by Wallet](/data-feeds/recipes/wallet/nfts-by-wallet)) | exact |
+| `collections` | `count(DISTINCT token_address)` over `wallet_nfts` | exact |
+| `transactions.total` | `count` of the wallet's native transactions | exact |
+| `nft_transfers.total` | `count` where `event_type = 'nft_transfer'` | exact |
+| `token_transfers.total` | `count` where `event_type = 'token_transfer'` | exact |
+
+```sql
+SELECT
+  (SELECT count(*) FROM wallet_nfts
+    WHERE wallet_address = $1 AND balance > 0)                                  AS nfts,
+  (SELECT count(DISTINCT token_address) FROM wallet_nfts
+    WHERE wallet_address = $1 AND balance > 0)                                  AS collections,
+  (SELECT count(*) FROM wallet_history_full
+    WHERE wallet_address = $1 AND event_type = 'native_transfer')               AS transactions_total,
+  (SELECT count(*) FROM wallet_history_full
+    WHERE wallet_address = $1 AND event_type = 'nft_transfer')                  AS nft_transfers_total,
+  (SELECT count(*) FROM wallet_history_full
+    WHERE wallet_address = $1 AND event_type = 'token_transfer')                AS token_transfers_total;
+```
+
+**Good to know**
+
+- These counts are **cumulative over the wallet's life** — accurate totals need the full chain history backfilled (`historical` / `hybrid` from an early block). See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- For `transactions.total`, native transfers miss `value = 0` contract calls — count the raw block-array transaction rows for strict parity (same caveat as [native transactions](#wallet-native-transactions)).
+- For `nfts`, decide whether you count held token IDs or sum ERC-1155 amounts — the endpoint counted token IDs.
+- Serving many wallets? Materialize a per-wallet stats row and update it as events land.

@@ -3,15 +3,6 @@ title: "Swaps by Token"
 description: "Sync every DEX trade that touched a token — pool fills and aggregator-routed trades, USD-enriched at block time — into your own database, keyed for fast by-token lookups."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /tokens/{address}/analytics", guide: "token-analytics", label: "Token trading analytics" },
-    { path: "GET /pairs/{address}/ohlcv", guide: "pair-ohlcv", label: "Pair OHLCV candlesticks" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me every DEX trade that touched token **0x…**, newest first — with the amount on each side, the USD notional, the protocol, and whether it was a buy or a sell."
@@ -196,6 +187,52 @@ The recipe is chain-parametrized — point it at any supported EVM chain or Sola
 - **`price_usd`, `notional_usd`, `fee_usd`** are `NULL` when the bought token had **no in-block price update** — there's no off-block price backfill at write time. Join the Token Prices sync for fuller coverage.
 - **`fee_*`** is populated for **pool fills only**; bps-style fees (V3/V4/CL) are converted to an absolute amount, and already-absolute fees pass through. Aggregator-routed rows leave fees `NULL`.
 - **`side`** (`buy`/`sell`) is derived from the lower-priority (base) token's pool-balance delta on the trade.
+
+## Migrating from the REST API
+
+This recipe is the trade-level foundation for the legacy token-analytics endpoint. That endpoint returns a pre-aggregated dashboard, so there is **no 1:1 replacement table** — you land the token's trades with this recipe and compute the rolling windows yourself, joining sibling recipes for price, liquidity, and FDV. Every figure is **calculated** (aggregated from real trades, prices, reserves, and supply — very close, compare with a tolerance); there are no off-chain fields to add.
+
+### GET /tokens/:tokenAddress/analytics
+
+Buy/sell volume, buyers/sellers, trade counts, unique wallets, price change, liquidity, and FDV per rolling window (5m / 1h / 6h / 24h). On Data Feeds those windows become queries you own — and so does any other window or metric (buy/sell ratio, VWAP, …).
+
+<Warning>
+This endpoint needs a **combination of recipes**, not one. Run this recipe (the trades) plus [Token Prices](/data-feeds/recipes/token/token-prices) (`token_price_updates` — `usdPrice` and `pricePercentChange`), [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) (`pair_reserves` — `totalLiquidityUsd`), and [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata.total_supply` — FDV) against the same database, then aggregate. There is no pre-aggregated analytics recipe — the composition is the supported path.
+</Warning>
+
+| `/tokens/:tokenAddress/analytics` | Data Feeds | Fidelity |
+|---|---|---|
+| `totalBuyVolume`, `totalSellVolume` (per window) | `sum(swaps.notional_usd)` by side | calculated |
+| `totalBuyers`, `totalSellers`, `totalBuys`, `totalSells` | distinct traders / trade counts by side | calculated |
+| `uniqueWallets` | distinct traders in the window | calculated |
+| `usdPrice`, `pricePercentChange` | latest `token_price_updates.usd_price` / price now vs window-ago | calculated |
+| `totalLiquidityUsd` | sum of the token's pool reserves × price | calculated |
+| `totalFullyDilutedValuation` | `total_supply` × price | calculated |
+
+The trade-side aggregation for one window (Postgres — run per window: 300 / 3600 / 21600 / 86400 seconds):
+
+```sql
+SELECT
+  sum(notional_usd) FILTER (WHERE side = 'buy')              AS total_buy_volume,
+  sum(notional_usd) FILTER (WHERE side = 'sell')             AS total_sell_volume,
+  count(DISTINCT trader_address) FILTER (WHERE side='buy')   AS total_buyers,
+  count(DISTINCT trader_address) FILTER (WHERE side='sell')  AS total_sellers,
+  count(*) FILTER (WHERE side = 'buy')                       AS total_buys,
+  count(*) FILTER (WHERE side = 'sell')                      AS total_sells,
+  count(DISTINCT trader_address)                             AS unique_wallets
+FROM swaps
+WHERE (token0_address = lower($1) OR token1_address = lower($1))
+  AND block_timestamp >= extract(epoch FROM now()) - 86400;
+```
+
+Layer the rest on top: `usdPrice` is the latest price update, `pricePercentChange` compares it to the price a window ago, `totalLiquidityUsd` sums the token's pool reserves valued at price, and `totalFullyDilutedValuation` is `total_supply × price`.
+
+**Gotchas**
+
+- Backfill enough history to cover your longest window — a day or more for the 24h figures, plus price history for the price change. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- Materialize per token and window on a schedule if you serve many tokens — don't recompute per request.
+- Thin tokens have sparse windows, and trades whose bought leg had no in-block price carry `NULL` notional and drop out of USD sums.
+- On ClickHouse, run the same aggregation over `fact_swaps_by_token` with a prefix scan on `token_address` (the unpivot means a by-token filter already sees each trade once) — and make it reorg-safe with `FINAL` or sign-aware sums, never a bare `WHERE sign = 1`.
 
 ### Related
 

@@ -3,16 +3,6 @@ title: "Token Balances by Wallet"
 description: "Sync every ERC-20 token a wallet holds, with its current non-zero balance, into your own database — a portfolio lookup that's a single prefix scan."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /wallets/{address}/tokens", guide: "wallet-tokens", label: "Wallet token balances & prices" },
-    { path: "GET /{address}/erc20", guide: "wallet-erc20", label: "Wallet ERC-20 balances" },
-    { path: "GET /wallets/{address}/net-worth", guide: "wallet-networth", label: "Wallet net worth" },
-  ]}
-/>
-
 ### Question it answers
 
 > "Give me every token wallet **0x…** holds, with its current non-zero balance."
@@ -218,6 +208,142 @@ The recipe is chain-parametrized — point it at any supported EVM chain or Sola
 - **Raw balances only.** `balance` is the raw `uint256` post-transfer amount — divide by `10^token_decimals` to read human units. Fold in a decimals lookup from a Token Metadata sync if you need it pre-scaled.
 - **No USD value.** This recipe lands quantities, not dollar value. Join to a Token Prices sync at read time for portfolio valuation.
 - **Latest-wins semantics.** A `(wallet, token)` row reflects the most recent transfer-derived post-balance. Direct mints/burns or rebases that emit a transfer are captured; balance changes with no transfer event are not.
+
+## Migrating from the REST API
+
+This recipe replaces the wallet-balance family of legacy Web3 API endpoints. Data Feeds are **not** 1:1 replicas of those responses — you land the underlying data in your own database and reconstruct the response shape with a view. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal not in the feed), and the gotchas specific to that endpoint.
+
+### GET /wallets/:address/tokens
+
+The enriched balances-plus-prices endpoint. Replaced by this recipe's `token_balances` table joined with three sibling recipes for native balance, token details, and prices.
+
+<Warning>
+This endpoint needs **four recipes**, not one. Run this recipe plus [Native Balances](/data-feeds/recipes/wallet/native-balances) (`native_balances`), [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata`), and [Token Prices](/data-feeds/recipes/token/token-prices) (`token_price_updates`) against the same database, then join them in one view. There is no single pre-joined recipe — the composition is the supported path.
+</Warning>
+
+| `/wallets/:address/tokens` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `balance` (raw) | `token_balances.*` | exact |
+| `balance_formatted` | derive: `balance / 10^decimals` | exact |
+| `name`, `symbol`, `decimals`, `total_supply(_formatted)` | `token_metadata.*` | exact |
+| `usd_price` | latest `token_price_updates.usd_price` | calculated |
+| `usd_value`, `usd_price_24hr_*`, `portfolio_percentage` | derive from balance × price / price history | calculated |
+| `percentage_relative_to_total_supply` | derive: `balance / total_supply` | exact |
+| `native_token` + native balance | `native_balances` | exact |
+| `logo`, `thumbnail`, `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
+
+The reconstruction view (Postgres — adapt to your destination):
+
+```sql
+CREATE VIEW wallet_token_balances_price AS
+WITH latest_price AS (
+  SELECT DISTINCT ON (token_address)
+         token_address, usd_price
+  FROM   token_price_updates
+  ORDER  BY token_address, block_number DESC      -- newest price per token
+)
+SELECT
+  b.wallet_address,
+  b.token_address,
+  m.symbol,
+  m.name,
+  m.decimals,
+  b.balance                                          AS balance_raw,
+  b.balance / power(10, m.decimals)                  AS balance_formatted,
+  p.usd_price,
+  (b.balance / power(10, m.decimals)) * p.usd_price  AS usd_value,
+  m.total_supply,
+  b.balance / NULLIF(m.total_supply, 0)              AS percentage_relative_to_total_supply
+FROM token_balances b
+LEFT JOIN token_metadata m ON m.token_address = b.token_address
+LEFT JOIN latest_price   p ON p.token_address = b.token_address
+WHERE b.balance > 0;
+```
+
+Finishing touches: `portfolio_percentage` is `usd_value / SUM(usd_value)` per wallet at query time; `UNION` in `native_balances` priced with the native asset's USD mark; derive 24-hour change from the price ~24h ago in `token_price_updates`.
+
+**Gotchas**
+
+- USD values come from real DEX trades — very close to the old endpoint, but compare with a tolerance, not bit-for-bit. A thinly-traded token may not have a price yet.
+- No fixed spam filter: you get every token the wallet holds, then apply your own spam/dust rules.
+- No wallet-size limit — the old endpoint caps very large wallets; your own dataset has none.
+- Balances are current-state on Postgres/MySQL; use ClickHouse for real-time/hybrid.
+
+### GET /:address/erc20
+
+The plain ERC-20 balances endpoint (no prices, no portfolio math). Replaced by this recipe's `token_balances` table joined with [Token Metadata](/data-feeds/recipes/token/token-metadata) for name/symbol/decimals/supply — two recipes, one view, every onchain value exact.
+
+| `/:address/erc20` | Data Feeds | Fidelity |
+|---|---|---|
+| `token_address`, `balance` (raw) | `token_balances.*` | exact |
+| `name`, `symbol`, `decimals`, `total_supply` | `token_metadata.*` | exact |
+| `total_supply_formatted`, `percentage_relative_to_total_supply` | derive from those values | exact |
+| `balance_formatted` *(bonus, legacy omits it)* | derive: `balance / 10^decimals` | exact |
+| `logo`, `thumbnail`, `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
+
+The view is the balances-and-prices view above minus the price join — join `token_balances` to `token_metadata`, keep `balance > 0`, and derive the formatted/supply-relative columns. The old `exclude_spam` / `exclude_unverified_contracts` filters become a `WHERE` against your own list.
+
+**Gotchas**
+
+- Everything onchain is exact — no pricing engine in the loop, nothing to reconcile with a tolerance.
+- ERC-20 only, matching the legacy endpoint. For native (ETH) balance, add [Native Balances](/data-feeds/recipes/wallet/native-balances).
+- No wallet-size limit — the old endpoint errors on very large wallets ("too many ERC20 token balances"); your dataset doesn't, and you get real keyset pagination on top.
+
+### GET /wallets/:address/net-worth
+
+The USD net-worth roll-up. There is no single replacement table — net worth is `SUM(token balance × price) + native balance × native price`, computed over the same tables as `/wallets/:address/tokens`.
+
+<Warning>
+This endpoint needs **four recipes**: this recipe plus [Native Balances](/data-feeds/recipes/wallet/native-balances), [Token Metadata](/data-feeds/recipes/token/token-metadata), and [Token Prices](/data-feeds/recipes/token/token-prices). Build the balances-and-prices view above first, then aggregate it — net worth is a `SUM` on top of that view.
+</Warning>
+
+| `/wallets/:address/net-worth` | Data Feeds | Fidelity |
+|---|---|---|
+| `native_balance`, `native_balance_formatted` | `native_balances.balance` | exact |
+| `native_balance_usd` | derive: native balance × native price | calculated |
+| `token_balance_usd` | `SUM(usd_value)` over the balances view | calculated |
+| `networth_usd` | derive: native + token USD | calculated |
+| `total_networth_usd` | derive: sum across chains | calculated |
+
+The roll-up view (Postgres — sums the balances view above and adds the native leg):
+
+```sql
+CREATE VIEW wallet_net_worth AS
+WITH tokens AS (
+  SELECT wallet_address,
+         sum(usd_value) AS token_balance_usd        -- exclude what shouldn't count (see gotchas)
+  FROM   wallet_token_balances_price
+  WHERE  usd_value IS NOT NULL
+  GROUP  BY wallet_address
+),
+native AS (
+  SELECT n.wallet_address,
+         n.balance / 1e18                       AS native_balance_formatted,
+         n.balance / 1e18 * p.usd_price         AS native_balance_usd
+  FROM   native_balances n
+  LEFT JOIN LATERAL (
+    SELECT usd_price FROM token_price_updates
+    WHERE token_address = lower('0xC02aaa39b223FE8D0A0e5C4F27eAD9083C756Cc2')  -- WETH = native mark
+    ORDER BY block_number DESC LIMIT 1
+  ) p ON true
+)
+SELECT
+  coalesce(t.wallet_address, n.wallet_address)            AS wallet_address,
+  n.native_balance_formatted,
+  n.native_balance_usd,
+  coalesce(t.token_balance_usd, 0)                        AS token_balance_usd,
+  coalesce(t.token_balance_usd, 0) + coalesce(n.native_balance_usd, 0) AS networth_usd
+FROM tokens t
+FULL JOIN native n ON n.wallet_address = t.wallet_address;
+```
+
+**Gotchas**
+
+- **Curating the token set is the whole game.** One spam or bogus-priced token can dominate the total. The old `exclude_spam` / `exclude_unverified_contracts` / `min_pair_side_liquidity_usd` filters become your own `WHERE` in the `tokens` CTE — here they're essential, not polish.
+- Stale prices: a token that hasn't traded recently has no fresh mark. Decide whether to value it at zero, carry forward the last mark, or exclude it — each choice moves the total.
+- Cross-chain net worth: each chain is its own feed. Compute per chain and sum `networth_usd` into `total_networth_usd`.
+- Compare with a tolerance — USD comes from real DEX trades, very close to the old figure, not identical.
+- A missed holding silently changes the total, so full-history backfill (see the note in [Run it](#run-it)) matters even more here.
 
 ### Related
 

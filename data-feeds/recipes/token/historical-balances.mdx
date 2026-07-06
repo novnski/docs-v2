@@ -3,14 +3,6 @@ title: "Historical Balances"
 description: "Reconstruct any wallet's balance of any token at any past block — and the full holder set of a token as of a block — from a retained per-(wallet, token) balance event log in your own database."
 ---
 
-import { RecipeMigrationCallout } from '/snippets/recipe-migration-callout.jsx'
-
-<RecipeMigrationCallout
-  items={[
-    { path: "GET /erc20/{tokenAddress}/holders/historical", guide: "holders-historical", label: "Historical token holders" },
-  ]}
-/>
-
 ### Question it answers
 
 > "What was wallet **0x…**'s balance of token **0x…** at block **N** — for any past block? And who held the token back then?"
@@ -197,7 +189,84 @@ The recipe is chain-parametrized via the `chain` setting — point it at any sup
 
 On-chain primitives — wallet, token, raw post-event balance, block, log index, tx hash — are fully covered.
 
-### Related
+## Migrating from the REST API
+
+This recipe replaces the legacy **historical token holders** endpoints on EVM and Solana.
+
+<Warning>
+Both legacy endpoints below are **deprecated and sunset on July 31, 2026**. Migrate before that date.
+</Warning>
+
+Neither move is 1:1: the legacy endpoints returned a **pre-bucketed time series**, while this recipe lands the retained balance log that produces it. You resolve each bucket boundary to a block, count the as-of-block holder set, and diff adjacent buckets — and a **full backfill from the token's deployment block is required**, or early buckets undercount (see the backfill note in [Run it](#run-it) and [History & backfill](/data-feeds/concepts/history-and-backfill)).
+
+### EVM: historical token holders
+
+```
+GET /erc20/:tokenAddress/holders/historical
+```
+
+The holder-count time series becomes an aggregation over this recipe's balance log: the [holder set as of block N](#example-reads) query, run per bucket boundary.
+
+<Note>
+**This endpoint needs more than one recipe.** Counts and deltas come from this recipe alone, but `newHoldersByAcquisition` (swap / transfer / airdrop) classifies each new holder's first inbound event, which you build from [Token Transfers](/data-feeds/recipes/token/token-transfers) + [Swaps by Token](/data-feeds/recipes/markets/swaps-by-token).
+</Note>
+
+| Legacy field | Data Feeds | Fidelity |
+|---|---|---|
+| `timestamp` | your chosen bucket boundary, resolved to a block | your definition |
+| `totalHolders` | count of the as-of-block holder set | exact |
+| `netHolderChange`, `holderPercentChange` | deltas between adjacent buckets | calculated |
+| `holdersIn` / `holdersOut` (whales … shrimps) | size-tier flows on thresholds you set | your definition |
+| `newHoldersByAcquisition` (swap / transfer / airdrop) | classify new holders' first inbound transfer/swap | your definition |
+
+Holder count as of a bucket's end block (ClickHouse — repeat per bucket, or drive from a calendar):
+
+```sql
+SELECT countIf(balance_at_n != '0' AND balance_at_n != '') AS total_holders
+FROM (
+    SELECT wallet_address,
+           argMax(balance, (block_number, log_index)) AS balance_at_n
+    FROM recipe_historical_balance_at_block.fact_balance_observations FINAL
+    WHERE chain_id = 1
+      AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+      AND block_number <= {bucket_end_block:UInt64}
+    GROUP BY wallet_address
+);
+```
+
+Gotchas:
+
+- **Materialize, don't recompute.** Large tokens have millions of holders — compute `total_holders` per bucket on a schedule and store the small series; the deltas are then trivial.
+- **No fixed `timeFrame`.** Every observation is retained, so the same log serves hourly, daily, or custom windows.
+- **Tiers and acquisition are conventions you set** — a feature, not a black box, but budget time to define them.
+- **Backfill from the token's deployment block**, not chain genesis — the recipe is token-scoped for this question.
+
+### Solana: historical holders
+
+```
+GET /token/:network/holders/:address/historical
+```
+
+The same recipe, pointed at **Solana** in the Admin Panel wizard, replaces it — Solana's `tokenTransfers` carry the same absolute post-balances, so the balance log is identical in shape (see [Multichain](#multichain)). The field mapping matches the EVM table above, with the mint as `token_address`; `newHoldersByAcquisition` likewise needs [Token Transfers](/data-feeds/recipes/token/token-transfers) + [Swaps by Token](/data-feeds/recipes/markets/swaps-by-token) layered in.
+
+Holder set as of a past block, the building block for each bucket (ClickHouse):
+
+```sql
+SELECT wallet_address,
+       argMax(balance, (block_number, log_index)) AS balance_at_n
+FROM recipe_historical_balance_at_block.fact_balance_observations FINAL
+WHERE token_address = lower('<MINT>') AND block_number <= {N:UInt64}
+GROUP BY wallet_address
+HAVING balance_at_n != '0' AND balance_at_n != '';
+```
+
+Gotchas:
+
+- **SPL account model.** Count **owner wallets**, summing a wallet's token accounts for its per-owner balance.
+- **Backfill from the mint's deployment** — a short window gives wrong historical counts.
+- **Slot boundaries.** Resolve each interval boundary to a block/slot before running the as-of query.
+
+## Related
 
 <Columns cols={2}>
   <Card title="Token Holders" href="/data-feeds/recipes/token/token-holders" icon="users">
