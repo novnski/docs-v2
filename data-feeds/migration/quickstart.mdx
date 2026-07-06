@@ -11,10 +11,10 @@ then follows the same pattern.
 ## Before you begin
 
 <Warning>
-**Data Feeds is a technical product — you run the infrastructure.** Unlike the REST API, the data lands in a
+**Data Feeds is a technical product: you run the infrastructure.** Unlike the REST API, the data lands in a
 database **you own and operate**: you run the Docker sink, you provision Postgres/ClickHouse (locally for this
 quickstart; on your own servers in production), and you are responsible for storing, sizing, and backing up
-the decompressed data. Decoded onchain data expands significantly from its compressed transport size — budget
+the decompressed data. Decoded onchain data expands significantly from its compressed transport size, so budget
 disk accordingly.
 </Warning>
 
@@ -22,17 +22,17 @@ disk accordingly.
 - A **Data Feeds API key** (`cm_live_...`). [Request access](https://moralis.com/data-feeds/request-access) if
   you do not have one.
 - Access to the **Moralis Admin Panel**, where you generate the sink config.
-- A machine with enough **disk headroom** for your backfill window — start small (`tip-500`) and widen once
+- A machine with enough **disk headroom** for your backfill window: start small (`tip-500`) and widen once
   you've seen the per-block footprint for your chain.
 
 ## Step 1: Generate your sink starter pack
 
-In the Admin Panel, configure a sink — pick your **chain**, **topic**, and **destination database** — and
+In the Admin Panel, configure a sink (pick your **chain**, **topic**, and **destination database**) and
 download the **starter pack** (`continuum-sink-starter.zip`). Unzip it. You get:
 
 | File | What it is |
 |---|---|
-| `sink-config.yaml` | The sink config you generated — Continuum URL, `namespace` (chain), `topic`, and destination. |
+| `sink-config.yaml` | The sink config you generated: Continuum URL, `namespace` (chain), `topic`, and destination. |
 | `docker-compose.yml` | Brings up the sink (`moralisweb3/continuum-sink`) plus a local PostgreSQL. |
 | `.env` | Your API key and DB password. **Do not commit or share it.** |
 | `schema.sql` | DDL for the destination table(s), auto-applied to Postgres on first start. |
@@ -46,7 +46,7 @@ reads.
 
 ## Step 2: Add your API key
 
-Open `.env` and confirm your key is set — the generated file sometimes ships with a **blank or placeholder**
+Open `.env` and confirm your key is set; the generated file sometimes ships with a **blank or placeholder**
 key:
 
 ```bash
@@ -105,7 +105,7 @@ ORDER BY position DESC
 LIMIT 20;
 ```
 
-You should see the count climb as new blocks land. That is live, decoded onchain data in a store you own — no
+You should see the count climb as new blocks land. That is live, decoded onchain data in a store you own: no
 API quotas, no per-call limits.
 
 ## If no rows arrive
@@ -115,7 +115,7 @@ The pipe has a few moving parts. Work down this list:
 | Symptom | Cause | Fix |
 |---|---|---|
 | `continuum.api_key is required` in sink logs | `MORALIS_API_KEY` blank in `.env` | Paste your full `cm_live_...` key, `docker compose up -d --force-recreate sink`. |
-| Sink logs stop after `s3-proxy reachable` and rows stay at 0 | Upstream S3 backfill stalled (e.g. "Partition not found") | Not your setup — confirm the chain/topic backfill is healthy with the team, then it resumes automatically. |
+| Sink logs stop after `s3-proxy reachable` and rows stay at 0 | Upstream S3 backfill stalled (e.g. "Partition not found") | Not your setup. Confirm the chain/topic backfill is healthy with the team, then it resumes automatically. |
 | Can connect but app can't reach Postgres | No host port mapping | Add the `ports` block from Step 3. |
 
 ## Chain reference
@@ -141,7 +141,7 @@ The pipe has a few moving parts. Work down this list:
 ## Next steps
 
 - **Migrating an existing integration?** Find your endpoint in the [Migration guides](/data-feeds/migration/overview).
-- **Want a different dataset?** Browse the [recipes](https://docs.moralis.com/data-feeds/recipes/overview) — swaps, balances, holders, prices,
+- **Want a different dataset?** Browse the [recipes](https://docs.moralis.com/data-feeds/recipes/overview): swaps, balances, holders, prices,
   NFT activity. They all run the same way; swap the transform and schema.
 - **Understand the model:** [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds),
   [History & backfill](/data-feeds/concepts/history-and-backfill), and [Destinations](/data-feeds/concepts/destinations).

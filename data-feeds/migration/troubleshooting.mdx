@@ -1,14 +1,14 @@
 ---
 title: "Gotchas & troubleshooting"
-description: "Every known failure point when consuming Data Feeds — symptom, why it happens, and the fix — so you don't discover them the hard way. Covers the sink pipe, the live-vs-settled data boundary, and query-time surprises."
+description: "Every known failure point when consuming Data Feeds (symptom, why it happens, and the fix) so you don't discover them the hard way. Covers the sink pipe, the live-vs-settled data boundary, and query-time surprises."
 ---
 
 The complete list of things that surprise people when consuming Data Feeds. Each entry is **symptom, why, and
-what to do**. Skim the headings before your first run — five minutes here saves hours of debugging.
+what to do**. Skim the headings before your first run; five minutes here saves hours of debugging.
 
 <Warning>
 **You are running real infrastructure.** Data Feeds deliver decoded onchain data into a database **you own and
-operate** — Docker, Postgres/ClickHouse, disk, and backfill windows are your responsibility. If you have not
+operate**: Docker, Postgres/ClickHouse, disk, and backfill windows are your responsibility. If you have not
 run the pipe yet, start with the [quickstart](/data-feeds/migration/quickstart).
 </Warning>
 
@@ -20,12 +20,12 @@ run the pipe yet, start with the [quickstart](/data-feeds/migration/quickstart).
 result: 7)`.
 
 **Why:** the sink's `transform_sql` output must **positionally match** the destination table's columns. With no
-transform configured, the sink falls back to selecting a single column — which can never match a multi-column
+transform configured, the sink falls back to selecting a single column, which can never match a multi-column
 schema.
 
 **Do this:** make sure `sink-config.yaml` has a `transform_sql` whose SELECT list matches your destination
 table column-for-column, and a `parquet_columns` list naming the top-level fields the transform reads (e.g.
-`[position, tokenTransfers]`). If your starter pack shipped without one, add it — the config schema inside the
+`[position, tokenTransfers]`). If your starter pack shipped without one, add it; the config schema inside the
 sink image documents the pattern.
 
 ### The sink logs `api_key is required`
@@ -36,7 +36,7 @@ sink image documents the pattern.
 
 ### Every request returns HTTP 500 immediately
 
-**Why:** usually the wrong Continuum URL — the config must point at the **read-replica host**, not the admin
+**Why:** usually the wrong Continuum URL. The config must point at the **read-replica host**, not the admin
 panel host. Also check you are connected through your assigned VPN gateway if your access is VPN-gated.
 
 **Do this:** verify `continuum.url` in `sink-config.yaml` and your VPN connection before debugging anything
@@ -46,21 +46,21 @@ else.
 
 **Symptom:** `HTTP 500: Failed to read Parquet footer: Partition not found: s3://...`.
 
-**Why:** your backfill window includes blocks whose settled files are not available — either the window
+**Why:** your backfill window includes blocks whose settled files are not available: either the window
 reaches **too close to the tip** (recent blocks are served live, not as files yet), **too far back** on a
 chain with a thin retention window, or the settled store is **temporarily lagging**. The window is validated
-up front, so one missing partition fails the whole job — there is no partial backfill.
+up front, so one missing partition fails the whole job; there is no partial backfill.
 
 **Do this:** shrink the window (`tip-500` instead of `tip-5000`) and retry. You can also cap the upper end
 with a `blockNumber <= N` filter to pin the window entirely inside available history. If a modest window
-still fails for hours, the settled store is lagging — report it with the exact error; it resumes
+still fails for hours, the settled store is lagging. Report it with the exact error; it resumes
 automatically once fixed upstream.
 
 ### The sink completes instantly with 0 rows — and no error
 
 **Symptom:** logs show `Complete: 0 URL(s) processed`, exit code 0, empty table. **Looks like success; isn't.**
 
-**Why:** the window resolved to a range with no settled files in it — typically a window so close to the tip
+**Why:** the window resolved to a range with no settled files in it: typically a window so close to the tip
 that no complete partition exists yet, or a range the store is still catching up on.
 
 **Do this:** always verify with a row count (`SELECT count(*) FROM ...`) after a run, never trust a clean
@@ -73,7 +73,7 @@ the chain tip at start. Too deep on a thin-retention chain fails with `Partition
 returns 0 rows (see above). A `blockNumber <= N` filter caps the upper end when you need to pin a range.
 
 **Do this:** start small (`tip-500`), confirm rows land, then widen to the depth your use case needs. Remember
-[current-state answers need deep history](/data-feeds/concepts/history-and-backfill) — balances and holders
+[current-state answers need deep history](/data-feeds/concepts/history-and-backfill): balances and holders
 are only correct once you've backfilled the relevant range.
 
 ## The live vs. settled boundary
@@ -81,7 +81,7 @@ are only correct once you've backfilled the relevant range.
 ### Live data and file storage are two different stores
 
 **Why:** the chain status can show the feed tracking the tip (live, in-memory) while the most recent blocks
-are **not yet flushed to settled file storage**. These are different systems with different lag — "the feed is
+are **not yet flushed to settled file storage**. These are different systems with different lag: "the feed is
 live" does not mean "every recent block is downloadable."
 
 **Do this:** read near-tip data from the live stream and settled history from files; the chain status tells
@@ -90,7 +90,7 @@ find nothing while the feed is demonstrably live.
 
 ### Do not hard-code the feed version
 
-**Why:** each chain's feed carries a version that can roll over when the producer is upgraded — a hard-coded
+**Why:** each chain's feed carries a version that can roll over when the producer is upgraded; a hard-coded
 version can start returning a lagging tip or stop resolving.
 
 **Do this:** resolve the active topic from the chain's status before reading.
@@ -113,7 +113,7 @@ live, so there is a short warm-up before rows land.
 
 **Do this:** give it a minute, then check the sink logs: healthy output shows the cursor seeded near the tip
 and block windows advancing without errors. Still nothing? Confirm your chain ID and start block, then see
-[Modes](/data-feeds/concepts/modes) — and the 0-rows gotcha above.
+[Modes](/data-feeds/concepts/modes), and the 0-rows gotcha above.
 
 ### The newest rows look duplicated or briefly wrong
 
@@ -129,12 +129,12 @@ is never affected, only the tip. See [Reorgs](/data-feeds/concepts/reorgs).
 traded recently has no current mark.
 
 **Do this:** treat a missing price as "no recent trades", not an error, and fall back gracefully. USD values
-are **calculated** — compare with a small tolerance, never byte-equality. See
+are **calculated**: compare with a small tolerance, never byte-equality. See
 [Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api).
 
 ### My current-state results are incomplete
 
-**Why:** balances, holders, and approvals are **cumulative state** — start indexing too late and anyone whose
+**Why:** balances, holders, and approvals are **cumulative state**: start indexing too late and anyone whose
 last activity predates your start block is quietly missing.
 
 **Do this:** backfill from the beginning of the relevant history (the token's deploy block for by-token

@@ -1,13 +1,13 @@
 ---
 title: "NFT Collection Metadata"
-description: "Sync the on-chain metadata of every NFT collection — name, symbol, and contract type (ERC-721 / ERC-1155) — keyed by collection address, into your own database. Mirrors the Moralis GET /nft/{address}/metadata endpoint."
+description: "Sync the on-chain name, symbol, and contract type (ERC-721 / ERC-1155) of every NFT collection, keyed by collection address, into your own database. Mirrors the Moralis GET /nft/{address}/metadata endpoint."
 ---
 
 ### Question it answers
 
-> "Give me the collection metadata — name, symbol, contract type — for NFT collection **0x…**." Mirrors Moralis `GET /nft/{address}/metadata`.
+> "Give me the collection metadata (name, symbol, contract type) for NFT collection **0x…**." Mirrors Moralis `GET /nft/{address}/metadata`.
 
-This is the NFT-collection sibling of [Token Metadata](/data-feeds/recipes/token/token-metadata). Both read the same per-block deployed-contracts stream, but this recipe keeps only **NFT-type** contracts (ERC-721 / ERC-1155) and drops ERC-20 tokens. Collection metadata is fixed at deploy time, so there is normally exactly one row per `(chain_id, token_address)` — the latest deploy by `(block_number, transaction_index)` is canonical (defensive against a CREATE2 re-deploy at a reused address).
+This is the NFT-collection sibling of [Token Metadata](/data-feeds/recipes/token/token-metadata). Both read the same per-block deployed-contracts stream, but this recipe keeps only **NFT-type** contracts (ERC-721 / ERC-1155) and drops ERC-20 tokens. Collection metadata is fixed at deploy time, so there is normally exactly one row per `(chain_id, token_address)`: the latest deploy by `(block_number, transaction_index)` is canonical (defensive against a CREATE2 re-deploy at a reused address).
 
 ### What you get
 
@@ -16,18 +16,18 @@ One row per NFT-type contract deploy, keyed by the collection (`token_address`):
 | Column | Description |
 | --- | --- |
 | `token_address` | The NFT collection contract address |
-| `name` | On-chain collection name — best-effort; may be empty for many ERC-1155 collections |
-| `symbol` | On-chain collection symbol — best-effort; may be empty |
+| `name` | On-chain collection name, best-effort; may be empty for many ERC-1155 collections |
+| `symbol` | On-chain collection symbol, best-effort; may be empty |
 | `contract_type` | `ERC721` · `ERC1155` · `NFT` (derived from the EIP-165 interface ids; `NFT` is the fallback when neither interface is advertised) |
 | `deployer_address` | Address that deployed the contract |
-| `block_number`, `transaction_index` | Deploy position — the recency tiebreaker for latest-wins |
+| `block_number`, `transaction_index` | Deploy position, the recency tiebreaker for latest-wins |
 | `block_timestamp` | Block time of the deploy |
 
-Unlike the ERC-20 path, symbol-less contracts are **not** dropped — `name`/`symbol` are best-effort on-chain fields, not filter keys. Far fewer rows land than Token Metadata: only a handful of NFT contracts deploy per ~1000 blocks.
+Unlike the ERC-20 path, symbol-less contracts are **not** dropped: `name`/`symbol` are best-effort on-chain fields, not filter keys. Far fewer rows land than Token Metadata: only a handful of NFT contracts deploy per ~1000 blocks.
 
 ### Source
 
-The transform reads the per-block deployed-contracts stream and keeps the **NFT slice** — contracts whose `type` contains `NFT` (ERC-721 / ERC-1155). A contract is kept when its `deployer_address` is non-empty. `contract_type` is derived from the contract's `supportedInterfaces` (EIP-165 ids): `0xd9b67a26` → `ERC1155`, else `0x80ac58cd` → `ERC721`, else the `NFT` fallback.
+The transform reads the per-block deployed-contracts stream and keeps the **NFT slice**, contracts whose `type` contains `NFT` (ERC-721 / ERC-1155). A contract is kept when its `deployer_address` is non-empty. `contract_type` is derived from the contract's `supportedInterfaces` (EIP-165 ids): `0xd9b67a26` → `ERC1155`, else `0x80ac58cd` → `ERC721`, else the `NFT` fallback.
 
 ### Destination
 
@@ -41,9 +41,9 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 ### Full schema
 
-The complete read table this recipe produces. Keep the columns you need — `name`/`symbol`/`contract_type` are usually enough for a metadata lookup (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `name` and `symbol` are stored as text; they can contain quotes and odd characters, which are parameter-bound on insert so there is no quoting breakage.
+The complete read table this recipe produces. Keep the columns you need, `name`/`symbol`/`contract_type` are usually enough for a metadata lookup (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `name` and `symbol` are stored as text; they can contain quotes and odd characters, which are parameter-bound on insert so there is no quoting breakage.
 
-<Accordion title="ClickHouse — fact_nft_collection_metadata">
+<Accordion title="ClickHouse, fact_nft_collection_metadata">
 
 ```sql
 CREATE TABLE recipe_nft_collection_metadata.fact_nft_collection_metadata
@@ -68,11 +68,11 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, token_address, block_number, transaction_index, vendor_event_id);
 ```
 
-The `sign` column drives reorg collapsing — read with `FINAL` or a sign-aware aggregate, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path. The collection-keyed sort order makes a single-collection lookup a tight prefix scan.
+The `sign` column drives reorg collapsing, read with `FINAL` or a sign-aware aggregate, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path. The collection-keyed sort order makes a single-collection lookup a tight prefix scan.
 
 </Accordion>
 
-<Accordion title="Postgres — nft_collection_metadata">
+<Accordion title="Postgres, nft_collection_metadata">
 
 ```sql
 -- 1. Observations (sink target): one row per NFT-contract deploy.
@@ -118,13 +118,13 @@ CREATE INDEX IF NOT EXISTS nft_collection_metadata_type_idx
   ON public.nft_collection_metadata (contract_type);
 ```
 
-The sink appends to `nft_collection_metadata_observations`; refresh the current-metadata view on a schedule with `REFRESH MATERIALIZED VIEW CONCURRENTLY nft_collection_metadata;`. MySQL mirrors this shape — `VARCHAR(255)` for `name`/`symbol` — with the current-metadata `nft_collection_metadata` table maintained incrementally by an `AFTER INSERT` latest-wins trigger.
+The sink appends to `nft_collection_metadata_observations`; refresh the current-metadata view on a schedule with `REFRESH MATERIALIZED VIEW CONCURRENTLY nft_collection_metadata;`. MySQL mirrors this shape, `VARCHAR(255)` for `name`/`symbol`, with the current-metadata `nft_collection_metadata` table maintained incrementally by an `AFTER INSERT` latest-wins trigger.
 
 </Accordion>
 
 ### Example reads
 
-Metadata for one collection — latest deploy wins (ClickHouse):
+Metadata for one collection, latest deploy wins (ClickHouse):
 
 ```sql
 SELECT
@@ -158,10 +158,10 @@ WHERE token_address = lower('0x...');
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
-  The realtime reorg path on Postgres / MySQL needs a single-column `UNIQUE` on the block-level `position`, but a single block can deploy several NFT contracts — so the array-expanded rows can only carry a composite unique. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block. The Postgres / MySQL configs are intended for `historical` backfill, which is the dominant use of this recipe — a once-off metadata census.
+  The realtime reorg path on Postgres / MySQL needs a single-column `UNIQUE` on the block-level `position`, but a single block can deploy several NFT contracts, so the array-expanded rows can only carry a composite unique. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block. The Postgres / MySQL configs are intended for `historical` backfill, which is the dominant use of this recipe, a once-off metadata census.
 </Note>
 
 ### EVM only
@@ -170,23 +170,23 @@ This recipe is EVM-shaped: it reads EVM contract deploys. Solana NFT (Metaplex) 
 
 ### Fidelity gaps
 
-`GET /nft/{address}/metadata` returns enrichment fields this recipe does not source — all off-chain indexer or editorial state:
+`GET /nft/{address}/metadata` returns enrichment fields this recipe does not source, all off-chain indexer or editorial state:
 
-- `collection_logo` / `collection_banner_image` — off-chain CDN assets.
-- `collection_category` — editorial categorisation.
-- `project_url` / `discord_url` / `telegram_url` / `wiki_url` — social links.
-- `possible_spam` / `verified_collection` — spam & verification heuristics from a separate pipeline.
-- `synced_at` (wall-clock) — this recipe carries on-chain `block_number` / `block_timestamp` instead.
+- `collection_logo` / `collection_banner_image`, off-chain CDN assets.
+- `collection_category`: editorial categorisation.
+- `project_url` / `discord_url` / `telegram_url` / `wiki_url`, social links.
+- `possible_spam` / `verified_collection`, spam & verification heuristics from a separate pipeline.
+- `synced_at` (wall-clock), this recipe carries on-chain `block_number` / `block_timestamp` instead.
 
-The core on-chain fields — `token_address`, `name`, `symbol`, `contract_type`, plus `block_number` and `deployer_address` — are fully sourced.
+The core on-chain fields, `token_address`, `name`, `symbol`, `contract_type`, plus `block_number` and `deployer_address`, are fully sourced.
 
 ## Migrating from the REST API
 
-This recipe replaces the collection-metadata side of the legacy NFT endpoints. Data Feeds are **not** 1:1 replicas of those responses — you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+This recipe replaces the collection-metadata side of the legacy NFT endpoints. Data Feeds are **not** 1:1 replicas of those responses, you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
 
 ### GET /nft/:address/metadata
 
-A collection's identity. Replaced directly by this recipe's `nft_collection_metadata` table — `name`, `symbol`, and `contract_type` land from the contract's deploy, keyed by `token_address`. Optionally add [NFT Trades](/data-feeds/recipes/nft/nft-trades) for `last_sale`. The editorial layer (logo, banner, category, description, social links) and floor price are off-chain — bring your own collection directory and floor source, or drop them.
+A collection's identity. Replaced directly by this recipe's `nft_collection_metadata` table, `name`, `symbol`, and `contract_type` land from the contract's deploy, keyed by `token_address`. Optionally add [NFT Trades](/data-feeds/recipes/nft/nft-trades) for `last_sale`. The editorial layer (logo, banner, category, description, social links) and floor price are off-chain, bring your own collection directory and floor source, or drop them.
 
 | `/nft/:address/metadata` | Data Feeds | Fidelity |
 |---|---|---|
@@ -198,7 +198,7 @@ A collection's identity. Replaced directly by this recipe's `nft_collection_meta
 | `floor_price`, `floor_price_usd`, `floor_price_currency` | add yourself | off-chain |
 | `synced_at`, `created_date` | add yourself (on-chain `block_number` / `block_timestamp` carried instead) | off-chain |
 
-The lookup (Postgres — adapt to your destination):
+The lookup (Postgres, adapt to your destination):
 
 ```sql
 SELECT token_address, name, symbol, contract_type
@@ -208,16 +208,16 @@ WHERE token_address = lower('0x...');
 
 **Gotchas**
 
-- **`name`/`symbol` can be empty** for some ERC-1155 collections (no on-chain name) — expected, not an error.
-- **Backfill from the collection's deploy block** — metadata is recorded at deployment, so the deploy block must be in your indexed window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- **`name`/`symbol` can be empty** for some ERC-1155 collections (no on-chain name), expected, not an error.
+- **Backfill from the collection's deploy block**: metadata is recorded at deployment, so the deploy block must be in your indexed window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
 - `contract_type` may be the `NFT` fallback when a contract advertises neither EIP-165 interface; the legacy endpoint made a similar best-effort call.
 
 ### POST /nft/getMultipleNFTs
 
-Batch NFT lookup by `(token_address, token_id)`. The onchain half — ownership, mint provenance, contract type, collection identity, realized sales — is replaced by a composition of recipes, with no 25-NFT batch cap.
+Batch NFT lookup by `(token_address, token_id)`. The onchain half, ownership, mint provenance, contract type, collection identity, realized sales, is replaced by a composition of recipes, with no 25-NFT batch cap.
 
 <Warning>
-This endpoint needs **multiple recipes**, and it is *mostly a metadata product*. Run [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) (current owner per token_id) plus this recipe (collection `name` / `symbol`), [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) (mint provenance), and [NFT Trades](/data-feeds/recipes/nft/nft-trades) (`last_sale`) against the same database. The resolved token JSON, media, rarity, and floor/listing prices are built off-chain from each token's `tokenURI` and marketplace data — pair the recipes with your own metadata resolver and pricing sources, or drop those fields. If resolved metadata is the entire job, keep a metadata indexer for that layer; the recipes supply the ownership and provenance to pair with it.
+This endpoint needs **multiple recipes**, and it is *mostly a metadata product*. Run [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) (current owner per token_id) plus this recipe (collection `name` / `symbol`), [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) (mint provenance), and [NFT Trades](/data-feeds/recipes/nft/nft-trades) (`last_sale`) against the same database. The resolved token JSON, media, rarity, and floor/listing prices are built off-chain from each token's `tokenURI` and marketplace data, pair the recipes with your own metadata resolver and pricing sources, or drop those fields. If resolved metadata is the entire job, keep a metadata indexer for that layer; the recipes supply the ownership and provenance to pair with it.
 </Warning>
 
 | `/nft/getMultipleNFTs` | Data Feeds | Fidelity |
@@ -234,7 +234,7 @@ This endpoint needs **multiple recipes**, and it is *mostly a metadata product*.
 | `floor_price*`, `list_price` | add yourself (pricing/marketplace) | off-chain |
 | `possible_spam`, `verified_collection`, collection editorial, `*_sync` timestamps | add yourself | off-chain |
 
-The batch lookup (Postgres — adapt to your destination):
+The batch lookup (Postgres, adapt to your destination):
 
 ```sql
 SELECT o.token_address, o.token_id, o.contract_type,
@@ -250,16 +250,16 @@ WHERE (o.token_address, o.token_id) IN (VALUES
 
 **Gotchas**
 
-- **Backfill each collection from its deploy block** — a token's current owner is the cumulative result of every transfer, so a late start returns stale or missing owners.
-- **ERC-1155** token_ids can have many owners — you get `(owner, amount)` rows rather than a single `owner_of`.
-- `token_id` is a `uint256` stored as text — compare as strings, never as numbers.
-- No batch cap and no per-call limits — the 25-NFT ceiling disappears; batch size is just the length of your `IN` list.
+- **Backfill each collection from its deploy block**: a token's current owner is the cumulative result of every transfer, so a late start returns stale or missing owners.
+- **ERC-1155** token_ids can have many owners, you get `(owner, amount)` rows rather than a single `owner_of`.
+- `token_id` is a `uint256` stored as text, compare as strings, never as numbers.
+- No batch cap and no per-call limits, the 25-NFT ceiling disappears; batch size is just the length of your `IN` list.
 
 ### Related
 
 <Columns cols={2}>
   <Card title="NFT Owners by Contract" href="/data-feeds/recipes/nft/nft-owners-by-contract" icon="users">
-    Current holders of a collection — pair with this metadata for a complete collection view.
+    Current holders of a collection, pair with this metadata for a complete collection view.
   </Card>
   <Card title="NFT Marketplace" href="/data-feeds/use-cases/nft-marketplace" icon="store">
     The use case this collection metadata powers.

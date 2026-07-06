@@ -64,32 +64,22 @@ see three labels:
 ## Find your endpoint
 
 When you are ready, the **[endpoint → recipe lookup](/data-feeds/migration/endpoints)** maps every covered
-Moralis REST endpoint to the recipe — or **combination of recipes** — that replaces it, ordered by usage.
+Moralis REST endpoint to the recipe (or **combination of recipes**) that replaces it, ordered by usage.
 Migration details live **on the recipe pages themselves**: each recipe has a "Migrating from the REST API"
 section with the field-by-field mapping, the required recipe combination, one reconstruction query, and the
-endpoint-specific gotchas. One page per dataset — the recipe is the single source of truth.
+endpoint-specific gotchas. One page per dataset: the recipe is the single source of truth.
 
 New to Data Feeds entirely? Start with the **[quickstart](/data-feeds/migration/quickstart)** to get live data
 flowing into your own database in about ten minutes, then come back and migrate your endpoints. And skim
-[Gotchas & troubleshooting](/data-feeds/migration/troubleshooting) before your first run — it lists every
+[Gotchas & troubleshooting](/data-feeds/migration/troubleshooting) before your first run; it lists every
 known failure point with the fix.
-
-## Not yet covered
-
-These are intentionally out of this set for now:
-
-- **Other Solana endpoints** (prices, swaps, portfolio, metadata) — the sunsetting holder and launchpad
-  endpoints are covered; the rest are not yet.
-- **Search and discovery endpoints** (`/tokens/search`, `/discovery/*`) are a search product rather than an
-  indexed feed, so they are out of scope for a data-lake migration.
-- **RPC node methods** (`eth_*`) belong to the node product, not Data Feeds.
 
 ## How each migration section is structured
 
 Every recipe's "Migrating from the REST API" section follows the same shape, so once you have read one you
 can skim the rest:
 
-1. **The legacy endpoint(s)** it replaces, and whether you need this recipe alone or a **combination** —
+1. **The legacy endpoint(s)** it replaces, and whether you need this recipe alone or a **combination**,
    stated up front, with links to the other recipes you need.
 2. **Field mapping reference**, the per-field table with the fidelity label.
 3. **One reconstruction query**, the SQL view that rebuilds the old response shape.

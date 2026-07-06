@@ -1,13 +1,13 @@
 ---
 title: "Contract Logs"
-description: "Sync every raw event log emitted by a contract — all topics and raw data, in on-chain order — into your own database. Mirrors the Moralis GET /{address}/logs endpoint."
+description: "Sync every raw event log emitted by a contract, all topics and raw data, in on-chain order, into your own database. Mirrors the Moralis GET /{address}/logs endpoint."
 ---
 
 ### Question it answers
 
 > "Give me every raw event log emitted by contract **0x…**, in on-chain order." Mirrors Moralis `GET /{address}/logs`.
 
-This is the **raw** event log — `topic0…topic3` plus the ABI-encoded `data` payload — keyed by the emitting contract. Unlike the decoded recipes (Token Transfers, Token Approvals, Swaps), it does not decode event names or arguments; you decode `data` in your application against the contract's ABI. Use it to index **any contract's events**, including custom or non-standard ones the decoded recipes don't cover.
+This is the **raw** event log, `topic0…topic3` plus the ABI-encoded `data` payload, keyed by the emitting contract. Unlike the decoded recipes (Token Transfers, Token Approvals, Swaps), it does not decode event names or arguments; you decode `data` in your application against the contract's ABI. Use it to index **any contract's events**, including custom or non-standard ones the decoded recipes don't cover.
 
 ### What you get
 
@@ -18,23 +18,23 @@ One row per log, keyed by the emitting contract:
 | `contract_address` | The emitting contract (the log's address) |
 | `block_number`, `transaction_index`, `log_index` | On-chain ordering tuple |
 | `tx_hash` | Transaction that produced the log |
-| `topic0` | Event signature hash (`keccak256` of the canonical signature) — always present |
+| `topic0` | Event signature hash (`keccak256` of the canonical signature), always present |
 | `topic1`, `topic2`, `topic3` | Indexed event parameters; `NULL` when the log has fewer topics |
-| `data` | Raw, ABI-encoded, non-indexed payload as hex — decode in your app |
+| `data` | Raw, ABI-encoded, non-indexed payload as hex, decode in your app |
 | `block_timestamp` | Block time |
 
 ### On-chain ordering
 
-A log's canonical position is the tuple **`(block_number, transaction_index, log_index)`** — block height, then the transaction's position in the block, then the log's index within the transaction. Every destination is keyed `contract_address` first, then that tuple, so "all logs for a contract, in order" is a sort-free range scan:
+A log's canonical position is the tuple **`(block_number, transaction_index, log_index)`**, block height, then the transaction's position in the block, then the log's index within the transaction. Every destination is keyed `contract_address` first, then that tuple, so "all logs for a contract, in order" is a sort-free range scan:
 
-- **ClickHouse** — `ORDER BY (chain_id, contract_address, block_number, transaction_index, log_index, …)`; a prefix scan returns rows already ordered.
-- **Postgres / MySQL** — a composite index on `(contract_address, block_number, transaction_index, log_index)` answers the read with no filesort step.
+- **ClickHouse**: `ORDER BY (chain_id, contract_address, block_number, transaction_index, log_index, …)`; a prefix scan returns rows already ordered.
+- **Postgres / MySQL**: a composite index on `(contract_address, block_number, transaction_index, log_index)` answers the read with no filesort step.
 
 ### Optional: group by event signature (topic0)
 
 The primary key already leads with `contract_address`, so "all `Transfer` logs for contract X" prefix-scans to the contract and filters `topic0` within it. On a **high-volume contract that emits many event types**, an opt-in `(contract_address, topic0, …)` structure makes that read a tight `(contract, topic0)` range that stays sort-free *and* skips the contract's other event types.
 
-These are shipped **commented-out** in each schema (extra write cost + storage) — uncomment to enable:
+These are shipped **commented-out** in each schema (extra write cost + storage), uncomment to enable:
 
 | Destination | Optional structure |
 | --- | --- |
@@ -44,7 +44,7 @@ These are shipped **commented-out** in each schema (extra write cost + storage) 
 
 ### Source
 
-Raw logs aren't a decoded entity array — they live in the flattened `block` raw-passthrough array, where each block is expanded into items discriminated by `itemType` (`log` / `transaction` / …). The transform `ARRAY JOIN`s `block`, keeps `itemType = 'log'`, and lands one row per log. A log row carries **no transaction hash**, so `tx_hash` is recovered by joining each log to its sibling `itemType = 'transaction'` row on `(block_number, transaction_index)`.
+Raw logs aren't a decoded entity array, they live in the flattened `block` raw-passthrough array, where each block is expanded into items discriminated by `itemType` (`log` / `transaction` / …). The transform `ARRAY JOIN`s `block`, keeps `itemType = 'log'`, and lands one row per log. A log row carries **no transaction hash**, so `tx_hash` is recovered by joining each log to its sibling `itemType = 'transaction'` row on `(block_number, transaction_index)`.
 
 ### Destination
 
@@ -54,13 +54,13 @@ Raw logs aren't a decoded entity array — they live in the flattened `block` ra
 | **Postgres** | `contract_logs` | Composite index `(contract_address, block_number, transaction_index, log_index)` |
 | **MySQL** | `contract_logs` | Composite key `(contract_address, block_number, transaction_index, log_index)` |
 
-Logs are immutable append-only events, so the ClickHouse fact table is a plain collapsing table — each log is one row, and a chain reorganization cancels it via the companion log table. There's no latest-wins logic; every log is a distinct row.
+Logs are immutable append-only events, so the ClickHouse fact table is a plain collapsing table, each log is one row, and a chain reorganization cancels it via the companion log table. There's no latest-wins logic; every log is a distinct row.
 
 ### Full schema
 
 The complete read table. Keep the columns you need; `topic1…topic3` and `data` are nullable raw fields you decode in your app (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)).
 
-<Accordion title="ClickHouse — fact_logs (contract-keyed)">
+<Accordion title="ClickHouse, fact_logs (contract-keyed)">
 
 ```sql
 CREATE TABLE recipe_logs_by_contract.fact_logs
@@ -128,10 +128,10 @@ LIMIT 100;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`**, **Postgres / MySQL `historical`**. For live/reorg-safe ingestion use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`**, **Postgres / MySQL `historical`**. For live/reorg-safe ingestion use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
-  This recipe reads the wide raw `block` column (every log **and** transaction per block), so per-block bytes are higher than the decoded recipes. The transaction rows are read only to recover `tx_hash` — drop that join if you don't need it.
+  This recipe reads the wide raw `block` column (every log **and** transaction per block), so per-block bytes are higher than the decoded recipes. The transaction rows are read only to recover `tx_hash`, drop that join if you don't need it.
 </Note>
 
 ### EVM only
@@ -140,18 +140,18 @@ Contract Logs extracts EVM event logs (`topic0…3` + `data`). Solana program lo
 
 ### Fidelity gaps
 
-Raw on-chain log primitives — emitter, all topics, raw data, block, tx hash, on-chain ordering — are fully covered. Fields with no onchain source are omitted: `decoded_event` (needs the contract ABI — decode in your app) and transaction receipt fields beyond `tx_hash`.
+Raw on-chain log primitives, emitter, all topics, raw data, block, tx hash, on-chain ordering, are fully covered. Fields with no onchain source are omitted: `decoded_event` (needs the contract ABI, decode in your app) and transaction receipt fields beyond `tx_hash`.
 
 ## Migrating from the REST API
 
-This recipe is the landing point for the two legacy **Blockchain API** endpoints. Neither maps 1:1 to a single recipe: both responses are assembled from the raw `block` array — the flattened header / transaction / log rows this recipe already reads (see [The block array](/data-feeds/concepts/the-block-array)). This recipe lands the **log** rows in a queryable table; the transaction and header fields come from the sibling rows in the same array. The subsections below cover each endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **decoded** = you decode from the ABI or a typed recipe covers it, **gap** = not delivered today, **off-chain** = add yourself), and the gotchas specific to that endpoint.
+This recipe is the landing point for the two legacy **Blockchain API** endpoints. Neither maps 1:1 to a single recipe: both responses are assembled from the raw `block` array, the flattened header / transaction / log rows this recipe already reads (see [The block array](/data-feeds/concepts/the-block-array)). This recipe lands the **log** rows in a queryable table; the transaction and header fields come from the sibling rows in the same array. The subsections below cover each endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **decoded** = you decode from the ABI or a typed recipe covers it, **gap** = not delivered today, **off-chain** = add yourself), and the gotchas specific to that endpoint.
 
 ### GET /transaction/:transaction_hash/verbose
 
-The decoded-transaction-by-hash endpoint. Replaced by reading the transaction's logs from this recipe's table and its raw fields from the transaction row of [the block array](/data-feeds/concepts/the-block-array) — the "verbose" ABI decoding becomes a step you own.
+The decoded-transaction-by-hash endpoint. Replaced by reading the transaction's logs from this recipe's table and its raw fields from the transaction row of [the block array](/data-feeds/concepts/the-block-array), the "verbose" ABI decoding becomes a step you own.
 
 <Warning>
-This is **not** a 1:1 table swap — it's a three-part workflow. **Logs** come from this recipe's table, keyed by `tx_hash`. **The transaction's own fields** (`from`, `to`, `value`, `input`, gas, receipt) come from the sibling `itemType = 'transaction'` row in the block array — the matching log rows give you its `block_number`. **Decoding** is yours: standard events are already typed rows in the decoded recipes ([Token Transfers](/data-feeds/recipes/token/token-transfers), [NFT Transfers](/data-feeds/recipes/nft/nft-transfers), [Swaps by Pair](/data-feeds/recipes/markets/swaps-by-pair)); custom events and `decoded_call` decode from the contract ABI.
+This is **not** a 1:1 table swap, it's a three-part workflow. **Logs** come from this recipe's table, keyed by `tx_hash`. **The transaction's own fields** (`from`, `to`, `value`, `input`, gas, receipt) come from the sibling `itemType = 'transaction'` row in the block array, the matching log rows give you its `block_number`. **Decoding** is yours: standard events are already typed rows in the decoded recipes ([Token Transfers](/data-feeds/recipes/token/token-transfers), [NFT Transfers](/data-feeds/recipes/nft/nft-transfers), [Swaps by Pair](/data-feeds/recipes/markets/swaps-by-pair)); custom events and `decoded_call` decode from the contract ABI.
 </Warning>
 
 | `/transaction/:hash/verbose` | Data Feeds | Fidelity |
@@ -165,7 +165,7 @@ This is **not** a 1:1 table swap — it's a three-part workflow. **Logs** come f
 | `internal_transactions` | not carried in the `block` array today | gap |
 | `from/to_address_entity`, `*_label`, `*_entity_logo` | add yourself | off-chain |
 
-A transaction's logs by hash (Postgres — same shape on ClickHouse with `FINAL`):
+A transaction's logs by hash (Postgres, same shape on ClickHouse with `FINAL`):
 
 ```sql
 SELECT block_number, transaction_index, log_index, contract_address,
@@ -177,17 +177,17 @@ ORDER BY log_index;
 
 **Gotchas**
 
-- **By-hash is a point lookup, but the shipped keys are contract-first.** Add an index on `tx_hash` (or keep your own hash-to-block map) — the shipped `(contract_address, block_number, …)` ordering doesn't serve it.
-- **Index the history you'll look up.** Arbitrary historical hashes need a `historical`/`hybrid` backfill across the range; recent-only lookups need only a recent window — see [History & backfill](/data-feeds/concepts/history-and-backfill).
-- `internal_transactions` is a gap today — it isn't carried in the `block` array.
+- **By-hash is a point lookup, but the shipped keys are contract-first.** Add an index on `tx_hash` (or keep your own hash-to-block map), the shipped `(contract_address, block_number, …)` ordering doesn't serve it.
+- **Index the history you'll look up.** Arbitrary historical hashes need a `historical`/`hybrid` backfill across the range; recent-only lookups need only a recent window, see [History & backfill](/data-feeds/concepts/history-and-backfill).
+- `internal_transactions` is a gap today, it isn't carried in the `block` array.
 - The `*_entity` / `*_label` / `*_entity_logo` fields are off-chain address labels; bring your own directory or drop them.
 
 ### GET /block/:block_number_or_hash
 
-The whole-block endpoint. Replaced by reading the block directly from the feed — a feed row's native unit **is** a block, so the header, transactions, and logs arrive together in [the block array](/data-feeds/concepts/the-block-array) and a by-number read is a direct positional read (a block's position is its block number).
+The whole-block endpoint. Replaced by reading the block directly from the feed, a feed row's native unit **is** a block, so the header, transactions, and logs arrive together in [the block array](/data-feeds/concepts/the-block-array) and a by-number read is a direct positional read (a block's position is its block number).
 
 <Warning>
-This recipe's table alone does **not** reconstruct the response — it holds only the log rows. The header and transaction rows come from the block array itself (`itemType = 'block'` / `'transaction'` / `'log'`): read the block's row from the feed, split the array by `itemType`, and join each log to its transaction on `transaction_index`. Keep this recipe running alongside to make logs queryable by block without re-reading whole blocks — and to resolve `block_hash → block_number` for by-hash reads.
+This recipe's table alone does **not** reconstruct the response, it holds only the log rows. The header and transaction rows come from the block array itself (`itemType = 'block'` / `'transaction'` / `'log'`): read the block's row from the feed, split the array by `itemType`, and join each log to its transaction on `transaction_index`. Keep this recipe running alongside to make logs queryable by block without re-reading whole blocks, and to resolve `block_hash → block_number` for by-hash reads.
 </Warning>
 
 | `/block/:block_number_or_hash` | Data Feeds | Fidelity |
@@ -212,9 +212,9 @@ ORDER BY transaction_index, log_index;
 
 **Gotchas**
 
-- **By-hash resolves to a number first** — the feed is positioned by block number; this recipe's `block_hash` column (or your own index) does the resolve.
-- **Raw log rows carry no tx hash** — they join to their transaction on `(block_number, transaction_index)`; this recipe already attaches `tx_hash` for you.
-- **Busy blocks are large** (a megabyte or two of JSON) — read by position and process the array.
+- **By-hash resolves to a number first**: the feed is positioned by block number; this recipe's `block_hash` column (or your own index) does the resolve.
+- **Raw log rows carry no tx hash**: they join to their transaction on `(block_number, transaction_index)`; this recipe already attaches `tx_hash` for you.
+- **Busy blocks are large** (a megabyte or two of JSON), read by position and process the array.
 - Legacy responses return **raw** logs, matching this recipe exactly; if you also want decoded events, add the decoded recipes or decode from the ABI.
 - `internal_transactions` and address labels: same gaps as above.
 
@@ -222,7 +222,7 @@ ORDER BY transaction_index, log_index;
 
 <Columns cols={2}>
   <Card title="Logs by Event Signature" href="/data-feeds/recipes/logs/logs-by-topic0" icon="layer-group">
-    The sibling — index one event type across all contracts.
+    The sibling, index one event type across all contracts.
   </Card>
   <Card title="Onchain Event Indexing" href="/data-feeds/use-cases/event-indexing" icon="cube">
     The use case these raw-log recipes power.

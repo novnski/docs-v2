@@ -1,6 +1,6 @@
 ---
 title: "Token Balances by Wallet"
-description: "Sync every ERC-20 token a wallet holds, with its current non-zero balance, into your own database — a portfolio lookup that's a single prefix scan."
+description: "Sync every ERC-20 token a wallet holds, with its current non-zero balance, into your own database: a portfolio lookup that's a single prefix scan."
 ---
 
 ### Question it answers
@@ -11,24 +11,24 @@ This is the by-wallet portfolio read. It's the same ingest as Token Balances by 
 
 ### What you get
 
-The recipe lands **one balance observation per wallet, per transfer leg**. Each `token_transfer` carries absolute post-transfer balances (`from_post_balance` / `to_post_balance`), so every transfer becomes two observations — one for the sender, one for the receiver. The **latest observation per `(wallet, token)`** is the current balance ("latest-wins").
+The recipe lands **one balance observation per wallet, per transfer leg**. Each `token_transfer` carries absolute post-transfer balances (`from_post_balance` / `to_post_balance`), so every transfer becomes two observations: one for the sender, one for the receiver. The **latest observation per `(wallet, token)`** is the current balance ("latest-wins").
 
 | Column | Description |
 | --- | --- |
 | `chain_id` | Chain identifier |
-| `wallet_address` | The holder — leading sort key |
+| `wallet_address` | The holder (leading sort key) |
 | `token_address` | The ERC-20 contract |
 | `balance` | Absolute post-transfer balance for this wallet, raw `uint256` (the latest per `(wallet, token)` is the current balance) |
-| `leg` | `from` or `to` — which side of the transfer produced this observation |
-| `block_number`, `log_index` | On-chain ordering tuple — picks the latest observation |
+| `leg` | `from` or `to`: which side of the transfer produced this observation |
+| `block_number`, `log_index` | On-chain ordering tuple; picks the latest observation |
 | `event_ts` | Block time |
 | `vendor_event_id` | Stable per-observation identity (keeps rows unique) |
 
-The zero address is excluded, so a token's balance going to `0` on a full transfer-out is a real observation you read as the current state — not a missing row.
+The zero address is excluded, so a token's balance going to `0` on a full transfer-out is a real observation you read as the current state, not a missing row.
 
 ### Source
 
-The transform reads one per-block array — `tokenTransfers` — and unpivots each transfer into two per-wallet observations: `(from_address, from_post_balance)` and `(to_address, to_post_balance)`. Because the source supplies **absolute** post-balances on each transfer, there's no running-sum reconstruction: the latest observation is the balance.
+The transform reads one per-block array, `tokenTransfers`, and unpivots each transfer into two per-wallet observations: `(from_address, from_post_balance)` and `(to_address, to_post_balance)`. Because the source supplies **absolute** post-balances on each transfer, there's no running-sum reconstruction: the latest observation is the balance.
 
 ### Destination
 
@@ -42,7 +42,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point — keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` balances are stored as text (ClickHouse) or `NUMERIC(76, 0)` (Postgres) so they never overflow.
+Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` balances are stored as text (ClickHouse) or `NUMERIC(76, 0)` (Postgres) so they never overflow.
 
 <Accordion title="ClickHouse — fact_balances_by_wallet">
 
@@ -68,7 +68,7 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, wallet_address, token_address, block_number, log_index, vendor_event_id, leg);
 ```
 
-The `sign` column drives reorg collapsing — read with `FINAL` then `argMax`, or a sign-aware aggregate, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+The `sign` column drives reorg collapsing; read with `FINAL` then `argMax`, or a sign-aware aggregate, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
 
 </Accordion>
 
@@ -146,14 +146,14 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 Generate a **starter pack** for `tokenBalancesByWalletAddress` in the [Moralis Admin Panel](https://admin.moralis.com), pick your chain and destination database, then run it with Docker. The [quickstart](/data-feeds/migration/quickstart) walks through it end to end. Set the backfill window (`MORALIS_HISTORICAL_FROM_BLOCK`) as noted below.
 
 <Note>
-**Backfill full history for complete balances.** A balance is *current state* — the latest transfer-derived observation per `(wallet, token)` — and a wallet can still hold a token it last moved years ago. To return a wallet's *complete* holdings, backfill from an early block (`MORALIS_HISTORICAL_FROM_BLOCK=0`, or a token's deploy block if you scope to one token). A recent-only window like `tip-1000` captures only tokens that moved in that window, so balances would be incomplete — unlike an event feed, a partial window is **not** correct here. Full-chain backfill on a busy chain is large; plan for it. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+**Backfill full history for complete balances.** A balance is *current state* (the latest transfer-derived observation per `(wallet, token)`), and a wallet can still hold a token it last moved years ago. To return a wallet's *complete* holdings, backfill from an early block (`MORALIS_HISTORICAL_FROM_BLOCK=0`, or a token's deploy block if you scope to one token). A recent-only window like `tip-1000` captures only tokens that moved in that window, so balances would be incomplete. Unlike an event feed, a partial window is **not** correct here. Full-chain backfill on a busy chain is large; plan for it. See [History & backfill](/data-feeds/concepts/history-and-backfill).
 </Note>
 
 Then run the example reads below to confirm rows are landing.
 
 ### Example reads
 
-Every token a wallet holds, current non-zero balance only (ClickHouse — `argMax` over `FINAL` picks the latest observation per token):
+Every token a wallet holds, current non-zero balance only (ClickHouse; `argMax` over `FINAL` picks the latest observation per token):
 
 ```sql
 SELECT token_address,
@@ -183,17 +183,17 @@ ORDER BY balance DESC;
 
 ### Other ways to consume this data
 
-The sink is the way to get **this pre-shaped table** (`token_balances`) — recommended for a portfolio lookup you own. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather derive balances yourself:
+The sink is the way to get **this pre-shaped table** (`token_balances`), recommended for a portfolio lookup you own. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather derive balances yourself:
 
-- **Your existing message clients** — stream it with **Kafka / AMQP / SQS**.
-- **REST / Arrow Flight** — pull the decoded block stream directly.
-- **Your warehouse** — query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
+- **Your existing message clients**: stream it with **Kafka / AMQP / SQS**.
+- **REST / Arrow Flight**: pull the decoded block stream directly.
+- **Your warehouse**: query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
 
 Those give you the **source array** (`tokenTransfers`, which carries absolute post-transfer balances) to compute balances yourself, not this pre-computed table. All of them read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse; see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
   The backfill cursor (`position`) is block-level, so realtime/hybrid on Postgres / MySQL is constrained by their single-column `UNIQUE` requirement. Run realtime/hybrid on **ClickHouse**; the Postgres / MySQL configs target `historical` backfill.
@@ -201,24 +201,24 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized — point it at any supported EVM chain or Solana. On Solana, the per-observation identity already folds `(from, to, token, amount)` into `vendor_event_id` so rows stay unique under Solana's repeated `logIndex`; the balances it produces are identical in shape.
+The recipe is chain-parametrized: point it at any supported EVM chain or Solana. On Solana, the per-observation identity already folds `(from, to, token, amount)` into `vendor_event_id` so rows stay unique under Solana's repeated `logIndex`; the balances it produces are identical in shape.
 
 ### Fidelity gaps
 
-- **Raw balances only.** `balance` is the raw `uint256` post-transfer amount — divide by `10^token_decimals` to read human units. Fold in a decimals lookup from a Token Metadata sync if you need it pre-scaled.
+- **Raw balances only.** `balance` is the raw `uint256` post-transfer amount; divide by `10^token_decimals` to read human units. Fold in a decimals lookup from a Token Metadata sync if you need it pre-scaled.
 - **No USD value.** This recipe lands quantities, not dollar value. Join to a Token Prices sync at read time for portfolio valuation.
 - **Latest-wins semantics.** A `(wallet, token)` row reflects the most recent transfer-derived post-balance. Direct mints/burns or rebases that emit a transfer are captured; balance changes with no transfer event are not.
 
 ## Migrating from the REST API
 
-This recipe replaces the wallet-balance family of legacy Web3 API endpoints. Data Feeds are **not** 1:1 replicas of those responses — you land the underlying data in your own database and reconstruct the response shape with a view. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal not in the feed), and the gotchas specific to that endpoint.
+This recipe replaces the wallet-balance family of legacy Web3 API endpoints. Data Feeds are **not** 1:1 replicas of those responses: you land the underlying data in your own database and reconstruct the response shape with a view. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal not in the feed), and the gotchas specific to that endpoint.
 
 ### GET /wallets/:address/tokens
 
 The enriched balances-plus-prices endpoint. Replaced by this recipe's `token_balances` table joined with three sibling recipes for native balance, token details, and prices.
 
 <Warning>
-This endpoint needs **four recipes**, not one. Run this recipe plus [Native Balances](/data-feeds/recipes/wallet/native-balances) (`native_balances`), [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata`), and [Token Prices](/data-feeds/recipes/token/token-prices) (`token_price_updates`) against the same database, then join them in one view. There is no single pre-joined recipe — the composition is the supported path.
+This endpoint needs **four recipes**, not one. Run this recipe plus [Native Balances](/data-feeds/recipes/wallet/native-balances) (`native_balances`), [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata`), and [Token Prices](/data-feeds/recipes/token/token-prices) (`token_price_updates`) against the same database, then join them in one view. There is no single pre-joined recipe; the composition is the supported path.
 </Warning>
 
 | `/wallets/:address/tokens` | Data Feeds | Fidelity |
@@ -232,7 +232,7 @@ This endpoint needs **four recipes**, not one. Run this recipe plus [Native Bala
 | `native_token` + native balance | `native_balances` | exact |
 | `logo`, `thumbnail`, `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
 
-The reconstruction view (Postgres — adapt to your destination):
+The reconstruction view (Postgres; adapt to your destination):
 
 ```sql
 CREATE VIEW wallet_token_balances_price AS
@@ -264,14 +264,14 @@ Finishing touches: `portfolio_percentage` is `usd_value / SUM(usd_value)` per wa
 
 **Gotchas**
 
-- USD values come from real DEX trades — very close to the old endpoint, but compare with a tolerance, not bit-for-bit. A thinly-traded token may not have a price yet.
+- USD values come from real DEX trades: very close to the old endpoint, but compare with a tolerance, not bit-for-bit. A thinly-traded token may not have a price yet.
 - No fixed spam filter: you get every token the wallet holds, then apply your own spam/dust rules.
-- No wallet-size limit — the old endpoint caps very large wallets; your own dataset has none.
+- No wallet-size limit: the old endpoint caps very large wallets; your own dataset has none.
 - Balances are current-state on Postgres/MySQL; use ClickHouse for real-time/hybrid.
 
 ### GET /:address/erc20
 
-The plain ERC-20 balances endpoint (no prices, no portfolio math). Replaced by this recipe's `token_balances` table joined with [Token Metadata](/data-feeds/recipes/token/token-metadata) for name/symbol/decimals/supply — two recipes, one view, every onchain value exact.
+The plain ERC-20 balances endpoint (no prices, no portfolio math). Replaced by this recipe's `token_balances` table joined with [Token Metadata](/data-feeds/recipes/token/token-metadata) for name/symbol/decimals/supply: two recipes, one view, every onchain value exact.
 
 | `/:address/erc20` | Data Feeds | Fidelity |
 |---|---|---|
@@ -281,20 +281,20 @@ The plain ERC-20 balances endpoint (no prices, no portfolio math). Replaced by t
 | `balance_formatted` *(bonus, legacy omits it)* | derive: `balance / 10^decimals` | exact |
 | `logo`, `thumbnail`, `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
 
-The view is the balances-and-prices view above minus the price join — join `token_balances` to `token_metadata`, keep `balance > 0`, and derive the formatted/supply-relative columns. The old `exclude_spam` / `exclude_unverified_contracts` filters become a `WHERE` against your own list.
+The view is the balances-and-prices view above minus the price join: join `token_balances` to `token_metadata`, keep `balance > 0`, and derive the formatted/supply-relative columns. The old `exclude_spam` / `exclude_unverified_contracts` filters become a `WHERE` against your own list.
 
 **Gotchas**
 
-- Everything onchain is exact — no pricing engine in the loop, nothing to reconcile with a tolerance.
+- Everything onchain is exact: no pricing engine in the loop, nothing to reconcile with a tolerance.
 - ERC-20 only, matching the legacy endpoint. For native (ETH) balance, add [Native Balances](/data-feeds/recipes/wallet/native-balances).
-- No wallet-size limit — the old endpoint errors on very large wallets ("too many ERC20 token balances"); your dataset doesn't, and you get real keyset pagination on top.
+- No wallet-size limit: the old endpoint errors on very large wallets ("too many ERC20 token balances"); your dataset doesn't, and you get real keyset pagination on top.
 
 ### GET /wallets/:address/net-worth
 
-The USD net-worth roll-up. There is no single replacement table — net worth is `SUM(token balance × price) + native balance × native price`, computed over the same tables as `/wallets/:address/tokens`.
+The USD net-worth roll-up. There is no single replacement table; net worth is `SUM(token balance × price) + native balance × native price`, computed over the same tables as `/wallets/:address/tokens`.
 
 <Warning>
-This endpoint needs **four recipes**: this recipe plus [Native Balances](/data-feeds/recipes/wallet/native-balances), [Token Metadata](/data-feeds/recipes/token/token-metadata), and [Token Prices](/data-feeds/recipes/token/token-prices). Build the balances-and-prices view above first, then aggregate it — net worth is a `SUM` on top of that view.
+This endpoint needs **four recipes**: this recipe plus [Native Balances](/data-feeds/recipes/wallet/native-balances), [Token Metadata](/data-feeds/recipes/token/token-metadata), and [Token Prices](/data-feeds/recipes/token/token-prices). Build the balances-and-prices view above first, then aggregate it; net worth is a `SUM` on top of that view.
 </Warning>
 
 | `/wallets/:address/net-worth` | Data Feeds | Fidelity |
@@ -305,7 +305,7 @@ This endpoint needs **four recipes**: this recipe plus [Native Balances](/data-f
 | `networth_usd` | derive: native + token USD | calculated |
 | `total_networth_usd` | derive: sum across chains | calculated |
 
-The roll-up view (Postgres — sums the balances view above and adds the native leg):
+The roll-up view (Postgres; sums the balances view above and adds the native leg):
 
 ```sql
 CREATE VIEW wallet_net_worth AS
@@ -339,17 +339,17 @@ FULL JOIN native n ON n.wallet_address = t.wallet_address;
 
 **Gotchas**
 
-- **Curating the token set is the whole game.** One spam or bogus-priced token can dominate the total. The old `exclude_spam` / `exclude_unverified_contracts` / `min_pair_side_liquidity_usd` filters become your own `WHERE` in the `tokens` CTE — here they're essential, not polish.
-- Stale prices: a token that hasn't traded recently has no fresh mark. Decide whether to value it at zero, carry forward the last mark, or exclude it — each choice moves the total.
+- **Curating the token set is the whole game.** One spam or bogus-priced token can dominate the total. The old `exclude_spam` / `exclude_unverified_contracts` / `min_pair_side_liquidity_usd` filters become your own `WHERE` in the `tokens` CTE; here they're essential, not polish.
+- Stale prices: a token that hasn't traded recently has no fresh mark. Decide whether to value it at zero, carry forward the last mark, or exclude it. Each choice moves the total.
 - Cross-chain net worth: each chain is its own feed. Compute per chain and sum `networth_usd` into `total_networth_usd`.
-- Compare with a tolerance — USD comes from real DEX trades, very close to the old figure, not identical.
+- Compare with a tolerance: USD comes from real DEX trades, very close to the old figure, not identical.
 - A missed holding silently changes the total, so full-history backfill (see the note in [Run it](#run-it)) matters even more here.
 
 ### Related
 
 <Columns cols={2}>
   <Card title="Token Balances by Token" href="/data-feeds/recipes/token/token-balances-by-token" icon="coins">
-    The sibling — same ingest, keyed token-first to list a token's holders.
+    The sibling: same ingest, keyed token-first to list a token's holders.
   </Card>
   <Card title="Portfolio Tracking" href="/data-feeds/use-cases/portfolio-tracking" icon="wallet">
     The use case this balance feed powers.

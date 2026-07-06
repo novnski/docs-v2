@@ -1,36 +1,36 @@
 ---
 title: "Token Bonding Status (Solana launchpads)"
-description: "Sync every pump.fun / Raydium LaunchLab launchpad event — created, traded, migrated — into your own database, and serve a launchpad's new / bonding / graduated token lists plus any token's bonding-curve status."
+description: "Sync every pump.fun / Raydium LaunchLab launchpad event, created, traded, migrated, into your own database, and serve a launchpad's new / bonding / graduated token lists plus any token's bonding-curve status."
 ---
 
 ### Question it answers
 
-> "For a Solana launchpad like **pump.fun**: which tokens just launched, which are still climbing the bonding curve, and which have graduated to a DEX — and what's a given token's bonding-curve status?"
+> "For a Solana launchpad like **pump.fun**: which tokens just launched, which are still climbing the bonding curve, and which have graduated to a DEX, and what's a given token's bonding-curve status?"
 
-Lands one row per **launchpad event** (`created` / `traded` / `migrated`) from the decoded `launchpadEvents` feed, and derives a per-token latest-status projection. The four legacy pump.fun surfaces — new, bonding, graduated, and per-token status — are all reads over this one recipe.
+Lands one row per **launchpad event** (`created` / `traded` / `migrated`) from the decoded `launchpadEvents` feed, and derives a per-token latest-status projection. The four legacy pump.fun surfaces, new, bonding, graduated, and per-token status, are all reads over this one recipe.
 
 ### What you get
 
 The recipe reads the master-block `launchpadEvents` array and lands two surfaces:
 
-- **The launchpad event log**, keyed by exchange — one row per `created` / `traded` / `migrated` event.
-- **A per-token status projection**, keyed by token — latest bonding progress, graduated flag, and graduation time.
+- **The launchpad event log**, keyed by exchange, one row per `created` / `traded` / `migrated` event.
+- **A per-token status projection**, keyed by token, latest bonding progress, graduated flag, and graduation time.
 
 | Column | Description |
 | --- | --- |
 | `token_address` | The launchpad token (SPL mint) |
 | `exchange_address` | The launchpad program (the legacy `:exchange`, e.g. pump.fun `6EF8…F6P`) |
-| `launchpad_platform` | Friendly name — `pumpfun`, `raydium_launchlab` |
+| `launchpad_platform` | Friendly name, `pumpfun`, `raydium_launchlab` |
 | `event_type` | `created` · `traded` · `migrated` (**migrated = graduated**) |
-| `progress_percentage` | Bonding-curve progress 0–100 (sparse — set on trading activity) |
-| `pool_address` | The DEX pool a token migrated into — populated on the `migrated` event (take `max(pool_address)`) |
+| `progress_percentage` | Bonding-curve progress 0–100 (sparse, set on trading activity) |
+| `pool_address` | The DEX pool a token migrated into, populated on the `migrated` event (take `max(pool_address)`) |
 | `token_name`, `token_symbol`, `token_uri` | Emitted on the `created` event only |
-| `trade_direction`, `token_amount`, `native_amount` | On `traded` events — native price = `native_amount / token_amount` |
+| `trade_direction`, `token_amount`, `native_amount` | On `traded` events, native price = `native_amount / token_amount` |
 | `block_number`, `log_index`, `event_ts`, `tx_hash` | On-chain ordering + provenance |
 
 ### Source
 
-The transform reads one per-block array — `launchpadEvents` — one row per event. `event_type` distinguishes `created` (a new token, carries name/symbol/uri), `traded` (a bonding-curve fill, carries `progress_percentage` and trade amounts), and `migrated` (graduation to a DEX pool, carries `pool_address`). On the Solana feed today the price field (`current_price`) is **not populated** — see [Fidelity gaps](#fidelity-gaps). The `exchange_address` (launchpad program) is shared by every token on a platform.
+The transform reads one per-block array, `launchpadEvents`, one row per event. `event_type` distinguishes `created` (a new token, carries name/symbol/uri), `traded` (a bonding-curve fill, carries `progress_percentage` and trade amounts), and `migrated` (graduation to a DEX pool, carries `pool_address`). On the Solana feed today the price field (`current_price`) is **not populated**, see [Fidelity gaps](#fidelity-gaps). The `exchange_address` (launchpad program) is shared by every token on a platform.
 
 ### Destination
 
@@ -44,7 +44,7 @@ ClickHouse uses the collapsing log-table pattern so chain reorganizations self-c
 
 ### Full schema
 
-<Accordion title="ClickHouse — fact_launchpad_events">
+<Accordion title="ClickHouse, fact_launchpad_events">
 
 ```sql
 CREATE TABLE recipe_token_bonding_status.fact_launchpad_events
@@ -85,7 +85,7 @@ ORDER BY (chain_id, exchange_address, block_number, vendor_event_id);
 
 </Accordion>
 
-<Accordion title="ClickHouse — fact_token_bonding_status (per-token)">
+<Accordion title="ClickHouse, fact_token_bonding_status (per-token)">
 
 ```sql
 CREATE TABLE recipe_token_bonding_status.fact_token_bonding_status
@@ -134,12 +134,12 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 Generate a **starter pack** for `tokenBondingStatus` in the [Moralis Admin Panel](https://admin.moralis.com), choose **Solana** as the chain (launchpad activity is densest on pump.fun and Raydium LaunchLab) and your destination, then run it with Docker. The [quickstart](/data-feeds/migration/quickstart) walks through it end to end.
 
 <Note>
-**Backfill by use case.** The new / bonding / graduated **lists** are event feeds — run **realtime** to track launches live, no backfill needed. A per-token **status** is current state — backfill from the token's `created` event to capture its full curve. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+**Backfill by use case.** The new / bonding / graduated **lists** are event feeds, run **realtime** to track launches live, no backfill needed. A per-token **status** is current state, backfill from the token's `created` event to capture its full curve. See [History & backfill](/data-feeds/concepts/history-and-backfill).
 </Note>
 
 ### Example reads
 
-**New tokens** on a launchpad — the token's `created` event, newest first:
+**New tokens** on a launchpad, the token's `created` event, newest first:
 
 ```sql
 SELECT token_address,
@@ -154,7 +154,7 @@ ORDER BY created_at DESC
 LIMIT 50;
 ```
 
-**Bonding tokens** — progress < 100, not yet graduated, closest to graduating first:
+**Bonding tokens**, progress < 100, not yet graduated, closest to graduating first:
 
 ```sql
 SELECT token_address,
@@ -167,7 +167,7 @@ ORDER BY bonding_progress DESC
 LIMIT 50;
 ```
 
-**Graduated tokens** — tokens with a `migrated` event, plus the DEX pool they migrated into (`max` grabs the non-empty `pool_address`, since a graduation can emit more than one `migrated` row):
+**Graduated tokens**, tokens with a `migrated` event, plus the DEX pool they migrated into (`max` grabs the non-empty `pool_address`, since a graduation can emit more than one `migrated` row):
 
 ```sql
 SELECT token_address,
@@ -198,15 +198,15 @@ GROUP BY token_address;
 
 The sink is the way to get **these pre-shaped tables**. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather shape it yourself:
 
-- **Your existing message clients** — stream `launchpadEvents` live with **Kafka / AMQP / SQS** (great for a real-time launch feed).
-- **REST / Arrow Flight** — pull the decoded Solana block stream directly.
-- **Your warehouse** — query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
+- **Your existing message clients**: stream `launchpadEvents` live with **Kafka / AMQP / SQS** (great for a real-time launch feed).
+- **REST / Arrow Flight**: pull the decoded Solana block stream directly.
+- **Your warehouse**: query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
 
 Those give you the raw `launchpadEvents` array to project yourself, not these tables. All read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`**. For live launch discovery use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`**. For live launch discovery use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
 
 ### Multichain
 
@@ -215,17 +215,17 @@ Launchpad activity is densest on **Solana** (pump.fun, Raydium LaunchLab) and **
 ### Fidelity gaps
 
 - **`name` / `symbol`** ride on the `created` event; a token seen only via `traded` events carries none until you join [Token Metadata](/data-feeds/recipes/token/token-metadata) (also the source of `decimals`).
-- **`progress_percentage` is sparse** — `created` events carry no curve progress (0 is coerced to null), so a freshly-created token has null progress until its first trade.
+- **`progress_percentage` is sparse**: `created` events carry no curve progress (0 is coerced to null), so a freshly-created token has null progress until its first trade.
 - **No price in the feed.** `current_price` lands **empty on the Solana feed today** (0 populated in live sampling). Derive the **native price** per token from `traded` events (`native_amount / token_amount`), and convert to **USD** with a SOL/USD mark (e.g. wrapped SOL from a [Token Prices](/data-feeds/recipes/token/token-prices) sync). **Liquidity** (cumulative curve `native_amount`, or post-graduation [Pair Reserves](/data-feeds/recipes/markets/pair-reserves)) and **FDV** (`token_metadata.total_supply` × price) are derive-or-omit.
-- **`pool_address` arrives on the `migrated` event** — the DEX pool the token graduated into (verified live). A graduation can emit **more than one** `migrated` row, so take the non-empty value with `max(pool_address)` rather than `anyLast`.
+- **`pool_address` arrives on the `migrated` event**: the DEX pool the token graduated into (verified live). A graduation can emit **more than one** `migrated` row, so take the non-empty value with `max(pool_address)` rather than `anyLast`.
 - **`logo`** and other off-chain metadata aren't in the feed.
 
-Core fields — `token_address`, `exchange_address`, `event_type`, `progress_percentage`, graduation (the `migrated` event, with `pool_address`), token name/symbol (on `created`), trade amounts, and timestamps — are sourced from `launchpadEvents`.
+Core fields, `token_address`, `exchange_address`, `event_type`, `progress_percentage`, graduation (the `migrated` event, with `pool_address`), token name/symbol (on `created`), trade amounts, and timestamps, are sourced from `launchpadEvents`.
 
 ## Migrating from the REST API
 
 <Warning>
-All four legacy Solana launchpad endpoints below are **deprecated and sunset on July 31, 2026**. This one recipe replaces all of them — each legacy response is a read over the tables above.
+All four legacy Solana launchpad endpoints below are **deprecated and sunset on July 31, 2026**. This one recipe replaces all of them, each legacy response is a read over the tables above.
 </Warning>
 
 The four endpoints share most of their response shape, so the common fields map once:
@@ -235,13 +235,13 @@ The four endpoints share most of their response shape, so the common fields map 
 | `tokenAddress` / `mint` | `token_address` | exact |
 | `name`, `symbol` | `token_name` / `token_symbol` on the `created` event, or [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
 | `decimals` | `token_metadata.decimals` (join [Token Metadata](/data-feeds/recipes/token/token-metadata)) | exact |
-| `priceNative` | derive `native_amount / token_amount` from `traded` events — `currentPrice` is **not populated** on the Solana feed today | calculated |
+| `priceNative` | derive `native_amount / token_amount` from `traded` events, `currentPrice` is **not populated** on the Solana feed today | calculated |
 | `priceUsd` | `priceNative` × a SOL/USD mark (wrapped SOL via [Token Prices](/data-feeds/recipes/token/token-prices)) | calculated |
 | `liquidity` | cumulative curve `native_amount` × price; post-graduation, [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) × price | calculated |
 | `fullyDilutedValuation` | `token_metadata.total_supply` × price | calculated |
-| `logo` | not in the feed — bring your own token list, or omit | add yourself |
+| `logo` | not in the feed, bring your own token list, or omit | add yourself |
 
-In every legacy URL, `:exchange` is the launchpad's onchain **program address** (pump.fun is `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`); each event carries it as `exchange_address` plus a friendly `launchpad_platform` (`pumpfun`, `raydium_launchlab`) — filter on either. None of the lists have a per-call cap anymore; page with a keyset on the sort column.
+In every legacy URL, `:exchange` is the launchpad's onchain **program address** (pump.fun is `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`); each event carries it as `exchange_address` plus a friendly `launchpad_platform` (`pumpfun`, `raydium_launchlab`), filter on either. None of the lists have a per-call cap anymore; page with a keyset on the sort column.
 
 ### New tokens by exchange
 
@@ -249,7 +249,7 @@ In every legacy URL, `:exchange` is the launchpad's onchain **program address** 
 GET /token/:network/exchange/:exchange/new
 ```
 
-"New" is the set of **`created`** events on a launchpad, newest first — a view over `fact_launchpad_events`:
+"New" is the set of **`created`** events on a launchpad, newest first, a view over `fact_launchpad_events`:
 
 ```sql
 CREATE VIEW new_tokens_by_exchange AS
@@ -267,7 +267,7 @@ GROUP BY token_address, exchange_address;
 
 `createdAt` maps to `min(event_ts)` over the `created` event (exact).
 
-- Launches are an **event list** — run the recipe realtime for a live feed, no backfill needed; index back only to list tokens created before you started.
+- Launches are an **event list**, run the recipe realtime for a live feed, no backfill needed; index back only to list tokens created before you started.
 - A brand-new token has **no price and no curve progress** until its first trade.
 
 ### Bonding tokens by exchange
@@ -276,7 +276,7 @@ GROUP BY token_address, exchange_address;
 GET /token/:network/exchange/:exchange/bonding
 ```
 
-"Bonding" is the set of tokens still on the curve — progress below 100, never migrated — ranked by progress:
+"Bonding" is the set of tokens still on the curve, progress below 100, never migrated, ranked by progress:
 
 ```sql
 CREATE VIEW bonding_tokens_by_exchange AS
@@ -293,7 +293,7 @@ HAVING maxIf(1, event_type = 'migrated') = 0   -- still bonding (not graduated)
 
 `bondingCurveProgress` maps to the latest non-null `progress_percentage` per token (exact).
 
-- **Progress is carried forward** — it updates with each trade, and is null until the first trade (same as the old endpoint, which had nothing to report before curve activity).
+- **Progress is carried forward**: it updates with each trade, and is null until the first trade (same as the old endpoint, which had nothing to report before curve activity).
 - A token **leaves the bonding list** the moment it emits a `migrated` event; the `HAVING` clause excludes those.
 
 ### Graduated tokens by exchange
@@ -302,7 +302,7 @@ HAVING maxIf(1, event_type = 'migrated') = 0   -- still bonding (not graduated)
 GET /token/:network/exchange/:exchange/graduated
 ```
 
-Graduation is the **`migrated`** event — a token with one has left the curve for a DEX pool:
+Graduation is the **`migrated`** event, a token with one has left the curve for a DEX pool:
 
 ```sql
 CREATE VIEW graduated_tokens_by_exchange AS
@@ -317,14 +317,14 @@ HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 -- per launchpad: WHERE exchange_address = :exchange ORDER BY graduated_at DESC
 ```
 
-`graduatedAt` maps to `minIf(event_ts, event_type = 'migrated')`, and `poolAddress` — which the old endpoint didn't even expose — is `max(pool_address)` over the token's `migrated` events (both exact).
+`graduatedAt` maps to `minIf(event_ts, event_type = 'migrated')`, and `poolAddress`, which the old endpoint didn't even expose, is `max(pool_address)` over the token's `migrated` events (both exact).
 
 <Note>
-**This one is not a 1:1 swap.** The legacy response bundled prices, liquidity, and FDV, but a graduated token trades on a normal DEX pool — so price it with [Token Prices](/data-feeds/recipes/token/token-prices) and read pool liquidity with [Pair Reserves](/data-feeds/recipes/markets/pair-reserves), keyed on the migrated `pool_address`. Run those recipes alongside this one if you serve those fields.
+**This one is not a 1:1 swap.** The legacy response bundled prices, liquidity, and FDV, but a graduated token trades on a normal DEX pool, so price it with [Token Prices](/data-feeds/recipes/token/token-prices) and read pool liquidity with [Pair Reserves](/data-feeds/recipes/markets/pair-reserves), keyed on the migrated `pool_address`. Run those recipes alongside this one if you serve those fields.
 </Note>
 
-- `pool_address` is **only populated on `migrated` events** (verified live), and a graduation can emit more than one `migrated` row — take the non-empty value with `max(pool_address)`, not `anyLast`.
-- Graduations are an event list — run realtime to catch them as they happen.
+- `pool_address` is **only populated on `migrated` events** (verified live), and a graduation can emit more than one `migrated` row, take the non-empty value with `max(pool_address)`, not `anyLast`.
+- Graduations are an event list, run realtime to catch them as they happen.
 
 ### Token bonding status
 
@@ -332,7 +332,7 @@ HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 GET /token/:network/:address/bonding-status
 ```
 
-The most direct migration of the set — the recipe's per-token projection *is* this response. `mint`, `bondingProgress`, and `graduatedAt` map to `token_address`, `bonding_progress`, and `graduated_at` (all exact). On Postgres or MySQL it's a single-row lookup on the maintained status table:
+The most direct migration of the set, the recipe's per-token projection *is* this response. `mint`, `bondingProgress`, and `graduatedAt` map to `token_address`, `bonding_progress`, and `graduated_at` (all exact). On Postgres or MySQL it's a single-row lookup on the maintained status table:
 
 ```sql
 SELECT token_address AS mint, bonding_progress, graduated, graduated_at
@@ -342,7 +342,7 @@ WHERE token_address = $1;
 
 On ClickHouse, use the per-token aggregate shown in [Example reads](#example-reads).
 
-- **Status is current state**, not an event list — backfill from the token's `created` event to capture its full curve and graduation history.
+- **Status is current state**, not an event list, backfill from the token's `created` event to capture its full curve and graduation history.
 - `graduated` / `graduated_at` come from the `migrated` event; both are empty until the token graduates.
 
 ### Related
