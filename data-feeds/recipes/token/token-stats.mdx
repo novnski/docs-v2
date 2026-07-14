@@ -1,5 +1,5 @@
 ---
-title: "Token Stats"
+title: "Token stats"
 description: "Maintain per-token transfer counters (how many transfers a token has had) as a continuous, reorg-safe aggregate in your own database. Mirrors the Moralis GET /erc20/{address}/stats endpoint."
 ---
 
@@ -43,7 +43,7 @@ ClickHouse uses a **SummingMergeTree** counter table (not the collapsing pattern
 
 Below is the complete read table this recipe produces. It's deliberately minimal (one counter) and is a starting point for the forward-compatible counter pattern: add more summable columns to land more per-token stats on the same row (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)).
 
-<Accordion title="ClickHouse — fact_token_stats">
+<Accordion title="ClickHouse, fact_token_stats">
 
 ```sql
 CREATE TABLE recipe_token_stats.fact_token_stats
@@ -61,7 +61,7 @@ SummingMergeTree sums every numeric column that isn't part of the `ORDER BY` tup
 
 </Accordion>
 
-<Accordion title="Postgres — token_stats">
+<Accordion title="Postgres, token_stats">
 
 ```sql
 -- 1. Transfer events (sink target).

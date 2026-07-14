@@ -56,7 +56,7 @@ with a `blockNumber <= N` filter to pin the window entirely inside available his
 still fails for hours, the settled store is lagging. Report it with the exact error; it resumes
 automatically once fixed upstream.
 
-### The sink completes instantly with 0 rows — and no error
+### The sink completes instantly with 0 rows, and no error
 
 **Symptom:** logs show `Complete: 0 URL(s) processed`, exit code 0, empty table. **Looks like success; isn't.**
 

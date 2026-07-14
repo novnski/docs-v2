@@ -1,5 +1,5 @@
 ---
-title: "Token Metadata"
+title: "Token metadata"
 description: "Sync ERC-20 token metadata (name, symbol, decimals, total supply, and deployer) captured at deploy time into your own database. Mirrors the Moralis GET /erc20/metadata endpoint."
 ---
 
@@ -183,7 +183,7 @@ Also note `total_supply` is the **raw** `uint256` with no decimals applied; divi
 
 ## Migrating from the REST API
 
-### `GET /erc20/metadata` — ERC-20 token metadata
+### `GET /erc20/metadata`: ERC-20 token metadata
 
 This recipe replaces the endpoint's on-chain core: `name`, `symbol`, `decimals`, `total_supply`, and the deploy position come through exactly, with no batch cap on how many contracts you look up per query.
 
@@ -200,11 +200,11 @@ This recipe replaces the endpoint's on-chain core: `name`, `symbol`, `decimals`,
 | `created_at` (deploy time) | `token_metadata_observations.block_timestamp` (not on the `token_metadata` view) | exact |
 | `fully_diluted_valuation` | `total_supply_formatted × usd_price` via [Token Prices](/data-feeds/recipes/token/token-prices) | calculated |
 | `market_cap` | `circulating_supply × price`; needs off-chain circulating supply | add yourself |
-| `circulating_supply` | — | add yourself |
+| `circulating_supply` | None | add yourself |
 | `implementations` | match the token across the chains you index, or a multichain token list | add yourself |
-| `logo`, `logo_hash`, `thumbnail` | — | add yourself |
-| `possible_spam`, `verified_contract`, `validated`, `security_score` | — | add yourself |
-| `categories`, `links`, `description`, `address_label` | — | add yourself |
+| `logo`, `logo_hash`, `thumbnail` | None | add yourself |
+| `possible_spam`, `verified_contract`, `validated`, `security_score` | None | add yourself |
+| `categories`, `links`, `description`, `address_label` | None | add yourself |
 
 Any set of contracts in one query, with formatted supply and FDV (Postgres):
 

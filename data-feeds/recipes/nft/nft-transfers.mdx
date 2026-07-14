@@ -1,5 +1,5 @@
 ---
-title: "NFT Transfers"
+title: "NFT transfers"
 description: "Sync every ERC-721 / ERC-1155 transfer, by contract, by wallet, or for a single (contract, token_id), as a flat event log into your own database."
 ---
 
@@ -47,7 +47,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces. Keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` and `amount` are stored at full `uint256` width: `token_id` as text (hash-derived ENS / ERC-1155 ids routinely exceed any SQL numeric precision), `amount` as a wide decimal.
 
-<Accordion title="ClickHouse — fact_nft_transfers">
+<Accordion title="ClickHouse, fact_nft_transfers">
 
 ```sql
 CREATE TABLE recipe_nft_transfers.fact_nft_transfers
@@ -83,7 +83,7 @@ The `sign` column drives reorg collapsing: read with `FINAL` or `sum(sign)`, nev
 
 </Accordion>
 
-<Accordion title="Postgres — nft_transfers">
+<Accordion title="Postgres, nft_transfers">
 
 ```sql
 CREATE TABLE public.nft_transfers (

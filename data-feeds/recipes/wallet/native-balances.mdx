@@ -1,5 +1,5 @@
 ---
-title: "Native Balances"
+title: "Native balances"
 description: "Sync each wallet's current native-asset (ETH/MATIC/…) balance into your own database, kept current from per-block onchain data. Mirrors the Moralis GET /{address}/balance and GET /wallets/balances endpoints."
 ---
 
@@ -48,7 +48,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces: observations keyed by wallet. Keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). The raw `balance` is a `uint256` in wei and is stored as text (it exceeds numeric precision); divide by `10^18` (the native decimals) in your app to read whole units.
 
-<Accordion title="ClickHouse — fact_native_balances">
+<Accordion title="ClickHouse, fact_native_balances">
 
 ```sql
 CREATE TABLE recipe_native_balances.fact_native_balances
@@ -76,7 +76,7 @@ The `sign` column drives reorg collapsing; read with `FINAL` + `argMax`, never a
 
 </Accordion>
 
-<Accordion title="Postgres — native_balances">
+<Accordion title="Postgres, native_balances">
 
 ```sql
 -- Observations (sink target).

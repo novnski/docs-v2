@@ -1,5 +1,5 @@
 ---
-title: "NFT Owners by Contract"
+title: "NFT owners by contract"
 description: "Sync the current owner set for an NFT collection (every wallet holding a token_id, with live counts for ERC-1155 editions) into your own database. Mirrors the Moralis GET /nft/{address}/owners endpoint."
 ---
 
@@ -42,7 +42,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces: one row per holding observation. Keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` and `amount` are stored as text / wide numeric because full-range `uint256` ids and counts overflow standard numeric types.
 
-<Accordion title="ClickHouse — fact_nft_owners_by_contract">
+<Accordion title="ClickHouse, fact_nft_owners_by_contract">
 
 ```sql
 CREATE TABLE recipe_nft_owners_by_contract.fact_nft_owners_by_contract
@@ -72,7 +72,7 @@ The `sign` column drives reorg collapsing: read with `FINAL` then `argMax`, or a
 
 </Accordion>
 
-<Accordion title="Postgres — nft_owner_observations + nft_owners">
+<Accordion title="Postgres, nft_owner_observations + nft_owners">
 
 ```sql
 CREATE TABLE public.nft_owner_observations (

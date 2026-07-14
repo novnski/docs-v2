@@ -1,5 +1,5 @@
 ---
-title: "NFT Trades"
+title: "NFT trades"
 description: "Sync every NFT marketplace trade (seller, buyer, collection, token ID, marketplace, and raw price), re-assembled into one row per traded NFT, into your own database."
 ---
 
@@ -47,7 +47,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` and `price` are raw `uint256` values that exceed numeric precision, so they're stored as text / wide decimals.
 
-<Accordion title="ClickHouse — fact_nft_trades">
+<Accordion title="ClickHouse, fact_nft_trades">
 
 ```sql
 CREATE TABLE recipe_nft_trades.fact_nft_trades
@@ -85,7 +85,7 @@ The `sign` column drives reorg collapsing: read with `FINAL` or `sum(sign)`. A s
 
 </Accordion>
 
-<Accordion title="Postgres — nft_trades">
+<Accordion title="Postgres, nft_trades">
 
 ```sql
 CREATE TABLE public.nft_trades (

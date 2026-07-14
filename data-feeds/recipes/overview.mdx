@@ -1,12 +1,12 @@
 ---
-title: "Data Feed Recipes"
+title: "Data Feed recipes"
 sidebarTitle: "Overview"
 description: "Pre-built blueprints that reconstruct Moralis's most popular endpoints (wallet history, balances, prices, swaps, holders) as continuous syncs into your own ClickHouse, Postgres, or MySQL."
 ---
 
 ### What a recipe is
 
-A **recipe** is a ready-made blueprint that reconstructs one popular Moralis endpoint as a continuous sync into a database you own. Instead of calling an API per request, you run the recipe once and the data lands — and stays current — in your own ClickHouse, Postgres, or MySQL.
+A **recipe** is a ready-made blueprint that reconstructs one popular Moralis endpoint as a continuous sync into a database you own. Instead of calling an API per request, you run the recipe once and the data lands, and stays current, in your own ClickHouse, Postgres, or MySQL.
 
 <Note>
 **Coming from the Moralis REST API?** Each recipe maps to one or more REST endpoints. Start with the [migration overview](/data-feeds/migration/overview) for how the API and Data Feeds differ, then use the [endpoint list](/data-feeds/migration/endpoints) to find the field-by-field guide for the endpoint you call today.
@@ -72,7 +72,7 @@ Postgres and MySQL recipes write flat, uniquely-keyed event tables and are **fir
 | Mode | What it does | Default for |
 | --- | --- | --- |
 | `historical` | One-shot backfill of a block window | Postgres / MySQL |
-| `realtime` | Live tail from the chain head | — |
+| `realtime` | Live tail from the chain head | None |
 | `hybrid` | Backfill, then a seamless handoff to realtime | ClickHouse |
 
 ### Token Prices is the connective tissue
@@ -87,7 +87,7 @@ the most popular endpoints.
 **Coming from the REST API?** Each recipe page ends with a **"Migrating from the REST API"** section: the
 legacy endpoint(s) it replaces, the field-by-field mapping, and (because Data Feeds are not a 1:1 endpoint
 swap) the exact combination of recipes you need when one endpoint spans several datasets. The
-[endpoint → recipe lookup](/data-feeds/migration/endpoints) maps all covered endpoints in one table.
+[Map endpoints to recipes](/data-feeds/migration/endpoints) table maps all covered endpoints in one place.
 
 | API | Recipe | Answers |
 | --- | --- | --- |

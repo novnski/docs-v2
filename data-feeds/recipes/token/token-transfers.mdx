@@ -1,5 +1,5 @@
 ---
-title: "Token Transfers"
+title: "Token transfers"
 description: "Sync every ERC-20 token transfer, by token or by wallet, as a flat, ordered event log into your own database."
 ---
 
@@ -44,7 +44,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `amount` is stored raw (`uint256` token units) because the transfer event carries no decimals; scale by `10^token_decimals` at read time.
 
-<Accordion title="ClickHouse — fact_token_transfers">
+<Accordion title="ClickHouse, fact_token_transfers">
 
 ```sql
 CREATE TABLE recipe_token_transfers.fact_token_transfers
@@ -79,7 +79,7 @@ The `sign` column drives reorg collapsing: read with `FINAL` or `sum(sign)`, nev
 
 </Accordion>
 
-<Accordion title="Postgres — token_transfers">
+<Accordion title="Postgres, token_transfers">
 
 ```sql
 CREATE TABLE public.token_transfers (
@@ -188,12 +188,12 @@ Field mapping (both endpoints share it; **calculated** = derived at read time, *
 | `transaction_hash` | `token_transfers.tx_hash` | exact |
 | `block_number`, `block_timestamp`, `block_hash`, `transaction_index`, `log_index` | `token_transfers.*` | exact |
 | `token_name`, `token_symbol`, `token_decimals` | join [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
-| `token_logo`, `possible_spam`, `verified_contract`, `security_score` | — | add yourself |
-| `from/to_address_label`, `*_entity`, `*_entity_logo` | — | add yourself |
+| `token_logo`, `possible_spam`, `verified_contract`, `security_score` | None | add yourself |
+| `from/to_address_label`, `*_entity`, `*_entity_logo` | None | add yourself |
 
 Neither endpoint returned USD values (a transfer carries no price), so every mapped value is exact from the chain, and the feed adds two fields the API omitted: `transfer_type` and `initiated_by`.
 
-### `GET /erc20/{address}/transfers` — transfers by token
+### `GET /erc20/{address}/transfers`: transfers by token
 
 Every transfer of one token becomes a plain by-token read of `token_transfers`, the table's primary sort, so it's a contiguous range scan:
 
@@ -210,7 +210,7 @@ LIMIT 100;
 - High-volume tokens have enormous histories: keyset-paginate on `(block_number, log_index)`, not `OFFSET`.
 - For a token's *complete* history, backfill from its deploy block (`historical` or `hybrid` mode); `realtime` alone only captures new transfers.
 
-### `GET /{address}/erc20/transfers` — transfers by wallet
+### `GET /{address}/erc20/transfers`: transfers by wallet
 
 A wallet's transfers are the rows where it appears on **either side**; the recipe indexes both `from_address` and `to_address`, so it's one query:
 

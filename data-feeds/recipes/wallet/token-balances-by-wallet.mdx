@@ -1,5 +1,5 @@
 ---
-title: "Token Balances by Wallet"
+title: "Token balances by wallet"
 description: "Sync every ERC-20 token a wallet holds, with its current non-zero balance, into your own database: a portfolio lookup that's a single prefix scan."
 ---
 
@@ -44,7 +44,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` balances are stored as text (ClickHouse) or `NUMERIC(76, 0)` (Postgres) so they never overflow.
 
-<Accordion title="ClickHouse — fact_balances_by_wallet">
+<Accordion title="ClickHouse, fact_balances_by_wallet">
 
 ```sql
 CREATE TABLE recipe_token_balances_by_wallet.fact_balances_by_wallet
@@ -72,7 +72,7 @@ The `sign` column drives reorg collapsing; read with `FINAL` then `argMax`, or a
 
 </Accordion>
 
-<Accordion title="Postgres — token_balances">
+<Accordion title="Postgres, token_balances">
 
 ```sql
 -- 1. Observations (sink target): one row per wallet, per transfer leg.

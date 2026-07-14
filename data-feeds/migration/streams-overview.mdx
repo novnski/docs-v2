@@ -1,6 +1,6 @@
 ---
 title: "Migrating from Moralis Streams"
-description: "Using Streams webhooks today? Here is how the model maps onto Data Feeds (push webhooks vs. data flowing into a database you own) and what to expect from the upcoming per-stream migration guides."
+description: "Using Streams webhooks today? Here is how the model maps onto Data Feeds: push webhooks vs. data flowing into a database you own."
 ---
 
 If you use **Moralis Streams**, you receive webhooks: you define a stream (addresses, topics, chains), Moralis
@@ -11,20 +11,13 @@ and storing what you need, the data **flows directly into a database you own**: 
 tail through one pipe. Your webhook handler, retry logic, and ingestion queue disappear; what remains is a
 table you query.
 
-<Note>
-**Individual Streams migration guides are coming soon.** This page gives you the model so you can evaluate the
-move today. When the per-stream guides land, each will map a common stream configuration to its matching
-recipe, field by field, the same treatment the [Data API migration guides](/data-feeds/migration/overview)
-give REST endpoints.
-</Note>
-
 ## How the concepts map
 
 | In Streams | In Data Feeds |
 |---|---|
 | A **stream config** (addresses, topics, ABIs) | A **recipe** plus SQL filters, e.g. [token-transfers](/data-feeds/recipes/token/token-transfers), [contract-logs](/data-feeds/recipes/logs/contract-logs) filtered to your addresses or topics |
 | A **webhook payload** pushed per event | **Rows in your own database**, written by the sink as blocks land |
-| Your **webhook endpoint + retries + queue** | Nothing — delivery, ordering, and resume are the sink's job |
+| Your **webhook endpoint + retries + queue** | Nothing: delivery, ordering, and resume are the sink's job |
 | `confirmed: true/false` payloads for reorg safety | [Reorg handling](/data-feeds/concepts/reorgs) built into the pipe |
 | **Replay / history** (limited) | **Full backfill**: the same feed serves history and live data ([how backfill works](/data-feeds/concepts/history-and-backfill)) |
 
@@ -44,7 +37,7 @@ query, not a pipeline you maintain.
 
 ## Try the model now
 
-You do not need to wait for the per-stream guides to evaluate Data Feeds:
+You can evaluate Data Feeds against your current Streams setup today:
 
 1. Run the **[quickstart](/data-feeds/migration/quickstart)**: live decoded data in your own Postgres in about
    ten minutes.

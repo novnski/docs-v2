@@ -1,5 +1,5 @@
 ---
-title: "Token Prices"
+title: "Token prices"
 description: "Sync a token's full USD / native mark price history (every in-block price update for each pair and protocol) as a continuous feed into your own database, with a carry-forward latest mark for valuing quiet positions."
 ---
 
@@ -44,7 +44,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `usd_price` and `native_price` are carried as text to preserve full precision across many orders of magnitude; cast at read time.
 
-<Accordion title="ClickHouse — fact_token_price_update">
+<Accordion title="ClickHouse, fact_token_price_update">
 
 ```sql
 CREATE TABLE recipe_token_price_history.fact_token_price_update
@@ -98,7 +98,7 @@ The `sign` column drives reorg collapsing: read with `FINAL` or `sum(sign)`. A s
 
 </Accordion>
 
-<Accordion title="Postgres — token_price_updates">
+<Accordion title="Postgres, token_price_updates">
 
 ```sql
 CREATE TABLE public.token_price_updates (
@@ -208,7 +208,7 @@ Both endpoints returned the same shape, so one field mapping covers them:
 | `exchangeAddress` | not in these recipes: `protocol` names the venue; bring a factory list if you need the address | add yourself |
 | `tokenLogo`, `possibleSpam`, `verifiedContract`, `securityScore` | off-chain signals; bring your own token / allow / deny lists | add yourself |
 
-### GET /erc20/:address/price — single token price
+### GET /erc20/:address/price: single token price
 
 ```
 GET /erc20/:address/price
@@ -233,7 +233,7 @@ ORDER BY p.token_address, p.block_number DESC;   -- newest mark
 - For "price now" you only need the feed running recently; backfill only if you want historical prices (the old `to_block` behavior) or a 24h-change window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
 - A token that hasn't traded recently carries an older mark; the dictionary carries it forward but does not interpolate.
 
-### POST /erc20/prices — batch token prices
+### POST /erc20/prices: batch token prices
 
 ```
 POST /erc20/prices

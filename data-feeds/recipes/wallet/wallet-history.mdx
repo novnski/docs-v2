@@ -1,5 +1,5 @@
 ---
-title: "Wallet History"
+title: "Wallet history"
 description: "Reconstruct a wallet's full chronological event feed (every transfer, swap, NFT move, approval, and LP change, with USD value per event) as a continuous sync into your own database."
 ---
 
@@ -18,10 +18,10 @@ The recipe lands **one row per wallet-bearing event**. A wallet is "involved" if
 | `event_type` | Rows per event | Populated columns | USD value |
 | --- | --- | --- | --- |
 | `token_transfer` | 2 (from + to) | `token_address`, `amount` | ✅ inline (unscaled) |
-| `native_transfer` | 2 (from + to) | `amount` | — |
-| `nft_transfer` | 2 (from + to) | `token_address`, `token_id`, `amount` | — |
+| `native_transfer` | 2 (from + to) | `amount` | None |
+| `nft_transfer` | 2 (from + to) | `token_address`, `token_id`, `amount` | None |
 | `swap` | 1 (the wallet) | `pair_address`, `token_in/out_address`, `amount_in/out` | ✅ inline |
-| `approval` | 1 (approver) | `spender_address`, `token_address`, `amount` | — |
+| `approval` | 1 (approver) | `spender_address`, `token_address`, `amount` | None |
 | `liquidity_change` | 1 (LP owner) | `change_type`, `pair_address`, `token0/1_address`, `token0/1_amount` | ✅ inline |
 
 Each row also carries `direction` (`sent` · `received` · `self` · `minted` · `burned`), `counterparty`, `tx_hash`, `block_number`, `block_timestamp`, and `log_index`.
@@ -48,7 +48,7 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 Below is the complete read table this recipe produces. It's the **full shape**: every event type's columns in one wide row. This is a starting point: keep the columns and event types you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` amounts and `token_id` are stored as text (they exceed numeric precision); USD columns are wide decimals so a low-decimals token × price never overflows.
 
-<Accordion title="ClickHouse — fact_wallet_history_full">
+<Accordion title="ClickHouse, fact_wallet_history_full">
 
 ```sql
 CREATE TABLE recipe_wallet_history_full.fact_wallet_history_full
@@ -95,7 +95,7 @@ The `sign` column drives reorg collapsing; read with `FINAL` or `sum(sign)`. A s
 
 </Accordion>
 
-<Accordion title="Postgres — wallet_history_full">
+<Accordion title="Postgres, wallet_history_full">
 
 ```sql
 CREATE TABLE public.wallet_history_full (
