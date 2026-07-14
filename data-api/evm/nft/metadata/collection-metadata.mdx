@@ -4,5 +4,8 @@ openapi: "/openapi-files/data-api/api.json GET /nft/{address}/metadata"
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+import { MigrationCallout } from '/snippets/migration-callout.jsx'
 
 <EndpointMeta cus={50} />
+
+<MigrationCallout guide="nft-collection-metadata" />

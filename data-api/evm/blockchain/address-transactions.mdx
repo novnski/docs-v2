@@ -4,5 +4,8 @@ openapi: "/openapi-files/data-api/api.json GET /{address}"
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+import { MigrationCallout } from '/snippets/migration-callout.jsx'
 
 <EndpointMeta cus={30} />
+
+<MigrationCallout guide="wallet-native-txns" />

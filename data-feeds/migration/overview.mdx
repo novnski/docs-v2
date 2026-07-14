@@ -1,0 +1,86 @@
+---
+title: "Migrating from the Moralis REST API"
+description: "Already using Moralis REST API endpoints? This is the background you need before you move an endpoint onto Data Feeds: how the two differ, why the schema is not a copy, and the gotchas to plan for."
+---
+
+If you already call the Moralis Web3 Data API, you can move endpoint by endpoint onto **Data Feeds**.
+You go from a pre-packaged REST response to the **underlying decoded data that produces it**, served from a
+database you own, in real time, with no per-call limits and full control over how you store and query it.
+
+This page is the background to read **once**. When you are ready to move a specific endpoint, go to the
+[endpoint list](/data-feeds/migration/endpoints) and pick the one you call today.
+
+## API vs. Data Feeds: why they are different
+
+The Data API hands you a **finished answer**. A single call returns a wallet's tokens, already joined to
+prices, metadata, and spam flags, shaped into one JSON response.
+
+Data Feeds hand you the **decoded onchain data that answer is built from**, streamed into a database you own.
+You assemble the answer yourself, which is what gives you no per-call limits, full history, and control over
+filtering and pricing.
+
+That trade has one consequence worth internalizing before you start:
+
+<Note>
+**A Data Feed reconstructs an endpoint, it is not a byte-for-byte copy of the old response.** The same facts
+are there, but they arrive as raw rows across a few datasets rather than one pre-joined object. You do the
+join (usually one SQL view), and you decide what to do about the off-chain extras.
+</Note>
+
+## Start with the model, once
+
+Two concept pages explain how Data Feeds work, so every recipe links here instead of repeating it. Read these
+first and the per-endpoint migration sections go quickly:
+
+- [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the ways to consume it (your
+  Kafka / AMQP / SQS clients, REST / Arrow Flight, the sink into your own database, or query engines via
+  Iceberg).
+- [Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) The fidelity model: a Data Feed
+  reconstructs an endpoint from raw onchain data, it is not a byte-for-byte copy of the old response.
+
+## The schema gotchas to plan for
+
+These are the differences that surprise people first. Each recipe's migration section states the answer for
+its own endpoint(s), but the pattern is always one of these:
+
+| You had in the API response | Where it comes from in Data Feeds |
+|---|---|
+| **One pre-joined object** (e.g. a wallet token with balance, price, metadata) | Several datasets you join yourself, usually in one SQL view. One endpoint often maps to **more than one recipe**. |
+| **A derived USD value** (price, net worth, USD-at-risk) | **Calculated** from live DEX trades. Very close to the old value, best compared with a small tolerance, not byte-equality. |
+| **An off-chain signal** (logos, spam flags, security scores) | **Not in the lake.** Bring your own source, or drop the field. |
+| **A field that needs full history to be correct** (balances, holders, approvals) | Correct only once you backfill. Decide your [backfill](/data-feeds/concepts/history-and-backfill) before you start. |
+
+### How to read the fidelity of a migration
+
+Every field-mapping table classifies each output value so you can plan with confidence. Throughout, you will
+see three labels:
+
+| Label | Meaning |
+|---|---|
+| **exact** | Comes straight from the chain, identical to the old endpoint (balances, transfers, metadata). |
+| **calculated** | Derived from real onchain activity, for example USD prices from live DEX trades. Very close to the old value, best compared with a small tolerance. |
+| **add yourself** | An off-chain signal (logos, spam flags, security scores) that is not in the lake. Bring your own source, or skip it. |
+
+## Find your endpoint
+
+When you are ready, the **[Map endpoints to recipes](/data-feeds/migration/endpoints)** table maps every covered
+Moralis REST endpoint to the recipe (or **combination of recipes**) that replaces it, ordered by usage.
+Migration details live **on the recipe pages themselves**: each recipe has a "Migrating from the REST API"
+section with the field-by-field mapping, the required recipe combination, one reconstruction query, and the
+endpoint-specific gotchas. One page per dataset: the recipe is the single source of truth.
+
+New to Data Feeds entirely? Start with the **[quickstart](/data-feeds/migration/quickstart)** to get live data
+flowing into your own database in about ten minutes, then come back and migrate your endpoints. And skim
+[Gotchas & troubleshooting](/data-feeds/migration/troubleshooting) before your first run; it lists every
+known failure point with the fix.
+
+## How each migration section is structured
+
+Every recipe's "Migrating from the REST API" section follows the same shape, so once you have read one you
+can skim the rest:
+
+1. **The legacy endpoint(s)** it replaces, and whether you need this recipe alone or a **combination**,
+   stated up front, with links to the other recipes you need.
+2. **Field mapping reference**, the per-field table with the fidelity label.
+3. **One reconstruction query**, the SQL view that rebuilds the old response shape.
+4. **Good to know**, the endpoint-specific gotchas worth knowing before you ship.

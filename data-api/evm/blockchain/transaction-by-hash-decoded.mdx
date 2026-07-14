@@ -4,5 +4,8 @@ openapi: "/openapi-files/data-api/api.json GET /transaction/{transaction_hash}/v
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+import { MigrationCallout } from '/snippets/migration-callout.jsx'
 
 <EndpointMeta cus={20} />
+
+<MigrationCallout guide="transaction-verbose" />

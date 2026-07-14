@@ -4,5 +4,8 @@ openapi: "/openapi-files/data-api/api.json POST /erc20/prices"
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+import { MigrationCallout } from '/snippets/migration-callout.jsx'
 
 <EndpointMeta cus={100} mainnetOnly />
+
+<MigrationCallout guide="erc20-prices" />

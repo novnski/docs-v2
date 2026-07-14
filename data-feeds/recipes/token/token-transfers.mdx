@@ -1,13 +1,13 @@
 ---
-title: "Token Transfers"
-description: "Sync every ERC-20 token transfer — by token or by wallet — as a flat, ordered event log into your own database."
+title: "Token transfers"
+description: "Sync every ERC-20 token transfer, by token or by wallet, as a flat, ordered event log into your own database."
 ---
 
 ### Question it answers
 
-> "Give me every ERC-20 transfer — all transfers of token **0x…**, or every transfer wallet **0x…** sent or received."
+> "Give me every ERC-20 transfer: all transfers of token **0x…**, or every transfer wallet **0x…** sent or received."
 
-One flat event log of token transfers, served two ways from a single sync: **by-token** (every movement of a given token) and **by-wallet** (every transfer a wallet was on either side of). Each row is one transfer carrying exactly one token and one amount — there's no USD enrichment, because a transfer event carries no price.
+One flat event log of token transfers, served two ways from a single sync: **by-token** (every movement of a given token) and **by-wallet** (every transfer a wallet was on either side of). Each row is one transfer carrying exactly one token and one amount; there's no USD enrichment, because a transfer event carries no price.
 
 ### What you get
 
@@ -26,7 +26,7 @@ One row per transfer, from Moralis-indexed, normalized per-block onchain data:
 
 ### Source
 
-The transform reads a single per-block array — `tokenTransfers` — and lands one row per transfer. Fields map straight from the source struct (`tokenAddress → token_address`, `fromAddress → from_address`, `toAddress → to_address`, `amount → amount`, `type → transfer_type`, `initiatedBy → initiated_by`).
+The transform reads a single per-block array, `tokenTransfers`, and lands one row per transfer. Fields map straight from the source struct (`tokenAddress → token_address`, `fromAddress → from_address`, `toAddress → to_address`, `amount → amount`, `type → transfer_type`, `initiatedBy → initiated_by`).
 
 There's no price join: transfers are unpriced, so there is no `amount_usd` column. The per-transfer `vendor_event_id` is widened beyond `(tx_hash, log_index)` so the id stays unique on Solana, where `logIndex` is not row-unique within an instruction (see [Multichain](#multichain)).
 
@@ -42,9 +42,9 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point — keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `amount` is stored raw (`uint256` token units) because the transfer event carries no decimals; scale by `10^token_decimals` at read time.
+Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `amount` is stored raw (`uint256` token units) because the transfer event carries no decimals; scale by `10^token_decimals` at read time.
 
-<Accordion title="ClickHouse — fact_token_transfers">
+<Accordion title="ClickHouse, fact_token_transfers">
 
 ```sql
 CREATE TABLE recipe_token_transfers.fact_token_transfers
@@ -75,11 +75,11 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, token_address, block_number, vendor_event_id);
 ```
 
-The `sign` column drives reorg collapsing — read with `FINAL` or `sum(sign)`, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+The `sign` column drives reorg collapsing: read with `FINAL` or `sum(sign)`, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
 
 </Accordion>
 
-<Accordion title="Postgres — token_transfers">
+<Accordion title="Postgres, token_transfers">
 
 ```sql
 CREATE TABLE public.token_transfers (
@@ -152,7 +152,7 @@ WHERE chain_id = 1 AND token_address = lower('0xtoken');
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse; see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
   The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level (many transfers share one block), so array-expanded transfer rows can only carry a composite unique. Run realtime/hybrid on **ClickHouse**, where the collapsing log table corrects reorgs per-block. The Postgres / MySQL configs are intended for `historical` backfill.
@@ -160,21 +160,80 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting — point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the `vendor_event_id` is widened with `(from_address, to_address, token_address, amount)` to keep rows distinct; the transfer log it produces is identical in shape.
+The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the `vendor_event_id` is widened with `(from_address, to_address, token_address, amount)` to keep rows distinct; the transfer log it produces is identical in shape.
 
 ### Fidelity gaps
 
 The recipe lands exactly what the `tokenTransfers` array carries. Fields a transfers endpoint might surface that have **no onchain source in this array** are omitted:
 
-- **USD value** — a transfer carries no price. Pricing requires joining the same-block price data; that's out of scope for a plain transfer log (see Token Prices for the price-join pattern).
-- **Token metadata** (`symbol`, `name`, `decimals`, logo, verified/spam flags) — these come from a separate token-metadata sync, not the transfer event. `amount` is therefore stored raw, not decimal-adjusted.
-- **Pre/post balances** — the balance surface lives in the balances recipes (Token Balances by Token / by Wallet); this transfer log stays a flat event stream.
+- **USD value**: a transfer carries no price. Pricing requires joining the same-block price data; that's out of scope for a plain transfer log (see Token Prices for the price-join pattern).
+- **Token metadata** (`symbol`, `name`, `decimals`, logo, verified/spam flags): these come from a separate token-metadata sync, not the transfer event. `amount` is therefore stored raw, not decimal-adjusted.
+- **Pre/post balances**: the balance surface lives in the balances recipes (Token Balances by Token / by Wallet); this transfer log stays a flat event stream.
+
+## Migrating from the REST API
+
+This recipe replaces both legacy ERC-20 transfer endpoints from one sync: the same `token_transfers` table serves the by-token and by-wallet reads.
+
+<Note>
+  **Not 1:1.** The legacy responses inlined `token_name` / `token_symbol` / `token_decimals` and a pre-scaled `value_decimal`; this recipe's `amount` is raw `uint256`. Pair it with [Token Metadata](/data-feeds/recipes/token/token-metadata) and join on `token_address` to scale amounts and label tokens. `token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity` fields are off-chain signals; add them from your own token/label lists or drop them.
+</Note>
+
+Field mapping (both endpoints share it; **calculated** = derived at read time, **add yourself** = off-chain):
+
+| Legacy field | Data Feeds | Fidelity |
+| --- | --- | --- |
+| `from_address`, `to_address`, token contract | `token_transfers.from_address` / `to_address` / `token_address` | exact |
+| `value` (raw) | `token_transfers.amount` | exact |
+| `value_decimal` | `amount / 10^decimals` (decimals via Token Metadata) | calculated |
+| `transaction_hash` | `token_transfers.tx_hash` | exact |
+| `block_number`, `block_timestamp`, `block_hash`, `transaction_index`, `log_index` | `token_transfers.*` | exact |
+| `token_name`, `token_symbol`, `token_decimals` | join [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
+| `token_logo`, `possible_spam`, `verified_contract`, `security_score` | None | add yourself |
+| `from/to_address_label`, `*_entity`, `*_entity_logo` | None | add yourself |
+
+Neither endpoint returned USD values (a transfer carries no price), so every mapped value is exact from the chain, and the feed adds two fields the API omitted: `transfer_type` and `initiated_by`.
+
+### `GET /erc20/{address}/transfers`: transfers by token
+
+Every transfer of one token becomes a plain by-token read of `token_transfers`, the table's primary sort, so it's a contiguous range scan:
+
+```sql
+SELECT t.*, t.amount / power(10, m.decimals) AS value_decimal
+FROM token_transfers t
+LEFT JOIN token_metadata m ON m.token_address = t.token_address
+WHERE t.token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+ORDER BY t.block_number DESC, t.log_index DESC
+LIMIT 100;
+```
+
+- The endpoint's `from_date` / `to_date`, `from_block` / `to_block`, and `order` params are plain `WHERE` / `ORDER BY` clauses; no fixed page size.
+- High-volume tokens have enormous histories: keyset-paginate on `(block_number, log_index)`, not `OFFSET`.
+- For a token's *complete* history, backfill from its deploy block (`historical` or `hybrid` mode); `realtime` alone only captures new transfers.
+
+### `GET /{address}/erc20/transfers`: transfers by wallet
+
+A wallet's transfers are the rows where it appears on **either side**; the recipe indexes both `from_address` and `to_address`, so it's one query:
+
+```sql
+SELECT t.*,
+       t.amount / power(10, m.decimals) AS value_decimal,
+       CASE WHEN t.from_address = lower('0xwallet') THEN 'send' ELSE 'receive' END AS direction
+FROM token_transfers t
+LEFT JOIN token_metadata m ON m.token_address = t.token_address
+WHERE (t.from_address = lower('0xwallet') OR t.to_address = lower('0xwallet'))
+ORDER BY t.block_number DESC, t.log_index DESC
+LIMIT 100;
+```
+
+- In each row the `token_address` is the token, not the wallet; derive direction by comparing the wallet to `from_address` / `to_address`, as above.
+- The endpoint's `contract_addresses` filter becomes `AND t.token_address = ANY($tokens)`; block/date windows and `order` map the same way as by-token.
+- On ClickHouse the by-wallet read is served by the `bloom_filter` skip indexes on `from_address` / `to_address` (see [Example reads](#example-reads)) rather than a second sort key.
 
 ### Related
 
 <Columns cols={2}>
   <Card title="Token Holders" href="/data-feeds/recipes/token/token-holders" icon="users">
-    The balance roll-up these transfers feed — all non-zero holders of a token.
+    The balance roll-up these transfers feed: all non-zero holders of a token.
   </Card>
   <Card title="Accounting & Tax" href="/data-feeds/use-cases/accounting" icon="calculator">
     Per-asset transfer ledgers for reconciliation, valued via Token Prices.

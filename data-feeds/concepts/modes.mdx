@@ -1,0 +1,68 @@
+---
+title: "Modes: historical, realtime, and hybrid"
+description: "A recipe runs in one of three modes. The mode decides whether the sink backfills past history, tails live blocks, or does both. Here's how to pick."
+---
+
+# Modes
+
+Every recipe runs in one of three modes. The mode is a single setting, but it decides the shape of your
+whole setup: whether the sink fills in **past history**, follows **new blocks** as they arrive, or does
+**both**. Pick the mode from what your product needs to show, then size the backfill window to match.
+
+## The three modes
+
+> **Most production setups want hybrid: backfill the history you need, then stay live automatically.**
+
+### historical
+Backfill a fixed window of past blocks, then stop. The sink indexes everything from your start block
+(`MORALIS_HISTORICAL_FROM_BLOCK`) up to the chain tip at the time it runs, and finishes. Use it for
+one-off loads, analytics snapshots, or to seed a table you will keep current another way.
+
+### realtime
+Tail live blocks from now on, with no backfill. The sink starts at the current tip and writes each new
+block as it arrives. Use it when you only care about activity going forward, for example a live trade tape
+or a transfer alert, and you do not need any history.
+
+### hybrid
+Backfill first, then hand off to live with no gap. The sink indexes your history window, then continues
+straight into realtime tailing. This is the default for most recipes because it gives you a complete table
+that also stays current. Use it whenever you want both history and live data, which is most of the time.
+
+## Quick reference
+
+| Mode | What the sink does | Use when |
+|---|---|---|
+| `historical` | Backfill a window, then stop | One-off load, analytics snapshot, seed-then-maintain-elsewhere |
+| `realtime` | Tail new blocks from now, no backfill | You only need activity going forward |
+| `hybrid` | Backfill, then continue live with no gap | You want history **and** live data (most cases) |
+
+## How the mode relates to backfill
+
+The mode is only half the decision. The other half is **how far back** to set your start block, and that
+depends on whether your answer is current state or an event list, covered in
+[History & backfill](./history-and-backfill). In short:
+
+- **Current-state answers** (balances, holders, approvals) must backfill from the beginning of the relevant
+  history to be correct, so they run `historical` or `hybrid` with the start block set accordingly.
+- **Event-list answers** (swaps, transfers, logs, prices) are correct at any window, so the start block is
+  purely a product choice, and `realtime` with no backfill is a valid option.
+
+## How to set it
+
+The mode is set in the recipe's sink config, alongside the start block:
+
+```yaml
+mode: hybrid
+source:
+  filters:
+    - "blockNumber >= ${MORALIS_HISTORICAL_FROM_BLOCK}"   # e.g. tip-50000, or a token's deploy block
+cutoff:
+  auto: true        # let the sink choose the historical/realtime handoff point
+```
+
+<Note>
+**Realtime and hybrid run best on ClickHouse.** ClickHouse corrects chain reorgs at the block level
+automatically (see [Reorgs](./reorgs)), so it is the recommended destination for any live mode. The Postgres
+and MySQL recipe variants ship in `historical` mode for backfill loads. See [Destinations](./destinations)
+for the full trade-off.
+</Note>

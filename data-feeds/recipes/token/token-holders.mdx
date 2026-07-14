@@ -1,17 +1,17 @@
 ---
-title: "Token Holders"
-description: "Sync the full holder list of a token — every non-zero wallet, its current balance, and a best-effort USD value — as a continuously updated table in your own database. Mirrors the Moralis GET /erc20/{address}/owners endpoint."
+title: "Token holders"
+description: "Sync the full holder list of a token, every non-zero wallet, its current balance, and a best-effort USD value, as a continuously updated table in your own database. Mirrors the Moralis GET /erc20/{address}/owners endpoint."
 ---
 
 ### Question it answers
 
-> "Who holds token **0x…** — with their current balance and USD value? Give me the full holder list, biggest first."
+> "Who holds token **0x…**, with their current balance and USD value? Give me the full holder list, biggest first."
 
-Mirrors Moralis [`GET /erc20/{address}/owners`](https://docs.moralis.com/web3-data-api/evm/reference/get-token-owners). Storing the holder set **pre-aggregated**, keyed by token, in your own database is the value — no per-request rebuild from raw transfers.
+Mirrors Moralis [`GET /erc20/{address}/owners`](https://docs.moralis.com/web3-data-api/evm/reference/get-token-owners). Storing the holder set **pre-aggregated**, keyed by token, in your own database is the value, no per-request rebuild from raw transfers.
 
 ### What you get
 
-Token transfers carry the **absolute** post-transfer balance of both sides of every transfer (`fromPostBalance` / `toPostBalance`). Each transfer becomes two per-wallet balance observations, and the latest observation per `(token, wallet)` is the current holding — no running-sum reconstruction. Each observation is USD-enriched in-block from the same block's price updates.
+Token transfers carry the **absolute** post-transfer balance of both sides of every transfer (`fromPostBalance` / `toPostBalance`). Each transfer becomes two per-wallet balance observations, and the latest observation per `(token, wallet)` is the current holding, no running-sum reconstruction. Each observation is USD-enriched in-block from the same block's price updates.
 
 | Column | Description |
 | --- | --- |
@@ -19,9 +19,9 @@ Token transfers carry the **absolute** post-transfer balance of both sides of ev
 | `wallet_address` | The holder |
 | `balance` | Absolute balance after the latest transfer, raw `uint256` as text |
 | `usd_price` | In-block USD spot price per **whole** token (newest-wins from the block's price updates; `0` if no same-block update) |
-| `usd_value` | Best-effort holding value — `balance / 10^18 × usd_price` (see [fidelity gaps](#fidelity-gaps)) |
-| `block_number`, `log_index` | Recency tuple — the latest pair wins as the current holding |
-| `leg` | `from` / `to` — which side of the transfer produced this observation |
+| `usd_value` | Best-effort holding value, `balance / 10^18 × usd_price` (see [fidelity gaps](#fidelity-gaps)) |
+| `block_number`, `log_index` | Recency tuple, the latest pair wins as the current holding |
+| `leg` | `from` / `to`, which side of the transfer produced this observation |
 
 Balances are **latest-wins**: the current holding of a `(token, wallet)` is simply the observation with the highest `(block_number, log_index)`.
 
@@ -31,7 +31,7 @@ The transform reads one per-block array and unpivots it:
 
 `tokenTransfers`
 
-Each transfer yields `(from_address, from_post_balance)` and `(to_address, to_post_balance)`. The EVM zero address (mint/burn counterparty) and any side without a resolved post-balance are skipped. USD spot prices are folded in **inline** from the same block's `tokenPriceUpdates` (reversed so the chronologically-last update wins per token) — no separate price join at read time.
+Each transfer yields `(from_address, from_post_balance)` and `(to_address, to_post_balance)`. The EVM zero address (mint/burn counterparty) and any side without a resolved post-balance are skipped. USD spot prices are folded in **inline** from the same block's `tokenPriceUpdates` (reversed so the chronologically-last update wins per token), no separate price join at read time.
 
 This recipe is **Token Balances by Token** plus the in-block USD valuation leg.
 
@@ -43,15 +43,15 @@ This recipe is **Token Balances by Token** plus the in-block USD valuation leg.
 | **Postgres** | `token_holders` (materialized view over `token_holder_observations`) | Partial index `(token_address, wallet_address) WHERE balance > 0` |
 | **MySQL** | `token_holders` (trigger-maintained from `token_holder_observations`) | PK `(token_address, wallet_address)` + `DELETE … WHERE balance = 0` cleanup |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct — a reorg negates the rolled-back block's observations (`sign = -1`) and re-emits the corrected ones, and `FINAL` collapses the pair before `argMax` so the aggregate sees only canonical state. The fact table's sort key is token-first, so a token's holder set is a contiguous range read.
+ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct, a reorg negates the rolled-back block's observations (`sign = -1`) and re-emits the corrected ones, and `FINAL` collapses the pair before `argMax` so the aggregate sees only canonical state. The fact table's sort key is token-first, so a token's holder set is a contiguous range read.
 
 Postgres and MySQL keep an append-only observations table and derive the current-holder projection: Postgres as a `DISTINCT ON (token, wallet) … ORDER BY block_number DESC, log_index DESC` materialized view (refresh on a schedule), MySQL via an `AFTER INSERT` latest-wins upsert trigger with a periodic `DELETE … WHERE balance = 0` cleanup.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point — keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` balances are stored as text (they exceed numeric precision); `usd_price` is a wide decimal so a low-decimals token × price never overflows.
+Below is the complete read table this recipe produces. It's a starting point, keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` balances are stored as text (they exceed numeric precision); `usd_price` is a wide decimal so a low-decimals token × price never overflows.
 
-<Accordion title="ClickHouse — fact_token_holders">
+<Accordion title="ClickHouse, fact_token_holders">
 
 ```sql
 CREATE TABLE recipe_token_holders.fact_token_holders
@@ -76,11 +76,11 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, token_address, wallet_address, block_number, log_index, vendor_event_id, leg);
 ```
 
-The `sign` column drives reorg collapsing — read with `FINAL` (then `argMax`) or a sign-aware aggregate, never a bare `WHERE sign = 1`. `leg` keeps the two unpivoted rows of one transfer distinct; the `+1`/`-1` reorg pair for one leg shares a key and collapses. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+The `sign` column drives reorg collapsing, read with `FINAL` (then `argMax`) or a sign-aware aggregate, never a bare `WHERE sign = 1`. `leg` keeps the two unpivoted rows of one transfer distinct; the `+1`/`-1` reorg pair for one leg shares a key and collapses. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
 
 </Accordion>
 
-<Accordion title="Postgres — token_holders">
+<Accordion title="Postgres, token_holders">
 
 ```sql
 -- 1. Observations (append-only sink target).
@@ -141,9 +141,32 @@ MySQL is the same shape with `DECIMAL(76,0)` / `DECIMAL(38,18)`, and replaces th
 
 </Accordion>
 
+### Run it
+
+Everything runs in **your** infrastructure: the sink writes into a database you own and you query it with plain SQL, no API and no per-call limits.
+
+**Prerequisites**
+
+- **Docker** and Docker Compose.
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+
+<Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
+  Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
+</Card>
+
+**Start the sink**
+
+Generate a **starter pack** for `tokenHolders` in the [Moralis Admin Panel](https://admin.moralis.com), pick your chain and destination database, then run it with Docker. The [quickstart](/data-feeds/migration/quickstart) walks through it end to end. Set the backfill window (`MORALIS_HISTORICAL_FROM_BLOCK`) as noted below.
+
+<Note>
+**Backfill from the token's first block for a complete holder set.** A holder list is *current state*, the latest transfer-derived balance per `(token, wallet)`, so to return **every** holder you need the token's full transfer history. The good news: that's history since the **token launched**, not chain genesis, so set `MORALIS_HISTORICAL_FROM_BLOCK` to around the token's deployment block. A recent-only window would miss holders who haven't moved the token lately. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+</Note>
+
+Then run the example reads below to confirm rows are landing.
+
 ### Example reads
 
-All current non-zero holders of a token with balance and best-effort `usd_value` — `FINAL` collapses reorg `±1` pairs before `argMax` (ClickHouse). The example assumes 18 decimals; substitute the token's real decimals to be exact:
+All current non-zero holders of a token with balance and best-effort `usd_value`, `FINAL` collapses reorg `±1` pairs before `argMax` (ClickHouse). The example assumes 18 decimals; substitute the token's real decimals to be exact:
 
 ```sql
 SELECT wallet_address,
@@ -153,7 +176,7 @@ SELECT wallet_address,
          (toFloat64OrZero(argMax(balance, (block_number, log_index))) / pow(10, 18))
          * toFloat64OrZero(argMax(usd_price, (block_number, log_index))), 18)) AS usd_value
 FROM recipe_token_holders.fact_token_holders FINAL
-WHERE chain_id = 1 AND token_address = lower('0xA0b8...')
+WHERE chain_id = 1 AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
 GROUP BY wallet_address
 HAVING current_balance != '0' AND current_balance != ''
 ORDER BY toFloat64OrZero(current_balance) DESC
@@ -167,7 +190,7 @@ SELECT countDistinct(wallet_address) FROM (
   SELECT wallet_address,
          argMax(balance, (block_number, log_index)) AS bal
   FROM recipe_token_holders.fact_token_holders FINAL
-  WHERE chain_id = 1 AND token_address = lower('0xA0b8...')
+  WHERE chain_id = 1 AND token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
   GROUP BY wallet_address
   HAVING bal != '0' AND bal != '');
 ```
@@ -178,32 +201,176 @@ The same read on Postgres after refreshing the view (the partial index serves it
 REFRESH MATERIALIZED VIEW CONCURRENTLY token_holders;
 
 SELECT wallet_address, balance, usd_price, usd_value FROM public.token_holders
-WHERE token_address = lower('0xA0b8...') AND balance > 0
+WHERE token_address = lower('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48') AND balance > 0
 ORDER BY balance DESC LIMIT 100;
 ```
 
+### Other ways to consume this data
+
+The sink is the way to get **this pre-aggregated table** (`token_holders`), recommended for a holder list you own. The *same underlying data* is also available as the **raw decoded feed**, if you'd rather maintain holder state yourself:
+
+- **Your existing message clients**: stream it with **Kafka / AMQP / SQS**.
+- **REST / Arrow Flight**: pull the decoded block stream directly.
+- **Your warehouse**: query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
+
+Those give you the **source array** (`tokenTransfers`, which carries absolute post-transfer balances) to compute the holder set yourself, not this pre-aggregated table. All of them read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
+
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
-  The Postgres materialized view and the MySQL trigger state are not reorg-aware on their own — under realtime you would have to re-derive or refresh them. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block via `sign` automatically; the Postgres/MySQL configs target `historical` backfill.
+  The Postgres materialized view and the MySQL trigger state are not reorg-aware on their own, under realtime you would have to re-derive or refresh them. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block via `sign` automatically; the Postgres/MySQL configs target `historical` backfill.
 </Note>
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting — point it at any supported EVM chain or Solana. On Solana, the event identity already includes `(from, to, token, amount)` so each observation stays row-unique despite Solana's repeated `logIndex` within an instruction; the holder set it produces is identical in shape.
+The recipe is chain-parametrized via the `chain` setting, point it at any supported EVM chain or Solana. On Solana, the event identity already includes `(from, to, token, amount)` so each observation stays row-unique despite Solana's repeated `logIndex` within an instruction; the holder set it produces is identical in shape.
 
 ### Fidelity gaps
 
 The Moralis `/erc20/{address}/owners` response has fields that aren't derivable from normalized per-block data and are therefore omitted or approximated:
 
-- **`balance_formatted`** — needs the token's `decimals`, which is contract metadata not present in `tokenTransfers`. Only the raw `balance` (uint256 string) is emitted; divide by `10^decimals` off-stream to format. Source decimals from a Token Metadata sync.
-- **`usd_value`** — emitted **best-effort assuming 18 decimals** (`balance / 1e18 × usd_price`). The faithful per-token USD spot `usd_price` (same-block, newest-wins) is stored alongside, so a consumer that knows the real decimals can recompute exactly: `usd_value = balance / 10^decimals × usd_price`. Tokens with no same-block price update get `usd_price = 0` (→ `usd_value = 0`) for that observation.
-- **`percentage_relative_to_total_supply`** and **`total_supply`** — there's no clean circulating/total-supply figure in the block stream (it would require summing all mints − burns since genesis or a contract `totalSupply()` read). Omitted.
-- **`owner_address_label`**, **`is_contract`**, **`entity`**, **`entity_logo`** — off-chain enrichment / address-classification metadata, not on-chain block data. Omitted.
+- **`balance_formatted`**: needs the token's `decimals`, which is contract metadata not present in `tokenTransfers`. Only the raw `balance` (uint256 string) is emitted; divide by `10^decimals` off-stream to format. Source decimals from a Token Metadata sync.
+- **`usd_value`**: emitted **best-effort assuming 18 decimals** (`balance / 1e18 × usd_price`). The faithful per-token USD spot `usd_price` (same-block, newest-wins) is stored alongside, so a consumer that knows the real decimals can recompute exactly: `usd_value = balance / 10^decimals × usd_price`. Tokens with no same-block price update get `usd_price = 0` (→ `usd_value = 0`) for that observation.
+- **`percentage_relative_to_total_supply`** and **`total_supply`**, there's no clean circulating/total-supply figure in the block stream (it would require summing all mints − burns since genesis or a contract `totalSupply()` read). Omitted.
+- **`owner_address_label`**, **`is_contract`**, **`entity`**, **`entity_logo`**, off-chain enrichment / address-classification metadata, not on-chain block data. Omitted.
 
-The core access key — `token_address` → holder `wallet_address` + current `balance` — is fully covered, so these gaps don't block the recipe.
+The core access key, `token_address` → holder `wallet_address` + current `balance`, is fully covered, so these gaps don't block the recipe.
+
+## Migrating from the REST API
+
+This recipe replaces the token-holder family of legacy endpoints, the EVM Web3 API holder list and summary, and the deprecated Solana Token API holder endpoints. Data Feeds are **not** 1:1 replicas of those responses: you land the holder set in your own database and reconstruct each response shape with SQL. The subsections below cover each legacy endpoint, what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal or a definition you set), and the gotchas specific to that endpoint.
+
+### GET /erc20/:address/owners
+
+The per-holder list, every owner, biggest first, with balance and USD value. The most direct migration on this page: this recipe's `token_holders` table *is* the holder list, and the ranking becomes your `ORDER BY`.
+
+For `balance_formatted`, `percentage_relative_to_total_supply`, and the envelope `totalSupply`, add [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata`) to the same database, the raw list needs only this recipe, the formatted fields need the join.
+
+| `/erc20/:address/owners` | Data Feeds | Fidelity |
+|---|---|---|
+| `owner_address` | `token_holders.wallet_address` | exact |
+| `balance` (raw) | `token_holders.balance` | exact |
+| `balance_formatted` | derive: `balance / 10^decimals` (`token_metadata`) | exact |
+| `usd_value` | `token_holders.usd_value` | calculated |
+| `percentage_relative_to_total_supply` | derive: `balance / total_supply` (`token_metadata`) | exact |
+| `totalSupply` (envelope) | `token_metadata.total_supply` | exact |
+| `is_contract`, `owner_address_label`, `entity`, `entity_logo` | your own label / contract-address source | add yourself |
+
+The reconstruction query (Postgres, adapt to your destination):
+
+```sql
+SELECT h.wallet_address AS owner_address,
+       h.balance,
+       h.balance / power(10, m.decimals)     AS balance_formatted,
+       h.usd_value,
+       h.balance / NULLIF(m.total_supply, 0) AS percentage_relative_to_total_supply
+FROM token_holders h
+LEFT JOIN token_metadata m ON m.token_address = h.token_address
+WHERE h.token_address = lower($1)
+  AND h.balance > 0                -- current owners only, like the endpoint
+ORDER BY h.balance DESC            -- biggest first, like the endpoint
+LIMIT $2 OFFSET $3;
+```
+
+**Gotchas**
+
+- Ordering and filtering are yours: the endpoint hard-coded biggest-first and non-zero-only; with your own table you rank by `balance` or `usd_value`, set any minimum, and page with plain SQL, no per-call limit.
+- The stored `usd_value` assumes 18 decimals, recompute as `balance / 10^decimals × usd_price` with real decimals from `token_metadata` for non-18-decimal tokens (see [fidelity gaps](#fidelity-gaps)).
+- USD values come from real DEX trades, very close to the old endpoint, compare with a tolerance; a thinly-traded token may value at 0.
+- Backfill from the token's deployment block (see [Run it](#run-it)) or the list silently misses holders who haven't moved the token lately.
+
+### GET /erc20/:tokenAddress/holders
+
+The **aggregate holder summary**, `totalHolders`, supply concentration, size tiers, acquisition split, and trend windows, not the per-holder list. There is no single replacement table: you compute the summary yourself over this recipe's holder set, which turns the black-box buckets into definitions you control.
+
+<Warning>
+This endpoint needs **multiple recipes**, not one. Run this recipe plus [Token Metadata](/data-feeds/recipes/token/token-metadata) (`total_supply` for the concentration percentages), and add [Token Transfers](/data-feeds/recipes/token/token-transfers) if you want the `holdersByAcquisition` split (classify each holder's first inbound transfer). The `holderChange` trend windows need a holder-count series **you maintain**, snapshot the count per interval and read the deltas.
+</Warning>
+
+| `/erc20/:tokenAddress/holders` | Data Feeds | Fidelity |
+|---|---|---|
+| `totalHolders` | `COUNT(*)` over `token_holders` (`balance > 0`) | exact |
+| `holderSupply.topN.supply` / `.supplyPercent` | top-N by balance vs `token_metadata.total_supply` | exact |
+| `holderDistribution.{whales…shrimps}` | bucket holders by size, thresholds you set | add yourself |
+| `holdersByAcquisition.{swap,transfer,airdrop}` | classify each holder's first inbound from `token_transfers` | add yourself |
+| `holderChange.{5min…30d}` | holder count now vs one window ago, from your count series | calculated |
+
+The headline numbers in one pass (Postgres, tier thresholds are illustrative, set your own):
+
+```sql
+WITH ranked AS (
+  SELECT usd_value,
+         row_number() OVER (ORDER BY balance DESC) AS rnk,
+         balance / sum(balance) OVER ()            AS supply_share
+  FROM token_holders
+  WHERE token_address = lower($1) AND balance > 0
+)
+SELECT count(*)                                              AS total_holders,
+       sum(supply_share) FILTER (WHERE rnk <= 10)  * 100     AS top10_percent,
+       sum(supply_share) FILTER (WHERE rnk <= 100) * 100     AS top100_percent,
+       sum(supply_share) FILTER (WHERE rnk <= 500) * 100     AS top500_percent,
+       count(*) FILTER (WHERE usd_value >= 1000000)          AS whales,
+       count(*) FILTER (WHERE usd_value <  100)              AS shrimps
+FROM ranked;
+```
+
+**Gotchas**
+
+- The foundation is exact, the analytics are yours: holder count and concentration are deterministic SQL; the tier boundaries and acquisition rules are conventions you define, once fixed, the counts are exact.
+- Materialize for large tokens, USDC has millions of holders; compute the summary on a schedule into its own table, not per request.
+- Full-history backfill matters even more here: start late and you undercount holders and skew **every** aggregate, including the 30-day trend and the first-acquisition split.
+- Decimals matter for USD tiering, recompute `usd_value` with real `decimals` before bucketing non-18-decimal tokens.
+
+### Solana: GET /token/:network/holders/:address
+
+<Warning>
+This endpoint and `/token/:network/:address/top-holders` below are **deprecated Solana Token API endpoints sunsetting July 31, 2026**. Migrate before that date, after sunset the endpoints stop responding. This recipe pointed at Solana (see [Multichain](#multichain)) is the replacement for both.
+</Warning>
+
+The Solana holder-metrics summary, holder count and size distribution for an SPL token. Replaced by this recipe with `chain` set to Solana: `tokenHolders` maintains one current balance per `(mint, owner)` and you aggregate the metrics in SQL. The field mapping matches the `/erc20/:tokenAddress/holders` table above, `totalHolders` is exact, `holderDistribution` and `holdersByAcquisition` are definitions you set (the acquisition split again needs [Token Transfers](/data-feeds/recipes/token/token-transfers)), and `holderChange` is calculated from a count series you maintain.
+
+Total plus distribution tiers (Postgres, swap in your own thresholds, by `usd_value` or raw `balance`):
+
+```sql
+SELECT count(*)                                                             AS total_holders,
+       count(*) FILTER (WHERE usd_value >= 1000000)                         AS whales,
+       count(*) FILTER (WHERE usd_value >= 100000 AND usd_value < 1000000)  AS sharks,
+       count(*) FILTER (WHERE usd_value >= 10000  AND usd_value < 100000)   AS dolphins,
+       count(*) FILTER (WHERE usd_value <  10000)                           AS shrimps
+FROM token_holders
+WHERE token_address = $1   -- base58 mint, case-sensitive: do NOT lowercase
+  AND balance > 0;
+```
+
+**Gotchas**
+
+- Don't lowercase Solana addresses: EVM addresses in this recipe are stored lowercased, but base58 mints and owners are **case-sensitive**, match them as-is.
+- SPL account model: the decoded feed resolves transfers to **owner wallets**, so `wallet_address` is the owner; one owner can hold across multiple token accounts, sum them for a per-owner total.
+- Backfill from around the mint's deployment or the count silently undershoots.
+
+### Solana: GET /token/:network/:address/top-holders
+
+The ranked per-holder list for an SPL token, the Solana twin of `/erc20/:address/owners`, and the same direct migration: this recipe on Solana plus `ORDER BY balance DESC`. The field mapping matches the `/erc20/:address/owners` table above with camelCase names (`ownerAddress`, `balanceFormatted`, `usdValue`, `percentageRelativeToTotalSupply`); `isContract` (is the owner a program-owned account) is **add yourself** from your own account-type source. Formatted balance and supply percentage again need [Token Metadata](/data-feeds/recipes/token/token-metadata).
+
+```sql
+SELECT wallet_address AS owner_address,
+       balance,
+       usd_value
+FROM token_holders
+WHERE token_address = $1   -- base58 mint, case-sensitive: do NOT lowercase
+  AND balance > 0
+ORDER BY balance DESC
+LIMIT $2 OFFSET $3;
+```
+
+**Gotchas**
+
+- Sunsetting **July 31, 2026** along with the holder-metrics endpoint above, plan the cutover now.
+- SPL decimals vary per token, format against real `decimals` from `token_metadata`, never a fixed 18; the stored best-effort `usd_value` assumes 18.
+- Same base58 case-sensitivity and owner-vs-token-account notes as above.
+- USD value comes from real trades, compare with a tolerance; a thinly-traded token may value at 0.
 
 ### Related
 

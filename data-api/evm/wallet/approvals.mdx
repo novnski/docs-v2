@@ -5,5 +5,8 @@ openapi: "/openapi-files/data-api/api.json GET /wallets/{address}/approvals"
 ---
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+import { MigrationCallout } from '/snippets/migration-callout.jsx'
 
 <EndpointMeta cus={100} />
+
+<MigrationCallout guide="wallet-approvals" />

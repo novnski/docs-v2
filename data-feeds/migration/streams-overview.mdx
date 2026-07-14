@@ -1,0 +1,47 @@
+---
+title: "Migrating from Moralis Streams"
+description: "Using Streams webhooks today? Here is how the model maps onto Data Feeds: push webhooks vs. data flowing into a database you own."
+---
+
+If you use **Moralis Streams**, you receive webhooks: you define a stream (addresses, topics, chains), Moralis
+watches the chain, and decoded events are **pushed** to your server as they happen.
+
+**Data Feeds** deliver the same decoded onchain data with the direction reversed: instead of receiving pushes
+and storing what you need, the data **flows directly into a database you own**: historical backfill and live
+tail through one pipe. Your webhook handler, retry logic, and ingestion queue disappear; what remains is a
+table you query.
+
+## How the concepts map
+
+| In Streams | In Data Feeds |
+|---|---|
+| A **stream config** (addresses, topics, ABIs) | A **recipe** plus SQL filters, e.g. [token-transfers](/data-feeds/recipes/token/token-transfers), [contract-logs](/data-feeds/recipes/logs/contract-logs) filtered to your addresses or topics |
+| A **webhook payload** pushed per event | **Rows in your own database**, written by the sink as blocks land |
+| Your **webhook endpoint + retries + queue** | Nothing: delivery, ordering, and resume are the sink's job |
+| `confirmed: true/false` payloads for reorg safety | [Reorg handling](/data-feeds/concepts/reorgs) built into the pipe |
+| **Replay / history** (limited) | **Full backfill**: the same feed serves history and live data ([how backfill works](/data-feeds/concepts/history-and-backfill)) |
+
+The practical difference: a webhook tells you *something happened*, and building state from webhooks (balances,
+holder counts, volumes) is your accounting problem. A Data Feed hands you the rows already in SQL: state is a
+query, not a pipeline you maintain.
+
+## Why teams move
+
+- **No delivery infrastructure.** No public webhook endpoint, no signature checks, no retry handling, no
+  ingestion queue. Data lands in your database directly.
+- **History and live in one pipe.** A new stream starts at "now"; a feed backfills as deep as you need, then
+  stays live.
+- **Consume it your way.** The same feed can flow into Postgres today and your own Kafka, AMQP, or SQS
+  consumers as the platform's export options roll out; see
+  [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) for the consumption model.
+
+## Try the model now
+
+You can evaluate Data Feeds against your current Streams setup today:
+
+1. Run the **[quickstart](/data-feeds/migration/quickstart)**: live decoded data in your own Postgres in about
+   ten minutes.
+2. Find the [recipe](/data-feeds/recipes/overview) closest to what your stream watches (token transfers, contract
+   logs, swaps, NFT activity).
+3. Keep your stream running in parallel while you compare; nothing about trying Data Feeds disturbs your
+   existing Streams setup.

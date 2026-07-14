@@ -1,0 +1,68 @@
+---
+title: "Reorgs: how chain reorganizations surface, and how recipes correct them"
+description: "Near the chain tip, a block can be replaced by another. Data Feeds detect this and emit a correction, so your table converges on the canonical chain. Here's what that means for your queries."
+---
+
+# Reorgs
+
+Blockchains do not always agree on the most recent blocks. For a short window near the tip, the network can
+**reorganize**: a block that looked final gets replaced by a competing block at the same height, and anything
+only in the replaced block is no longer part of the canonical chain. Data Feeds handle this for you, but it
+shapes one thing you must get right: **how you read the most recent rows.**
+
+## How a reorg surfaces
+
+Each block carries its **position** (the block number) and its **block hash**, and the feed tracks the link
+back to the parent block. When the sink sees that a block at a given position has been replaced by a
+different hash, it knows the earlier block's rows are no longer canonical.
+
+Rather than silently deleting them, the sink writes a **correction**. The original rows were written with a
+`+1` marker; the reorg emits matching `-1` rows for the same data. The pair cancels out, and the rows from
+the new, canonical block are written in their place. Your table converges on the true chain without you
+re-running anything.
+
+## What this means for your queries
+
+The correction rows are how reorgs stay safe, but they mean a naive `SELECT *` over a ClickHouse fact table
+can briefly show both the original and its `-1` cancel. You apply the corrections at read time:
+
+> **On ClickHouse fact tables, read with `FINAL` (or use sign-aware sums). That applies reorg corrections and
+> gives you the canonical result.**
+
+```sql
+-- Correct: FINAL applies the collapse
+SELECT block_number, from_address, to_address, amount
+FROM recipe_token_transfers.fact_token_transfers FINAL
+WHERE chain_id = 1 AND token_address = lower('0x...')
+ORDER BY block_number DESC LIMIT 50;
+
+-- For aggregates, sign-aware sums are cheaper than FINAL and equally correct:
+SELECT sum(toFloat64OrZero(amount) * sign) AS net
+FROM recipe_token_transfers.fact_token_transfers
+WHERE chain_id = 1 AND token_address = lower('0x...');
+```
+
+The recipe's own example queries already follow this rule, so if you start from those you get it for free.
+Postgres and MySQL recipe variants are intended for `historical` backfill of settled blocks, where reorgs do
+not apply, which is why the live reorg path is a ClickHouse strength (see [Destinations](./destinations)).
+
+## Only the tip is provisional
+
+Reorgs only affect the **most recent** blocks. Once a block is buried under enough confirmations it is
+settled and will not change. So:
+
+- **Historical and settled data is stable.** A backfill of last month's swaps will not be revised.
+- **Near-tip data is provisional for a short window.** A row for a block from a few seconds ago may be
+  corrected if that block reorganizes. This is normal and expected, not data loss.
+
+<Warning>
+**Do not treat a brand-new tip block as final.** If your product acts on the very latest blocks (live
+balances, instant alerts), expect occasional corrections in that tip window and read with `FINAL` so a
+reorged row is collapsed away rather than double-counted. For settled history, no special handling is needed.
+</Warning>
+
+## Related
+
+- [The `block` array](./the-block-array) for where `position` and the block hash live on each row.
+- [Destinations](./destinations) for why ClickHouse is the home for live, reorg-correcting workloads.
+- [Modes](./modes) for choosing realtime or hybrid, the modes where reorg handling matters.

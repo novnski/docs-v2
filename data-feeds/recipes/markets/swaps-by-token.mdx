@@ -1,24 +1,24 @@
 ---
-title: "Swaps by Token"
-description: "Sync every DEX trade that touched a token — pool fills and aggregator-routed trades, USD-enriched at block time — into your own database, keyed for fast by-token lookups."
+title: "Swaps by token"
+description: "Sync every DEX trade that touched a token, pool fills and aggregator-routed trades, USD-enriched at block time, into your own database, keyed for fast by-token lookups."
 ---
 
 ### Question it answers
 
-> "Give me every DEX trade that touched token **0x…**, newest first — with the amount on each side, the USD notional, the protocol, and whether it was a buy or a sell."
+> "Give me every DEX trade that touched token **0x…**, newest first, with the amount on each side, the USD notional, the protocol, and whether it was a buy or a sell."
 
 A single read returns what the public Moralis Swaps endpoints serve by token, stored **pre-shaped and indexed by token** in your own database. Both direct pool fills and aggregator-routed trades are captured, so you see every fill of the token once.
 
 ### What you get
 
-The recipe lands **one row per (trade, token side)** — each trade is unpivoted so it appears under both of its tokens, and a by-token lookup is a prefix scan. Key columns of the fact table:
+The recipe lands **one row per (trade, token side)**, each trade is unpivoted so it appears under both of its tokens, and a by-token lookup is a prefix scan. Key columns of the fact table:
 
 | Column | Description |
 | --- | --- |
 | `token_address` | This side's token (the leg you're querying by) |
 | `counter_token_address` | The other token in the trade |
-| `leg` | `token0` or `token1` — which side of the underlying trade this row is |
-| `side` | `buy` or `sell` — derived from the base token's pool-balance delta |
+| `leg` | `token0` or `token1`, which side of the underlying trade this row is |
+| `side` | `buy` or `sell`, derived from the base token's pool-balance delta |
 | `side_amount` | Raw amount of `token_address` (uint256, as text) |
 | `counter_amount` | Raw amount of `counter_token_address` |
 | `notional_usd` | Trade notional in USD (bought-leg amount × in-block price) |
@@ -35,7 +35,7 @@ The transform reads two per-block trade arrays and unions them into the trade fe
 
 `tokenSwaps` (direct pool fills) · `aggregateTokenSwaps` (aggregator-routed trades)
 
-The two branches are disjoint by construction — pool fills are keyed off the pair address, aggregator routes off the aggregator address — so together they give every fill exactly once. USD values are computed **inline** from the same block's `tokenPriceUpdates` (the chronologically-last update wins on duplicate keys), so no separate price join is needed at read time.
+The two branches are disjoint by construction, pool fills are keyed off the pair address, aggregator routes off the aggregator address, so together they give every fill exactly once. USD values are computed **inline** from the same block's `tokenPriceUpdates` (the chronologically-last update wins on duplicate keys), so no separate price join is needed at read time.
 
 ### Destination
 
@@ -45,13 +45,13 @@ The two branches are disjoint by construction — pool fills are keyed off the p
 | **Postgres** | `swaps` | Indexes on `token0_address` and `token1_address`, each `(…, block_number DESC)` |
 | **MySQL** | `swaps` | Indexes on `token0_address` and `token1_address` |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct. The fact table is token-first, so all trades for a token — newest first — are a contiguous range read. Postgres/MySQL keep a flat one-row-per-trade `swaps` table and reach a token via either side's index.
+ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct. The fact table is token-first, so all trades for a token, newest first, are a contiguous range read. Postgres/MySQL keep a flat one-row-per-trade `swaps` table and reach a token via either side's index.
 
 ### Full schema
 
 Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` amounts and fees are stored as text in ClickHouse and as `NUMERIC(76, 0)` in Postgres (explicit precision so large raw balances never overflow); USD columns are nullable wide decimals.
 
-<Accordion title="ClickHouse — fact_swaps_by_token">
+<Accordion title="ClickHouse, fact_swaps_by_token">
 
 ```sql
 CREATE TABLE recipe_swaps_by_token.fact_swaps_by_token
@@ -85,11 +85,11 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, token_address, event_ts, vendor_event_id, leg);
 ```
 
-Each trade is unpivoted into two rows (`leg = 'token0'` and `'token1'`) so it's found under both tokens. `leg` is part of the `ORDER BY` so the two sides never collapse into each other, while the `+1/−1` reorg pair for one side shares an identical key and collapses cleanly. Read with `FINAL` or `sum(sign)` — never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+Each trade is unpivoted into two rows (`leg = 'token0'` and `'token1'`) so it's found under both tokens. `leg` is part of the `ORDER BY` so the two sides never collapse into each other, while the `+1/−1` reorg pair for one side shares an identical key and collapses cleanly. Read with `FINAL` or `sum(sign)`, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
 
 </Accordion>
 
-<Accordion title="Postgres — swaps">
+<Accordion title="Postgres, swaps">
 
 ```sql
 CREATE TABLE public.swaps (
@@ -171,7 +171,7 @@ LIMIT 50;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
   The realtime reorg path needs a single-column unique on the position cursor, but `position` is block-level (many trades per block), so the array-expanded trade rows can only carry a composite unique. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block; the Postgres/MySQL configs are intended for `historical` backfill.
@@ -179,20 +179,66 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized — point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the pool-fill event identity is widened (with the token addresses and amount) to keep rows distinct; the by-token feed it produces is identical in shape.
+The recipe is chain-parametrized, point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the pool-fill event identity is widened (with the token addresses and amount) to keep rows distinct; the by-token feed it produces is identical in shape.
 
 ### USD valuation and fidelity gaps
 
 - **`notional_usd`** is the bought-leg (`token1`) amount scaled by its decimals × the in-block price (`token1Amount / 10^token1Decimals × price`), so it's a true dollar value when the token had an in-block price update.
-- **`price_usd`, `notional_usd`, `fee_usd`** are `NULL` when the bought token had **no in-block price update** — there's no off-block price backfill at write time. Join the Token Prices sync for fuller coverage.
+- **`price_usd`, `notional_usd`, `fee_usd`** are `NULL` when the bought token had **no in-block price update**, there's no off-block price backfill at write time. Join the Token Prices sync for fuller coverage.
 - **`fee_*`** is populated for **pool fills only**; bps-style fees (V3/V4/CL) are converted to an absolute amount, and already-absolute fees pass through. Aggregator-routed rows leave fees `NULL`.
 - **`side`** (`buy`/`sell`) is derived from the lower-priority (base) token's pool-balance delta on the trade.
+
+## Migrating from the REST API
+
+This recipe is the trade-level foundation for the legacy token-analytics endpoint. That endpoint returns a pre-aggregated dashboard, so there is **no 1:1 replacement table**, you land the token's trades with this recipe and compute the rolling windows yourself, joining sibling recipes for price, liquidity, and FDV. Every figure is **calculated** (aggregated from real trades, prices, reserves, and supply, very close, compare with a tolerance); there are no off-chain fields to add.
+
+### GET /tokens/:tokenAddress/analytics
+
+Buy/sell volume, buyers/sellers, trade counts, unique wallets, price change, liquidity, and FDV per rolling window (5m / 1h / 6h / 24h). On Data Feeds those windows become queries you own, and so does any other window or metric (buy/sell ratio, VWAP, …).
+
+<Warning>
+This endpoint needs a **combination of recipes**, not one. Run this recipe (the trades) plus [Token Prices](/data-feeds/recipes/token/token-prices) (`token_price_updates`, `usdPrice` and `pricePercentChange`), [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) (`pair_reserves`, `totalLiquidityUsd`), and [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata.total_supply`, FDV) against the same database, then aggregate. There is no pre-aggregated analytics recipe, the composition is the supported path.
+</Warning>
+
+| `/tokens/:tokenAddress/analytics` | Data Feeds | Fidelity |
+|---|---|---|
+| `totalBuyVolume`, `totalSellVolume` (per window) | `sum(swaps.notional_usd)` by side | calculated |
+| `totalBuyers`, `totalSellers`, `totalBuys`, `totalSells` | distinct traders / trade counts by side | calculated |
+| `uniqueWallets` | distinct traders in the window | calculated |
+| `usdPrice`, `pricePercentChange` | latest `token_price_updates.usd_price` / price now vs window-ago | calculated |
+| `totalLiquidityUsd` | sum of the token's pool reserves × price | calculated |
+| `totalFullyDilutedValuation` | `total_supply` × price | calculated |
+
+The trade-side aggregation for one window (Postgres, run per window: 300 / 3600 / 21600 / 86400 seconds):
+
+```sql
+SELECT
+  sum(notional_usd) FILTER (WHERE side = 'buy')              AS total_buy_volume,
+  sum(notional_usd) FILTER (WHERE side = 'sell')             AS total_sell_volume,
+  count(DISTINCT trader_address) FILTER (WHERE side='buy')   AS total_buyers,
+  count(DISTINCT trader_address) FILTER (WHERE side='sell')  AS total_sellers,
+  count(*) FILTER (WHERE side = 'buy')                       AS total_buys,
+  count(*) FILTER (WHERE side = 'sell')                      AS total_sells,
+  count(DISTINCT trader_address)                             AS unique_wallets
+FROM swaps
+WHERE (token0_address = lower($1) OR token1_address = lower($1))
+  AND block_timestamp >= extract(epoch FROM now()) - 86400;
+```
+
+Layer the rest on top: `usdPrice` is the latest price update, `pricePercentChange` compares it to the price a window ago, `totalLiquidityUsd` sums the token's pool reserves valued at price, and `totalFullyDilutedValuation` is `total_supply × price`.
+
+**Gotchas**
+
+- Backfill enough history to cover your longest window, a day or more for the 24h figures, plus price history for the price change. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+- Materialize per token and window on a schedule if you serve many tokens, don't recompute per request.
+- Thin tokens have sparse windows, and trades whose bought leg had no in-block price carry `NULL` notional and drop out of USD sums.
+- On ClickHouse, run the same aggregation over `fact_swaps_by_token` with a prefix scan on `token_address` (the unpivot means a by-token filter already sees each trade once), and make it reorg-safe with `FINAL` or sign-aware sums, never a bare `WHERE sign = 1`.
 
 ### Related
 
 <Columns cols={2}>
   <Card title="Swaps by Pair" href="/data-feeds/recipes/markets/swaps-by-pair" icon="arrow-right-arrow-left">
-    The sibling — every trade keyed by pool/pair address.
+    The sibling, every trade keyed by pool/pair address.
   </Card>
   <Card title="Token Analytics" href="/data-feeds/use-cases/token-analytics" icon="chart-mixed">
     The use case this by-token trade feed powers.

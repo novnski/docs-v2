@@ -1,0 +1,166 @@
+---
+title: "Gotchas & troubleshooting"
+description: "Every known failure point when consuming Data Feeds (symptom, why it happens, and the fix) so you don't discover them the hard way. Covers the sink pipe, the live-vs-settled data boundary, and query-time surprises."
+---
+
+The complete list of things that surprise people when consuming Data Feeds. Each entry is **symptom, why, and
+what to do**. Skim the headings before your first run; five minutes here saves hours of debugging.
+
+<Warning>
+**You are running real infrastructure.** Data Feeds deliver decoded onchain data into a database **you own and
+operate**: Docker, Postgres/ClickHouse, disk, and backfill windows are your responsibility. If you have not
+run the pipe yet, start with the [quickstart](/data-feeds/migration/quickstart).
+</Warning>
+
+## Sink pipe gotchas
+
+### The sink exits with `NUMBER_OF_COLUMNS_DOESNT_MATCH`
+
+**Symptom:** every batch fails with `Code: 20. DB::Exception: Number of columns doesn't match (source: 1 and
+result: 7)`.
+
+**Why:** the sink's `transform_sql` output must **positionally match** the destination table's columns. With no
+transform configured, the sink falls back to selecting a single column, which can never match a multi-column
+schema.
+
+**Do this:** make sure `sink-config.yaml` has a `transform_sql` whose SELECT list matches your destination
+table column-for-column, and a `parquet_columns` list naming the top-level fields the transform reads (e.g.
+`[position, tokenTransfers]`). If your starter pack shipped without one, add it; the config schema inside the
+sink image documents the pattern.
+
+### The sink logs `api_key is required`
+
+**Why:** the generated `.env` sometimes ships with a blank or placeholder key.
+
+**Do this:** paste your full `cm_live_...` key into `.env`, then `docker compose up -d --force-recreate sink`.
+
+### Every request returns HTTP 500 immediately
+
+**Why:** usually the wrong Continuum URL. The config must point at the **read-replica host**, not the admin
+panel host. Also check you are connected through your assigned VPN gateway if your access is VPN-gated.
+
+**Do this:** verify `continuum.url` in `sink-config.yaml` and your VPN connection before debugging anything
+else.
+
+### The backfill fails with `Partition not found`
+
+**Symptom:** `HTTP 500: Failed to read Parquet footer: Partition not found: s3://...`.
+
+**Why:** your backfill window includes blocks whose settled files are not available: either the window
+reaches **too close to the tip** (recent blocks are served live, not as files yet), **too far back** on a
+chain with a thin retention window, or the settled store is **temporarily lagging**. The window is validated
+up front, so one missing partition fails the whole job; there is no partial backfill.
+
+**Do this:** shrink the window (`tip-500` instead of `tip-5000`) and retry. You can also cap the upper end
+with a `blockNumber <= N` filter to pin the window entirely inside available history. If a modest window
+still fails for hours, the settled store is lagging. Report it with the exact error; it resumes
+automatically once fixed upstream.
+
+### The sink completes instantly with 0 rows, and no error
+
+**Symptom:** logs show `Complete: 0 URL(s) processed`, exit code 0, empty table. **Looks like success; isn't.**
+
+**Why:** the window resolved to a range with no settled files in it: typically a window so close to the tip
+that no complete partition exists yet, or a range the store is still catching up on.
+
+**Do this:** always verify with a row count (`SELECT count(*) FROM ...`) after a run, never trust a clean
+exit alone. Widen the window backward until files exist.
+
+### Sizing the backfill window
+
+**Why it matters:** the window is set as a filter, e.g. `blockNumber >= tip-1000`; `tip-<N>` resolves against
+the chain tip at start. Too deep on a thin-retention chain fails with `Partition not found`; too shallow
+returns 0 rows (see above). A `blockNumber <= N` filter caps the upper end when you need to pin a range.
+
+**Do this:** start small (`tip-500`), confirm rows land, then widen to the depth your use case needs. Remember
+[current-state answers need deep history](/data-feeds/concepts/history-and-backfill): balances and holders
+are only correct once you've backfilled the relevant range.
+
+## The live vs. settled boundary
+
+### Live data and file storage are two different stores
+
+**Why:** the chain status can show the feed tracking the tip (live, in-memory) while the most recent blocks
+are **not yet flushed to settled file storage**. These are different systems with different lag: "the feed is
+live" does not mean "every recent block is downloadable."
+
+**Do this:** read near-tip data from the live stream and settled history from files; the chain status tells
+you where the boundary sits. If you only consume through the sink, this is why a very shallow backfill can
+find nothing while the feed is demonstrably live.
+
+### Do not hard-code the feed version
+
+**Why:** each chain's feed carries a version that can roll over when the producer is upgraded; a hard-coded
+version can start returning a lagging tip or stop resolving.
+
+**Do this:** resolve the active topic from the chain's status before reading.
+
+### Older history may be missing newer fields
+
+**Why:** the decoded schema has gained fields over time; partitions from before a field existed genuinely do
+not carry it. On some chains, always-null struct fields are stripped from the files entirely.
+
+**Do this:** discover the columns actually present for the range you read, and treat an absent field as
+zero/none rather than a failure. When reading nested structs, wrap optional fields defensively so a missing
+field yields a default instead of an error.
+
+## Query-time gotchas
+
+### The sink started but no rows have appeared yet
+
+**Why:** a recipe in `historical` or `hybrid` mode backfills a window of past blocks before (or while) it goes
+live, so there is a short warm-up before rows land.
+
+**Do this:** give it a minute, then check the sink logs: healthy output shows the cursor seeded near the tip
+and block windows advancing without errors. Still nothing? Confirm your chain ID and start block, then see
+[Modes](/data-feeds/concepts/modes), and the 0-rows gotcha above.
+
+### The newest rows look duplicated or briefly wrong
+
+**Why:** near the tip a block can be replaced by a reorg. ClickHouse recipes write a **correcting row** rather
+than silently deleting, so a naive `SELECT *` can momentarily show both the original and its cancel.
+
+**Do this:** read ClickHouse fact tables with **`FINAL`** (or sign-aware sums for aggregates). Settled history
+is never affected, only the tip. See [Reorgs](/data-feeds/concepts/reorgs).
+
+### A token has no price
+
+**Why:** prices are **calculated from real onchain DEX trades**, not a pricing engine. A token that has not
+traded recently has no current mark.
+
+**Do this:** treat a missing price as "no recent trades", not an error, and fall back gracefully. USD values
+are **calculated**: compare with a small tolerance, never byte-equality. See
+[Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api).
+
+### My current-state results are incomplete
+
+**Why:** balances, holders, and approvals are **cumulative state**: start indexing too late and anyone whose
+last activity predates your start block is quietly missing.
+
+**Do this:** backfill from the beginning of the relevant history (the token's deploy block for by-token
+answers, full history for by-wallet answers). Event-list answers (swaps, transfers, logs) don't have this
+constraint. See [History & backfill](/data-feeds/concepts/history-and-backfill).
+
+### I get a 403 or a 402 from the API
+
+**Why:** **403** = your key is not scoped to that chain. **402** = your subscription or access is inactive
+(account-level, not per-chain).
+
+**Do this:** for 403, use a key that includes the chain or request access; for 402, check your Data Feeds
+access is active.
+
+## Reading the lake directly (REST / Arrow Flight)
+
+### Keep direct-read concurrency modest
+
+**Why:** each direct read does real work to prepare data, so very high concurrency degrades rather than
+cleanly rate-limiting.
+
+**Do this:** keep concurrency modest and retry transient `5xx` with exponential backoff.
+
+<Note>
+**Still stuck?** Most first-run issues come down to the backfill window (too shallow → 0 rows, too deep →
+`Partition not found`), the `FINAL` reading rule, or an access/chain scope mismatch. If you have ruled those
+out, capture the recipe, chain, window, and the exact error, and reach out through your Data Feeds support
+channel.
+</Note>

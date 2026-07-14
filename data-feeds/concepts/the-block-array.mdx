@@ -1,0 +1,107 @@
+---
+title: "The `block` array: how transactions and logs are laid out"
+description: "How raw transactions, logs, withdrawals, and block headers are packed into a single flattened array per block, and how to read them."
+---
+
+# The `block` array
+
+A Data Feed delivers **one row per block**. Most onchain activity is exposed as typed arrays on that row
+(`tokenSwaps`, `tokenTransfers`, …), but the **raw** block header, transactions, logs, withdrawals, and access
+lists all arrive together in a single flattened array called `block`.
+
+If you're coming from the REST API, where `GET /{address}/logs` hands you ready-made log objects, this is the
+biggest shape change to understand.
+
+## One array, many row types
+
+Every element of `block` has the **same wide shape**: all the `block*`, `transaction*`, `log*`, and
+`withdrawal*` columns exist on every element. A discriminator column, **`itemType`**, tells you what each
+element actually is; only the columns matching that `itemType` are populated, the rest are `null`.
+
+`itemType` is one of: `block`, `transaction`, `log`, `withdrawal`, `accessList`.
+
+So for a block with **110 transactions, each emitting 4 logs**, the `block` array contains roughly:
+
+| `itemType` | Count | Populated columns |
+|---|---|---|
+| `block` | 1 | `block*` (number, hash, timestamp, miner, gas…) |
+| `transaction` | 110 | `transaction*` (hash, from, to, value, receipt…) |
+| `log` | 440 | `log*` (index, address, topic0-3, data) |
+
+≈ **551 elements** in that one block row (plus any `withdrawal` / `accessList` rows).
+
+## ⚠️ Log rows don't carry the transaction hash
+
+This is the detail that trips people up. A `log` element has its `transactionIndex` and `logIndex`, the
+emitting `logAddress`, the four topics, and the raw `logData`, but **no `transactionHash`**.
+
+To attach the hash, join each log to its sibling `transaction` element on `transactionIndex`:
+
+- `itemType = 'transaction' AND transactionIndex = N` → the tx hash + metadata
+- `itemType = 'log' AND transactionIndex = N` → that transaction's logs
+
+Block-level context (`blockNumber`, `timestamp`, `blockHash`) comes from the **top-level row** (`position`,
+`timestamp`, `hash`), not from the log element.
+
+## Worked example, two transactions, four logs each
+
+Top-level row for the block: `position = 21000000`, `hash = "0xblk…"`, `timestamp = 1718800000`.
+Below is an excerpt of its `block` array showing transactions `#5` and `#6` with their logs. Only populated
+columns are shown; everything else on each element is `null`.
+
+```jsonc
+[
+  // transaction #5, the hash lives here
+  { "itemType": "transaction", "transactionIndex": 5, "sequenceIndex": 21,
+    "transactionHash": "0xTX5", "transactionFrom": "0xalice", "transactionTo": "0xrouter",
+    "transactionValue": "0", "transactionReceiptStatus": "1" /* …more tx* fields… */ },
+
+  // transaction #5's 4 logs, note: NO transactionHash, only transactionIndex = 5
+  { "itemType": "log", "transactionIndex": 5, "logIndex": 30, "sequenceIndex": 22,
+    "logAddress": "0xUSDC", "logTopic0": "0xddf252ad… (Transfer)",
+    "logTopic1": "0x…alice", "logTopic2": "0x…router", "logTopic3": null, "logData": "0x…amount" },
+  { "itemType": "log", "transactionIndex": 5, "logIndex": 31, "sequenceIndex": 23,
+    "logAddress": "0xPair", "logTopic0": "0x1c411e9a… (Sync)",
+    "logTopic1": null, "logTopic2": null, "logTopic3": null, "logData": "0x…reserves" },
+  { "itemType": "log", "transactionIndex": 5, "logIndex": 32, "sequenceIndex": 24,
+    "logAddress": "0xPair", "logTopic0": "0xd78ad95f… (Swap)",
+    "logTopic1": "0x…router", "logTopic2": "0x…alice", "logTopic3": null, "logData": "0x…amounts" },
+  { "itemType": "log", "transactionIndex": 5, "logIndex": 33, "sequenceIndex": 25,
+    "logAddress": "0xWETH", "logTopic0": "0xe1fffcc4… (Withdrawal)",
+    "logTopic1": "0x…router", "logTopic2": null, "logTopic3": null, "logData": "0x…amount" },
+
+  // transaction #6
+  { "itemType": "transaction", "transactionIndex": 6, "sequenceIndex": 26,
+    "transactionHash": "0xTX6", "transactionFrom": "0xbob", "transactionTo": "0xnft",
+    "transactionValue": "1000000000000000000", "transactionReceiptStatus": "1" },
+
+  // transaction #6's 4 logs
+  { "itemType": "log", "transactionIndex": 6, "logIndex": 34, "sequenceIndex": 27,
+    "logAddress": "0xNFT", "logTopic0": "0xddf252ad… (Transfer)",
+    "logTopic1": "0x0… (mint)", "logTopic2": "0x…bob", "logTopic3": "0x…tokenId", "logData": "0x" },
+  { "itemType": "log", "transactionIndex": 6, "logIndex": 35, "sequenceIndex": 28,
+    "logAddress": "0xMarket", "logTopic0": "0x… (Sale)",
+    "logTopic1": "0x…bob", "logTopic2": null, "logTopic3": null, "logData": "0x…price" },
+  { "itemType": "log", "transactionIndex": 6, "logIndex": 36, "sequenceIndex": 29,
+    "logAddress": "0xMarket", "logTopic0": "0x… (Fee)",
+    "logTopic1": null, "logTopic2": null, "logTopic3": null, "logData": "0x…fee" },
+  { "itemType": "log", "transactionIndex": 6, "logIndex": 37, "sequenceIndex": 30,
+    "logAddress": "0xRoyalty", "logTopic0": "0x… (Paid)",
+    "logTopic1": null, "logTopic2": null, "logTopic3": null, "logData": "0x…amount" }
+]
+```
+
+## Reading it
+
+- **Get a transaction with its logs:** filter `itemType='transaction'` for the hash/metadata and
+  `itemType='log'` for the events, both on the same `transactionIndex`, then join on `transactionIndex`.
+- **On-chain order** of a log is `(blockNumber, transactionIndex, logIndex)`, don't rely on physical array
+  position; use the index columns (or `sequenceIndex` for the raw interleaving).
+- **Topics are flat columns.** `topic0` (the event signature hash) is always present; `topic1..topic3` are
+  `null` when the event has fewer topics. Re-assemble a `topics[]` array if your downstream expects one.
+- **No decoding.** `logData` + topics are raw hex, the event name and parameters are yours to decode from the
+  contract ABI. (The REST API's decoded/"verbose" responses do this for you; on a raw feed it's a
+  derive-yourself step.)
+
+> The `logsByContract` and `logsByTopic0` recipes do exactly this filtering+join for you and write a flat
+> one-row-per-log table, a drop-in for `GET /{address}/logs`.

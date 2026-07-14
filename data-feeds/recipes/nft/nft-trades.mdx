@@ -1,17 +1,17 @@
 ---
-title: "NFT Trades"
-description: "Sync every NFT marketplace trade — seller, buyer, collection, token ID, marketplace, and raw price — re-assembled into one row per traded NFT, into your own database."
+title: "NFT trades"
+description: "Sync every NFT marketplace trade (seller, buyer, collection, token ID, marketplace, and raw price), re-assembled into one row per traded NFT, into your own database."
 ---
 
 ### Question it answers
 
-> "Give me every NFT marketplace trade — for collection **0x…**, for a single `(collection, token_id)`, or for wallet **0x…** as seller or buyer."
+> "Give me every NFT marketplace trade: for collection **0x…**, for a single `(collection, token_id)`, or for wallet **0x…** as seller or buyer."
 
-A single sync serves all three access paths. It mirrors the on-chain subset of Moralis `GET /nft/{address}/trades` (by collection), `GET /nft/{address}/{token_id}/trades` (single token), and `GET /wallets/{address}/nfts/trades` (by wallet). It is an on-chain trade log: no off-chain enrichment — no USD price, no reliable marketplace human-name, no address labels.
+A single sync serves all three access paths. It mirrors the on-chain subset of Moralis `GET /nft/{address}/trades` (by collection), `GET /nft/{address}/{token_id}/trades` (single token), and `GET /wallets/{address}/nfts/trades` (by wallet). It is an on-chain trade log with no off-chain enrichment: no USD price, no reliable marketplace human-name, no address labels.
 
 ### What you get
 
-One row per **traded NFT** — a bundle/batch fill that moves several NFTs lands one row per `(trade, token_id)`, each carrying the bundle's per-item average price:
+One row per **traded NFT**: a bundle/batch fill that moves several NFTs lands one row per `(trade, token_id)`, each carrying the bundle's per-item average price:
 
 | Column | Description |
 | --- | --- |
@@ -22,7 +22,7 @@ One row per **traded NFT** — a bundle/batch fill that moves several NFTs lands
 | `amount` | ERC-1155 quantity (`1` for ERC-721) |
 | `price` | Raw price in `price_token_address` units; for bundles, the per-item average |
 | `price_token_address` | Payment token; `''` means native (ETH) |
-| `marketplace_address` | The marketplace contract — the canonical join key for naming |
+| `marketplace_address` | The marketplace contract, the canonical join key for naming |
 | `marketplace` | Marketplace human name when decoded (`''` otherwise) |
 | `tx_hash`, `block_number`, `log_index`, `transaction_index` | On-chain ordering and provenance |
 | `event_ts` | Block time |
@@ -31,7 +31,7 @@ To collapse a bundle back to one logical trade, `GROUP BY (tx_hash, log_index)` 
 
 ### Source
 
-The recipe consumes the per-block `tradeTransactions` array, which is **fully flattened** — each element is one item (an NFT transfer, a token transfer, or an internal tx) for one participant in one trade. A single sale is spread across many rows. The transform re-joins those parts into one trade: it identifies the buyer (a participant who received an NFT **and** paid), reads the seller and collection off the received-NFT row, derives the price from the buyer's native or token payment, and emits one row per received NFT.
+The recipe consumes the per-block `tradeTransactions` array, which is **fully flattened**: each element is one item (an NFT transfer, a token transfer, or an internal tx) for one participant in one trade. A single sale is spread across many rows. The transform re-joins those parts into one trade: it identifies the buyer (a participant who received an NFT **and** paid), reads the seller and collection off the received-NFT row, derives the price from the buyer's native or token payment, and emits one row per received NFT.
 
 ### Destination
 
@@ -41,13 +41,13 @@ The recipe consumes the per-block `tradeTransactions` array, which is **fully fl
 | **Postgres** | `nft_trades` | Indexes on `(token_address, block_number DESC)`, `(token_address, token_id, block_number DESC)`, and seller/buyer |
 | **MySQL** | `nft_trades` | Same indexes (without `DESC` on the key) |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) — every trade row in a block shares the block's hash, so a per-block reorg corrects all of that block's trades together. The fact table's sort key is collection-first, so by-collection is a prefix scan and by-`(collection, token_id)` is a tighter prefix; by-wallet is served by the bloom-filter indexes. Read canonical state with `FINAL` or a sign-aware aggregate, never a bare `WHERE sign = 1`.
+ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)): every trade row in a block shares the block's hash, so a per-block reorg corrects all of that block's trades together. The fact table's sort key is collection-first, so by-collection is a prefix scan and by-`(collection, token_id)` is a tighter prefix; by-wallet is served by the bloom-filter indexes. Read canonical state with `FINAL` or a sign-aware aggregate, never a bare `WHERE sign = 1`.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point — keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` and `price` are raw `uint256` values that exceed numeric precision, so they're stored as text / wide decimals.
+Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` and `price` are raw `uint256` values that exceed numeric precision, so they're stored as text / wide decimals.
 
-<Accordion title="ClickHouse — fact_nft_trades">
+<Accordion title="ClickHouse, fact_nft_trades">
 
 ```sql
 CREATE TABLE recipe_nft_trades.fact_nft_trades
@@ -81,11 +81,11 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, token_address, token_id, block_number, vendor_event_id);
 ```
 
-The `sign` column drives reorg collapsing — read with `FINAL` or `sum(sign)`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path. The seller/buyer bloom-filter indexes ship enabled because by-wallet is a first-class access path here.
+The `sign` column drives reorg collapsing: read with `FINAL` or `sum(sign)`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path. The seller/buyer bloom-filter indexes ship enabled because by-wallet is a first-class access path here.
 
 </Accordion>
 
-<Accordion title="Postgres — nft_trades">
+<Accordion title="Postgres, nft_trades">
 
 ```sql
 CREATE TABLE public.nft_trades (
@@ -166,31 +166,31 @@ LIMIT 50;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse (see the [overview](/data-feeds/recipes/overview#modes)).
 
 <Note>
-  The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level — many trades share one block. Array-expanded trade rows can only carry a composite unique, so run realtime/hybrid on **ClickHouse** (its log table corrects reorgs per-block). The Postgres / MySQL configs are intended for `historical` backfill.
+  The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level; many trades share one block. Array-expanded trade rows can only carry a composite unique, so run realtime/hybrid on **ClickHouse** (its log table corrects reorgs per-block). The Postgres / MySQL configs are intended for `historical` backfill.
 </Note>
 
 ### Multichain
 
-The recipe is chain-parametrized — point it at any supported EVM chain or Solana. Solana marketplace trades (Magic Eden, Tensor, and others) populate the same `tradeTransactions` shape. Solana assigns the same `log_index` to multiple events in one instruction, so the trade's identity is widened with `(seller, buyer, token_address, token_id)` to keep rows distinct; the trade log it produces is identical in shape.
+The recipe is chain-parametrized: point it at any supported EVM chain or Solana. Solana marketplace trades (Magic Eden, Tensor, and others) populate the same `tradeTransactions` shape. Solana assigns the same `log_index` to multiple events in one instruction, so the trade's identity is widened with `(seller, buyer, token_address, token_id)` to keep rows distinct; the trade log it produces is identical in shape.
 
 ### Fidelity gaps
 
 The recipe lands the columns the trade array carries. Fields a Moralis NFT trades endpoint surfaces that have no reliable on-chain source here are omitted:
 
-- **USD price.** `price` is the raw amount in `price_token_address` units (native ETH when `price_token_address = ''`). Converting to USD needs a same-block Token Prices join or an external price feed — out of scope for this on-chain trade log.
-- **Marketplace human name.** The `marketplace` field is frequently empty/unreliable on-chain and is landed as-is (`''` when absent). `marketplace_address` is always present — map it to a human name with an off-chain marketplace directory.
-- **Address labels** (`seller_address_label`, `buyer_address_label`) — off-chain entity tags, not on-chain data.
-- **Collection metadata** (`token_name`, `token_symbol`) — from the NFT contract or a metadata indexer, not the trade event (see NFT Collection Metadata).
-- **Smallest-total price-token quirk.** When a buyer pays in tokens across multiple token addresses, the price token is chosen as the **smallest** summed total. This is preserved for parity with the production transformer; it is a likely upstream quirk. Native-paid trades — the common case — are unaffected.
+- **USD price.** `price` is the raw amount in `price_token_address` units (native ETH when `price_token_address = ''`). Converting to USD needs a same-block Token Prices join or an external price feed, which is out of scope for this on-chain trade log.
+- **Marketplace human name.** The `marketplace` field is frequently empty/unreliable on-chain and is landed as-is (`''` when absent). `marketplace_address` is always present; map it to a human name with an off-chain marketplace directory.
+- **Address labels** (`seller_address_label`, `buyer_address_label`): off-chain entity tags, not on-chain data.
+- **Collection metadata** (`token_name`, `token_symbol`): from the NFT contract or a metadata indexer, not the trade event (see NFT Collection Metadata).
+- **Smallest-total price-token quirk.** When a buyer pays in tokens across multiple token addresses, the price token is chosen as the **smallest** summed total. This is preserved for parity with the production transformer; it is a likely upstream quirk. Native-paid trades (the common case) are unaffected.
 
 ### Related
 
 <Columns cols={2}>
   <Card title="NFT Transfers" href="/data-feeds/recipes/nft/nft-transfers" icon="arrow-right-arrow-left">
-    Every NFT movement (mints, transfers, burns) — the untraded counterpart to this trade log.
+    Every NFT movement (mints, transfers, burns), the untraded counterpart to this trade log.
   </Card>
   <Card title="NFT Marketplace" href="/data-feeds/use-cases/nft-marketplace" icon="store">
     The use case this trade feed powers.

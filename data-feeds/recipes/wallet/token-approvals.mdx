@@ -1,13 +1,13 @@
 ---
-title: "Token Approvals"
-description: "Sync the current ERC-20 allowances a wallet has granted — and to whom — as a continuous, reorg-safe feed into your own database. Mirrors the Moralis GET /wallets/{address}/approvals endpoint."
+title: "Token approvals"
+description: "Sync the current ERC-20 allowances a wallet has granted, and to whom, as a continuous, reorg-safe feed into your own database. Mirrors the Moralis GET /wallets/{address}/approvals endpoint."
 ---
 
 ### Question it answers
 
 > "What ERC-20 allowances has wallet **0x…** granted, and to whom?" Mirrors Moralis `GET /wallets/{address}/approvals`.
 
-Each ERC-20 `Approval(owner, spender, value)` log is one approval event. The **current allowance** for an `(owner, token, spender)` triple is the latest approval by `(block_number, log_index)` — a fresh `approve` overwrites the prior allowance (latest-wins, the same machinery as the balances recipes). A revoke is just `approve(spender, 0)`, so it lands as a new event whose value is `'0'`.
+Each ERC-20 `Approval(owner, spender, value)` log is one approval event. The **current allowance** for an `(owner, token, spender)` triple is the latest approval by `(block_number, log_index)`, a fresh `approve` overwrites the prior allowance (latest-wins, the same machinery as the balances recipes). A revoke is just `approve(spender, 0)`, so it lands as a new event whose value is `'0'`.
 
 ### What you get
 
@@ -18,7 +18,7 @@ One row per approval event, keyed by the approving wallet (`owner_address`). The
 | `owner_address` | The approving wallet (the `owner` on the `Approval` log) |
 | `spender_address` | The address authorized to spend |
 | `token_address` | The ERC-20 token the allowance is for |
-| `value` | The raw allowance amount — stored as text (an unlimited approve is `type(uint256).max`, 78 digits) |
+| `value` | The raw allowance amount, stored as text (an unlimited approve is `type(uint256).max`, 78 digits) |
 | `block_number`, `log_index` | On-chain ordering tuple; the latest pair per triple wins |
 | `tx_hash` | Transaction that produced the approval |
 | `event_ts` / `block_timestamp` | Block time |
@@ -45,9 +45,9 @@ ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/da
 
 ### Full schema
 
-Below is the complete read table this recipe produces — keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). The raw allowance `value` is stored as text on all three destinations: an unlimited approve uses `type(uint256).max` (78 digits), which overflows Postgres `NUMERIC(76,0)` and MySQL `DECIMAL(65,0)`.
+Below is the complete read table this recipe produces, keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). The raw allowance `value` is stored as text on all three destinations: an unlimited approve uses `type(uint256).max` (78 digits), which overflows Postgres `NUMERIC(76,0)` and MySQL `DECIMAL(65,0)`.
 
-<Accordion title="ClickHouse — fact_token_approvals">
+<Accordion title="ClickHouse, fact_token_approvals">
 
 ```sql
 CREATE TABLE recipe_token_approvals.fact_token_approvals
@@ -72,11 +72,11 @@ PARTITION BY (chain_id, toYYYYMM(event_ts))
 ORDER BY (chain_id, owner_address, token_address, spender_address, block_number, log_index, vendor_event_id);
 ```
 
-The `sign` column drives reorg collapsing. Read the current allowance with `argMax(value, (block_number, log_index))` over `FINAL` — never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
+The `sign` column drives reorg collapsing. Read the current allowance with `argMax(value, (block_number, log_index))` over `FINAL`, never a bare `WHERE sign = 1`. A single-node setup can use `CollapsingMergeTree(sign)` without the replication path.
 
 </Accordion>
 
-<Accordion title="Postgres — token_approval_events + token_allowances">
+<Accordion title="Postgres, token_approval_events + token_allowances">
 
 ```sql
 -- 1. Approval events (sink target) — one row per Approval log.
@@ -125,7 +125,7 @@ MySQL is the same shape with `VARCHAR(80)` for `value` and a trigger-maintained 
 
 ### Example reads
 
-All current allowances granted by an owner — latest approve per token + spender, dropping revoked (`'0'`) rows (ClickHouse):
+All current allowances granted by an owner, latest approve per token + spender, dropping revoked (`'0'`) rows (ClickHouse):
 
 ```sql
 SELECT token_address,
@@ -138,7 +138,7 @@ HAVING current_allowance != '0' AND current_allowance != ''
 ORDER BY token_address, spender_address;
 ```
 
-Postgres — refresh the projection, then read the live allowances:
+Postgres, refresh the projection, then read the live allowances:
 
 ```sql
 REFRESH MATERIALIZED VIEW CONCURRENTLY token_allowances;
@@ -151,7 +151,7 @@ ORDER BY token_address, spender_address;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse — see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
 
 <Note>
   Realtime / hybrid on Postgres / MySQL is constrained: the block-level cursor means array-expanded approval rows share a `position`, which collides with the single-column `UNIQUE` requirement. Run realtime / hybrid on **ClickHouse**, which corrects reorgs per-block via the collapsing log table; the Postgres / MySQL configs target `historical` backfill.
@@ -163,19 +163,88 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Fidelity gaps
 
-On-chain primitives — owner, spender, token, raw allowance value, block, and tx hash — are fully covered. Response fields of `GET /wallets/{address}/approvals` with no on-chain source are intentionally omitted:
+On-chain primitives, owner, spender, token, raw allowance value, block, and tx hash, are fully covered. Response fields of `GET /wallets/{address}/approvals` with no on-chain source are intentionally omitted:
 
-- `value_formatted` — needs token `decimals`; scale `value` by `10^token_decimals` using a Token Metadata sync.
-- `token.name` / `token.symbol` / `token.logo` / `token.decimals` — token metadata, not in `tokenApprovals`.
-- `spender.entity` / `spender.entity_logo` / `spender.address_label` — off-chain spender labelling.
+- `value_formatted`: needs token `decimals`; scale `value` by `10^token_decimals` using a Token Metadata sync.
+- `token.name` / `token.symbol` / `token.logo` / `token.decimals`, token metadata, not in `tokenApprovals`.
+- `spender.entity` / `spender.entity_logo` / `spender.address_label`, off-chain spender labelling.
+
+## Migrating from the REST API
+
+```
+GET /wallets/:address/approvals
+```
+
+The **active allowance set**, allowance value, spender, token address, block and tx, comes from this recipe directly: the latest approve per `(owner, token, spender)` wins, and revokes (approve-to-zero) drop out. The rest of the endpoint's response (token metadata, wallet balance, USD figures) does not live on the `Approval` log, you rebuild it with joins.
+
+<Note>
+  **This endpoint needs four recipes.** Data Feeds are not 1:1 endpoint replicas, to reproduce the full response, run these together and join their tables yourself (query below):
+
+  - **Token Approvals** (this page), allowance, spender, token address, block / tx
+  - [Token Metadata](/data-feeds/recipes/token/token-metadata): `token.name`, `token.symbol`, `decimals` for `value_formatted`
+  - [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet): the wallet's current balance of each approved token
+  - [Token Prices](/data-feeds/recipes/token/token-prices): `usd_price`, and `usd_at_risk` derived from it
+</Note>
+
+**Field mapping**, **exact** comes from the chain, **calculated** is derived from real onchain trades (very close; compare with a small tolerance), **add yourself** is an off-chain signal:
+
+| `/wallets/:address/approvals` | Data Feeds | Fidelity |
+|---|---|---|
+| `value` (allowance) | `token_allowances.value` | exact |
+| `value_formatted` | derive: `value / 10^decimals` | exact |
+| `block_number`, `block_timestamp`, `transaction_hash` | `token_allowances.*` | exact |
+| `spender.address` | `token_allowances.spender_address` | exact |
+| `token.address` | `token_allowances.token_address` | exact |
+| `token.name`, `token.symbol` | token metadata sync | exact |
+| `token.current_balance(_formatted)` | token balances sync | exact |
+| `token.usd_price` | latest price update | calculated |
+| `token.usd_at_risk` | derive: `min(allowance, balance) × price` | calculated |
+| `token.logo`, `possible_spam`, `verified_contract`, `address_label` | add yourself | off-chain |
+| `spender.address_label`, `entity`, `entity_logo` | add yourself | off-chain |
+
+**The join** (Postgres; table names follow each recipe's default schema), one view that reproduces the response, with `usd_at_risk` computed the realistic way (`min(allowance, balance) × price`, a spender can't take more than the wallet holds):
+
+```sql
+CREATE VIEW wallet_approvals AS
+SELECT
+  a.owner_address                                AS wallet_address,
+  a.token_address,
+  a.spender_address,
+  m.name, m.symbol,
+  a.value                                        AS allowance,
+  a.value / power(10, m.decimals)                AS value_formatted,
+  b.balance                                      AS current_balance,
+  p.usd_price,
+  least(a.value, coalesce(b.balance, 0))
+    / power(10, m.decimals) * p.usd_price        AS usd_at_risk,
+  a.block_number, a.block_timestamp, a.tx_hash
+FROM token_allowances a
+LEFT JOIN token_metadata m ON m.token_address = a.token_address
+LEFT JOIN token_balances b ON b.token_address = a.token_address
+                          AND b.wallet_address = a.owner_address
+LEFT JOIN LATERAL (
+  SELECT usd_price FROM token_price_updates
+  WHERE token_address = a.token_address ORDER BY block_number DESC LIMIT 1
+) p ON true;
+```
+
+Query it per wallet with `ORDER BY usd_at_risk DESC NULLS LAST` so the riskiest approvals surface first.
+
+**Good to know**
+
+- **Backfill full history first.** The latest approve for a triple can sit at any past block, run `historical` / `hybrid` from an early block or you'll miss or misstate allowances ([History & backfill](/data-feeds/concepts/history-and-backfill)).
+- **Unlimited approvals** show as a max-uint `value` (78 digits, stored as text). Lead with `usd_at_risk`, it caps the scary figure to what the wallet actually holds.
+- **Revokes disappear automatically** (an approve to zero), so you always see the live, active set.
+- **Compare USD figures with a tolerance**: prices come from real DEX trades, not the legacy API's pricing.
+- **Real-time is the strength here.** Stream the `tokenApprovals` feed (Kafka / AMQP / SQS) to alert the moment a risky allowance is granted, instead of polling.
 
 ### Related
 
 <Columns cols={2}>
   <Card title="Wallet History" href="/data-feeds/recipes/wallet/wallet-history" icon="clock-rotate-left">
-    The full chronological event feed — approvals included alongside transfers and swaps.
+    The full chronological event feed, approvals included alongside transfers and swaps.
   </Card>
-  <Card title="Compliance & AML" icon="shield-check">
+  <Card title="Compliance & AML" href="/data-feeds/use-cases/compliance-aml" icon="shield-check">
     Outstanding allowances are a core risk surface for wallet monitoring.
   </Card>
 </Columns>

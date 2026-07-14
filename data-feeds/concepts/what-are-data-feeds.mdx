@@ -1,0 +1,59 @@
+---
+title: "What are Data Feeds?"
+description: "Moralis Data Feeds give you the complete, decoded onchain dataset as a real-time stream you own, consumed through whatever already fits your stack."
+---
+
+Moralis **Data Feeds** give you the complete, **decoded onchain dataset**, every block turned into balances,
+transfers, swaps, prices, approvals, NFT activity, and raw logs, as a **real-time stream you can own**. It's
+the same data that powers Moralis, available for you to consume directly.
+
+## One data lake, many ways out
+
+Data Feeds is a single service over one data lake. Moralis writes each chain's data **once**, then exposes that
+same data through whatever interface fits your stack, so you adopt it **without re-tooling**:
+
+### Stream it with the tools you already use
+Point your **existing clients** straight at Data Feeds, they're wire-compatible and work unmodified:
+
+- **Kafka**, your Kafka producers/consumers connect as-is.
+- **AMQP / RabbitMQ**, standard AMQP 0-9-1 clients.
+- **Amazon SQS**, SQS-compatible HTTP API.
+
+…or read directly over **REST / HTTP** or **Arrow Flight (gRPC)** when you want high-throughput columnar pulls.
+
+### Land it with the sink
+Point a **recipe** at your own **Postgres, MySQL, or ClickHouse** and the sink continuously lands
+ready-to-query tables. Moralis does the heavy lifting in the recipe, decoding, enrichment, and reorg
+correction, so you get a production-grade dataset you own and query however you like. This is the smoothest
+path for request/response needs (e.g. "a wallet's balances").
+
+### Query it from your warehouse
+Every feed is an Apache **Iceberg** table, committed as data lands, so your warehouse and notebooks read it
+**directly, without moving data**: **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, dbt**.
+
+> It's the **same data lake** under all of these, they're access modes of one service, not separate products.
+> Choose by your stack and use case; you're never locked into one shape.
+
+## What's in a feed
+
+Each record is a **block**, carrying the decoded onchain activity for that block as typed arrays, token
+transfers, swaps, price updates, balances, NFT transfers, approvals, and the raw block/transaction/log data.
+See [The `block` array](./the-block-array) for how transactions and logs are laid out.
+
+A few properties worth knowing:
+
+- **Decoded, not raw RPC.** Swaps, transfers, balances, and prices are already extracted, you don't decode
+  logs yourself (though the raw logs are there if you want them).
+- **Real-time and historical.** Read the latest blocks as they land, backfill history, or both.
+- **Reorg-aware.** Each block records its position and parent, so consumers (and the sink's recipes) correct
+  for chain reorganizations rather than serving stale data.
+- **Onchain data.** A feed contains what's on the chain. Off-chain signals (token logos, spam/verification
+  labels, security scores) are layered on separately, see
+  [Data Feeds vs. the legacy API](./data-feeds-vs-the-legacy-api).
+
+## Where to go next
+
+- **Migrating from a Moralis REST endpoint?** Start with the relevant migration guide.
+- **Building something new?** Browse the recipe cookbook for a ready-to-run feed.
+- **Choosing how to consume it?** Skim "One data lake, many ways out" above and pick the interface you already
+  use.
