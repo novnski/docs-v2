@@ -3,6 +3,8 @@ title: "Quickstart: Run Your First Sink"
 description: "Get live, decoded onchain data flowing into your own database in about ten minutes. Generate a sink starter pack, run it with Docker, and query your first rows."
 ---
 
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
 This quickstart takes you from nothing to **live onchain data in your own database** in about ten minutes.
 You generate a **sink starter pack** in the Admin Panel, run it with Docker, and query your first rows. Every
 [recipe](/data-feeds/recipes/overview) and [migration guide](/data-feeds/migration/overview)
@@ -19,11 +21,12 @@ disk accordingly.
 </Warning>
 
 - **Docker** and Docker Compose installed and running.
-- A **Data Feeds API key** (`cm_live_...`). [Request access](/data-feeds/early-access) if
-  you do not have one.
+- A **Data Feeds API key** (`cm_live_...`): request access below if you do not have one.
 - Access to the **Moralis Admin Panel**, where you generate the sink config.
 - A machine with enough **disk headroom** for your backfill window: start small (`tip-500`) and widen once
   you've seen the per-block footprint for your chain.
+
+<RequestAccessButton href="/data-feeds/early-access" title="Request access" />
 
 ## Step 1: generate your sink starter pack
 
