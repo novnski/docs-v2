@@ -1,5 +1,5 @@
 export const RequestAccessButton = ({
-  href = "https://continuum.moralis.com/#contact",
+  href = "https://continuum.moralis.com/solutions/blockchain/#contact",
   title = "Request an early-access account",
 }) => {
   return (
