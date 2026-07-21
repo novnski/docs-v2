@@ -5,7 +5,7 @@ openapi: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/pn
 
 import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
 
-<EndpointMeta cus={50} mainnetOnly />
+<EndpointMeta cus={50} cusUnit="chain" mainnetOnly />
 
 <Note>
   This is the multi-chain successor to the legacy Deep Index [Wallet PnL Breakdown](/data-api/evm/wallet/wallet-pnl) endpoint. Pass multiple `chains` (or `mainnets`) to get per-token profitability across chains in a single request.
