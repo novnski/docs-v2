@@ -13,9 +13,9 @@ description: "New releases and improvements"
   |  | Legacy ([getWalletTokenBalancesPrice](https://deep-index.moralis.io/api-docs-2.2/#/Wallets/getWalletTokenBalancesPrice)) | New ([getTokenBalances](https://api.moralis.com/api#/Wallets/getTokenBalances)) |
   | --- | --- | --- |
   | Scope | Single chain per request | Multi-chain in one request |
-  | Chain coverage | EVM | EVM (Bitcoin and Solana coming) |
+  | Chain coverage | EVM | EVM + Bitcoin (Solana coming) |
   | Filters | Spam exclusion, unverified contracts, liquidity thresholds, etc. | All preserved |
-  | Pricing data | Included | Included |
+  | Pricing data | Included | Included, plus optional `includeSparklines` and `includePnl` enrichment per token |
 
   Everything customers already rely on - spam filtering, unverified contract exclusion, liquidity thresholds, USD pricing - works exactly the same. The only difference is you can now ask for multiple chains in a single call.
 
@@ -27,9 +27,8 @@ description: "New releases and improvements"
   - **Faster portfolio views** - no client-side stitching across responses
   - **Same trusted filters** - spam, unverified, and low-liquidity controls carry over unchanged, so existing implementations port cleanly
 
-  **Roadmap:** currently EVM. Coming next:
+  **Roadmap:** covers EVM and Bitcoin (address or xpub) today. Coming next:
 
-  - **Bitcoin** - native Bitcoin wallet balances in the same endpoint
   - **Solana** - Solana token balances brought into the Universal API (we already offer Solana token balances as a dedicated API; this unifies them into the same multi-chain request structure)
 
   The end state: one endpoint, one request shape, balances across EVM, Bitcoin, and Solana wallets.
