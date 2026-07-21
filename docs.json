@@ -696,6 +696,16 @@
                 ]
               },
               {
+                "group": "PnL API",
+                "tag": "New",
+                "pages": [
+                  "data-api/universal/pnl/overview",
+                  "data-api/universal/pnl/wallet-pnl",
+                  "data-api/universal/pnl/wallet-pnl-summary",
+                  "data-api/universal/pnl/top-traders"
+                ]
+              },
+              {
                 "group": "Token API",
                 "tag": "New features",
                 "pages": [
@@ -706,7 +716,9 @@
                   "data-api/universal/token/trending-tokens",
                   "data-api/universal/token/analytics/token-analytics",
                   "data-api/universal/token/analytics/token-analytics-multi",
-                  "data-api/universal/token/analytics/token-analytics-timeseries"
+                  "data-api/universal/token/analytics/token-analytics-timeseries",
+                  "data-api/universal/token/price/token-price-timeseries",
+                  "data-api/universal/token/price/token-price-sparkline"
                 ]
               },
               {

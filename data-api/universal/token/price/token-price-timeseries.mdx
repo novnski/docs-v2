@@ -1,0 +1,12 @@
+---
+title: "Token Price Timeseries"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/chains/{chainAlias}/tokens/{tokenAliasOrTokenAddress}/price/timeseries"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={50} />
+
+<Note>
+  Returns historical price data points for a token, ready for line charts. Choose an `interval` from `5m` up to `monthly`, and set `forwardFill=true` to fill gaps with the last known price. For native coins, pass `native` as `tokenAliasOrTokenAddress`.
+</Note>

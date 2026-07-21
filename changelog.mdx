@@ -53,6 +53,43 @@ description: "New releases and improvements"
   Early access is limited. [Request access](https://continuum.moralis.com/solutions/blockchain/#contact) to get started.
 </Update>
 
+<Update label="July 18, 2026" tags={["New Feature"]}>
+  ## Token Price Timeseries & Sparkline
+
+  Two chart-ready price endpoints are now available on the Universal API, covering native coins and tokens across EVM (Ethereum, Base, BNB, Polygon, Arbitrum, Linea, and more), Solana, and Bitcoin - through a single request shape.
+
+  - **[Token Price Timeseries](/data-api/universal/token/price/token-price-timeseries)** ([getTokenPriceTimeSeries](https://api.moralis.com/api#/Tokens/getTokenPriceTimeSeries)) - historical price points for a token at your chosen `interval` (`5m` up to `monthly`), with optional forward-fill for gap-free line charts.
+  - **[Token Price Sparkline](/data-api/universal/token/price/token-price-sparkline)** ([getTokenPriceSparkline](https://api.moralis.com/api#/Tokens/getTokenPriceSparkline)) - a fixed number of price points for a selected `range` (`24h` to `1y`) - drop the response directly into a sparkline widget in token lists, watchlists, or portfolio rows, no resampling needed.
+
+  **Who it's for:** wallets, portfolio dashboards, token screeners, and trading UIs that need price charts without building candle-aggregation pipelines.
+
+  [Try the new endpoints →](https://api.moralis.com/api#/Tokens)
+</Update>
+
+<Update label="July 15, 2026" tags={["New Feature"]}>
+  ## Multi-Chain PnL Endpoints
+
+  Wallet profitability is now available on the Universal API as a dedicated **[PnL API](/data-api/universal/pnl/overview)** - three new endpoints that replace the legacy single-chain Deep Index profitability endpoints with **multi-chain requests**:
+
+  | New (Universal) | Replaces (Deep Index) |
+  | --- | --- |
+  | [Wallet PnL](/data-api/universal/pnl/wallet-pnl) - per-token realized/unrealized PnL, ROI, volumes, and trade counts across multiple chains | [Wallet PnL Breakdown](/data-api/evm/wallet/wallet-pnl) |
+  | [Wallet PnL Summary](/data-api/universal/pnl/wallet-pnl-summary) - aggregated wallet-level totals including win rate | [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) |
+  | [Top Traders by Token](/data-api/universal/pnl/top-traders) - top-trader leaderboard for a token, ranked by a selectable PnL metric | [Top Traders by Token](/data-api/evm/token/signals/top-traders) |
+
+  **What's new vs. the legacy endpoints:**
+
+  - **Multi-chain in one call** - pass a list of `chains` (or `mainnets`) instead of one request per chain
+  - **Broader chain coverage** - Ethereum, Base, BNB, Polygon, Optimism, Avalanche, and Pulse
+  - **Quality filters** - `excludeLowLiquidity`, `minVolumeUsd`, and `minTradeCount` cut noise from the results
+  - **Flexible time ranges** - a `period` shorthand (`7d`, `30d`, `all`) or explicit `fromTimestamp`/`toTimestamp`
+  - **Selectable ranking** - sort top traders by realized, unrealized, or total PnL, volume, or trade count
+
+  **Who it's for:** portfolio trackers, trading platforms, copy-trading products, and token analytics surfacing smart-money activity.
+
+  [Try the new endpoints →](https://api.moralis.com/api#/PnL)
+</Update>
+
 <Update label="June 30, 2026" tags={["Deprecation"]}>
   ## Token Holders and Solana Token Discovery Endpoints Sunsetting
 

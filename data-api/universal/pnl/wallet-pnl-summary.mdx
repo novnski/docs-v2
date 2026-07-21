@@ -1,0 +1,12 @@
+---
+title: "Wallet PnL Summary"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/wallets/{walletAddress}/pnl/summary"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={30} mainnetOnly />
+
+<Note>
+  This is the multi-chain successor to the legacy Deep Index [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) endpoint. Pass multiple `chains` (or `mainnets`) to get aggregated wallet-level totals across chains in a single request.
+</Note>

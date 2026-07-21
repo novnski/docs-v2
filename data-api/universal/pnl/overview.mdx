@@ -1,0 +1,49 @@
+---
+title: "PnL API"
+sidebarTitle: "Overview"
+description: "Multi-chain profit and loss endpoints in the Universal API - wallet profitability, wallet PnL summaries, and top-trader leaderboards per token."
+---
+
+## Overview
+
+The **Universal PnL API** answers the question every trading, portfolio, and analytics product gets asked: *is this wallet (or this token's traders) making money?* It replaces the legacy Deep Index profitability endpoints with multi-chain versions that query several chains in a single request.
+
+---
+
+## Endpoints
+
+| Endpoint | Purpose |
+| --- | --- |
+| [Wallet PnL](/data-api/universal/pnl/wallet-pnl) | Per-token profitability rows for a wallet across multiple chains - realized and unrealized PnL, ROI, volumes, and trade counts |
+| [Wallet PnL Summary](/data-api/universal/pnl/wallet-pnl-summary) | Aggregated wallet-level totals across all queried chains - PnL, volumes, trade counts, and win rate |
+| [Top Traders by Token](/data-api/universal/pnl/top-traders) | Leaderboard of top traders for a (chain, token) pair, ranked by a selectable PnL metric |
+
+---
+
+## Migrating from the legacy Deep Index endpoints
+
+These endpoints supersede the single-chain Deep Index profitability endpoints. The headline change is **multi-chain in one request**, plus new filters (`excludeLowLiquidity`, `minVolumeUsd`, `minTradeCount`) and flexible time ranges (`period` or explicit timestamps).
+
+| Legacy (Deep Index) | New (Universal) |
+| --- | --- |
+| [Wallet PnL Breakdown](/data-api/evm/wallet/wallet-pnl) - `GET /wallets/{address}/profitability` | [Wallet PnL](/data-api/universal/pnl/wallet-pnl) - `GET /v1/wallets/{walletAddress}/pnl` |
+| [Wallet PnL Summary](/data-api/evm/wallet/wallet-pnl-summary) - `GET /wallets/{address}/profitability/summary` | [Wallet PnL Summary](/data-api/universal/pnl/wallet-pnl-summary) - `GET /v1/wallets/{walletAddress}/pnl/summary` |
+| [Top Traders by Token](/data-api/evm/token/signals/top-traders) - `GET /erc20/{address}/top-gainers` | [Top Traders by Token](/data-api/universal/pnl/top-traders) - `GET /v1/chains/{chainAlias}/tokens/{tokenAddress}/top-traders` |
+
+---
+
+## Common Use Cases
+
+- **Portfolio Trackers** - show realized/unrealized PnL and ROI per holding across every chain in one call
+- **Trading Platforms** - surface win rate and PnL summaries on wallet profiles
+- **Token Analytics** - rank a token's top traders by realized PnL, volume, or trade count to spot smart money
+- **Copy Trading & Signals** - find consistently profitable wallets for a token and follow their activity
+- **AI Agents** - hand the model a wallet's full multi-chain profitability picture in a single response
+
+---
+
+## Get Started
+
+- [Wallet PnL](/data-api/universal/pnl/wallet-pnl)
+- [Wallet PnL Summary](/data-api/universal/pnl/wallet-pnl-summary)
+- [Top Traders by Token](/data-api/universal/pnl/top-traders)

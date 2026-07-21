@@ -1,0 +1,12 @@
+---
+title: "Token Price Sparkline"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/chains/{chainAlias}/tokens/{tokenAliasOrTokenAddress}/price/sparkline"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={50} />
+
+<Note>
+  Returns a fixed number of price points for the selected `range` (`24h` to `1y`) - a compact, chart-ready array you can drop directly into a sparkline widget without resampling. For native coins, pass `native` as `tokenAliasOrTokenAddress`.
+</Note>

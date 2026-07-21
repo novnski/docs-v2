@@ -1,0 +1,13 @@
+---
+title: "Top Traders by Token"
+sidebarTitle: "Top Traders"
+openapi: "/openapi-files/data-api/api-v1.json GET /v1/chains/{chainAlias}/tokens/{tokenAddress}/top-traders"
+---
+
+import { EndpointMeta } from '/snippets/endpoint-meta.jsx'
+
+<EndpointMeta cus={50} mainnetOnly />
+
+<Note>
+  This is the successor to the legacy Deep Index [Top Traders by Token](/data-api/evm/token/signals/top-traders) endpoint, with a selectable ranking metric (`sortBy`) and low-liquidity, volume, and trade-count filters.
+</Note>
