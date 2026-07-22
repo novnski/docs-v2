@@ -235,7 +235,7 @@ Query it per wallet with `ORDER BY usd_at_risk DESC NULLS LAST` so the riskiest 
 - **Backfill full history first.** The latest approve for a triple can sit at any past block, run `historical` / `hybrid` from an early block or you'll miss or misstate allowances ([History & backfill](/data-feeds/concepts/history-and-backfill)).
 - **Unlimited approvals** show as a max-uint `value` (78 digits, stored as text). Lead with `usd_at_risk`, it caps the scary figure to what the wallet actually holds.
 - **Revokes disappear automatically** (an approve to zero), so you always see the live, active set.
-- **Compare USD figures with a tolerance**: prices come from real DEX trades, not the legacy API's pricing.
+- **Compare USD figures with a tolerance**: prices come from real DEX trades, not the REST API's pricing.
 - **Real-time is the strength here.** Stream the `tokenApprovals` feed (Kafka / AMQP / SQS) to alert the moment a risky allowance is granted, instead of polling.
 
 ### Related

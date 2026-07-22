@@ -19,7 +19,7 @@ Data Feeds differ, then come back here to pick your endpoint.
 
 ## Endpoints by usage
 
-| # | Legacy endpoint | Recipes you need | Headline fidelity |
+| # | REST endpoint | Recipes you need | Headline fidelity |
 |---|---|---|---|
 | 1 | `GET /wallets/:address/tokens` | [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet) + [Native Balances](/data-feeds/recipes/wallet/native-balances) + [Token Prices](/data-feeds/recipes/token/token-prices) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | balances exact, prices calculated |
 | 2 | `GET /erc20/:token_address/owners` | [Token Holders](/data-feeds/recipes/token/token-holders) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
@@ -57,7 +57,7 @@ Data Feeds differ, then come back here to pick your endpoint.
 The sunsetting Solana **token-holder** endpoints map onto the same holder recipes, pointed at Solana (the feed's
 SPL `tokenTransfers` carry absolute post-balances, so the recipes run unchanged):
 
-| Legacy endpoint | Recipes you need | Headline fidelity |
+| REST endpoint | Recipes you need | Headline fidelity |
 |---|---|---|
 | `GET /token/:network/:address/top-holders` | [Token Holders](/data-feeds/recipes/token/token-holders) | exact, USD calculated |
 | `GET /token/:network/holders/:address` | [Token Holders](/data-feeds/recipes/token/token-holders) + [Token Transfers](/data-feeds/recipes/token/token-transfers) | totalHolders exact, tiers your-definition |
@@ -66,7 +66,7 @@ SPL `tokenTransfers` carry absolute post-balances, so the recipes run unchanged)
 The sunsetting **launchpad / discovery** endpoints (pump.fun, Raydium LaunchLab) are all served by the one
 [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) recipe over the `launchpadEvents` feed:
 
-| Legacy endpoint | Recipes you need | Headline fidelity |
+| REST endpoint | Recipes you need | Headline fidelity |
 |---|---|---|
 | `GET /token/:network/exchange/:exchange/new` | [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) | exact, price calculated |
 | `GET /token/:network/exchange/:exchange/bonding` | [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) | progress exact, price calculated |

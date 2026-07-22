@@ -182,24 +182,24 @@ The recipe is chain-parametrized via the `chain` setting: point it at any suppor
 
 ## Migrating from the REST API
 
-This recipe replaces both legacy price endpoints. Their responses were **not 1:1 rows in one table**: prices, token details, and pair liquidity came bundled in a single payload, but they live in different parts of the dataset here.
+This recipe replaces both REST price endpoints. Their responses were **not 1:1 rows in one table**: prices, token details, and pair liquidity came bundled in a single payload, but they live in different parts of the dataset here.
 
 <Note>
-  Rebuilding the full legacy response takes a **combination of recipes**: this one for the marks, plus [Token Metadata](/data-feeds/recipes/token/token-metadata) for `tokenName` / `tokenSymbol` / `tokenDecimals` and [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) if you need `pairTotalLiquidityUsd` (reserves × price). Join them at read time on `token_address` / `pair_address`.
+  Rebuilding the full REST response takes a **combination of recipes**: this one for the marks, plus [Token Metadata](/data-feeds/recipes/token/token-metadata) for `tokenName` / `tokenSymbol` / `tokenDecimals` and [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) if you need `pairTotalLiquidityUsd` (reserves × price). Join them at read time on `token_address` / `pair_address`.
 </Note>
 
 Two workflow changes to plan for:
 
-- **USD prices are calculated from DEX trades**: the same trades the legacy endpoints priced from, so marks track closely, but compare with a small tolerance rather than expecting identical figures.
-- **You pick the reference pair.** The legacy endpoints chose one pair (typically deepest liquidity) as "the price"; this table keeps every `(pair, protocol)` mark, so you define the rule: filter by `pair_address`, or `argMax` for the newest overall.
+- **USD prices are calculated from DEX trades**: the same trades the REST endpoints priced from, so marks track closely, but compare with a small tolerance rather than expecting identical figures.
+- **You pick the reference pair.** The REST endpoints chose one pair (typically deepest liquidity) as "the price"; this table keeps every `(pair, protocol)` mark, so you define the rule: filter by `pair_address`, or `argMax` for the newest overall.
 
 Both endpoints returned the same shape, so one field mapping covers them:
 
-| Legacy field | Data Feeds | Fidelity |
+| REST API field | Data Feeds | Fidelity |
 | --- | --- | --- |
 | `tokenAddress` | `token_address` | exact |
 | `usdPrice` / `usdPriceFormatted` | latest `usd_price` per token | calculated |
-| `nativePrice` | latest `native_price` (a scalar, not the legacy object) | calculated |
+| `nativePrice` | latest `native_price` (a scalar, not the REST endpoint's object) | calculated |
 | `pairAddress`, `exchangeName` | `pair_address`, `protocol` | exact |
 | `priceLastChangedAtBlock`, `blockTimestamp` | `block_number`, `event_ts` (`block_timestamp` on Postgres / MySQL, in **seconds**, not ms) | exact |
 | `tokenName`, `tokenSymbol`, `tokenDecimals` | [Token Metadata](/data-feeds/recipes/token/token-metadata) recipe | exact |
@@ -254,7 +254,7 @@ WHERE chain_id = 1
 GROUP BY token_address;
 ```
 
-- The legacy 24h-change fields (`24hrPercentChange`, `usdPrice24hr*`) aren't stored; derive them by comparing each token's latest mark against its mark ~24 hours earlier from this same table.
+- The REST 24h-change fields (`24hrPercentChange`, `usdPrice24hr*`) aren't stored; derive them by comparing each token's latest mark against its mark ~24 hours earlier from this same table.
 - Pin the reference pair per token (filter `pair_address` or order by your liquidity column) before `argMax`, or the "price" can flip between venues call to call.
 - Tokens with no recent DEX activity return their last mark, not `null`; check `price_last_changed_at_block` if staleness matters.
 

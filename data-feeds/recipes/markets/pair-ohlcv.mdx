@@ -259,7 +259,7 @@ The recipe is chain-parametrized, point it at any supported EVM chain or Solana,
 
 ## Migrating from the REST API
 
-This recipe replaces the legacy pair-OHLCV endpoint, and it's the closest to 1:1 in the swaps family: the shipped candle surface mirrors the endpoint at a 1-hour timeframe, and because the underlying `swaps` table is trade-level, any other timeframe is a `GROUP BY` you own rather than a fixed parameter. Fidelity labels: **exact** = straight from the chain, **calculated** = aggregated from real DEX trades (very close, compare with a tolerance).
+This recipe replaces the pair-OHLCV REST endpoint, and it's the closest to 1:1 in the swaps family: the shipped candle surface mirrors the endpoint at a 1-hour timeframe, and because the underlying `swaps` table is trade-level, any other timeframe is a `GROUP BY` you own rather than a fixed parameter. Fidelity labels: **exact** = straight from the chain, **calculated** = aggregated from real DEX trades (very close, compare with a tolerance).
 
 ### GET /pairs/:address/ohlcv
 
@@ -275,7 +275,7 @@ Candlestick data for a pool/pair. Replaced by this recipe's `candles` surface fo
 | `tokenAddress` (priced leg) | the bought leg (`token1`), priced in USD | exact |
 | `timeframe`, `currency` | your `GROUP BY` bucket + price leg | your choice |
 
-The legacy `timeframe` parameter becomes the bucket expression. A 5-minute example over `swaps` (Postgres, use 60 / 3600 / 86400 for 1m / 1h / 1d):
+The REST `timeframe` parameter becomes the bucket expression. A 5-minute example over `swaps` (Postgres, use 60 / 3600 / 86400 for 1m / 1h / 1d):
 
 ```sql
 SELECT
@@ -297,7 +297,7 @@ ORDER BY 1;
 **Gotchas**
 
 - OHLC is trade-reconstructed, not exchange-reported, it tracks the old endpoint closely, but compare with a tolerance rather than expecting identical figures.
-- The legacy `currency` parameter has no direct analog: candles here are priced in the bought leg's in-block USD price, so be explicit about which token the OHLC is quoted in.
+- The REST `currency` parameter has no direct analog: candles here are priced in the bought leg's in-block USD price, so be explicit about which token the OHLC is quoted in.
 - Thinly-traded pairs produce sparse candles, gaps where no priced trade occurred, not flat carry-forward candles (see [Fidelity gaps](#fidelity-gaps)).
 - `volume` must be `sum(abs(notional_usd))`, the notional is signed on V3/V4 pools, so a plain `sum` lets buy and sell legs cancel.
 - For live charts, run the recipe `realtime` on ClickHouse and read `candles` (or `candles_exact` after a reorg); for historical candles back to a date, backfill `historical` / `hybrid` from that date, no need to index from genesis. See [History & backfill](/data-feeds/concepts/history-and-backfill).

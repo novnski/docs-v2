@@ -35,7 +35,7 @@ first and the per-endpoint migration sections go quickly:
 - [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the ways to consume it (your
   Kafka / AMQP / SQS clients, REST / Arrow Flight, the sink into your own database, or query engines via
   Iceberg).
-- [Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api) The fidelity model: a Data Feed
+- [Data Feeds vs. the REST API](/data-feeds/concepts/data-feeds-vs-the-rest-api) The fidelity model: a Data Feed
   reconstructs an endpoint from raw onchain data, it is not a byte-for-byte copy of the old response.
 
 ## The schema gotchas to plan for
@@ -79,7 +79,7 @@ known failure point with the fix.
 Every recipe's "Migrating from the REST API" section follows the same shape, so once you have read one you
 can skim the rest:
 
-1. **The legacy endpoint(s)** it replaces, and whether you need this recipe alone or a **combination**,
+1. **The REST endpoint(s)** it replaces, and whether you need this recipe alone or a **combination**,
    stated up front, with links to the other recipes you need.
 2. **Field mapping reference**, the per-field table with the fidelity label.
 3. **One reconstruction query**, the SQL view that rebuilds the old response shape.

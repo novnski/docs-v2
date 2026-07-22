@@ -1021,7 +1021,7 @@
           {
             "group": "Concepts",
             "pages": [
-              "data-feeds/concepts/data-feeds-vs-the-legacy-api",
+              "data-feeds/concepts/data-feeds-vs-the-rest-api",
               "data-feeds/concepts/the-block-array",
               "data-feeds/concepts/history-and-backfill",
               "data-feeds/concepts/modes",
@@ -1854,6 +1854,10 @@
     }
   },
   "redirects": [
+    {
+      "source": "/data-feeds/concepts/data-feeds-vs-the-legacy-api",
+      "destination": "/data-feeds/concepts/data-feeds-vs-the-rest-api"
+    },
     {
       "source": "/data-api/index",
       "destination": "/data-api/overview"

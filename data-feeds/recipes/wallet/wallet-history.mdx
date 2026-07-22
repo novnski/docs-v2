@@ -148,7 +148,7 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 **Prerequisites**
 
 - **Docker** and Docker Compose.
-- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your Web3 API key).
 
 <Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
   Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
@@ -242,7 +242,7 @@ The recipe is chain-parametrized via the `chain` setting: point it at any suppor
 
 ## Migrating from the REST API
 
-Coming from the legacy Web3 Data API? This recipe replaces the wallet-activity endpoints below. Data Feeds are **not 1:1 replicas** of REST responses (you own the table and reshape it with SQL), so each subsection states exactly what maps, what's calculated for you, and what you add yourself. For the general model see [Data Feeds vs. the legacy API](/data-feeds/concepts/data-feeds-vs-the-legacy-api); for the full endpoint index see the [endpoint map](/data-feeds/migration/endpoints).
+Coming from the Web3 Data API? This recipe replaces the wallet-activity endpoints below. Data Feeds are **not 1:1 replicas** of REST responses (you own the table and reshape it with SQL), so each subsection states exactly what maps, what's calculated for you, and what you add yourself. For the general model see [Data Feeds vs. the REST API](/data-feeds/concepts/data-feeds-vs-the-rest-api); for the full endpoint index see the [endpoint map](/data-feeds/migration/endpoints).
 
 ### Wallet transaction history
 
@@ -298,7 +298,7 @@ LIMIT $2;
 Replaced by this recipe filtered to `event_type = 'native_transfer'`: the native slice of the same event feed. Direction, date, block, and ordering filters become plain `WHERE` / `ORDER BY` clauses.
 
 <Note>
-**Not a 1:1 swap for strict parity.** The legacy endpoint returns *every* transaction where the wallet is `from` or `to`, including `value = 0` contract calls; native value movements alone miss those. For exact parity, and for gas/nonce/receipt fields, read the raw transaction rows from the `block` array (filter `transactionFrom` / `transactionTo` = your wallet) alongside this recipe. See [The `block` array](/data-feeds/concepts/the-block-array).
+**Not a 1:1 swap for strict parity.** The REST endpoint returns *every* transaction where the wallet is `from` or `to`, including `value = 0` contract calls; native value movements alone miss those. For exact parity, and for gas/nonce/receipt fields, read the raw transaction rows from the `block` array (filter `transactionFrom` / `transactionTo` = your wallet) alongside this recipe. See [The `block` array](/data-feeds/concepts/the-block-array).
 </Note>
 
 | `/{address}` | Data Feeds | Fidelity |

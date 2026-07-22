@@ -187,11 +187,11 @@ The recipe is chain-parametrized, point it at any supported EVM chain or Solana.
 
 ## Migrating from the REST API
 
-This recipe replaces the legacy wallet-swaps endpoint. It is **not** a 1:1 replica of the response, you land the trades in your own database and reconstruct the response shape with a query. Fidelity labels: **exact** = straight from the chain, **calculated** = derived from real DEX trades (very close, compare with a tolerance), **add yourself** = off-chain signal not in the feed.
+This recipe replaces the wallet-swaps REST endpoint. It is **not** a 1:1 replica of the response, you land the trades in your own database and reconstruct the response shape with a query. Fidelity labels: **exact** = straight from the chain, **calculated** = derived from real DEX trades (very close, compare with a tolerance), **add yourself** = off-chain signal not in the feed.
 
 ### GET /wallets/:address/swaps
 
-A wallet's DEX trade history with bought/sold legs and USD values. Replaced directly by this recipe, trades are keyed by `trader_address`, so the legacy response is a single by-wallet read, with [Token Metadata](/data-feeds/recipes/token/token-metadata) joined in for the leg symbols and `pairLabel`.
+A wallet's DEX trade history with bought/sold legs and USD values. Replaced directly by this recipe, trades are keyed by `trader_address`, so the REST response is a single by-wallet read, with [Token Metadata](/data-feeds/recipes/token/token-metadata) joined in for the leg symbols and `pairLabel`.
 
 | `/wallets/:address/swaps` | Data Feeds | Fidelity |
 |---|---|---|
@@ -204,13 +204,13 @@ A wallet's DEX trade history with bought/sold legs and USD values. Replaced dire
 | `walletAddressLabel`, `entity`, `entityLogo`, `exchangeLogo`, token logos | add yourself | add yourself |
 | `subCategory` (accumulation/distribution) | classify yourself | add yourself |
 
-The legacy read with keyset pagination (Postgres, adapt to your destination):
+The REST read with keyset pagination (Postgres, adapt to your destination):
 
 ```sql
 SELECT s.*
 FROM swaps s
 WHERE s.trader_address = lower($1)
-  AND ($2::bigint IS NULL OR s.block_number < $2)   -- keyset pagination (legacy cursor)
+  AND ($2::bigint IS NULL OR s.block_number < $2)   -- keyset pagination (REST cursor)
 ORDER BY s.block_number DESC
 LIMIT $3;
 ```
@@ -220,7 +220,7 @@ LIMIT $3;
 - USD values are calculated from real trades, compare with a tolerance, and they're `NULL` when the bought leg had no in-block price update (see [Fidelity gaps](#fidelity-gaps)).
 - Leg symbols and `pairLabel` need the `token_metadata` join, and `amount0`/`amount1` land as raw `uint256`, scale by `10^decimals` from the same table.
 - The off-chain extras (`walletAddressLabel`, `entity`, logos) come from your own directory or get dropped; `subCategory` is a classification rule you define over the wallet's trades.
-- The legacy `transactionTypes` filter becomes `WHERE side = 'buy'` / `'sell'`; date and block windows are plain SQL.
+- The REST `transactionTypes` filter becomes `WHERE side = 'buy'` / `'sell'`; date and block windows are plain SQL.
 - Both direct pool fills and aggregator-routed trades land in the one table, `source_kind` distinguishes them, matching the old endpoint's mixed feed.
 
 ### Related

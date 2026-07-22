@@ -179,14 +179,14 @@ The recipe lands only what the `nftTokenTransfers` array carries. Fields a Moral
 
 ## Migrating from the REST API
 
-This recipe replaces the legacy wallet NFT transfers endpoint. Data Feeds are **not** 1:1 replicas of the old responses: you land the underlying data in your own database and reconstruct the response shape with a query. Below: what replaces the endpoint, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+This recipe replaces the wallet NFT transfers REST endpoint. Data Feeds are **not** 1:1 replicas of the old responses: you land the underlying data in your own database and reconstruct the response shape with a query. Below: what replaces the endpoint, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
 
 ### GET /:address/nft/transfers
 
 A wallet's NFT transfer history. Replaced by this recipe's `nft_transfers` table: a wallet's transfers are the rows where it appears on either side, and the old endpoint's `contract_addresses`, `from_block`/`to_block`, and `order` parameters become plain `WHERE` / `ORDER BY` clauses.
 
 <Warning>
-Reproducing the full legacy response needs **three recipes**, not one. The transfer event carries no collection metadata or sale context. Run this recipe plus [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`token_name` / `token_symbol`) and [NFT Trades](/data-feeds/recipes/nft/nft-trades) (`last_sale`) against the same database and join them.
+Reproducing the full REST response needs **three recipes**, not one. The transfer event carries no collection metadata or sale context. Run this recipe plus [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`token_name` / `token_symbol`) and [NFT Trades](/data-feeds/recipes/nft/nft-trades) (`last_sale`) against the same database and join them.
 </Warning>
 
 | `/:address/nft/transfers` | Data Feeds | Fidelity |

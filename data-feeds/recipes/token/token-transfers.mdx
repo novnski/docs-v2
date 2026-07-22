@@ -172,15 +172,15 @@ The recipe lands exactly what the `tokenTransfers` array carries. Fields a trans
 
 ## Migrating from the REST API
 
-This recipe replaces both legacy ERC-20 transfer endpoints from one sync: the same `token_transfers` table serves the by-token and by-wallet reads.
+This recipe replaces both ERC-20 transfer REST endpoints from one sync: the same `token_transfers` table serves the by-token and by-wallet reads.
 
 <Note>
-  **Not 1:1.** The legacy responses inlined `token_name` / `token_symbol` / `token_decimals` and a pre-scaled `value_decimal`; this recipe's `amount` is raw `uint256`. Pair it with [Token Metadata](/data-feeds/recipes/token/token-metadata) and join on `token_address` to scale amounts and label tokens. `token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity` fields are off-chain signals; add them from your own token/label lists or drop them.
+  **Not 1:1.** The REST responses inlined `token_name` / `token_symbol` / `token_decimals` and a pre-scaled `value_decimal`; this recipe's `amount` is raw `uint256`. Pair it with [Token Metadata](/data-feeds/recipes/token/token-metadata) and join on `token_address` to scale amounts and label tokens. `token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity` fields are off-chain signals; add them from your own token/label lists or drop them.
 </Note>
 
 Field mapping (both endpoints share it; **calculated** = derived at read time, **add yourself** = off-chain):
 
-| Legacy field | Data Feeds | Fidelity |
+| REST API field | Data Feeds | Fidelity |
 | --- | --- | --- |
 | `from_address`, `to_address`, token contract | `token_transfers.from_address` / `to_address` / `token_address` | exact |
 | `value` (raw) | `token_transfers.amount` | exact |

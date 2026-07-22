@@ -144,7 +144,7 @@ Raw on-chain log primitives, emitter, all topics, raw data, block, tx hash, on-c
 
 ## Migrating from the REST API
 
-This recipe is the landing point for the two legacy **Blockchain API** endpoints. Neither maps 1:1 to a single recipe: both responses are assembled from the raw `block` array, the flattened header / transaction / log rows this recipe already reads (see [The block array](/data-feeds/concepts/the-block-array)). This recipe lands the **log** rows in a queryable table; the transaction and header fields come from the sibling rows in the same array. The subsections below cover each endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **decoded** = you decode from the ABI or a typed recipe covers it, **gap** = not delivered today, **off-chain** = add yourself), and the gotchas specific to that endpoint.
+This recipe is the landing point for the two **Blockchain API** REST endpoints. Neither maps 1:1 to a single recipe: both responses are assembled from the raw `block` array, the flattened header / transaction / log rows this recipe already reads (see [The block array](/data-feeds/concepts/the-block-array)). This recipe lands the **log** rows in a queryable table; the transaction and header fields come from the sibling rows in the same array. The subsections below cover each endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **decoded** = you decode from the ABI or a typed recipe covers it, **gap** = not delivered today, **off-chain** = add yourself), and the gotchas specific to that endpoint.
 
 ### GET /transaction/:transaction_hash/verbose
 
@@ -215,7 +215,7 @@ ORDER BY transaction_index, log_index;
 - **By-hash resolves to a number first**: the feed is positioned by block number; this recipe's `block_hash` column (or your own index) does the resolve.
 - **Raw log rows carry no tx hash**: they join to their transaction on `(block_number, transaction_index)`; this recipe already attaches `tx_hash` for you.
 - **Busy blocks are large** (a megabyte or two of JSON), read by position and process the array.
-- Legacy responses return **raw** logs, matching this recipe exactly; if you also want decoded events, add the decoded recipes or decode from the ABI.
+- The REST responses return **raw** logs, matching this recipe exactly; if you also want decoded events, add the decoded recipes or decode from the ABI.
 - `internal_transactions` and address labels: same gaps as above.
 
 ### Related

@@ -182,7 +182,7 @@ The core on-chain fields, `token_address`, `name`, `symbol`, `contract_type`, pl
 
 ## Migrating from the REST API
 
-This recipe replaces the collection-metadata side of the legacy NFT endpoints. Data Feeds are **not** 1:1 replicas of those responses, you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+This recipe replaces the collection-metadata side of the NFT REST endpoints. Data Feeds are **not** 1:1 replicas of those responses, you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each REST endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
 
 ### GET /nft/:address/metadata
 
@@ -210,7 +210,7 @@ WHERE token_address = lower('0x...');
 
 - **`name`/`symbol` can be empty** for some ERC-1155 collections (no on-chain name), expected, not an error.
 - **Backfill from the collection's deploy block**: metadata is recorded at deployment, so the deploy block must be in your indexed window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
-- `contract_type` may be the `NFT` fallback when a contract advertises neither EIP-165 interface; the legacy endpoint made a similar best-effort call.
+- `contract_type` may be the `NFT` fallback when a contract advertises neither EIP-165 interface; the REST endpoint made a similar best-effort call.
 
 ### POST /nft/getMultipleNFTs
 

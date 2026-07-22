@@ -148,7 +148,7 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 **Prerequisites**
 
 - **Docker** and Docker Compose.
-- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your Web3 API key).
 
 <Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
   Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
@@ -240,7 +240,7 @@ The core access key, `token_address` → holder `wallet_address` + current `bala
 
 ## Migrating from the REST API
 
-This recipe replaces the token-holder family of legacy endpoints, the EVM Web3 API holder list and summary, and the deprecated Solana Token API holder endpoints. Data Feeds are **not** 1:1 replicas of those responses: you land the holder set in your own database and reconstruct each response shape with SQL. The subsections below cover each legacy endpoint, what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal or a definition you set), and the gotchas specific to that endpoint.
+This recipe replaces the token-holder family of REST endpoints, the EVM Web3 API holder list and summary, and the deprecated Solana Token API holder endpoints. Data Feeds are **not** 1:1 replicas of those responses: you land the holder set in your own database and reconstruct each response shape with SQL. The subsections below cover each REST endpoint, what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal or a definition you set), and the gotchas specific to that endpoint.
 
 ### GET /erc20/:address/owners
 

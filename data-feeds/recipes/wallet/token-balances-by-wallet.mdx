@@ -135,7 +135,7 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 **Prerequisites**
 
 - **Docker** and Docker Compose.
-- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your Web3 API key).
 
 <Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
   Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
@@ -211,7 +211,7 @@ The recipe is chain-parametrized: point it at any supported EVM chain or Solana.
 
 ## Migrating from the REST API
 
-This recipe replaces the wallet-balance family of legacy Web3 API endpoints. Data Feeds are **not** 1:1 replicas of those responses: you land the underlying data in your own database and reconstruct the response shape with a view. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal not in the feed), and the gotchas specific to that endpoint.
+This recipe replaces the wallet-balance family of Web3 API endpoints. Data Feeds are **not** 1:1 replicas of those responses: you land the underlying data in your own database and reconstruct the response shape with a view. The subsections below cover each REST endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real DEX trades, very close, **add yourself** = off-chain signal not in the feed), and the gotchas specific to that endpoint.
 
 ### GET /wallets/:address/tokens
 
@@ -278,7 +278,7 @@ The plain ERC-20 balances endpoint (no prices, no portfolio math). Replaced by t
 | `token_address`, `balance` (raw) | `token_balances.*` | exact |
 | `name`, `symbol`, `decimals`, `total_supply` | `token_metadata.*` | exact |
 | `total_supply_formatted`, `percentage_relative_to_total_supply` | derive from those values | exact |
-| `balance_formatted` *(bonus, legacy omits it)* | derive: `balance / 10^decimals` | exact |
+| `balance_formatted` *(bonus, the REST response omits it)* | derive: `balance / 10^decimals` | exact |
 | `logo`, `thumbnail`, `possible_spam`, `verified_contract`, `security_score` | add yourself | off-chain |
 
 The view is the balances-and-prices view above minus the price join: join `token_balances` to `token_metadata`, keep `balance > 0`, and derive the formatted/supply-relative columns. The old `exclude_spam` / `exclude_unverified_contracts` filters become a `WHERE` against your own list.
@@ -286,7 +286,7 @@ The view is the balances-and-prices view above minus the price join: join `token
 **Gotchas**
 
 - Everything onchain is exact: no pricing engine in the loop, nothing to reconcile with a tolerance.
-- ERC-20 only, matching the legacy endpoint. For native (ETH) balance, add [Native Balances](/data-feeds/recipes/wallet/native-balances).
+- ERC-20 only, matching the REST endpoint. For native (ETH) balance, add [Native Balances](/data-feeds/recipes/wallet/native-balances).
 - No wallet-size limit: the old endpoint errors on very large wallets ("too many ERC20 token balances"); your dataset doesn't, and you get real keyset pagination on top.
 
 ### GET /wallets/:address/net-worth

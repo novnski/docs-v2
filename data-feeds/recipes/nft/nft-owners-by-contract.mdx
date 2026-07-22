@@ -181,14 +181,14 @@ This recipe returns on-chain ownership only. Fields a Moralis `/nft/{address}/ow
 
 ## Migrating from the REST API
 
-This recipe replaces the by-collection ownership endpoints of the legacy Web3 API. Data Feeds are **not** 1:1 replicas of those responses: you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each legacy endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
+This recipe replaces the by-collection ownership endpoints of the Web3 API. Data Feeds are **not** 1:1 replicas of those responses: you land the underlying data in your own database and reconstruct the response shape with a query. The subsections below cover each REST endpoint: what replaces it, the field mapping (**exact** = straight from the chain, **calculated** = derived from real trades, very close, **add yourself** = off-chain signal not in the feed), and the endpoint-specific gotchas.
 
 ### GET /nft/:address/owners
 
 Every owner of every token in a collection. Replaced by this recipe's owner surface (`nft_owners` on Postgres/MySQL, `argMax` over the ClickHouse fact table): one row per `(token_id, owner)` with `amount > 0`.
 
 <Warning>
-Reproducing the full legacy response needs **three recipes**, not one. Run this recipe plus [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`name` / `symbol`) and [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) (mint provenance; the mint is the transfer from the zero address) against the same database. The resolved token metadata is a different story entirely: `token_uri`, `metadata`, and `normalized_metadata` are derived from each token's `tokenURI` off-chain. Pair the recipe with your own metadata resolver, or drop those fields.
+Reproducing the full REST response needs **three recipes**, not one. Run this recipe plus [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`name` / `symbol`) and [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) (mint provenance; the mint is the transfer from the zero address) against the same database. The resolved token metadata is a different story entirely: `token_uri`, `metadata`, and `normalized_metadata` are derived from each token's `tokenURI` off-chain. Pair the recipe with your own metadata resolver, or drop those fields.
 </Warning>
 
 | `/nft/:address/owners` | Data Feeds | Fidelity |
@@ -226,8 +226,8 @@ Every NFT in a collection with its current owner. Same recipe, same tables, same
 
 **Gotchas**
 
-- The legacy endpoint was mostly a metadata product; the chain only carries ownership, mint, and identity. If resolved JSON metadata and media are the entire job, keep a metadata indexer for that layer; this recipe supplies the ownership and provenance to pair with it.
-- The legacy `totalRanges` / `range` parallel-scan pagination has no equivalent: it's your table now; scan or keyset on `token_id`.
+- The REST endpoint was mostly a metadata product; the chain only carries ownership, mint, and identity. If resolved JSON metadata and media are the entire job, keep a metadata indexer for that layer; this recipe supplies the ownership and provenance to pair with it.
+- The REST `totalRanges` / `range` parallel-scan pagination has no equivalent: it's your table now; scan or keyset on `token_id`.
 - Backfill from the collection's deploy block, as above.
 
 ### Related

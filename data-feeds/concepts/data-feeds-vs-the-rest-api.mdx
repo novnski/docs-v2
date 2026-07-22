@@ -1,16 +1,16 @@
 ---
-title: "Data Feeds vs. the Legacy API"
-description: "How results from Moralis Data Feeds compare to a legacy Web3 API endpoint, what comes through exactly, what you calculate, and what you add yourself."
+title: "Data Feeds vs. the REST API"
+description: "How results from Moralis Data Feeds compare to a Web3 API endpoint, what comes through exactly, what you calculate, and what you add yourself."
 ---
 
-A legacy Moralis Web3 API endpoint hands you a single, **pre-packaged, enriched response**. Data Feeds give you
+A Moralis Web3 API endpoint hands you a single, **pre-packaged, enriched response**. Data Feeds give you
 the **decoded onchain dataset that produces it**, which is exactly what lets you own the data and query it
 freely. Migrating means thinking in terms of that dataset rather than one fixed response. This page explains
 what to expect in general; each migration guide then says precisely how it applies to that endpoint.
 
 ## The one idea
 
-> The legacy endpoint is a *finished dish*. A Data Feed is the *ingredients*, the same onchain facts, plus
+> The REST endpoint is a *finished dish*. A Data Feed is the *ingredients*, the same onchain facts, plus
 > live prices, ready for you to plate however you like (or let a recipe plate them for you).
 
 That's a feature, not a compromise: you get the underlying data, in real time, with no per-call limits and full
@@ -30,12 +30,12 @@ Every migration guide classifies each field into one of these, so there are no s
 ## Why these differences exist
 
 - **Prices come from real onchain trades.** Data Feeds derive USD values from DEX activity in the data lake, so
-  they're live and verifiable, and may differ slightly from the legacy pricing engine. A token that hasn't
+  they're live and verifiable, and may differ slightly from the REST API's pricing engine. A token that hasn't
   traded recently may not have a price yet.
 - **Off-chain signals live off-chain.** Logos, spam/verification labels, and security scores are curation Moralis
   layers on top of the chain. They aren't onchain facts, so they aren't in a feed. Bring your own source (e.g. a
   public token list), or layer them in alongside your Data Feeds tables.
-- **You own the filtering.** The legacy endpoint bakes in choices (which tokens to include, spam rules); with a
+- **You own the filtering.** The REST endpoint bakes in choices (which tokens to include, spam rules); with a
   feed those choices are yours, so you can match your product exactly.
 
 ## Adding the off-chain extras

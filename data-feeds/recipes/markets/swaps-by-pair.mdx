@@ -189,7 +189,7 @@ The recipe is chain-parametrized, point it at any supported EVM chain or Solana.
 
 ## Migrating from the REST API
 
-This recipe supplies the volume leg of the legacy token-pairs endpoint. That endpoint composes a pool registry with live numbers, so there is **no 1:1 replacement**, you land the pieces and join them in one view. Fidelity labels: **exact** = straight from the chain, **calculated** = derived from real DEX trades (very close, compare with a tolerance), **add yourself** = off-chain signal not in the feed.
+This recipe supplies the volume leg of the token-pairs REST endpoint. That endpoint composes a pool registry with live numbers, so there is **no 1:1 replacement**, you land the pieces and join them in one view. Fidelity labels: **exact** = straight from the chain, **calculated** = derived from real DEX trades (very close, compare with a tolerance), **add yourself** = off-chain signal not in the feed.
 
 ### GET /erc20/:token_address/pairs
 

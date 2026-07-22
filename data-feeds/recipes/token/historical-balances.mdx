@@ -104,7 +104,7 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 **Prerequisites**
 
 - **Docker** and Docker Compose.
-- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your Web3 API key).
 
 <Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
   Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
@@ -191,13 +191,13 @@ On-chain primitives, wallet, token, raw post-event balance, block, log index, tx
 
 ## Migrating from the REST API
 
-This recipe replaces the legacy **historical token holders** endpoints on EVM and Solana.
+This recipe replaces the deprecated **historical token holders** endpoints on EVM and Solana.
 
 <Warning>
-Both legacy endpoints below are **deprecated and sunset on July 31, 2026**. Migrate before that date.
+Both REST endpoints below are **deprecated and sunset on July 31, 2026**. Migrate before that date.
 </Warning>
 
-Neither move is 1:1: the legacy endpoints returned a **pre-bucketed time series**, while this recipe lands the retained balance log that produces it. You resolve each bucket boundary to a block, count the as-of-block holder set, and diff adjacent buckets, and a **full backfill from the token's deployment block is required**, or early buckets undercount (see the backfill note in [Run it](#run-it) and [History & backfill](/data-feeds/concepts/history-and-backfill)).
+Neither move is 1:1: the REST endpoints returned a **pre-bucketed time series**, while this recipe lands the retained balance log that produces it. You resolve each bucket boundary to a block, count the as-of-block holder set, and diff adjacent buckets, and a **full backfill from the token's deployment block is required**, or early buckets undercount (see the backfill note in [Run it](#run-it) and [History & backfill](/data-feeds/concepts/history-and-backfill)).
 
 ### EVM: historical token holders
 
@@ -211,7 +211,7 @@ The holder-count time series becomes an aggregation over this recipe's balance l
 **This endpoint needs more than one recipe.** Counts and deltas come from this recipe alone, but `newHoldersByAcquisition` (swap / transfer / airdrop) classifies each new holder's first inbound event, which you build from [Token Transfers](/data-feeds/recipes/token/token-transfers) + [Swaps by Token](/data-feeds/recipes/markets/swaps-by-token).
 </Note>
 
-| Legacy field | Data Feeds | Fidelity |
+| REST API field | Data Feeds | Fidelity |
 |---|---|---|
 | `timestamp` | your chosen bucket boundary, resolved to a block | your definition |
 | `totalHolders` | count of the as-of-block holder set | exact |

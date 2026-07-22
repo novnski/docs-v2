@@ -7,7 +7,7 @@ description: "Sync every pump.fun / Raydium LaunchLab launchpad event, created, 
 
 > "For a Solana launchpad like **pump.fun**: which tokens just launched, which are still climbing the bonding curve, and which have graduated to a DEX, and what's a given token's bonding-curve status?"
 
-Lands one row per **launchpad event** (`created` / `traded` / `migrated`) from the decoded `launchpadEvents` feed, and derives a per-token latest-status projection. The four legacy pump.fun surfaces, new, bonding, graduated, and per-token status, are all reads over this one recipe.
+Lands one row per **launchpad event** (`created` / `traded` / `migrated`) from the decoded `launchpadEvents` feed, and derives a per-token latest-status projection. The four deprecated pump.fun surfaces, new, bonding, graduated, and per-token status, are all reads over this one recipe.
 
 ### What you get
 
@@ -19,7 +19,7 @@ The recipe reads the master-block `launchpadEvents` array and lands two surfaces
 | Column | Description |
 | --- | --- |
 | `token_address` | The launchpad token (SPL mint) |
-| `exchange_address` | The launchpad program (the legacy `:exchange`, e.g. pump.fun `6EF8…F6P`) |
+| `exchange_address` | The launchpad program (the `:exchange` path param, e.g. pump.fun `6EF8…F6P`) |
 | `launchpad_platform` | Friendly name, `pumpfun`, `raydium_launchlab` |
 | `event_type` | `created` · `traded` · `migrated` (**migrated = graduated**) |
 | `progress_percentage` | Bonding-curve progress 0–100 (sparse, set on trading activity) |
@@ -123,7 +123,7 @@ Everything runs in **your** infrastructure: the sink writes into a database you 
 **Prerequisites**
 
 - **Docker** and Docker Compose.
-- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your legacy Web3 API key).
+- A **Data Feeds key**, a `cm_live_…` key with `continuum:read` scope (this is *not* your Web3 API key).
 
 <Card title="Sign up for a Data Feeds key" icon="key" href="https://admin.moralis.com">
   Log in to the Moralis admin panel to create your account and generate a `cm_live_…` key.
@@ -225,12 +225,12 @@ Core fields, `token_address`, `exchange_address`, `event_type`, `progress_percen
 ## Migrating from the REST API
 
 <Warning>
-All four legacy Solana launchpad endpoints below are **deprecated and sunset on July 31, 2026**. This one recipe replaces all of them, each legacy response is a read over the tables above.
+All four Solana launchpad endpoints below are **deprecated and sunset on July 31, 2026**. This one recipe replaces all of them, each REST response is a read over the tables above.
 </Warning>
 
 The four endpoints share most of their response shape, so the common fields map once:
 
-| Legacy field (all four endpoints) | Data Feeds | Fidelity |
+| REST API field (all four endpoints) | Data Feeds | Fidelity |
 | --- | --- | --- |
 | `tokenAddress` / `mint` | `token_address` | exact |
 | `name`, `symbol` | `token_name` / `token_symbol` on the `created` event, or [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
@@ -241,7 +241,7 @@ The four endpoints share most of their response shape, so the common fields map 
 | `fullyDilutedValuation` | `token_metadata.total_supply` × price | calculated |
 | `logo` | not in the feed, bring your own token list, or omit | add yourself |
 
-In every legacy URL, `:exchange` is the launchpad's onchain **program address** (pump.fun is `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`); each event carries it as `exchange_address` plus a friendly `launchpad_platform` (`pumpfun`, `raydium_launchlab`), filter on either. None of the lists have a per-call cap anymore; page with a keyset on the sort column.
+In every deprecated endpoint URL, `:exchange` is the launchpad's onchain **program address** (pump.fun is `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`); each event carries it as `exchange_address` plus a friendly `launchpad_platform` (`pumpfun`, `raydium_launchlab`), filter on either. None of the lists have a per-call cap anymore; page with a keyset on the sort column.
 
 ### New tokens by exchange
 
@@ -320,7 +320,7 @@ HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 `graduatedAt` maps to `minIf(event_ts, event_type = 'migrated')`, and `poolAddress`, which the old endpoint didn't even expose, is `max(pool_address)` over the token's `migrated` events (both exact).
 
 <Note>
-**This one is not a 1:1 swap.** The legacy response bundled prices, liquidity, and FDV, but a graduated token trades on a normal DEX pool, so price it with [Token Prices](/data-feeds/recipes/token/token-prices) and read pool liquidity with [Pair Reserves](/data-feeds/recipes/markets/pair-reserves), keyed on the migrated `pool_address`. Run those recipes alongside this one if you serve those fields.
+**This one is not a 1:1 swap.** The REST response bundled prices, liquidity, and FDV, but a graduated token trades on a normal DEX pool, so price it with [Token Prices](/data-feeds/recipes/token/token-prices) and read pool liquidity with [Pair Reserves](/data-feeds/recipes/markets/pair-reserves), keyed on the migrated `pool_address`. Run those recipes alongside this one if you serve those fields.
 </Note>
 
 - `pool_address` is **only populated on `migrated` events** (verified live), and a graduation can emit more than one `migrated` row, take the non-empty value with `max(pool_address)`, not `anyLast`.

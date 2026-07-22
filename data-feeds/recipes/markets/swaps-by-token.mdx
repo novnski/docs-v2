@@ -190,7 +190,7 @@ The recipe is chain-parametrized, point it at any supported EVM chain or Solana.
 
 ## Migrating from the REST API
 
-This recipe is the trade-level foundation for the legacy token-analytics endpoint. That endpoint returns a pre-aggregated dashboard, so there is **no 1:1 replacement table**, you land the token's trades with this recipe and compute the rolling windows yourself, joining sibling recipes for price, liquidity, and FDV. Every figure is **calculated** (aggregated from real trades, prices, reserves, and supply, very close, compare with a tolerance); there are no off-chain fields to add.
+This recipe is the trade-level foundation for the token-analytics REST endpoint. That endpoint returns a pre-aggregated dashboard, so there is **no 1:1 replacement table**, you land the token's trades with this recipe and compute the rolling windows yourself, joining sibling recipes for price, liquidity, and FDV. Every figure is **calculated** (aggregated from real trades, prices, reserves, and supply, very close, compare with a tolerance); there are no off-chain fields to add.
 
 ### GET /tokens/:tokenAddress/analytics
 
