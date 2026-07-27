@@ -1,0 +1,50 @@
+---
+title: "Streaming Data Feeds: Kafka, RabbitMQ, and SQS"
+sidebarTitle: "Streaming: Kafka, RabbitMQ & SQS"
+description: "Consume Data Feeds through supported streaming interfaces using Kafka-compatible, RabbitMQ/AMQP, or SQS-compatible clients. Bring your existing consumers instead of building new ingestion."
+---
+
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
+If your infrastructure already moves events through Kafka, RabbitMQ, or SQS, you don't need to build a new
+ingestion path for onchain data. Data Feeds supports **familiar streaming interfaces**, so you can consume
+feeds with the client libraries your team already runs:
+
+- **Kafka-compatible**: consume feeds using Kafka client libraries.
+- **RabbitMQ / AMQP**: consume feeds using standard AMQP clients.
+- **SQS-compatible**: poll feeds through an SQS-style HTTP API.
+
+Which interfaces are available can depend on the feed and current availability, confirm the protocols you
+plan to use when you onboard.
+
+## What you receive
+
+Each message carries **block-level decoded data**: the block's token transfers, swaps, price updates,
+balances, NFT activity, approvals, and the raw block/transaction/log data, laid out as typed arrays. You
+consume decoded records, not raw RPC payloads. See
+[The `block` array](../concepts/the-block-array) for the exact layout.
+
+## Reorg handling
+
+Streaming consumers see blocks as they land. Each block records its **position and parent**, so when the
+chain reorganizes, your consumer (or a downstream process) can detect the rollback and correct affected
+records. This differs from the [database sinks](../concepts/destinations), where recipes apply reorg
+corrections for you. See [Reorgs](../concepts/reorgs) for how rollbacks are signaled.
+
+## Streaming vs. the sink
+
+| Choose… | When… |
+|---|---|
+| **Streaming** | You already run an event pipeline, want fan-out to multiple consumers, or apply your own processing before storage |
+| **Database sink** | You want ready-to-query tables with decoding, enrichment, and reorg correction handled for you |
+
+You can also combine them: land ready-to-query tables with the sink while streaming the same feed into an
+existing pipeline. It's the same data lake underneath, see the
+[access methods overview](./overview).
+
+## Get connected
+
+Connection details, authentication, and per-feed protocol availability are provided during early-access
+onboarding.
+
+<RequestAccessButton />

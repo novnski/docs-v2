@@ -1,0 +1,73 @@
+---
+title: "Access Methods: Databases, Streams, Warehouses, and Direct Reads"
+sidebarTitle: "Overview"
+description: "One data lake, many ways out. Compare the four ways to consume Data Feeds (database sinks, streaming clients, warehouse access, and direct reads) and pick the right path for your workload."
+---
+
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
+Data Feeds is a single service over **one data lake**. Moralis writes each chain's decoded data once, then
+exposes that same data through several interfaces, so you consume it with the tools your team already works
+with, **without building the blockchain indexing layer behind it**.
+
+There are four ways out. They are access modes of one service, not separate products, so you can mix them and
+switch between them without re-tooling.
+
+## Database sinks: Postgres, MySQL, ClickHouse
+
+Point a [recipe](../recipes/overview) at your own **Postgres, MySQL, or ClickHouse** database and the sink
+continuously lands **ready-to-query tables**. Moralis does the heavy lifting in the recipe, decoding,
+enrichment, and reorg correction, so you query a production-grade dataset inside your own stack.
+
+**Use this if** you want queryable tables in a database you control, especially for request/response needs
+like "a wallet's balances." See [Database sinks](../concepts/destinations) for choosing between the three.
+
+## Streaming: Kafka, RabbitMQ, SQS
+
+Consume feeds through **supported streaming interfaces** using **Kafka-compatible**, **RabbitMQ/AMQP**, or
+**SQS-compatible** clients, depending on the feed and current availability. Bring the consumers you already
+run instead of building a new ingestion path.
+
+**Use this if** you already operate an event pipeline and want onchain data flowing through it. See
+[Streaming](./streaming).
+
+## Warehouse access: Apache Iceberg
+
+Query feed data from your warehouse or notebooks through **Apache Iceberg**-compatible workflows, on
+platforms such as **Snowflake, BigQuery, Databricks, Spark, Trino, DuckDB, Pandas, and dbt**, without
+moving the data through your own ETL first.
+
+**Use this if** your analytics or data team lives in a warehouse or notebook environment. See
+[Warehouse access](./warehouse-access).
+
+## Direct reads: REST/HTTP and Arrow Flight
+
+Read feed data directly over **REST/HTTP** for simple pulls, or over **Arrow Flight (gRPC)** for
+high-throughput columnar transfers straight into analytical tooling.
+
+**Use this if** you want to pull data on demand without running a sink or a streaming consumer. See
+[Direct reads](./direct-reads).
+
+## Which path fits your workload?
+
+| You need… | Best path |
+|---|---|
+| Real-time, high-volume analytics you query yourself | **ClickHouse sink** |
+| Tables inside an existing relational app | **Postgres or MySQL sink** |
+| Events flowing into an existing pipeline | **Streaming** (Kafka-compatible, RabbitMQ/AMQP, or SQS-compatible) |
+| Warehouse or notebook analytics without ETL | **Iceberg-compatible platforms** |
+| High-throughput columnar pulls into dataframes | **Arrow Flight** |
+| Simple, occasional request/response reads | **REST/HTTP** (or a database sink for repeated queries) |
+
+<Note>
+**Early access.** Data Feeds is in early access, and interface availability can vary by feed and chain.
+Confirm current availability for the protocols and platforms you plan to use when you onboard, see
+[Early access](../early-access).
+</Note>
+
+Whichever path you choose, it's the **same data lake** underneath: each record is a block carrying decoded
+balances, transfers, swaps, prices, approvals, NFT activity, and raw logs. See
+[What Are Data Feeds?](../concepts/what-are-data-feeds) and
+[The `block` array](../concepts/the-block-array).
+
+<RequestAccessButton />

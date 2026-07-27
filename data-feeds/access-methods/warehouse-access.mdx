@@ -1,0 +1,59 @@
+---
+title: "Warehouse Access with Apache Iceberg"
+sidebarTitle: "Warehouse Access: Apache Iceberg"
+description: "Query Data Feeds from your warehouse or notebooks through Apache Iceberg-compatible workflows, on platforms like Snowflake, BigQuery, Databricks, Spark, Trino, DuckDB, Pandas, and dbt."
+---
+
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
+Data Feeds stores decoded onchain data in a data lake designed for **Apache Iceberg**-compatible access.
+That means your warehouse, query engines, and notebooks can read feed data using the tooling your data team
+already works with, without you building and operating an ETL pipeline to get it there.
+
+## Why Iceberg
+
+[Apache Iceberg](https://iceberg.apache.org/) is an open table format for large analytical datasets. Instead
+of a proprietary export, feed data is organized as tables that Iceberg-aware engines can read **in place**:
+
+- **No ETL to maintain.** You query the data where it lands rather than copying it into your warehouse first.
+- **Engine choice.** Iceberg is supported across the modern data stack, so the same tables serve SQL
+  warehouses, Spark jobs, and local notebooks.
+- **Fresh data.** Data is committed as it lands, so analytical reads see recent blocks without waiting on a
+  batch export.
+
+## Compatible platforms
+
+Iceberg-compatible workflows cover platforms and tools including:
+
+| Layer | Tools |
+|---|---|
+| Warehouses | **Snowflake**, **BigQuery**, **Databricks** |
+| Query engines | **Spark**, **Trino** |
+| Local / notebook analysis | **DuckDB**, **Pandas** |
+| Transformation | **dbt** |
+
+<Note>
+**Early access.** Integration availability for specific platforms can vary, confirm the platforms and
+workflows you plan to use when you onboard. See [Early access](../early-access).
+</Note>
+
+## Typical workflows
+
+- **Warehouse SQL**: point Snowflake, BigQuery, or Databricks at feed tables and join onchain activity
+  against your own data.
+- **Notebook analysis**: pull feed data into DuckDB or Pandas for exploration and backtesting.
+- **Batch pipelines**: run Spark or Trino jobs over full history for aggregation and feature engineering.
+- **Modeled marts**: build dbt models on top of feed tables and ship curated datasets to your team.
+
+## Warehouse access vs. the sink
+
+The [database sinks](../concepts/destinations) land ready-to-query tables in a database you operate, which
+suits **serving** workloads (an app querying balances, for example). Warehouse access suits **analytics**
+workloads, where your data team queries feeds alongside the rest of the business's data. Both read the same
+data lake, see the [access methods overview](./overview).
+
+## Get connected
+
+Catalog and connection details for warehouse access are provided during early-access onboarding.
+
+<RequestAccessButton />

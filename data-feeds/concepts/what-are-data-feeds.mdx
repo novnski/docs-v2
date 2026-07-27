@@ -1,11 +1,12 @@
 ---
 title: "What Are Data Feeds?"
-description: "Moralis Data Feeds give you the complete, decoded onchain dataset as a real-time stream you own, consumed through whatever already fits your stack."
+description: "Moralis Data Feeds deliver the decoded onchain dataset as a real-time stream available inside your own stack, consumed through whatever already fits it."
 ---
 
-Moralis **Data Feeds** give you the complete, **decoded onchain dataset**, every block turned into balances,
-transfers, swaps, prices, approvals, NFT activity, and raw logs, as a **real-time stream you can own**. It's
-the same data that powers Moralis, available for you to consume directly.
+Moralis **Data Feeds** give you the **decoded onchain dataset**, every block turned into balances,
+transfers, swaps, prices, approvals, NFT activity, and raw logs, as a **real-time stream available inside
+your own stack**. It's the same data that powers Moralis, available for you to consume directly, without
+building the blockchain indexing layer behind it.
 
 ## One data lake, many ways out
 
@@ -13,23 +14,28 @@ Data Feeds is a single service over one data lake. Moralis writes each chain's d
 same data through whatever interface fits your stack, so you adopt it **without re-tooling**:
 
 ### Stream it with the tools you already use
-Point your **existing clients** straight at Data Feeds, they're wire-compatible and work unmodified:
+Consume feeds through **supported streaming interfaces**, using the client libraries your team already runs,
+depending on the feed and current availability:
 
-- **Kafka**, your Kafka producers/consumers connect as-is.
-- **AMQP / RabbitMQ**, standard AMQP 0-9-1 clients.
-- **Amazon SQS**, SQS-compatible HTTP API.
+- **Kafka-compatible** clients.
+- **RabbitMQ / AMQP** clients.
+- **SQS-compatible** clients.
 
-…or read directly over **REST / HTTP** or **Arrow Flight (gRPC)** when you want high-throughput columnar pulls.
+…or read directly over **REST / HTTP** or **Arrow Flight (gRPC)** when you want high-throughput columnar
+pulls. See [Streaming](../access-methods/streaming) and [Direct reads](../access-methods/direct-reads).
 
 ### Land it with the sink
 Point a **recipe** at your own **Postgres, MySQL, or ClickHouse** and the sink continuously lands
 ready-to-query tables. Moralis does the heavy lifting in the recipe, decoding, enrichment, and reorg
-correction, so you get a production-grade dataset you own and query however you like. This is the smoothest
-path for request/response needs (e.g. "a wallet's balances").
+correction, so you get a production-grade dataset inside your own stack, queried however you like. This is
+the smoothest path for request/response needs (e.g. "a wallet's balances"). See
+[Database sinks](./destinations).
 
 ### Query it from your warehouse
-Every feed is an Apache **Iceberg** table, committed as data lands, so your warehouse and notebooks read it
-**directly, without moving data**: **Snowflake, BigQuery, Spark, Trino, Databricks, DuckDB, Pandas, dbt**.
+Feed data is designed for **Apache Iceberg**-compatible access, committed as data lands, so your warehouse
+and notebooks can read it **without moving data first**, on platforms like **Snowflake, BigQuery, Spark,
+Trino, Databricks, DuckDB, Pandas, and dbt**. See
+[Warehouse access](../access-methods/warehouse-access) for details and current availability.
 
 > It's the **same data lake** under all of these, they're access modes of one service, not separate products.
 > Choose by your stack and use case; you're never locked into one shape.
@@ -55,5 +61,5 @@ A few properties worth knowing:
 
 - **Migrating from a Moralis REST endpoint?** Start with the relevant migration guide.
 - **Building something new?** Browse the recipe cookbook for a ready-to-run feed.
-- **Choosing how to consume it?** Skim "One data lake, many ways out" above and pick the interface you already
-  use.
+- **Choosing how to consume it?** The [access methods overview](../access-methods/overview) compares all four
+  paths with a decision table.

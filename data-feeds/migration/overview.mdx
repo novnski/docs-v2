@@ -32,9 +32,9 @@ join (usually one SQL view), and you decide what to do about the off-chain extra
 Two concept pages explain how Data Feeds work, so every recipe links here instead of repeating it. Read these
 first and the per-endpoint migration sections go quickly:
 
-- [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the ways to consume it (your
-  Kafka / AMQP / SQS clients, REST / Arrow Flight, the sink into your own database, or query engines via
-  Iceberg).
+- [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the
+  [ways to consume it](/data-feeds/access-methods/overview) (Kafka-compatible / AMQP / SQS-compatible
+  clients, REST / Arrow Flight, the sink into your own database, or query engines via Iceberg).
 - [Data Feeds vs. the REST API](/data-feeds/concepts/data-feeds-vs-the-rest-api) The fidelity model: a Data Feed
   reconstructs an endpoint from raw onchain data, it is not a byte-for-byte copy of the old response.
 

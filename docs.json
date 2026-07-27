@@ -945,6 +945,16 @@
             ]
           },
           {
+            "group": "Access Methods",
+            "pages": [
+              "data-feeds/access-methods/overview",
+              "data-feeds/concepts/destinations",
+              "data-feeds/access-methods/streaming",
+              "data-feeds/access-methods/warehouse-access",
+              "data-feeds/access-methods/direct-reads"
+            ]
+          },
+          {
             "group": "Data APIs & Migration Guides",
             "pages": [
               "data-feeds/recipes/overview",
@@ -1025,7 +1035,6 @@
               "data-feeds/concepts/the-block-array",
               "data-feeds/concepts/history-and-backfill",
               "data-feeds/concepts/modes",
-              "data-feeds/concepts/destinations",
               "data-feeds/concepts/reorgs"
             ]
           },

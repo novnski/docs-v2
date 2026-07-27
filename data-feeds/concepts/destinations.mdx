@@ -1,14 +1,20 @@
 ---
-title: "Destinations: ClickHouse, Postgres, and MySQL"
+title: "Database Sinks: ClickHouse, Postgres, and MySQL"
+sidebarTitle: "Database Sinks: ClickHouse, Postgres & MySQL"
 description: "The sink writes recipe data into your own database. Each recipe ships for ClickHouse, Postgres, and MySQL. Here's how to choose, and what changes between them."
 ---
 
-# Destinations
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
+# Database sinks
 
 Data Feeds land in **your own database**. You run the sink, point it at a recipe, and it writes rows into a
 schema you own. Every recipe ships three destination variants, ClickHouse, Postgres, and MySQL, built from
 the same source data. The recipe and the columns are the same across all three. What differs is how each
 store handles **live data, chain reorgs, and scale**, and that is what should drive your choice.
+
+The sink is one of four ways to consume Data Feeds, alongside streaming, warehouse access, and direct
+reads, see the [access methods overview](../access-methods/overview) if you're still choosing a path.
 
 ## The short version
 
@@ -63,3 +69,5 @@ the three. Live, high-volume event-list recipes (swaps, transfers, logs, prices)
 which is also where their `realtime` / `hybrid` modes are supported. See [Modes](./modes) and
 [History & backfill](./history-and-backfill).
 </Note>
+
+<RequestAccessButton />

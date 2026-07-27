@@ -1,0 +1,42 @@
+---
+title: "Direct Reads: REST/HTTP and Arrow Flight"
+sidebarTitle: "Direct Reads: REST & Arrow Flight"
+description: "Read Data Feeds directly over REST/HTTP for simple pulls, or over Arrow Flight (gRPC) for high-throughput columnar transfers into analytical tooling."
+---
+
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
+Not every workload needs a database sink, a streaming consumer, or a warehouse. When you want to **pull feed
+data on demand**, Data Feeds supports two direct read paths.
+
+## REST / HTTP
+
+Read feed data over plain HTTP. This is the simplest way in: no client libraries beyond an HTTP client, no
+infrastructure to run.
+
+**Use it for** spot checks, low-volume integrations, and getting a feel for a feed's shape before committing
+to a heavier access method.
+
+## Arrow Flight (gRPC)
+
+[Arrow Flight](https://arrow.apache.org/docs/format/Flight.html) is a gRPC-based protocol for moving
+[Apache Arrow](https://arrow.apache.org/) columnar data at high throughput. Instead of serializing rows one
+at a time, it transfers column batches that land directly in Arrow-native tooling (dataframes, query
+engines, and analytical libraries) without a conversion step.
+
+**Use it for** bulk pulls into Python or other analytical environments, where row-oriented HTTP APIs become
+the bottleneck.
+
+## Choosing a direct read path
+
+| You want… | Use |
+|---|---|
+| A quick look at a feed, or a simple low-volume integration | **REST / HTTP** |
+| Bulk, high-throughput pulls into dataframes or analytics | **Arrow Flight** |
+| The same data continuously landed or streamed instead | See the [access methods overview](./overview) |
+
+<Note>
+**Early access.** Endpoint details and availability per feed are provided during early-access onboarding, see [Early access](../early-access).
+</Note>
+
+<RequestAccessButton />
