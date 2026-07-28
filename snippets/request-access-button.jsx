@@ -1,6 +1,6 @@
 export const RequestAccessButton = ({
   href = "https://admin.moralis.com/data-feeds",
-  title = "Request an early-access account",
+  title = "Try it today",
 }) => {
   return (
     <a
