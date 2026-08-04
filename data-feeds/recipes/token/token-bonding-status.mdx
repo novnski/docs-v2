@@ -212,6 +212,35 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 Launchpad activity is densest on **Solana** (pump.fun, Raydium LaunchLab) and **Base**; on Ethereum mainnet the `launchpadEvents` array is effectively empty. Point the recipe at Solana in the Admin Panel wizard for real coverage. On Solana `logIndex` isn't row-unique within an instruction, so `vendor_event_id` widens with `(tokenAddress, eventType)` to keep rows distinct.
 
+### How much data does this consume?
+
+`tokenBondingStatus` reads a single per-block array, `launchpadEvents`, one of the smallest slices in the feed. On **Solana mainnet**, where launchpad activity is concentrated, a continuous real-time feed measured:
+
+| | Uncompressed bytes per month |
+| --- | --- |
+| Typical month (P50) | **~8.7 GB** |
+| Busy month (P90) | **~15.1 GB** |
+
+<sub>Measured 2026-08-04 against the live feed, 30 sampled partitions over 30 days, `metered` delivery. Billing is on uncompressed bytes.</sub>
+
+**Size your allowance against the top of the band, not the middle.** Chain activity varies, and this recipe tracks launchpad activity specifically, which is bursty by nature: a quiet month and a memecoin frenzy are not the same month. Worked example, against a hypothetical 10 GB monthly allowance:
+
+| If the month runs at | Against a 10 GB allowance |
+| --- | --- |
+| 8.5 GB | Within allowance, nothing extra to pay |
+| 15 GB | 5 GB of overage |
+
+Both are inside the measured range for this recipe, so choose an allowance that covers the busy figure and treat the typical figure as the good case.
+
+What this figure does and does not cover:
+
+- **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
+- **Solana.** On EVM chains the `launchpadEvents` array is effectively unpopulated (see [Multichain](#multichain)), so this recipe reads close to nothing on Ethereum.
+- **The whole slice, across every launchpad and every token.** Filtering to specific tokens, platforms, or programs happens after the data is delivered, so it does not reduce the figure. To reduce cost, narrow the **block range**, not the entity set.
+- **`metered` delivery.** Under `presigned_url` you are billed for whole partitions rather than the columns you project, which is a different number.
+
+If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+
 ### Fidelity gaps
 
 - **`name` / `symbol`** ride on the `created` event; a token seen only via `traded` events carries none until you join [Token Metadata](/data-feeds/recipes/token/token-metadata) (also the source of `decimals`).

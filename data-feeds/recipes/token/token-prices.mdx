@@ -174,6 +174,30 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, the same `logIndex` can be assigned to multiple events in one instruction, so the event identity is widened with `pairAddress` (or `protocol`) to keep marks distinct; the price feed it produces is identical in shape.
 
+### How much data does this consume?
+
+`tokenPriceUpdates` is one of the smaller slices in the feed. A continuous real-time feed measured:
+
+| Chain | Typical month (P50) | Busy month (P90) |
+| --- | --- | --- |
+| Solana | **~84 GB** | **~110 GB** |
+| BNB Smart Chain | **~23 GB** | not measured |
+| Base | **~6.0 GB** | not measured |
+| Polygon | **~3.0 GB** | not measured |
+| Arbitrum | **~2.7 GB** | not measured |
+| Ethereum | **~1.3 GB** | not measured |
+| Optimism | **~0.9 GB** | not measured |
+
+<sub>Measured 2026-07-30, `metered` delivery; Solana over 25 sampled partitions, the EVM chains over 60. Billing is on uncompressed bytes. All runs included the negligible `deployedContracts` slice.</sub>
+
+**Size your allowance against a busy month, not a typical one.** Where only a typical figure exists, leave meaningful headroom above it rather than sizing to it — chain activity is bursty, and busy months on comparable slices have measured 30–70% above typical. Three caveats:
+
+- **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
+- **Measured chains only.** Volume concentrates hard per chain, so these figures do not extrapolate to unmeasured chains.
+- **Filtering does not reduce it.** Restricting to specific tokens or venues happens after the data is delivered. To reduce cost, narrow the **block range**, not the entity set.
+
+If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+
 ### Fidelity and valuation notes
 
 - **Precision.** `usd_price` and `native_price` are carried as strings end-to-end to preserve full precision; cast at read time (`toDecimal*` on ClickHouse, the `NUMERIC` / `DECIMAL` columns on Postgres / MySQL).

@@ -162,6 +162,26 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the `vendor_event_id` is widened with `(from_address, to_address, token_address, amount)` to keep rows distinct; the transfer log it produces is identical in shape.
 
+### How much data does this consume?
+
+A continuous real-time feed centered on `tokenTransfers` measured:
+
+| Chain | Typical month (P50) | Busy month (P90) |
+| --- | --- | --- |
+| Solana | **~480 GB** | **~590 GB** |
+| BNB Smart Chain | **~210 GB** | **~285 GB** |
+| Ethereum | **~17 GB** | **~23 GB** |
+
+<sub>Measured 2026-07-31, 30 sampled partitions per chain, `metered` delivery. Billing is on uncompressed bytes. The Ethereum and BNB Smart Chain runs included the small `tokenPriceUpdates` slice, so they run slightly high for a transfers-only feed; the Solana run included the `nftTokenTransfers` slice, which is negligible there.</sub>
+
+**Size your allowance against the busy figure, not the typical one.** Chain activity is bursty, and the same feed can land on either side of a fixed allowance depending on the month. Three caveats:
+
+- **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
+- **Measured chains only.** Volume concentrates hard per chain (BNB Smart Chain measured over 10x Ethereum on the same selection), so these figures do not extrapolate to unmeasured chains.
+- **Filtering does not reduce it.** Restricting to specific tokens or wallets happens after the data is delivered. To reduce cost, narrow the **block range**, not the entity set.
+
+If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+
 ### Fidelity gaps
 
 The recipe lands exactly what the `tokenTransfers` array carries. Fields a transfers endpoint might surface that have **no onchain source in this array** are omitted:

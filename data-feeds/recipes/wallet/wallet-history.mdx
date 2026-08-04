@@ -229,6 +229,28 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, the event identity is widened to stay unique under Solana's repeated log indices; the wallet feed it produces is identical in shape.
 
+### How much data does this consume?
+
+Wallet history is one of the **largest** scopes in the feed, because it unions several transfer arrays across every wallet on the chain. On **Solana mainnet**, continuous real-time feeds measured:
+
+| Selection | Typical month (P50) | Busy month (P90) |
+| --- | --- | --- |
+| The three transfer arrays alone (`nativeTransfers`, `tokenTransfers`, `nftTokenTransfers`) | **~1,300 GB** | **~1,600 GB** |
+| The full nine-slice wallet-history selection (adds swaps, aggregator swaps, approvals, liquidity changes, prices) | **~1,400 GB** | **~1,800 GB** |
+| The transfer arrays **without** `nativeTransfers` | **~480 GB** | **~590 GB** |
+
+<sub>Measured 2026-07-31, 30 sampled partitions per selection, `metered` delivery. Billing is on uncompressed bytes.</sub>
+
+This recipe's selection sits between the first two rows. Note the third row: **`nativeTransfers` is roughly two thirds of the bill on its own** — if your use case doesn't need native (SOL/ETH) transfers, dropping that one slice is the single largest cost lever available.
+
+**Size your allowance against the busy figure, not the typical one.** Chain activity is bursty, and the same feed can land on either side of a fixed allowance depending on the month. Three caveats:
+
+- **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
+- **Solana only.** Volume concentrates hard per chain — Solana has measured over 20x Ethereum on comparable transfer-shaped selections — so this figure does not extrapolate to other chains.
+- **Filtering does not reduce it.** Restricting to specific wallets happens after the data is delivered. To reduce cost, narrow the **block range**, not the entity set.
+
+If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+
 ### Powers these use cases
 
 <Columns cols={2}>

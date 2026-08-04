@@ -181,6 +181,18 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 The recipe is chain-parametrized, point it at any supported EVM chain or Solana. On Solana, the same `logIndex` can be assigned to multiple events in one instruction, so for production the pool-fill event identity is widened with `(token0_address, token1_address, token0_amount)` to keep rows distinct; the trade feed it produces is identical in shape.
 
+### How much data does this consume?
+
+This recipe's exact selection has not been measured end to end yet. The closest measured scope: on **Solana mainnet**, a continuous real-time feed of `tokenSwaps` plus `tokenPriceUpdates` (plus the negligible `launchpadEvents` slice) measured **~250 GB** in a typical month and **~330 GB** in a busy one (measured 2026-08-04, 30 sampled partitions, `metered` delivery, uncompressed bytes).
+
+This recipe additionally reads `aggregateTokenSwaps`, so expect a somewhat larger figure than that band. Three caveats:
+
+- **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
+- **Solana only.** Volume concentrates hard per chain, so this figure does not extrapolate to other chains.
+- **Filtering does not reduce it.** Restricting to specific pairs or tokens happens after the data is delivered. To reduce cost, narrow the **block range**, not the entity set.
+
+If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+
 ### Fidelity gaps
 
 - **`price_usd` / `notional_usd` / `fee_usd` are `NULL`** when the relevant token had no in-block `tokenPriceUpdate` (illiquid or brand-new tokens). The recipe enriches only from same-block price updates, there is no cross-block carry-forward.
