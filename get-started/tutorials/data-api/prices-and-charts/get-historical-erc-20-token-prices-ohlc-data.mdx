@@ -9,6 +9,10 @@ In this tutorial, you'll learn how to retrieve historical OHLC (Open, High, Low,
 
 - [Get OHLCV Data](/data-api/evm/price/ohlc) - Fetch historical candlestick price data for token pairs
 
+<Info>
+Candlestick data is also available for Solana - see the [Solana OHLCV endpoint](/data-api/solana/price/ohlc).
+</Info>
+
 ## Prerequisites
 
 - Node.js v18+ installed
@@ -40,7 +44,7 @@ async function getOHLCData() {
   const toDate = new Date().toISOString();
 
   const response = await fetch(
-    `https://deep-index.moralis.io/api/v2.2/pairs/${PAIR_ADDRESS}/ohlcv?chain=eth&timeframe=1h&from_date=${fromDate}&to_date=${toDate}`,
+    `https://deep-index.moralis.io/api/v2.2/pairs/${PAIR_ADDRESS}/ohlcv?chain=eth&timeframe=1h&currency=usd&fromDate=${fromDate}&toDate=${toDate}`,
     {
       headers: {
         'X-API-Key': API_KEY,
@@ -69,15 +73,11 @@ node index.js
 
 ```json
 {
-  "pair_address": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
-  "token0": {
-    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-    "symbol": "USDC"
-  },
-  "token1": {
-    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-    "symbol": "WETH"
-  },
+  "page": 1,
+  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "pairAddress": "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+  "timeframe": "1h",
+  "currency": "usd",
   "result": [
     {
       "timestamp": "2024-01-15T10:00:00.000Z",
@@ -105,9 +105,11 @@ node index.js
 
 | Field | Description |
 |-------|-------------|
-| `pair_address` | The liquidity pair contract address |
-| `token0` | First token in the pair |
-| `token1` | Second token in the pair |
+| `pairAddress` | The liquidity pair contract address |
+| `timeframe` | The candle timeframe requested |
+| `currency` | The currency prices are denominated in (`usd` or `native`) |
+| `page` | The current page of the result |
+| `cursor` | Cursor for fetching the next page of results |
 | `timestamp` | The start time of the candle |
 | `open` | Opening price for the period |
 | `high` | Highest price during the period |
