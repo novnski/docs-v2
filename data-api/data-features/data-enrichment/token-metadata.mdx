@@ -183,6 +183,10 @@ Related:
 
 - `implementations` lists known linked deployments of the “same” token across multiple chains (e.g. bridged or multi-chain versions).
 
+<Note>
+`implementations` only lists the **other** chains the token is deployed on. The chain you queried is never repeated in the array — that deployment is the token object itself (`address` at the top level). In the example above the token was requested on Ethereum, so the array contains Avalanche, BNB Smart Chain, and Arbitrum, but not Ethereum. If you need the full multi-chain set, combine the queried chain and address with the entries in `implementations`.
+</Note>
+
 This enables:
 
 - consistent UI labels/logos across chains
