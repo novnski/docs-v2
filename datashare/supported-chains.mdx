@@ -5,6 +5,8 @@ description: "Blockchains supported by Moralis DataShare for bulk historical dat
 mode: "wide"
 ---
 
+import { MoonbeamChainsNote } from "/snippets/moonbeam-deprecation.jsx";
+
 ### Datashare Supported Chains
 
 Moralis Datashare provides **bulk access to historical blockchain data**, designed for analytics, data science, and large-scale ingestion workflows.
@@ -16,6 +18,8 @@ Datashare chain support depends on:
 - Data normalization maturity
 
 Use the table below to see which chains are supported for Datashare and what datasets are available per chain.
+
+<MoonbeamChainsNote />
 
 | Chain Name                  | Chain ID              | Token Transfers | NFT Transfers | Native Transfers | Swaps | Liquidity Events |
 | --------------------------- | --------------------- | --------------- | ------------- | ---------------- | ----- | ---------------- |
@@ -34,8 +38,8 @@ Use the table below to see which chains are supported for Datashare and what dat
 | Cronos Mainnet              | 0x19 (25)             | ✓               | ✓             | ✓                | ✓     | ✗                |
 | Gnosis                      | 0x64 (100)            | ✓               | ✓             | ✓                | ✓     | ✗                |
 | Chiliz Mainnet              | 0x15b38 (88888)       | ✓               | ✓             | ✓                | ✗     | ✗                |
-| Moonbeam                    | 0x504 (1284)          | ✓               | ✓             | ✓                | ✗     | ✗                |
-| Moonriver                   | 0x505 (1285)          | ✓               | ✓             | ✓                | ✗     | ✗                |
+| Moonbeam (deprecated)       | 0x504 (1284)          | ✓               | ✓             | ✓                | ✗     | ✗                |
+| Moonriver (deprecated)      | 0x505 (1285)          | ✓               | ✓             | ✓                | ✗     | ✗                |
 | Flow                        | 0x2eb (747)           | ✓               | ✓             | ✓                | ✗     | ✗                |
 | Flow Testnet                | 0x221 (545)           | ✓               | ✓             | ✓                | ✗     | ✗                |
 | Ronin                       | 0x7e4 (2020)          | ✓               | ✓             | ✓                | ✓     | ✗                |

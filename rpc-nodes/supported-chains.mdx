@@ -5,6 +5,8 @@ description: "Blockchain networks supported by Moralis RPC nodes for direct JSON
 mode: "wide"
 ---
 
+import { MoonbeamChainsNote } from "/snippets/moonbeam-deprecation.jsx";
+
 ### RPC Node Supported Chains
 
 Moralis provides managed **RPC node access** for supported blockchains, enabling you to send JSON-RPC requests without operating your own infrastructure.
@@ -16,6 +18,8 @@ RPC coverage focuses on:
 - High-availability access to popular chains
 
 Use the table below to see which chains are supported by Moralis RPC nodes.
+
+<MoonbeamChainsNote />
 
 | Chain Name                  | Type    | Chain ID              | RPC Supported | Path Parameter          |
 | --------------------------- | ------- | --------------------- | ------------- | ----------------------- |
@@ -36,8 +40,8 @@ Use the table below to see which chains are supported by Moralis RPC nodes.
 | Cronos Mainnet              | Mainnet | 0x19 (25)             | ✗             | N/A                     |
 | Gnosis                      | Mainnet | 0x64 (100)            | ✓             | `gnosis`                |
 | Chiliz Mainnet              | Mainnet | 0x15b38 (88888)       | ✗             | N/A                     |
-| Moonbeam                    | Mainnet | 0x504 (1284)          | ✓             | `moonbeam`              |
-| Moonriver                   | Testnet | 0x505 (1285)          | ✓             | `moonriver`             |
+| Moonbeam (deprecated)       | Mainnet | 0x504 (1284)          | ✓             | `moonbeam`              |
+| Moonriver (deprecated)      | Testnet | 0x505 (1285)          | ✓             | `moonriver`             |
 | Blast                       | Mainnet | 0x13e31 (81457)       | ✓             | `blast`                 |
 | Blast Sepolia               | Testnet | 0xa0c71fd (168587773) | ✓             | `blast-sepolia`         |
 | zkSync                      | Mainnet | 0x144 (324)           | ✓             | `zksync`                |

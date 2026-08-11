@@ -43,8 +43,8 @@ export const DataApiSupportedChainsTable = () => {
     { name: "Cronos Mainnet", type: "Mainnet", chainId: "0x19 (25)", qp: ["cronos", "0x19"], s: mk(T, T, T, T, F, T, T, F, T, F, F, F, F) },
     { name: "Gnosis", type: "Mainnet", chainId: "0x64 (100)", qp: ["gnosis", "0x64"], s: mk(T, T, F, T, F, T, T, F, T, T, F, F, F) },
     { name: "Chiliz Mainnet", type: "Mainnet", chainId: "0x15b38 (88888)", qp: ["chiliz", "0x15b38"], s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
-    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", qp: ["moonbeam", "0x504"], s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
-    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", qp: ["moonriver", "0x505"], s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
+    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", qp: ["moonbeam", "0x504"], deprecated: T, s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
+    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", qp: ["moonriver", "0x505"], deprecated: T, s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
     { name: "Flow", type: "Mainnet", chainId: "0x2eb (747)", qp: ["flow", "0x2eb"], s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
     { name: "Flow Testnet", type: "Testnet", chainId: "0x221 (545)", qp: ["flow-testnet", "0x221"], s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
     { name: "Ronin", type: "Mainnet", chainId: "0x7e4 (2020)", qp: ["ronin", "0x7e4"], s: mk(T, T, T, T, F, T, T, F, T, T, T, T, T) },
@@ -68,6 +68,27 @@ export const DataApiSupportedChainsTable = () => {
         {on ? "✓" : "✗"}
       </span>
     </td>
+  );
+
+  const DeprecatedBadge = () => (
+    <a
+      href="/changelog"
+      title="Support removed on August 21, 2026. Migrate to Base."
+      style={{
+        marginLeft: "6px",
+        padding: "1px 6px",
+        borderRadius: "9999px",
+        fontSize: "11px",
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+        color: "#b45309",
+        backgroundColor: "rgba(180,83,9,0.12)",
+        border: "1px solid rgba(180,83,9,0.35)",
+        textDecoration: "none",
+      }}
+    >
+      Deprecated Aug 21, 2026
+    </a>
   );
 
   const featureCols = features.slice(1);
@@ -132,7 +153,10 @@ export const DataApiSupportedChainsTable = () => {
         <tbody>
           {visible.map((c) => (
             <tr key={c.name}>
-              <td>{c.name}</td>
+              <td>
+                {c.name}
+                {c.deprecated && <DeprecatedBadge />}
+              </td>
               <td>{c.type}</td>
               <td>{c.chainId}</td>
               <td>

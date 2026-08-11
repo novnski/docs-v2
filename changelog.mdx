@@ -3,6 +3,34 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="August 11, 2026" tags={["Deprecation"]}>
+  ## Moonbeam and Moonriver API Deprecation: Migrate to Base
+
+  Moralis API support for **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) will be removed on **August 21, 2026**.
+
+  Following [Moonbeam's network relaunch on Base](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), GLMR has fully migrated from the Moonbeam Polkadot parachain to Base as a 1:1 ERC-20 token, and [MOVR has migrated to Base](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/) on the same terms. Holder bridging closed on July 31, 2026, and both original networks have wound down.
+
+  **What's changing:**
+
+  - **Data API:** wallet, token, NFT, DeFi, and price endpoints no longer return Moonbeam or Moonriver data. Requests passing `moonbeam` / `0x504` or `moonriver` / `0x505` will return an error.
+  - **RPC Nodes:** the Moonbeam and Moonriver RPC endpoints (`https://site1.moralis-nodes.com/moonbeam/` and `.../moonriver/`) are no longer available, and their documentation will be removed.
+  - **Streams:** existing Moonbeam and Moonriver streams will stop emitting webhook notifications and should be deleted from your workspace.
+
+  **What you need to do:** migrate your integration to Moralis Base endpoints. GLMR, MOVR, and all associated activity are now tracked on Base.
+
+  - Update your `chain` parameter to `base` (`0x2105`). For RPC Nodes, switch the path segment to `https://site1.moralis-nodes.com/base/`.
+  - Use the new token contracts on Base:
+
+  | Token | Contract address on Base |
+  | --- | --- |
+  | GLMR | `0xb3846fd356c2149ee8d30b0449088dc74e265459` |
+  | MOVR | `0x43fEB74608334DDa8c1a6500D185cFC3Ea962B83` |
+
+  **Not affected:** your API key, authentication, request shapes, and response formats. Base is already fully supported across the Data API, RPC Nodes, and Streams. Only the target chain changes.
+
+  Make these changes before August 21 to avoid errored responses. Questions? [Reach out to the team](https://admin.moralis.com/) (via chat widget).
+</Update>
+
 <Update label="July 21, 2026" tags={["New Feature"]}>
   ## Cross-Chain Token Balances
 

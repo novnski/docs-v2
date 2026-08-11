@@ -33,8 +33,8 @@ export const SupportedChainsTable = () => {
     { name: "Cronos Mainnet", type: "Mainnet", chainId: "0x19 (25)", s: mk(true, true, true, false, true) },
     { name: "Gnosis", type: "Mainnet", chainId: "0x64 (100)", s: mk(true, true, true, true, true) },
     { name: "Chiliz Mainnet", type: "Mainnet", chainId: "0x15b38 (88888)", s: mk(true, true, true, false, true) },
-    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", s: mk(true, true, true, true, true) },
-    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", s: mk(true, true, true, true, true) },
+    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", deprecated: true, s: mk(true, true, true, true, true) },
+    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", deprecated: true, s: mk(true, true, true, true, true) },
     { name: "Flow", type: "Mainnet", chainId: "0x2eb (747)", s: mk(true, true, true, true, false) },
     { name: "Flow Testnet", type: "Testnet", chainId: "0x221 (545)", s: mk(true, true, true, true, false) },
     { name: "Ronin", type: "Mainnet", chainId: "0x7e4 (2020)", s: mk(true, true, true, true, false) },
@@ -68,6 +68,27 @@ export const SupportedChainsTable = () => {
         {on ? "✓" : "✗"}
       </span>
     </td>
+  );
+
+  const DeprecatedBadge = () => (
+    <a
+      href="/changelog"
+      title="Support removed on August 21, 2026. Migrate to Base."
+      style={{
+        marginLeft: "6px",
+        padding: "1px 6px",
+        borderRadius: "9999px",
+        fontSize: "11px",
+        fontWeight: 600,
+        whiteSpace: "nowrap",
+        color: "#b45309",
+        backgroundColor: "rgba(180,83,9,0.12)",
+        border: "1px solid rgba(180,83,9,0.35)",
+        textDecoration: "none",
+      }}
+    >
+      Deprecated Aug 21, 2026
+    </a>
   );
 
   return (
@@ -129,7 +150,10 @@ export const SupportedChainsTable = () => {
         <tbody>
           {visible.map((c) => (
             <tr key={c.name}>
-              <td>{c.name}</td>
+              <td>
+                {c.name}
+                {c.deprecated && <DeprecatedBadge />}
+              </td>
               <td>{c.type}</td>
               <td>{c.chainId}</td>
               <Cell on={c.s.dataApi} />

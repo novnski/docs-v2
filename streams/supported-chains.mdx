@@ -5,6 +5,8 @@ description: "Blockchains supported by Moralis Streams for real-time onchain eve
 mode: "wide"
 ---
 
+import { MoonbeamChainsNote } from "/snippets/moonbeam-deprecation.jsx";
+
 ### Streams Supported Chains
 
 Moralis Streams provide **real-time onchain data delivery** via webhooks, allowing you to react to blockchain activity as it happens.
@@ -15,6 +17,8 @@ Streams support a subset of chains where:
 - Finality and reorg handling meet production requirements.
 
 Use the tables below to see which chains are supported for Streams and what types of events can be monitored.
+
+<MoonbeamChainsNote />
 
 ### Non-EVM Chains
 
@@ -50,8 +54,8 @@ Bitcoin and Solana streams have their own API groups and chain-specific configur
 | Cronos Mainnet              | Mainnet | 0x19 (25)             | ✓                 | ✗            | 100                    |
 | Gnosis                      | Mainnet | 0x64 (100)            | ✓                 | ✗            | 100                    |
 | Chiliz Mainnet              | Mainnet | 0x15b38 (88888)       | ✓                 | ✓            | 100                    |
-| Moonbeam                    | Mainnet | 0x504 (1284)          | ✓                 | ✗            | 100                    |
-| Moonriver                   | Testnet | 0x505 (1285)          | ✓                 | ✗            | 100                    |
+| Moonbeam (deprecated)       | Mainnet | 0x504 (1284)          | ✓                 | ✗            | 100                    |
+| Moonriver (deprecated)      | Testnet | 0x505 (1285)          | ✓                 | ✗            | 100                    |
 | Flow                        | Mainnet | 0x2eb (747)           | ✓                 | ✓            | 100                    |
 | Flow Testnet                | Testnet | 0x221 (545)           | ✓                 | ✗            | 100                    |
 | Ronin                       | Mainnet | 0x7e4 (2020)          | ✓                 | ✓            | 100                    |
