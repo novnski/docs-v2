@@ -3,7 +3,7 @@ title: "Pricing"
 description: "Understand compute unit costs, rate limits, and plan tiers for Moralis RPC Nodes."
 ---
 
-All [Moralis plans](https://moralis.io/pricing) include generous monthly limits on the number of requests you can make. Some requests are more computationally expensive than others, so heavier requests are assigned higher **Compute Unit (CU) weights**.
+All [Moralis plans](https://moralis.com/pricing) include generous monthly limits on the number of requests you can make. Some requests are more computationally expensive than others, so heavier requests are assigned higher **Compute Unit (CU) weights**.
 
 ## What is a Compute Unit (CU)?
 
@@ -11,13 +11,16 @@ A **Compute Unit** is a measure of computational load assigned to each RPC reque
 
 ## Plan Tiers
 
-|                              | Starter    | Pro         | Business    | Enterprise |
-|------------------------------|------------|-------------|-------------|------------|
-| CUs Included                 | 10,000,000 | 100,000,000 | 350,000,000 | Custom     |
-| API Throughput (CUs/second)  | 1,500      | 1,500       | 3,000       | Custom     |
-| Node Throughput (CUs/second) | 100        | 100         | 300         | Custom     |
-| Number of Nodes              | 2          | 5           | Unlimited   | Unlimited  |
-| Archive Requests             | Yes        | Yes         | Yes         | Yes        |
+|                  | Free           | Starter        | Pro             | Business        | Enterprise |
+|------------------|----------------|----------------|-----------------|-----------------|------------|
+| CUs Included     | 40,000 per day | 2,000,000/mo   | 100,000,000/mo  | 500,000,000/mo  | Custom     |
+| Throughput       | 40 reqs/s      | 40 reqs/s      | 80 reqs/s       | 200 reqs/s      | Custom     |
+| Number of Nodes  | 2              | 2              | 20              | Unlimited       | Unlimited  |
+| Archive Requests | Yes            | Yes            | Yes             | Yes             | Yes        |
+
+Throughput is shared across all Moralis products and is measured in requests per second, evaluated over a rolling 4-second window. See [Rate Limits](/data-api/resources/rate-limits) for details.
+
+For current plan pricing, see [moralis.com/pricing](https://moralis.com/pricing).
 
 ## Standard RPC Method Costs
 
@@ -78,4 +81,4 @@ Archive nodes store historical blockchain data beyond the most recent blocks. Be
 
 ## Need Higher Limits?
 
-If your use case requires more CUs than your current plan offers, consider upgrading or reaching out to the Moralis team for custom solutions at [moralis.io/pricing](https://moralis.io/pricing).
+If your use case requires more CUs than your current plan offers, consider upgrading or reaching out to the Moralis team for custom solutions at [moralis.com/pricing](https://moralis.com/pricing).
