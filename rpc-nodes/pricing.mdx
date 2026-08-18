@@ -11,14 +11,17 @@ A **Compute Unit** is a measure of computational load assigned to each RPC reque
 
 ## Plan Tiers
 
-|                  | Free           | Starter        | Pro             | Business        | Enterprise |
-|------------------|----------------|----------------|-----------------|-----------------|------------|
-| CUs Included     | 40,000 per day | 2,000,000/mo   | 100,000,000/mo  | 500,000,000/mo  | Custom     |
-| Throughput       | 40 reqs/s      | 40 reqs/s      | 80 reqs/s       | 200 reqs/s      | Custom     |
-| Number of Nodes  | 2              | 5              | 20              | Unlimited       | Unlimited  |
-| Archive Requests | Yes            | Yes            | Yes             | Yes             | Yes        |
+|                        | Free           | Starter        | Pro             | Business        | Enterprise |
+|------------------------|----------------|----------------|-----------------|-----------------|------------|
+| CUs Included           | 40,000 per day | 2,000,000/mo   | 100,000,000/mo  | 500,000,000/mo  | Custom     |
+| API Throughput         | 40 reqs/s      | 40 reqs/s      | 80 reqs/s       | 200 reqs/s      | Custom     |
+| Node Throughput (CU/s) | 100            | 100            | 100             | 300             | Unlimited  |
+| Number of Nodes        | 2              | 2              | 20              | Unlimited       | Unlimited  |
+| Archive Requests       | Yes            | Yes            | Yes             | Yes             | Yes        |
 
-Throughput is shared across all Moralis products and is measured in requests per second, evaluated over a rolling 4-second window. See [Rate Limits](/data-api/resources/rate-limits) for details.
+**API Throughput** is shared across all Moralis products and is measured in requests per second, evaluated over a rolling 4-second window. See [Rate Limits](/data-api/resources/rate-limits) for details.
+
+**Node Throughput** is a separate per-node cap, measured in Compute Units per second on each individual RPC node.
 
 For current plan pricing, see [moralis.com/pricing](https://moralis.com/pricing).
 
