@@ -4,11 +4,23 @@ sidebarTitle: "Pricing"
 description: "Pricing information about our products."
 ---
 
-All Moralis plans come with generous monthly request limits. The number of included requests depends on your plan - see the [product pricing pages](#cu-cost) for details.
+All Moralis plans come with generous monthly request limits. The number of included requests depends on your plan - see the [product pricing page](https://moralis.com/pricing) for details.
 
 Moralis uses **Compute Units (CUs)** as a standard way to measure and bill for usage across all products - including [Data API](/data-api/overview), [Streams](/streams/overview), and [RPC Nodes](/rpc-nodes/overview).
 
-CUs provide a unified way to account for **computational complexity** and **rate limits**, regardless of the product you're using.
+CUs provide a unified way to account for **computational complexity** across every product, so usage is metered consistently regardless of which product you're using.
+
+## Plan Overview
+
+|                  | Free           | Starter      | Pro            | Business       | Enterprise |
+|------------------|----------------|--------------|----------------|----------------|------------|
+| Price            | $0             | $59/mo       | $249/mo        | $749/mo        | Custom     |
+| CUs Included     | 40,000 per day | 2,000,000/mo | 100,000,000/mo | 500,000,000/mo | Custom     |
+| RPS Throughput   | 40 reqs/s      | 40 reqs/s    | 80 reqs/s      | 200 reqs/s     | Custom     |
+| RPC Nodes        | 2              | 5            | 20             | Unlimited      | Unlimited  |
+| Archive Requests | Yes            | Yes          | Yes            | Yes            | Yes        |
+
+Prices shown are for monthly billing. Annual billing is available at a discount. For full plan details, see [moralis.com/pricing](https://moralis.com/pricing).
 
 ## What is a Compute Unit?
 
@@ -44,10 +56,12 @@ For example:
 
 Dynamic endpoints are clearly marked on their respective documentation pages. You can find CU costs for all endpoints on the individual product pricing pages listed above.
 
-## CU Throughput (CU/s)
+## RPS Throughput
 
-CUs are also used to enforce **rate limits**, measured in **CUs per second (CU/s)**.
+Rate limits are enforced as **requests per second (RPS)**, separately from CU consumption. CUs meter how much you use, RPS caps how fast you can call.
 
-This helps manage request throughput and protect system performance - allowing heavier requests to be made less frequently, while lightweight calls remain fast and responsive.
+Each plan defines a maximum request rate, evaluated over a rolling 4-second window. This allows short bursts as long as your total request count stays within the limit across that window. Exceeding it returns a **429 Too Many Requests** response.
 
-Different products may enforce CU/s limits differently. Check the respective documentation for details.
+See [Rate Limits](/data-api/resources/rate-limits) for the full breakdown.
+
+Different products may apply throughput differently. Check the respective documentation for details.
