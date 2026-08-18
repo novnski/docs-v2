@@ -3,6 +3,8 @@ title: "Pricing"
 description: "Understand compute unit costs, rate limits, and plan tiers for Moralis RPC Nodes."
 ---
 
+import { RequestAccessButton } from '/snippets/request-access-button.jsx'
+
 All [Moralis plans](https://moralis.com/pricing) include generous monthly limits on the number of requests you can make. Some requests are more computationally expensive than others, so heavier requests are assigned higher **Compute Unit (CU) weights**.
 
 ## What is a Compute Unit (CU)?
@@ -11,19 +13,21 @@ A **Compute Unit** is a measure of computational load assigned to each RPC reque
 
 ## Plan Tiers
 
-|                        | Free           | Starter        | Pro             | Business        | Enterprise |
-|------------------------|----------------|----------------|-----------------|-----------------|------------|
-| CUs Included           | 40,000 per day | 2,000,000/mo   | 100,000,000/mo  | 500,000,000/mo  | Custom     |
-| API Throughput         | 40 reqs/s      | 40 reqs/s      | 80 reqs/s       | 200 reqs/s      | Custom     |
-| Node Throughput (CU/s) | 100            | 100            | 100             | 300             | Unlimited  |
-| Number of Nodes        | 2              | 5              | 20              | Unlimited       | Unlimited  |
-| Archive Requests       | Yes            | Yes            | Yes             | Yes             | Yes        |
+| Plan       | Price   | CUs Included   | API Throughput | Node Throughput | RPC Nodes |
+|------------|---------|----------------|----------------|-----------------|-----------|
+| Free       | $0      | 40,000/day     | 40 reqs/s      | 100 CU/s        | 2         |
+| Starter    | $59/mo  | 2,000,000/mo   | 40 reqs/s      | 100 CU/s        | 5         |
+| Pro        | $249/mo | 100,000,000/mo | 80 reqs/s      | 100 CU/s        | 20        |
+| Business   | $749/mo | 500,000,000/mo | 200 reqs/s     | 300 CU/s        | Unlimited |
+| Enterprise | Custom  | Custom         | Custom         | Unlimited       | Unlimited |
+
+All plans include full archive data. Prices shown are for monthly billing, and annual billing is available at a discount.
 
 **API Throughput** is shared across all Moralis products and is measured in requests per second, evaluated over a rolling 4-second window. See [Rate Limits](/data-api/resources/rate-limits) for details.
 
 **Node Throughput** is a separate per-node cap, measured in Compute Units per second on each individual RPC node.
 
-For current plan pricing, see [moralis.com/pricing](https://moralis.com/pricing).
+<RequestAccessButton href="https://moralis.com/pricing" title="View all plans" />
 
 ## Standard RPC Method Costs
 
