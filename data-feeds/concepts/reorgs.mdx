@@ -42,7 +42,7 @@ FROM recipe_token_transfers.fact_token_transfers
 WHERE chain_id = 1 AND token_address = lower('0x...');
 ```
 
-The recipe's own example queries already follow this rule, so if you start from those you get it for free.
+The recipe's own example queries already follow this rule, so if you start from those you get it automatically.
 Postgres and MySQL recipe variants are intended for `historical` backfill of settled blocks, where reorgs do
 not apply, which is why the live reorg path is a ClickHouse strength (see [Destinations](./destinations)).
 
