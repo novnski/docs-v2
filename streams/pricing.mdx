@@ -10,12 +10,12 @@ Records are the fundamental unit for calculating Streams API usage. **What count
 Each record costs **10 Compute Units (CUs)**. The `x-records-charged` header in webhook responses shows the exact record count for that delivery.
 
 <Info>
-Only webhooks with `confirmed: true` incur charges. Unconfirmed webhooks (`confirmed: false`) have `x-records-charged: 0` and are free.
+Only webhooks with `confirmed: true` incur charges. Unconfirmed webhooks (`confirmed: false`) have `x-records-charged: 0` and are included.
 </Info>
 
 For each match, you receive two webhooks:
 
-1. **Unconfirmed** — sent when the transaction is included in a block (free).
+1. **Unconfirmed** — sent when the transaction is included in a block.
 2. **Confirmed** — sent once the block is considered final (charged).
 
 <Note>
@@ -48,7 +48,7 @@ Across all chains, the unconfirmed (`confirmed: false`) delivery is sent when th
     | Batch NFT transfer (ERC-1155) | 2 records       |
     | ERC-721 minting (100 tokens)  | 100 records     |
 
-    ### Decoded logs are free
+    ### Decoded logs are included
 
     Moralis automatically decodes standardized contract events at **no additional cost**. These do **not** count as records:
 

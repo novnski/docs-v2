@@ -1858,7 +1858,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Start for Free",
+      "label": "Try Now",
       "href": "https://admin.moralis.com/register"
     }
   },

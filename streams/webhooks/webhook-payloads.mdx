@@ -9,7 +9,7 @@ Every Streams webhook delivers a **JSON payload** containing the on-chain events
 
 Payload shape depends on the chain:
 
-- **EVM** payloads include native transactions, internal transactions, contract logs, and free decoded ERC-20 / NFT transfers and approvals.
+- **EVM** payloads include native transactions, internal transactions, contract logs, and included decoded ERC-20 / NFT transfers and approvals.
 - **Bitcoin** payloads include block metadata and matched transactions with output (`vout`) and input (`vin`) details.
 - **Solana** payloads include slot/block metadata and matched transactions with `accountKeys`, instructions, inner instructions, and pre/post token balances.
 

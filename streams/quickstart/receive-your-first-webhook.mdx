@@ -57,10 +57,10 @@ The webhook body contains all the data for the block event. The key fields are:
 | `txs` | Array of native transactions |
 | `txsInternal` | Array of internal transactions |
 | `logs` | Array of raw event logs |
-| `erc20Transfers` | Decoded ERC20 transfer events (free) |
-| `erc20Approvals` | Decoded ERC20 approval events (free) |
-| `nftTransfers` | Decoded NFT transfer events (free) |
-| `nftApprovals` | Decoded NFT approval events (free) |
+| `erc20Transfers` | Decoded ERC20 transfer events (included) |
+| `erc20Approvals` | Decoded ERC20 approval events (included) |
+| `nftTransfers` | Decoded NFT transfer events (included) |
+| `nftApprovals` | Decoded NFT approval events (included) |
 | `tag` | Your user-defined stream tag |
 | `streamId` | The ID of the stream that triggered this webhook |
 | `confirmed` | Whether the block is confirmed |
@@ -144,7 +144,7 @@ def verify_signature(req, secret):
 
 For full details, see [Webhook Security](/streams/security-and-reliability/webhook-security).
 
-## Decoded Data (Free)
+## Decoded Data (Included)
 
 Moralis automatically decodes standard contract events at no additional cost:
 

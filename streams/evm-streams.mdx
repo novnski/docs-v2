@@ -19,7 +19,7 @@ For a full chain list (Ethereum, Base, Polygon, BNB, Arbitrum, Optimism, Avalanc
 - **Real-time delivery:** webhooks arrive within seconds of a block being produced
 - **Dual-phase notifications:** every match fires twice — once unconfirmed (`confirmed: false`) and again at finality (`confirmed: true`)
 - **Rich filtering:** watch addresses, contract events (via ABI), specific topics, or apply advanced value/contract conditions
-- **Free decoded data:** ERC-20 transfers, ERC-20 approvals, NFT transfers (ERC-721 / ERC-1155), and NFT approvals are decoded into clean fields at no extra record cost
+- **Included decoded data:** ERC-20 transfers, ERC-20 approvals, NFT transfers (ERC-721 / ERC-1155), and NFT approvals are decoded into clean fields at no extra record cost
 - **Internal transactions:** opt in to receive value moves that occur inside contract execution
 - **Triggers:** invoke read-only contract functions as part of event processing — e.g. fetch token balances at the moment of a transfer
 - **Automatic retries:** Moralis retries webhook delivery until your endpoint returns HTTP `200`
@@ -44,8 +44,8 @@ Each EVM webhook payload contains:
 - **`txs`** — native transactions (when `includeNativeTxs` is enabled)
 - **`txsInternal`** — internal transactions (when `includeInternalTxs` is enabled)
 - **`logs`** — raw contract event logs (when `includeContractLogs` is enabled)
-- **`erc20Transfers` / `erc20Approvals`** — automatically decoded from logs, free
-- **`nftTransfers` / `nftApprovals`** — automatically decoded for ERC-721 and ERC-1155, free
+- **`erc20Transfers` / `erc20Approvals`** — automatically decoded from logs, included
+- **`nftTransfers` / `nftApprovals`** — automatically decoded for ERC-721 and ERC-1155, included
 - **Confirmation status** — `confirmed: true` / `false`
 
 For full schemas and examples, see [Webhook Payload](/streams/webhooks/webhook-payloads).
@@ -108,7 +108,7 @@ All EVM Streams endpoints require the `x-api-key` header.
 ## Common Use Cases
 
 - **Wallet activity notifications** — alert users on inbound and outbound transfers, swaps, and contract interactions
-- **Token transfer tracking** — ERC-20 movements (airdrops, payments, vesting) decoded for free
+- **Token transfer tracking** — ERC-20 movements (airdrops, payments, vesting) decoded and included
 - **NFT marketplaces** — mint, transfer, and approval events for ERC-721 and ERC-1155 collections
 - **DeFi protocol monitoring** — track interactions with specific contracts via ABI events and topics
 - **Treasury & accounting** — real-time corporate or DAO wallet activity across multiple chains
