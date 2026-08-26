@@ -1,13 +1,17 @@
 ---
 title: 'How to Get Top ERC20 Tokens by Market Cap'
-description: 'Learn how to discover and filter top ERC20 tokens by market cap, volume, and other metrics using the Moralis API.'
+description: 'Learn how to rank ERC20 tokens by market cap, volume, and liquidity using the Moralis Token Search API.'
 ---
 
 ## Introduction
 
-In this tutorial, you'll learn how to discover and filter ERC20 tokens using the Moralis API. You can sort tokens by market cap, trading volume, price change, and other metrics. This is essential for building token discovery platforms, market dashboards, or trading screeners. We'll use the following Moralis API endpoint:
+In this tutorial, you'll learn how to rank ERC20 tokens by market cap using the Moralis API. You can also sort by trading volume and liquidity. This is useful for building token discovery platforms, market dashboards, or trading screeners. We'll use the following Moralis API endpoint:
 
-- [Token Search](/data-api/universal/token/search/token-search) - Search and filter tokens by various metrics
+- [Token Search](/data-api/universal/token/search/token-search) - Search and rank tokens by market cap, volume, or liquidity
+
+<Note>
+  Token Search requires a `query`, so it ranks the tokens matching your search rather than the entire token universe. There is no endpoint that returns a global top N by market cap. If that's what you need, [reach out to the team](https://admin.moralis.com/) (via chat widget).
+</Note>
 
 ## Prerequisites
 
@@ -32,22 +36,20 @@ Create a file called `index.js` and add the following code:
 const API_KEY = 'YOUR_API_KEY';
 
 async function getTopTokens() {
+  const params = new URLSearchParams({
+    query: 'pepe',
+    chains: 'eth',
+    sortBy: 'marketCapDesc',
+    limit: '20',
+  });
+
   const response = await fetch(
-    'https://deep-index.moralis.io/api/v2.2/discovery/tokens',
+    `https://deep-index.moralis.io/api/v2.2/tokens/search?${params}`,
     {
-      method: 'POST',
       headers: {
+        accept: 'application/json',
         'X-API-Key': API_KEY,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        chains: ['eth'],
-        sortBy: {
-          metric: 'marketCap',
-          type: 'DESC',
-        },
-        limit: 20,
-      }),
     }
   );
 
@@ -62,37 +64,49 @@ Replace `YOUR_API_KEY` with your actual Moralis API key.
 
 ## Step 3: Run the Script
 
-Execute the script to get top tokens:
+Execute the script to get tokens ranked by market cap:
 
 ```bash
 node index.js
 ```
 
+## Query Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `query` | Required. Contract address, pair address, token name, or symbol to search for |
+| `chains` | Comma-separated chains to filter by. Omit for a cross-chain search |
+| `sortBy` | `marketCapDesc`, `liquidityDesc`, `volume24hDesc`, or `volume1hDesc` |
+| `limit` | Page size of the result |
+| `isVerifiedContract` | Set to `true` to return only verified contracts |
+
 ## Example Response
 
 ```json
 {
-  "page": 1,
-  "page_size": 20,
+  "total": 10000,
   "result": [
     {
-      "token_address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      "name": "Wrapped Ether",
-      "symbol": "WETH",
-      "decimals": 18,
-      "logo": "https://cdn.moralis.io/eth/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2.png",
-      "market_cap": 420000000000,
-      "fully_diluted_valuation": 420000000000,
-      "price_usd": 3500.50,
-      "price_24h_percent_change": 2.5,
-      "price_7d_percent_change": 5.2,
-      "volume_24h_usd": 15000000000,
-      "holders": 7500000,
-      "total_supply": "120000000",
-      "total_supply_formatted": "120000000",
-      "verified_contract": true,
-      "possible_spam": false,
-      "security_score": 85
+      "tokenAddress": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+      "chainId": "0x1",
+      "name": "Pepe",
+      "symbol": "PEPE",
+      "logo": "https://cdn.moralis.io/eth/0x6982508145454ce325ddbe47a25d4ec3d2311933.png",
+      "usdPrice": 0.000024509478199144,
+      "marketCap": 9825629287.860994,
+      "fullyDilutedValuation": 71242582.97741453,
+      "usdPricePercentChange": {
+        "oneHour": 1.079210724244654,
+        "oneDay": 2.079210724244654
+      },
+      "volumeUsd": {
+        "oneHour": 188552.0639107914,
+        "oneDay": 76927981.5281831
+      },
+      "totalLiquidityUsd": 18908.234,
+      "totalHolders": 18908,
+      "securityScore": 92,
+      "isVerifiedContract": false
     }
   ]
 }
@@ -102,22 +116,19 @@ node index.js
 
 | Field | Description |
 |-------|-------------|
-| `token_address` | Token contract address |
+| `tokenAddress` | Token contract address |
+| `chainId` | Chain the token is on, in hex |
 | `name` / `symbol` | Token name and symbol |
-| `market_cap` | Current market capitalization in USD |
-| `fully_diluted_valuation` | FDV based on max supply |
-| `price_usd` | Current price in USD |
-| `price_24h_percent_change` | 24-hour price change percentage |
-| `price_7d_percent_change` | 7-day price change percentage |
-| `volume_24h_usd` | 24-hour trading volume in USD |
-| `holders` | Number of unique holders |
-| `verified_contract` | Whether contract is verified |
-| `possible_spam` | Whether flagged as spam |
-| `security_score` | Token security score (0-100) |
+| `usdPrice` | Current price in USD |
+| `marketCap` | Current market capitalization in USD |
+| `fullyDilutedValuation` | FDV based on total supply |
+| `usdPricePercentChange` | Price change over one hour and one day |
+| `volumeUsd` | Trading volume over one hour and one day |
+| `totalLiquidityUsd` | Total liquidity across pairs, in USD |
+| `totalHolders` | Number of unique holders |
+| `securityScore` | Token security score (0-100) |
+| `isVerifiedContract` | Whether the contract is verified |
 
 ## Next Steps
 
 - [Get Token Price](/get-started/tutorials/data-api/prices-and-charts/get-the-price-of-an-erc-20-token) - Get current token prices
-- [Get Token Pairs](/get-started/tutorials/data-api/tokens-and-markets/get-token-pairs-and-liquidity-data) - Find trading pairs
-- [Build a DEX Screener](/get-started/tutorials/data-api/tokens-and-markets/build-a-dex-screener-clone) - Create a trading dashboard
-- [API Reference](/data-api/universal/token/search/token-search) - Full API documentation

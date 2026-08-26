@@ -5,9 +5,13 @@ description: 'Learn how to build a DEX token screener dashboard using the Morali
 
 ## Introduction
 
-In this tutorial, you'll learn how to build a DEX token screener similar to DexScreener using the Moralis API. The screener will display top tokens by volume with real-time prices, market cap, and price changes. We'll use the following Moralis API endpoint:
+In this tutorial, you'll learn how to build a DEX token screener similar to DexScreener using the Moralis API. The screener will display tokens ranked by volume with real-time prices, market cap, and price changes. We'll use the following Moralis API endpoint:
 
-- [Token Search](/data-api/universal/token/search/token-search) - Search and discover tokens by various metrics
+- [Token Search](/data-api/universal/token/search/token-search) - Search and rank tokens by volume, market cap, or liquidity
+
+<Note>
+  Token Search requires a `query`, so it ranks the tokens matching your search rather than the entire token universe.
+</Note>
 
 ## Prerequisites
 
@@ -32,28 +36,21 @@ Create a file called `index.js` and add the following code:
 const API_KEY = 'YOUR_API_KEY';
 
 async function getTopTokens() {
+  const params = new URLSearchParams({
+    query: 'pepe',
+    chains: 'eth',
+    sortBy: 'volume24hDesc',
+    isVerifiedContract: 'true',
+    limit: '20',
+  });
+
   const response = await fetch(
-    'https://deep-index.moralis.io/api/v2.2/discovery/tokens',
+    `https://deep-index.moralis.io/api/v2.2/tokens/search?${params}`,
     {
-      method: 'POST',
       headers: {
+        accept: 'application/json',
         'X-API-Key': API_KEY,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        chains: ['eth'],
-        filters: [
-          { metric: 'marketCap', gt: 100000 },
-          { metric: 'volumeUsd', timeFrame: 'oneDay', gt: 10000 },
-          { metric: 'securityScore', gt: 70 }
-        ],
-        sortBy: {
-          metric: 'volumeUsd',
-          timeFrame: 'oneDay',
-          type: 'DESC'
-        },
-        limit: 20
-      }),
     }
   );
 
@@ -78,27 +75,31 @@ node index.js
 
 ```json
 {
+  "total": 10000,
   "result": [
     {
-      "tokenAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-      "chain": "eth",
-      "name": "Tether USD",
-      "symbol": "USDT",
-      "logo": "https://cdn.moralis.io/eth/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
-      "priceUsd": "1.00",
-      "marketCap": "83000000000",
+      "tokenAddress": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+      "chainId": "0x1",
+      "name": "Pepe",
+      "symbol": "PEPE",
+      "logo": "https://cdn.moralis.io/eth/0x6982508145454ce325ddbe47a25d4ec3d2311933.png",
+      "usdPrice": 0.000024509478199144,
+      "marketCap": 9825629287.860994,
+      "fullyDilutedValuation": 71242582.97741453,
+      "usdPricePercentChange": {
+        "oneHour": 1.079210724244654,
+        "oneDay": 2.079210724244654
+      },
       "volumeUsd": {
-        "oneDay": "25000000000"
+        "oneHour": 188552.0639107914,
+        "oneDay": 76927981.5281831
       },
-      "pricePercentChange": {
-        "oneDay": "0.01"
-      },
-      "securityScore": 85,
-      "holders": 4500000,
-      "createdAt": "2017-11-28T00:00:00.000Z"
+      "totalLiquidityUsd": 18908.234,
+      "totalHolders": 18908,
+      "securityScore": 92,
+      "isVerifiedContract": false
     }
-  ],
-  "cursor": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  ]
 }
 ```
 
@@ -107,17 +108,19 @@ node index.js
 | Field | Description |
 |-------|-------------|
 | `tokenAddress` | Contract address of the token |
-| `chain` | Blockchain the token is on |
+| `chainId` | Chain the token is on, in hex |
 | `name` | Token name |
 | `symbol` | Token ticker symbol |
 | `logo` | URL to token logo image |
-| `priceUsd` | Current price in USD |
-| `marketCap` | Total market capitalization |
+| `usdPrice` | Current price in USD |
+| `marketCap` | Total market capitalization in USD |
+| `fullyDilutedValuation` | FDV based on total supply |
+| `usdPricePercentChange.oneDay` | 24-hour price change percentage |
 | `volumeUsd.oneDay` | 24-hour trading volume in USD |
-| `pricePercentChange.oneDay` | 24-hour price change percentage |
+| `totalLiquidityUsd` | Total liquidity across pairs, in USD |
+| `totalHolders` | Number of token holders |
 | `securityScore` | Token security score (0-100) |
-| `holders` | Number of token holders |
-| `createdAt` | When the token was created |
+| `isVerifiedContract` | Whether the contract is verified |
 
 ## Next Steps
 

@@ -98,6 +98,37 @@ description: "New releases and improvements"
   Export anything you still need from Moonbeam or Moonriver before September 25, 2026 to avoid errored responses. Questions? [Reach out to the team](https://admin.moralis.com/) (via chat widget).
 </Update>
 
+<Update label="July 31, 2026" tags={["Deprecation"]}>
+  ## Token Holders and Solana Token Discovery Endpoints Removed
+
+  As [announced on June 30](#token-holders-and-solana-token-discovery-endpoints-sunsetting), the following endpoints have now been **removed** as of July 31, 2026. Requests to these endpoints return a 404. If you are still calling any of them, migrate to the replacements below.
+
+  **Solana token holders:**
+
+  - `GET /token/{network}/holders/{address}` — migrate to [Token Holders](/data-feeds/recipes/token/token-holders)
+  - `GET /token/{network}/{address}/top-holders` — migrate to [Token Holders](/data-feeds/recipes/token/token-holders)
+  - `GET /token/{network}/holders/{address}/historical` — migrate to [Historical Balances](/data-feeds/recipes/token/historical-balances)
+
+  **EVM token holders (historical only):**
+
+  - `GET /erc20/{tokenAddress}/holders/historical` — migrate to [Historical Balances](/data-feeds/recipes/token/historical-balances)
+
+  The other two EVM token holder endpoints, [`GET /erc20/{tokenAddress}/holders`](/data-api/evm/token/holders/token-holder-stats) (holder stats) and [`GET /erc20/{token_address}/owners`](/data-api/evm/token/holders/token-holders) (token holders), **remain fully supported**.
+
+  **Solana token discovery (`/token/{network}/exchange/*`):**
+
+  - `GET /token/{network}/exchange/{exchange}/new`
+  - `GET /token/{network}/exchange/{exchange}/bonding`
+  - `GET /token/{network}/exchange/{exchange}/graduated`
+  - `GET /token/{network}/{address}/bonding-status`
+
+  All four are served by [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status).
+
+  The API reference pages for these endpoints have been removed from the navigation, and their entries are gone from the OpenAPI sources so generated docs and API clients no longer advertise them.
+
+  If you need help identifying the right replacement, [reach out to the team](https://admin.moralis.com/) (via chat widget).
+</Update>
+
 <Update label="July 21, 2026" tags={["New Feature"]}>
   ## Cross-Chain Token Balances
 
@@ -187,26 +218,30 @@ description: "New releases and improvements"
 <Update label="June 30, 2026" tags={["Deprecation"]}>
   ## Token Holders and Solana Token Discovery Endpoints Sunsetting
 
+  <Note>
+    **These endpoints were removed on July 31, 2026.** See [Token Holders and Solana Token Discovery Endpoints Removed](#token-holders-and-solana-token-discovery-endpoints-removed) for the replacements.
+  </Note>
+
   The following endpoints are now deprecated and will be removed on **July 31, 2026**. If you rely on any of them, please migrate before that date. [Reach out to the team](https://admin.moralis.com/) (via chat widget) if you need help identifying replacements.
 
   **Solana token holders (all sunset):**
 
-  - [`GET /token/{network}/holders/{address}`](/data-api/solana/token/holders/holder-metrics) — Token holder metrics
-  - [`GET /token/{network}/{address}/top-holders`](/data-api/solana/token/holders/top-holders) — Top token holders
-  - [`GET /token/{network}/holders/{address}/historical`](/data-api/solana/token/holders/historical-holders) — Historical token holders
+  - `GET /token/{network}/holders/{address}` — Token holder metrics
+  - `GET /token/{network}/{address}/top-holders` — Top token holders
+  - `GET /token/{network}/holders/{address}/historical` — Historical token holders
 
   **EVM token holders (historical only):**
 
-  - [`GET /erc20/{tokenAddress}/holders/historical`](/data-api/evm/token/holders/historical-token-holders) — Historical token holders
+  - `GET /erc20/{tokenAddress}/holders/historical` — Historical token holders
 
   The other two EVM token holder endpoints — [`GET /erc20/{tokenAddress}/holders`](/data-api/evm/token/holders/token-holder-stats) (holder stats) and [`GET /erc20/{token_address}/owners`](/data-api/evm/token/holders/token-holders) (token holders) — **remain fully supported**.
 
   **Solana token discovery (`/token/{network}/exchange/*`):**
 
-  - [`GET /token/{network}/exchange/{exchange}/new`](/data-api/solana/token/search-and-discovery/pump-fun-new-tokens) — New tokens by exchange
-  - [`GET /token/{network}/exchange/{exchange}/bonding`](/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens) — Bonding tokens by exchange
-  - [`GET /token/{network}/exchange/{exchange}/graduated`](/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens) — Graduated tokens by exchange
-  - [`GET /token/{network}/{address}/bonding-status`](/data-api/solana/token/search-and-discovery/pump-fun-bonding-status) — Token bonding status
+  - `GET /token/{network}/exchange/{exchange}/new` — New tokens by exchange
+  - `GET /token/{network}/exchange/{exchange}/bonding` — Bonding tokens by exchange
+  - `GET /token/{network}/exchange/{exchange}/graduated` — Graduated tokens by exchange
+  - `GET /token/{network}/{address}/bonding-status` — Token bonding status
 </Update>
 
 <Update label="June 30, 2026" tags={["Deprecation"]}>

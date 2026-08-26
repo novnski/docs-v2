@@ -35,7 +35,6 @@ The **Sim APIs** and Moralis cover the same wallet-centric problem space: real-t
 | Search tokens              | `GET /v1/evm/token-search`                | [Search Tokens](/data-api/universal/token/search)                                           |
 | Token holders              | `GET /v1/evm/token-holders/{address}`     | [Get Token Holders](/data-api/evm/token/holders/token-holders)                              |
 | Holder distribution stats  | (derived from holders endpoint)           | [Get Token Holder Stats](/data-api/evm/token/holders/token-holder-stats)                    |
-| Holders over time          | _not available in Sim_                    | [Get Historical Token Holders](/data-api/evm/token/holders/historical-token-holders)        |
 | Stablecoin balances        | `GET /v1/evm/stablecoins/{address}`       | [Get Token Balances by Wallet](/data-api/evm/wallet/token-balances) — filter on `category`  |
 
 ### EVM — DeFi
@@ -179,7 +178,6 @@ curl "https://deep-index.moralis.io/api/v2.2/0xd8da6bf26964af9d7eed9e03e53415d37
 | ----- | --------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | EVM   | Get Token Holders           | `https://deep-index.moralis.io/api/v2.2/erc20/:token_address/owners`             | [Documentation](/data-api/evm/token/holders/token-holders)                 |
 | EVM   | Get Token Holder Stats      | `https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/stats`      | [Documentation](/data-api/evm/token/holders/token-holder-stats)            |
-| EVM   | Get Historical Token Holders| `https://deep-index.moralis.io/api/v2.2/erc20/:token_address/holders/historical` | [Documentation](/data-api/evm/token/holders/historical-token-holders)      |
 
 ### Search tokens
 

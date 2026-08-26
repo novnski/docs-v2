@@ -54,7 +54,7 @@ Data Feeds differ, then come back here to pick your endpoint.
 
 ## Solana endpoints
 
-The sunsetting Solana **token-holder** endpoints map onto the same holder recipes, pointed at Solana (the feed's
+The removed Solana **token-holder** endpoints map onto the same holder recipes, pointed at Solana (the feed's
 SPL `tokenTransfers` carry absolute post-balances, so the recipes run unchanged):
 
 | REST endpoint | Recipes you need | Headline fidelity |
@@ -63,7 +63,7 @@ SPL `tokenTransfers` carry absolute post-balances, so the recipes run unchanged)
 | `GET /token/:network/holders/:address` | [Token Holders](/data-feeds/recipes/token/token-holders) + [Token Transfers](/data-feeds/recipes/token/token-transfers) | totalHolders exact, tiers your-definition |
 | `GET /token/:network/holders/:address/historical` | [Historical Balances](/data-feeds/recipes/token/historical-balances) | per-bucket totals exact, change calculated |
 
-The sunsetting **launchpad / discovery** endpoints (pump.fun, Raydium LaunchLab) are all served by the one
+The removed **launchpad / discovery** endpoints (pump.fun, Raydium LaunchLab) are all served by the one
 [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) recipe over the `launchpadEvents` feed:
 
 | REST endpoint | Recipes you need | Headline fidelity |
@@ -76,5 +76,5 @@ The sunsetting **launchpad / discovery** endpoints (pump.fun, Raydium LaunchLab)
 ## Not covered yet
 
 - **Other Solana endpoints** (prices, swaps, portfolio, metadata) are not yet covered.
-- **Search and discovery endpoints** (`/tokens/search`, `/discovery/*`) are a search product, not an indexed feed.
+- **Search and discovery endpoints** (`/tokens/search`) are a search product, not an indexed feed.
 - **RPC node methods** (`eth_*`) belong to the node product, not Data Feeds.

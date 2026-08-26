@@ -267,7 +267,6 @@
               {
                 "group": "Search & Discovery",
                 "pages": [
-                  "data-api/data-features/search-and-discovery/token-filtering",
                   "data-api/data-features/search-and-discovery/token-search"
                 ]
               },
@@ -388,8 +387,7 @@
                     "group": "Holders",
                     "pages": [
                       "data-api/evm/token/holders/token-holders",
-                      "data-api/evm/token/holders/token-holder-stats",
-                      "data-api/evm/token/holders/historical-token-holders"
+                      "data-api/evm/token/holders/token-holder-stats"
                     ]
                   },
                   {
@@ -579,14 +577,6 @@
                     ]
                   },
                   {
-                    "group": "Holders",
-                    "pages": [
-                      "data-api/solana/token/holders/top-holders",
-                      "data-api/solana/token/holders/holder-metrics",
-                      "data-api/solana/token/holders/historical-holders"
-                    ]
-                  },
-                  {
                     "group": "Swaps & Pairs",
                     "pages": [
                       "data-api/solana/token/swaps/token-swaps",
@@ -607,11 +597,7 @@
                   {
                     "group": "Search & Discovery",
                     "pages": [
-                      "data-api/solana/token/search-and-discovery/token-search",
-                      "data-api/solana/token/search-and-discovery/pump-fun-new-tokens",
-                      "data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens",
-                      "data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens",
-                      "data-api/solana/token/search-and-discovery/pump-fun-bonding-status"
+                      "data-api/solana/token/search-and-discovery/token-search"
                     ]
                   }
                 ]
@@ -2202,6 +2188,42 @@
     {
       "source": "/data-feeds/migration/block",
       "destination": "/data-feeds/recipes/logs/contract-logs"
+    },
+    {
+      "source": "/data-api/evm/token/holders/historical-token-holders",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/holders/historical-holders",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/holders/holder-metrics",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/holders/top-holders",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/pump-fun-bonding-status",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/pump-fun-bonding-tokens",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/pump-fun-graduated-tokens",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/solana/token/search-and-discovery/pump-fun-new-tokens",
+      "destination": "/changelog"
+    },
+    {
+      "source": "/data-api/data-features/search-and-discovery/token-filtering",
+      "destination": "/data-api/data-features/search-and-discovery/token-search"
     }
   ],
   "footer": {
