@@ -3,18 +3,126 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="August 26, 2026" tags={["Deprecation"]}>
+  ## Lisk Support Removed: September 25, 2026
+
+  Moralis support for **Lisk** (`0x46f` / 1135) is removed on **September 25, 2026**, across the Data API, Streams, RPC Nodes, and Datashare.
+
+  **Why:** Lisk is winding down the Lisk Chain as part of [the next chapter for Lisk](https://lisk.com/blog/posts/introducing-the-new-lisk/). The LSK token contract on Ethereum is unchanged, and Base becomes LSK's primary network alongside Ethereum, so ongoing activity moves to two chains Moralis already covers in full.
+
+  **Timeline**
+
+  | Date | State |
+  | --- | --- |
+  | September 25, 2026 | Moralis removes Lisk support. Requests targeting `lisk` / `0x46f` return an unsupported-chain error |
+  | October 31, 2026 | Lisk's deadline for users to bridge assets from the Lisk Chain to Ethereum. Lisk notes that bridging takes at least 7 days, so start before late October 2026 |
+  | November 30, 2026 | Final shutdown of the Lisk Chain and its related infrastructure |
+
+  Note that Moralis removes support ahead of Lisk's own dates. The Lisk Chain keeps producing blocks and its infrastructure keeps running as normal until November 30, 2026. If you need chain access between September 25, 2026 and that date, point your integration at Lisk's own endpoints. See the [Lisk documentation](https://docs.lisk.com/), which stays available.
+
+  **What changes on September 25, 2026**
+
+  - **Data API:** wallet, token, NFT, entity, and blockchain endpoints reject `lisk` and `0x46f`. This applies to the `chain` query parameter on Deep Index endpoints and to the `chains` array on Universal API endpoints, so remove the value from your chain lists rather than relying on the rest of a multi-chain request still resolving.
+  - **RPC Nodes:** `https://site1.moralis-nodes.com/lisk/` and `https://site2.moralis-nodes.com/lisk/` stop resolving, including archive reads at historical block heights. The Lisk RPC reference pages are removed from the navigation.
+  - **Streams:** any stream that still lists `0x46f` in `chainIds` is invalid. List your streams with [Get streams](/streams/api-reference/streams/get-streams), then either [update the stream](/streams/api-reference/streams/update-stream) to a supported chain or [delete it](/streams/api-reference/streams/delete-stream).
+  - **Datashare:** Lisk is removed from the available datasets.
+
+  Lisk Sepolia (`0x106a` / 4202) was already removed in the [June 15, 2026 testnet wind-down](#testnets-removed).
+
+  **Export your history before September 25, 2026**
+
+  If you still need Lisk Chain data from Moralis, pull it while the endpoints answer. Paginate each call with `cursor` until the response returns an empty `result` and no `cursor`.
+
+  | Data | Endpoint |
+  | --- | --- |
+  | Full wallet history, decoded | [Wallet History](/data-api/evm/wallet/wallet-history) |
+  | ERC-20 transfers | [Wallet Token Transfers](/data-api/evm/wallet/token-transfers) |
+  | NFT transfers | [Wallet NFT Transfers](/data-api/evm/wallet/nft-transfers) |
+  | Closing token balances | [Wallet Token Balances](/data-api/evm/wallet/token-balances) |
+
+  **Where to point your integration**
+
+  | Network | Data API chain value | RPC path |
+  | --- | --- | --- |
+  | Ethereum | `eth` (`0x1`) | `https://site1.moralis-nodes.com/eth/` |
+  | Base | `base` (`0x2105`) | `https://site1.moralis-nodes.com/base/` |
+
+  Both are fully supported across the Data API, RPC Nodes, and Streams. Your API key, authentication, request shapes, and response formats do not change. Only the target chain does.
+
+  If you hold LSK on Ethereum or on an exchange, the token contract is unchanged and no action is needed. If you hold LSK on the Lisk Chain, bridge it to Ethereum before October 31, 2026.
+
+  For questions about the Lisk Chain itself, Lisk's [documentation](https://docs.lisk.com/) remains available and user-facing support has moved to [support.lisk.com](https://support.lisk.com/). If this change affects your Moralis integration or you need additional time, [reach out to the team](https://admin.moralis.com/) (via chat widget).
+</Update>
+
+<Update label="August 26, 2026" tags={["Deprecation"]}>
+  ## Moonbeam and Moonriver Historical Data Removal: September 25, 2026
+
+  On **August 21, 2026** Moralis stopped serving real-time **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) data. Historical data was left in place, so read requests kept returning records up to the last indexed block on each chain.
+
+  That ends on **September 25, 2026**. After this date, historical Moonbeam and Moonriver data is removed and no longer available through any Moralis product.
+
+  **Why:** GLMR and MOVR migrated to Base as 1:1 ERC-20 tokens ([Moonbeam](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), [Moonriver](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/)), holder bridging closed on July 31, 2026, and both original networks stopped producing blocks. There is no new state left to index on either chain.
+
+  **Timeline**
+
+  | Date | State |
+  | --- | --- |
+  | July 31, 2026 | Holder bridging to Base closed |
+  | August 21, 2026 | Real-time support removed. Streams stopped emitting webhooks and responses stopped advancing, since no new blocks were being produced |
+  | September 25, 2026 | Historical support removed. Requests targeting these chains return an unsupported-chain error |
+
+  **What changes on September 25, 2026**
+
+  - **Data API:** wallet, token, NFT, DeFi, and price endpoints reject `moonbeam`, `0x504`, `moonriver`, and `0x505`. This applies to the `chain` query parameter on Deep Index endpoints and to the `chains` array on Universal API endpoints, so remove these values from your chain lists rather than relying on the rest of a multi-chain request still resolving.
+  - **RPC Nodes:** `https://site1.moralis-nodes.com/moonbeam/`, `https://site2.moralis-nodes.com/moonbeam/`, and the matching `moonriver` paths stop resolving. Archive reads at historical block heights (`eth_getBlockByNumber`, `eth_getLogs`, `eth_getBalance` with a past block tag) go with them.
+  - **Streams:** any stream that still lists `0x504` or `0x505` in `chainIds` is invalid. List your streams with [Get streams](/streams/api-reference/streams/get-streams), then either [update the stream](/streams/api-reference/streams/update-stream) to `["0x2105"]` or [delete it](/streams/api-reference/streams/delete-stream).
+  - **Docs:** the Moonbeam and Moonriver RPC reference pages and their chain rows in the supported-chains tables are removed from the navigation.
+
+  **Export your history before September 25, 2026**
+
+  If you still need this data, pull it while the endpoints answer. Paginate each call with `cursor` until the response returns an empty `result` and no `cursor`.
+
+  | Data | Endpoint |
+  | --- | --- |
+  | Full wallet history, decoded | [Wallet History](/data-api/evm/wallet/wallet-history) |
+  | ERC-20 transfers | [Wallet Token Transfers](/data-api/evm/wallet/token-transfers) |
+  | NFT transfers | [Wallet NFT Transfers](/data-api/evm/wallet/nft-transfers) |
+  | Closing token balances | [Wallet Token Balances](/data-api/evm/wallet/token-balances) |
+
+  **Migrating to Base**
+
+  GLMR, MOVR, and all associated activity are tracked on Base going forward. Your API key, authentication, request shapes, and response formats do not change. Only the target chain does.
+
+  - **Data API:** set the chain to `base` (`0x2105`).
+  - **RPC Nodes:** swap the path segment to `https://site1.moralis-nodes.com/base/`. See the [Base RPC reference](/rpc-nodes/base/overview).
+  - **Streams:** create the stream with `"chainIds": ["0x2105"]` and the Base contract addresses below.
+
+  | Token | Contract address on Base |
+  | --- | --- |
+  | GLMR | `0xb3846fd356c2149ee8d30b0449088dc74e265459` |
+  | MOVR | `0x43fEB74608334DDa8c1a6500D185cFC3Ea962B83` |
+
+  For a walkthrough of the migration, watch [Moonbeam and Moonriver Migration to Base](https://www.youtube.com/watch?v=63UJ4EaqfUM).
+
+  If this change affects your integration or you need additional time, [reach out to the team](https://admin.moralis.com/) (via chat widget).
+</Update>
+
 <Update label="August 11, 2026" tags={["Deprecation"]}>
   ## Moonbeam and Moonriver API Deprecation: Migrate to Base
 
-  Moralis API support for **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) will be removed on **August 21, 2026**.
+  <Note>
+    **Updated August 26, 2026.** Only real-time support was removed on August 21, 2026. Historical data stayed available and is now scheduled for removal on **September 25, 2026**. See [Moonbeam and Moonriver Historical Data Removal](#moonbeam-and-moonriver-historical-data-removal-september-25-2026) for the current timeline.
+  </Note>
+
+  Moralis real-time API support for **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) was removed on **August 21, 2026**. Historical support for both chains is removed on **September 25, 2026**.
 
   Following [Moonbeam's network relaunch on Base](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), GLMR has fully migrated from the Moonbeam Polkadot parachain to Base as a 1:1 ERC-20 token, and [MOVR has migrated to Base](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/) on the same terms. Holder bridging closed on July 31, 2026, and both original networks have wound down.
 
-  **What's changing:**
+  **What changed on August 21, 2026:**
 
-  - **Data API:** wallet, token, NFT, DeFi, and price endpoints no longer return Moonbeam or Moonriver data. Requests passing `moonbeam` / `0x504` or `moonriver` / `0x505` will return an error.
-  - **RPC Nodes:** the Moonbeam and Moonriver RPC endpoints (`https://site1.moralis-nodes.com/moonbeam/` and `.../moonriver/`) are no longer available, and their documentation will be removed.
-  - **Streams:** existing Moonbeam and Moonriver streams will stop emitting webhook notifications and should be deleted from your workspace.
+  - **Data API:** wallet, token, NFT, DeFi, and price endpoints no longer return new Moonbeam or Moonriver data, since neither chain produces blocks. Historical records up to the last indexed block are still returned until September 25, 2026.
+  - **RPC Nodes:** the Moonbeam and Moonriver RPC endpoints (`https://site1.moralis-nodes.com/moonbeam/` and `.../moonriver/`) still resolve and serve the final state of each chain. They are removed on September 25, 2026, along with their documentation.
+  - **Streams:** existing Moonbeam and Moonriver streams stopped emitting webhook notifications and should be deleted from your workspace.
 
   **What you need to do:** migrate your integration to Moralis Base endpoints. GLMR, MOVR, and all associated activity are now tracked on Base.
 
@@ -28,7 +136,7 @@ description: "New releases and improvements"
 
   **Not affected:** your API key, authentication, request shapes, and response formats. Base is already fully supported across the Data API, RPC Nodes, and Streams. Only the target chain changes.
 
-  Make these changes before August 21 to avoid errored responses. Questions? [Reach out to the team](https://admin.moralis.com/) (via chat widget).
+  Export anything you still need from Moonbeam or Moonriver before September 25, 2026 to avoid errored responses. Questions? [Reach out to the team](https://admin.moralis.com/) (via chat widget).
 </Update>
 
 <Update label="July 21, 2026" tags={["New Feature"]}>
