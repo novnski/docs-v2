@@ -57,18 +57,19 @@ description: "New releases and improvements"
 <Update label="August 26, 2026" tags={["Deprecation"]}>
   ## Moonbeam and Moonriver Historical Data Removal: September 25, 2026
 
-  On **August 21, 2026** Moralis stopped serving real-time **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) data. Historical data was left in place, so read requests kept returning records up to the last indexed block on each chain.
+  **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) stopped producing new blocks on **August 1, 2026**, and Moralis removed real-time support for both chains on **August 21, 2026**. Historical data was left in place, so read requests kept returning records up to the final block on each chain.
 
   That ends on **September 25, 2026**. After this date, historical Moonbeam and Moonriver data is removed and no longer available through any Moralis product.
 
-  **Why:** GLMR and MOVR migrated to Base as 1:1 ERC-20 tokens ([Moonbeam](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), [Moonriver](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/)), holder bridging closed on July 31, 2026, and both original networks stopped producing blocks. There is no new state left to index on either chain.
+  **Why:** GLMR and MOVR migrated to Base as 1:1 ERC-20 tokens ([Moonbeam](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), [Moonriver](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/)), holder bridging closed on July 31, 2026, and both original networks stopped producing blocks on August 1, 2026. There is no new state left to index on either chain.
 
   **Timeline**
 
   | Date | State |
   | --- | --- |
   | July 31, 2026 | Holder bridging to Base closed |
-  | August 21, 2026 | Real-time support removed. Streams stopped emitting webhooks and responses stopped advancing, since no new blocks were being produced |
+  | August 1, 2026 | Moonbeam and Moonriver stopped producing new blocks |
+  | August 21, 2026 | Moralis removed real-time support. Streams stopped emitting webhooks, and responses had already stopped advancing at the final block |
   | September 25, 2026 | Historical support removed. Requests targeting these chains return an unsupported-chain error |
 
   **What changes on September 25, 2026**
@@ -116,11 +117,11 @@ description: "New releases and improvements"
 
   Moralis real-time API support for **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) was removed on **August 21, 2026**. Historical support for both chains is removed on **September 25, 2026**.
 
-  Following [Moonbeam's network relaunch on Base](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), GLMR has fully migrated from the Moonbeam Polkadot parachain to Base as a 1:1 ERC-20 token, and [MOVR has migrated to Base](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/) on the same terms. Holder bridging closed on July 31, 2026, and both original networks have wound down.
+  Following [Moonbeam's network relaunch on Base](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), GLMR has fully migrated from the Moonbeam Polkadot parachain to Base as a 1:1 ERC-20 token, and [MOVR has migrated to Base](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/) on the same terms. Holder bridging closed on July 31, 2026, both original networks stopped producing new blocks on August 1, 2026, and both have wound down.
 
   **What changed on August 21, 2026:**
 
-  - **Data API:** wallet, token, NFT, DeFi, and price endpoints no longer return new Moonbeam or Moonriver data, since neither chain produces blocks. Historical records up to the last indexed block are still returned until September 25, 2026.
+  - **Data API:** wallet, token, NFT, DeFi, and price endpoints no longer return new Moonbeam or Moonriver data, since neither chain has produced a block since August 1, 2026. Historical records up to the final block are still returned until September 25, 2026.
   - **RPC Nodes:** the Moonbeam and Moonriver RPC endpoints (`https://site1.moralis-nodes.com/moonbeam/` and `.../moonriver/`) still resolve and serve the final state of each chain. They are removed on September 25, 2026, along with their documentation.
   - **Streams:** existing Moonbeam and Moonriver streams stopped emitting webhook notifications and should be deleted from your workspace.
 
