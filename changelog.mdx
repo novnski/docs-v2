@@ -57,7 +57,7 @@ description: "New releases and improvements"
 <Update label="August 26, 2026" tags={["Deprecation"]}>
   ## Moonbeam and Moonriver Historical Data Removal: September 25, 2026
 
-  **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) stopped producing new blocks on **August 1, 2026**, and Moralis removed real-time support for both chains on **August 21, 2026**. Historical data was left in place, so read requests kept returning records up to the final block on each chain.
+  **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) stopped producing new blocks on **August 1, 2026**, so there has been no real-time data to serve since then. Historical data was left in place, and read requests have kept returning records up to the final block on each chain.
 
   That ends on **September 25, 2026**. After this date, historical Moonbeam and Moonriver data is removed and no longer available through any Moralis product.
 
@@ -68,8 +68,7 @@ description: "New releases and improvements"
   | Date | State |
   | --- | --- |
   | July 31, 2026 | Holder bridging to Base closed |
-  | August 1, 2026 | Moonbeam and Moonriver stopped producing new blocks |
-  | August 21, 2026 | Moralis removed real-time support. Streams stopped emitting webhooks, and responses had already stopped advancing at the final block |
+  | August 1, 2026 | Moonbeam and Moonriver stopped producing new blocks. No real-time data from this point, and streams stopped emitting webhooks |
   | September 25, 2026 | Historical support removed. Requests targeting these chains return an unsupported-chain error |
 
   **What changes on September 25, 2026**
@@ -112,18 +111,18 @@ description: "New releases and improvements"
   ## Moonbeam and Moonriver API Deprecation: Migrate to Base
 
   <Note>
-    **Updated August 26, 2026.** Only real-time support was removed on August 21, 2026. Historical data stayed available and is now scheduled for removal on **September 25, 2026**. See [Moonbeam and Moonriver Historical Data Removal](#moonbeam-and-moonriver-historical-data-removal-september-25-2026) for the current timeline.
+    **Updated August 26, 2026.** Both chains stopped producing new blocks on August 1, 2026, so there has been no real-time data to serve since then. Historical data stayed available and is now scheduled for removal on **September 25, 2026**. See [Moonbeam and Moonriver Historical Data Removal](#moonbeam-and-moonriver-historical-data-removal-september-25-2026) for the current timeline.
   </Note>
 
-  Moralis real-time API support for **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) was removed on **August 21, 2026**. Historical support for both chains is removed on **September 25, 2026**.
+  Moralis API support for **Moonbeam** (`0x504`) and **Moonriver** (`0x505`) is being removed. Both chains stopped producing new blocks on **August 1, 2026**, and historical support for both is removed on **September 25, 2026**.
 
   Following [Moonbeam's network relaunch on Base](https://moonbeam.network/news/moonbeam-strategic-update-moonbeam-network-relaunches-on-base/), GLMR has fully migrated from the Moonbeam Polkadot parachain to Base as a 1:1 ERC-20 token, and [MOVR has migrated to Base](https://moonbeam.network/news/moonriver-strategic-update-movr-is-migrating-to-base/) on the same terms. Holder bridging closed on July 31, 2026, both original networks stopped producing new blocks on August 1, 2026, and both have wound down.
 
-  **What changed on August 21, 2026:**
+  **What's changing:**
 
   - **Data API:** wallet, token, NFT, DeFi, and price endpoints no longer return new Moonbeam or Moonriver data, since neither chain has produced a block since August 1, 2026. Historical records up to the final block are still returned until September 25, 2026.
   - **RPC Nodes:** the Moonbeam and Moonriver RPC endpoints (`https://site1.moralis-nodes.com/moonbeam/` and `.../moonriver/`) still resolve and serve the final state of each chain. They are removed on September 25, 2026, along with their documentation.
-  - **Streams:** existing Moonbeam and Moonriver streams stopped emitting webhook notifications and should be deleted from your workspace.
+  - **Streams:** existing Moonbeam and Moonriver streams no longer emit webhook notifications, since there are no new blocks, and should be deleted from your workspace.
 
   **What you need to do:** migrate your integration to Moralis Base endpoints. GLMR, MOVR, and all associated activity are now tracked on Base.
 

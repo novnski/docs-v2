@@ -65,9 +65,9 @@ const MoonbeamCallout = ({ children }) => (
 
 export const MoonbeamDeprecation = () => (
   <MoonbeamCallout>
-    <strong>Deprecated. Migrate to Base.</strong> Real-time support for Moonbeam
-    (<code>0x504</code>) and Moonriver (<code>0x505</code>) ended on August 21,
-    2026, and historical support is removed on{" "}
+    <strong>Deprecated. Migrate to Base.</strong> Moonbeam (<code>0x504</code>)
+    and Moonriver (<code>0x505</code>) stopped producing new blocks on August 1,
+    2026, and Moralis support is removed on{" "}
     <strong>{MOONBEAM_REMOVAL_DATE}</strong>. Following Moonbeam's network
     relaunch on Base, GLMR (
     <code>0xb3846fd356c2149ee8d30b0449088dc74e265459</code>) and MOVR (
@@ -81,8 +81,8 @@ export const MoonbeamDeprecation = () => (
 
 export const MoonbeamChainsNote = () => (
   <MoonbeamCallout>
-    <strong>Moonbeam and Moonriver are deprecated.</strong> Real-time support
-    ended on August 21, 2026, and historical data for both chains is removed on{" "}
+    <strong>Moonbeam and Moonriver are deprecated.</strong> Both chains stopped
+    producing new blocks on August 1, 2026, and Moralis support is removed on{" "}
     <strong>{MOONBEAM_REMOVAL_DATE}</strong>, following Moonbeam's network
     relaunch on Base. GLMR and MOVR are now ERC-20 tokens on Base, so migrate to
     the <code>base</code> chain parameter and export any history you still need

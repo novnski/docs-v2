@@ -33,13 +33,13 @@ export const SupportedChainsTable = () => {
     { name: "Cronos Mainnet", type: "Mainnet", chainId: "0x19 (25)", s: mk(true, true, true, false, true) },
     { name: "Gnosis", type: "Mainnet", chainId: "0x64 (100)", s: mk(true, true, true, true, true) },
     { name: "Chiliz Mainnet", type: "Mainnet", chainId: "0x15b38 (88888)", s: mk(true, true, true, false, true) },
-    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", deprecated: true, s: mk(true, true, true, true, true) },
-    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", deprecated: true, s: mk(true, true, true, true, true) },
+    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", deprecated: true, depNote: "Support removed on September 25, 2026. Migrate to Base.", depHref: "/changelog#moonbeam-and-moonriver-historical-data-removal-september-25-2026", s: mk(true, true, true, true, true) },
+    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", deprecated: true, depNote: "Support removed on September 25, 2026. Migrate to Base.", depHref: "/changelog#moonbeam-and-moonriver-historical-data-removal-september-25-2026", s: mk(true, true, true, true, true) },
     { name: "Flow", type: "Mainnet", chainId: "0x2eb (747)", s: mk(true, true, true, true, false) },
     { name: "Flow Testnet", type: "Testnet", chainId: "0x221 (545)", s: mk(true, true, true, true, false) },
     { name: "Ronin", type: "Mainnet", chainId: "0x7e4 (2020)", s: mk(true, true, true, true, false) },
     { name: "Ronin Saigon Testnet", type: "Testnet", chainId: "0x7e5 (2021)", s: mk(true, true, true, true, false) },
-    { name: "Lisk", type: "Mainnet", chainId: "0x46f (1135)", s: mk(true, true, true, true, false) },
+    { name: "Lisk", type: "Mainnet", chainId: "0x46f (1135)", deprecated: true, depNote: "Support removed on September 25, 2026. Migrate to Ethereum or Base.", depHref: "/changelog#lisk-support-removed-september-25-2026", s: mk(true, true, true, true, false) },
     { name: "Pulsechain", type: "Mainnet", chainId: "0x171 (369)", s: mk(true, true, true, true, false) },
     { name: "Sei", type: "Mainnet", chainId: "0x531 (1329)", s: mk(true, true, true, false, false) },
     { name: "Sei Testnet", type: "Testnet", chainId: "0x530 (1328)", s: mk(true, true, true, false, false) },
@@ -70,10 +70,10 @@ export const SupportedChainsTable = () => {
     </td>
   );
 
-  const DeprecatedBadge = () => (
+  const DeprecatedBadge = ({ note, href }) => (
     <a
-      href="/changelog"
-      title="Support removed on August 21, 2026. Migrate to Base."
+      href={href || "/changelog"}
+      title={note || "Support removed on September 25, 2026."}
       style={{
         marginLeft: "6px",
         padding: "1px 6px",
@@ -87,7 +87,7 @@ export const SupportedChainsTable = () => {
         textDecoration: "none",
       }}
     >
-      Deprecated Aug 21, 2026
+      Deprecated Sep 25, 2026
     </a>
   );
 
@@ -152,7 +152,7 @@ export const SupportedChainsTable = () => {
             <tr key={c.name}>
               <td>
                 {c.name}
-                {c.deprecated && <DeprecatedBadge />}
+                {c.deprecated && <DeprecatedBadge note={c.depNote} href={c.depHref} />}
               </td>
               <td>{c.type}</td>
               <td>{c.chainId}</td>
