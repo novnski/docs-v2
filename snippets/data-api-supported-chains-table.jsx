@@ -43,13 +43,13 @@ export const DataApiSupportedChainsTable = () => {
     { name: "Cronos Mainnet", type: "Mainnet", chainId: "0x19 (25)", qp: ["cronos", "0x19"], s: mk(T, T, T, T, F, T, T, F, T, F, F, F, F) },
     { name: "Gnosis", type: "Mainnet", chainId: "0x64 (100)", qp: ["gnosis", "0x64"], s: mk(T, T, F, T, F, T, T, F, T, T, F, F, F) },
     { name: "Chiliz Mainnet", type: "Mainnet", chainId: "0x15b38 (88888)", qp: ["chiliz", "0x15b38"], s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
-    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", qp: ["moonbeam", "0x504"], deprecated: T, s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
-    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", qp: ["moonriver", "0x505"], deprecated: T, s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
+    { name: "Moonbeam", type: "Mainnet", chainId: "0x504 (1284)", qp: ["moonbeam", "0x504"], deprecated: T, depNote: "Support removed on September 25, 2026. Migrate to Base.", depHref: "/changelog#moonbeam-moonriver-and-lisk-support-ends-september-25-2026", s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
+    { name: "Moonriver", type: "Testnet", chainId: "0x505 (1285)", qp: ["moonriver", "0x505"], deprecated: T, depNote: "Support removed on September 25, 2026. Migrate to Base.", depHref: "/changelog#moonbeam-moonriver-and-lisk-support-ends-september-25-2026", s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
     { name: "Flow", type: "Mainnet", chainId: "0x2eb (747)", qp: ["flow", "0x2eb"], s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
     { name: "Flow Testnet", type: "Testnet", chainId: "0x221 (545)", qp: ["flow-testnet", "0x221"], s: mk(T, T, T, T, F, T, T, F, F, F, F, F, F) },
     { name: "Ronin", type: "Mainnet", chainId: "0x7e4 (2020)", qp: ["ronin", "0x7e4"], s: mk(T, T, T, T, F, T, T, F, T, T, T, T, T) },
     { name: "Ronin Saigon Testnet", type: "Testnet", chainId: "0x7e5 (2021)", qp: ["ronin-testnet", "0x31769"], s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
-    { name: "Lisk", type: "Mainnet", chainId: "0x46f (1135)", qp: ["lisk", "0x46f"], s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
+    { name: "Lisk", type: "Mainnet", chainId: "0x46f (1135)", qp: ["lisk", "0x46f"], deprecated: T, depNote: "Support removed on September 25, 2026. Migrate to Ethereum or Base.", depHref: "/changelog#moonbeam-moonriver-and-lisk-support-ends-september-25-2026", s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
     { name: "Pulsechain", type: "Mainnet", chainId: "0x171 (369)", qp: ["pulse", "0x171"], s: mk(T, T, F, T, F, T, T, F, T, T, F, F, F) },
     { name: "Sei", type: "Mainnet", chainId: "0x531 (1329)", qp: ["sei", "0x531"], s: mk(T, T, T, T, T, T, T, F, T, T, T, T, T) },
     { name: "Sei Testnet", type: "Testnet", chainId: "0x530 (1328)", qp: ["sei-testnet", "0x530"], s: mk(T, T, T, T, T, T, T, F, F, T, F, F, F) },
@@ -70,10 +70,10 @@ export const DataApiSupportedChainsTable = () => {
     </td>
   );
 
-  const DeprecatedBadge = () => (
+  const DeprecatedBadge = ({ note, href }) => (
     <a
-      href="/changelog"
-      title="Support removed on August 21, 2026. Migrate to Base."
+      href={href || "/changelog"}
+      title={note || "Support removed on September 25, 2026."}
       style={{
         marginLeft: "6px",
         padding: "1px 6px",
@@ -87,7 +87,7 @@ export const DataApiSupportedChainsTable = () => {
         textDecoration: "none",
       }}
     >
-      Deprecated Aug 21, 2026
+      Deprecated Sep 25, 2026
     </a>
   );
 
@@ -155,7 +155,7 @@ export const DataApiSupportedChainsTable = () => {
             <tr key={c.name}>
               <td>
                 {c.name}
-                {c.deprecated && <DeprecatedBadge />}
+                {c.deprecated && <DeprecatedBadge note={c.depNote} href={c.depHref} />}
               </td>
               <td>{c.type}</td>
               <td>{c.chainId}</td>
