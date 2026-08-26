@@ -75,7 +75,7 @@ export const MoonbeamDeprecation = () => (
     tokens on Base. Point your integration at Base by using the{" "}
     <code>base</code> chain parameter, or the{" "}
     <code>https://site1.moralis-nodes.com/base/</code> RPC path. See the{" "}
-    <a href="/changelog#moonbeam-and-moonriver-historical-data-removal-september-25-2026">deprecation notice</a> for details.
+    <a href="/changelog#moonbeam-moonriver-and-lisk-removed-on-september-25-2026">deprecation notice</a> for details.
   </MoonbeamCallout>
 );
 
@@ -87,7 +87,7 @@ export const MoonbeamChainsNote = () => (
     relaunch on Base. GLMR and MOVR are now ERC-20 tokens on Base, so migrate to
     the <code>base</code> chain parameter and export any history you still need
     before that date. See the{" "}
-    <a href="/changelog#moonbeam-and-moonriver-historical-data-removal-september-25-2026">deprecation notice</a> for contract addresses and
+    <a href="/changelog#moonbeam-moonriver-and-lisk-removed-on-september-25-2026">deprecation notice</a> for contract addresses and
     details.
   </MoonbeamCallout>
 );

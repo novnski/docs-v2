@@ -71,7 +71,7 @@ export const LiskDeprecation = () => (
     your integration at Ethereum (<code>eth</code>) or Base (<code>base</code>),
     or at the <code>https://site1.moralis-nodes.com/eth/</code> and{" "}
     <code>https://site1.moralis-nodes.com/base/</code> RPC paths. See the{" "}
-    <a href="/changelog#lisk-support-removed-september-25-2026">
+    <a href="/changelog#moonbeam-moonriver-and-lisk-removed-on-september-25-2026">
       deprecation notice
     </a>{" "}
     for the full timeline.
@@ -85,7 +85,7 @@ export const LiskChainsNote = () => (
     ahead of the Lisk Chain wind-down. Migrate to the <code>eth</code> or{" "}
     <code>base</code> chain parameter and export any history you still need
     before that date. See the{" "}
-    <a href="/changelog#lisk-support-removed-september-25-2026">
+    <a href="/changelog#moonbeam-moonriver-and-lisk-removed-on-september-25-2026">
       deprecation notice
     </a>{" "}
     for the full timeline.
