@@ -7,11 +7,11 @@ description: "Sync the current reserve0 / reserve1 of any DEX pair, the pool's a
 
 > "What are the current `reserve0` / `reserve1` of DEX pair **0x…**?"
 
-Mirrors Moralis `GET /{pair_address}/reserves` → `{ reserve0, reserve1 }`. The recipe lands the pool's absolute token balances and keeps the **latest observation per pair**, so a single read returns each pair's current reserves.
+Mirrors Moralis `GET /{pair_address}/reserves` → `{ reserve0, reserve1 }`. The template lands the pool's absolute token balances and keeps the **latest observation per pair**, so a single read returns each pair's current reserves.
 
 ### What you get
 
-The recipe lands **one observation per swap**, the pool's absolute token balances captured *after* each trade, and the current reserves of a pair are the highest-`(block_number, log_index)` observation for that pair:
+The template lands **one observation per swap**, the pool's absolute token balances captured *after* each trade, and the current reserves of a pair are the highest-`(block_number, log_index)` observation for that pair:
 
 | Column | Description |
 | --- | --- |
@@ -38,13 +38,13 @@ The faithful source for reserves is `tokenSwaps`. Each swap carries `token0PostB
 | **Postgres** | `pair_reserves` (materialized view over `pair_reserve_observations`) | Unique index `(pair_address)` |
 | **MySQL** | `pair_reserves` (trigger-maintained over `pair_reserve_observations`) | Primary key `(pair_address)` |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct: a reorg negates the rolled-back block's observations (`sign = -1`) and re-emits the corrected ones. Read with `FINAL` to collapse the `±1` pair, then `argMax` to pick the latest observation, never a bare `WHERE sign = 1`.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct: a reorg negates the rolled-back block's observations (`sign = -1`) and re-emits the corrected ones. Read with `FINAL` to collapse the `±1` pair, then `argMax` to pick the latest observation, never a bare `WHERE sign = 1`.
 
 Postgres and MySQL append append-only observations and derive a **latest-wins** current-reserves surface per pair: Postgres via a `DISTINCT ON (pair_address) … ORDER BY block_number DESC, log_index DESC` materialized view, MySQL via an `AFTER INSERT` upsert trigger.
 
 ### Full schema
 
-The ClickHouse fact table is the per-pair observation table; the current reserves are an `argMax` over it. Reserves are raw `uint256` stored as text (matching the API's string reserves), `argMax` over text ordered by the numeric recency key is exact. Keep the columns you need (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)).
+The ClickHouse fact table is the per-pair observation table; the current reserves are an `argMax` over it. Reserves are raw `uint256` stored as text (matching the API's string reserves), `argMax` over text ordered by the numeric recency key is exact. Keep the columns you need (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)).
 
 <Accordion title="ClickHouse, fact_pair_reserves">
 
@@ -158,7 +158,7 @@ WHERE pair_address = lower('0x...');
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   The Postgres / MySQL realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level. Run **realtime / hybrid on ClickHouse** (the collapsing log table corrects reorgs per block); the Postgres / MySQL configs target `historical` backfill and re-derive their current-reserves surface on refresh.
@@ -166,7 +166,7 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting, point it at any supported EVM chain or Solana. On Solana, the event identity already folds in `(pair_address, token0PostBalance, token1PostBalance)` on top of `(transaction_hash, log_index)`, so it stays row-unique despite Solana's repeated log indices within an instruction.
+The template is chain-parametrized via the `chain` setting, point it at any supported EVM chain or Solana. On Solana, the event identity already folds in `(pair_address, token0PostBalance, token1PostBalance)` on top of `(transaction_hash, log_index)`, so it stays row-unique despite Solana's repeated log indices within an instruction.
 
 ### Fidelity gaps
 
@@ -178,10 +178,10 @@ The recipe is chain-parametrized via the `chain` setting, point it at any suppor
 ### Related
 
 <Columns cols={2}>
-  <Card title="Swaps by Pair" href="/data-feeds/recipes/markets/swaps-by-pair" icon="arrow-right-arrow-left">
+  <Card title="Swaps by Pair" href="/data-feeds/templates/markets/swaps-by-pair" icon="arrow-right-arrow-left">
     Every DEX trade for a pair, the same swap stream these reserves derive from.
   </Card>
-  <Card title="Pair OHLCV" href="/data-feeds/recipes/markets/pair-ohlcv" icon="chart-candlestick">
+  <Card title="Pair OHLCV" href="/data-feeds/templates/markets/pair-ohlcv" icon="chart-candlestick">
     Per-pair price candles for charting.
   </Card>
 </Columns>

@@ -943,61 +943,61 @@
           {
             "group": "Data APIs & Migration Guides",
             "pages": [
-              "data-feeds/recipes/overview",
+              "data-feeds/templates/overview",
               "data-feeds/migration/overview",
               "data-feeds/migration/endpoints",
               {
                 "group": "Wallet API",
                 "pages": [
-                  "data-feeds/recipes/wallet/wallet-history",
-                  "data-feeds/recipes/wallet/token-balances-by-wallet",
-                  "data-feeds/recipes/wallet/native-balances",
-                  "data-feeds/recipes/wallet/nfts-by-wallet",
-                  "data-feeds/recipes/wallet/token-approvals"
+                  "data-feeds/templates/wallet/wallet-history",
+                  "data-feeds/templates/wallet/token-balances-by-wallet",
+                  "data-feeds/templates/wallet/native-balances",
+                  "data-feeds/templates/wallet/nfts-by-wallet",
+                  "data-feeds/templates/wallet/token-approvals"
                 ]
               },
               {
                 "group": "Token API",
                 "pages": [
-                  "data-feeds/recipes/token/token-holders",
-                  "data-feeds/recipes/token/historical-balances",
-                  "data-feeds/recipes/token/token-balances-by-token",
-                  "data-feeds/recipes/token/token-transfers",
-                  "data-feeds/recipes/token/token-stats",
-                  "data-feeds/recipes/token/token-metadata",
-                  "data-feeds/recipes/token/token-bonding-status"
+                  "data-feeds/templates/token/token-holders",
+                  "data-feeds/templates/token/historical-balances",
+                  "data-feeds/templates/token/token-balances-by-token",
+                  "data-feeds/templates/token/token-transfers",
+                  "data-feeds/templates/token/token-stats",
+                  "data-feeds/templates/token/token-metadata",
+                  "data-feeds/templates/token/token-bonding-status"
                 ]
               },
               {
                 "group": "Price API",
                 "pages": [
-                  "data-feeds/recipes/token/token-prices",
-                  "data-feeds/recipes/markets/pair-ohlcv"
+                  "data-feeds/templates/token/token-prices",
+                  "data-feeds/templates/markets/pair-ohlcv"
                 ]
               },
               {
                 "group": "DeFi API",
                 "pages": [
-                  "data-feeds/recipes/markets/swaps-by-wallet",
-                  "data-feeds/recipes/markets/swaps-by-token",
-                  "data-feeds/recipes/markets/swaps-by-pair",
-                  "data-feeds/recipes/markets/pair-reserves"
+                  "data-feeds/templates/markets/swaps-by-wallet",
+                  "data-feeds/templates/markets/swaps-by-token",
+                  "data-feeds/templates/markets/swaps-by-pair",
+                  "data-feeds/templates/markets/pair-reserves"
                 ]
               },
               {
                 "group": "NFT API",
                 "pages": [
-                  "data-feeds/recipes/nft/nft-transfers",
-                  "data-feeds/recipes/nft/nft-trades",
-                  "data-feeds/recipes/nft/nft-owners-by-contract",
-                  "data-feeds/recipes/nft/nft-collection-metadata"
+                  "data-feeds/templates/nft/nft-transfers",
+                  "data-feeds/templates/nft/nft-trades",
+                  "data-feeds/templates/nft/nft-owners-by-contract",
+                  "data-feeds/templates/nft/nft-collection-metadata"
                 ]
               },
               {
                 "group": "Blockchain API",
                 "pages": [
-                  "data-feeds/recipes/logs/contract-logs",
-                  "data-feeds/recipes/logs/logs-by-topic0"
+                  "data-feeds/templates/logs/contract-logs",
+                  "data-feeds/templates/logs/logs-by-topic0"
                 ]
               }
             ]
@@ -1850,6 +1850,10 @@
   },
   "redirects": [
     {
+      "source": "/data-feeds/recipes/:slug*",
+      "destination": "/data-feeds/templates/:slug*"
+    },
+    {
       "source": "/data-feeds/concepts/data-feeds-vs-the-legacy-api",
       "destination": "/data-feeds/concepts/data-feeds-vs-the-rest-api"
     },
@@ -2043,151 +2047,151 @@
     },
     {
       "source": "/data-feeds/migration/wallet-history",
-      "destination": "/data-feeds/recipes/wallet/wallet-history"
+      "destination": "/data-feeds/templates/wallet/wallet-history"
     },
     {
       "source": "/data-feeds/migration/wallet-native-txns",
-      "destination": "/data-feeds/recipes/wallet/wallet-history"
+      "destination": "/data-feeds/templates/wallet/wallet-history"
     },
     {
       "source": "/data-feeds/migration/wallet-chains",
-      "destination": "/data-feeds/recipes/wallet/wallet-history"
+      "destination": "/data-feeds/templates/wallet/wallet-history"
     },
     {
       "source": "/data-feeds/migration/wallet-stats",
-      "destination": "/data-feeds/recipes/wallet/wallet-history"
+      "destination": "/data-feeds/templates/wallet/wallet-history"
     },
     {
       "source": "/data-feeds/migration/wallet-tokens",
-      "destination": "/data-feeds/recipes/wallet/token-balances-by-wallet"
+      "destination": "/data-feeds/templates/wallet/token-balances-by-wallet"
     },
     {
       "source": "/data-feeds/migration/wallet-erc20",
-      "destination": "/data-feeds/recipes/wallet/token-balances-by-wallet"
+      "destination": "/data-feeds/templates/wallet/token-balances-by-wallet"
     },
     {
       "source": "/data-feeds/migration/wallet-networth",
-      "destination": "/data-feeds/recipes/wallet/token-balances-by-wallet"
+      "destination": "/data-feeds/templates/wallet/token-balances-by-wallet"
     },
     {
       "source": "/data-feeds/migration/native-balance",
-      "destination": "/data-feeds/recipes/wallet/native-balances"
+      "destination": "/data-feeds/templates/wallet/native-balances"
     },
     {
       "source": "/data-feeds/migration/wallet-approvals",
-      "destination": "/data-feeds/recipes/wallet/token-approvals"
+      "destination": "/data-feeds/templates/wallet/token-approvals"
     },
     {
       "source": "/data-feeds/migration/wallet-nfts",
-      "destination": "/data-feeds/recipes/wallet/nfts-by-wallet"
+      "destination": "/data-feeds/templates/wallet/nfts-by-wallet"
     },
     {
       "source": "/data-feeds/migration/wallet-nft-collections",
-      "destination": "/data-feeds/recipes/wallet/nfts-by-wallet"
+      "destination": "/data-feeds/templates/wallet/nfts-by-wallet"
     },
     {
       "source": "/data-feeds/migration/erc20-price",
-      "destination": "/data-feeds/recipes/token/token-prices"
+      "destination": "/data-feeds/templates/token/token-prices"
     },
     {
       "source": "/data-feeds/migration/erc20-prices",
-      "destination": "/data-feeds/recipes/token/token-prices"
+      "destination": "/data-feeds/templates/token/token-prices"
     },
     {
       "source": "/data-feeds/migration/erc20-owners",
-      "destination": "/data-feeds/recipes/token/token-holders"
+      "destination": "/data-feeds/templates/token/token-holders"
     },
     {
       "source": "/data-feeds/migration/erc20-holders",
-      "destination": "/data-feeds/recipes/token/token-holders"
+      "destination": "/data-feeds/templates/token/token-holders"
     },
     {
       "source": "/data-feeds/migration/solana-token-holders",
-      "destination": "/data-feeds/recipes/token/token-holders"
+      "destination": "/data-feeds/templates/token/token-holders"
     },
     {
       "source": "/data-feeds/migration/solana-top-holders",
-      "destination": "/data-feeds/recipes/token/token-holders"
+      "destination": "/data-feeds/templates/token/token-holders"
     },
     {
       "source": "/data-feeds/migration/holders-historical",
-      "destination": "/data-feeds/recipes/token/historical-balances"
+      "destination": "/data-feeds/templates/token/historical-balances"
     },
     {
       "source": "/data-feeds/migration/solana-historical-holders",
-      "destination": "/data-feeds/recipes/token/historical-balances"
+      "destination": "/data-feeds/templates/token/historical-balances"
     },
     {
       "source": "/data-feeds/migration/token-transfers",
-      "destination": "/data-feeds/recipes/token/token-transfers"
+      "destination": "/data-feeds/templates/token/token-transfers"
     },
     {
       "source": "/data-feeds/migration/wallet-erc20-transfers",
-      "destination": "/data-feeds/recipes/token/token-transfers"
+      "destination": "/data-feeds/templates/token/token-transfers"
     },
     {
       "source": "/data-feeds/migration/erc20-metadata",
-      "destination": "/data-feeds/recipes/token/token-metadata"
+      "destination": "/data-feeds/templates/token/token-metadata"
     },
     {
       "source": "/data-feeds/migration/solana-token-bonding-status",
-      "destination": "/data-feeds/recipes/token/token-bonding-status"
+      "destination": "/data-feeds/templates/token/token-bonding-status"
     },
     {
       "source": "/data-feeds/migration/solana-new-tokens-by-exchange",
-      "destination": "/data-feeds/recipes/token/token-bonding-status"
+      "destination": "/data-feeds/templates/token/token-bonding-status"
     },
     {
       "source": "/data-feeds/migration/solana-bonding-tokens-by-exchange",
-      "destination": "/data-feeds/recipes/token/token-bonding-status"
+      "destination": "/data-feeds/templates/token/token-bonding-status"
     },
     {
       "source": "/data-feeds/migration/solana-graduated-tokens-by-exchange",
-      "destination": "/data-feeds/recipes/token/token-bonding-status"
+      "destination": "/data-feeds/templates/token/token-bonding-status"
     },
     {
       "source": "/data-feeds/migration/wallet-swaps",
-      "destination": "/data-feeds/recipes/markets/swaps-by-wallet"
+      "destination": "/data-feeds/templates/markets/swaps-by-wallet"
     },
     {
       "source": "/data-feeds/migration/token-analytics",
-      "destination": "/data-feeds/recipes/markets/swaps-by-token"
+      "destination": "/data-feeds/templates/markets/swaps-by-token"
     },
     {
       "source": "/data-feeds/migration/token-pairs",
-      "destination": "/data-feeds/recipes/markets/swaps-by-pair"
+      "destination": "/data-feeds/templates/markets/swaps-by-pair"
     },
     {
       "source": "/data-feeds/migration/pair-ohlcv",
-      "destination": "/data-feeds/recipes/markets/pair-ohlcv"
+      "destination": "/data-feeds/templates/markets/pair-ohlcv"
     },
     {
       "source": "/data-feeds/migration/wallet-nft-transfers",
-      "destination": "/data-feeds/recipes/nft/nft-transfers"
+      "destination": "/data-feeds/templates/nft/nft-transfers"
     },
     {
       "source": "/data-feeds/migration/nft-owners",
-      "destination": "/data-feeds/recipes/nft/nft-owners-by-contract"
+      "destination": "/data-feeds/templates/nft/nft-owners-by-contract"
     },
     {
       "source": "/data-feeds/migration/nfts-by-contract",
-      "destination": "/data-feeds/recipes/nft/nft-owners-by-contract"
+      "destination": "/data-feeds/templates/nft/nft-owners-by-contract"
     },
     {
       "source": "/data-feeds/migration/nft-collection-metadata",
-      "destination": "/data-feeds/recipes/nft/nft-collection-metadata"
+      "destination": "/data-feeds/templates/nft/nft-collection-metadata"
     },
     {
       "source": "/data-feeds/migration/nft-multiple",
-      "destination": "/data-feeds/recipes/nft/nft-collection-metadata"
+      "destination": "/data-feeds/templates/nft/nft-collection-metadata"
     },
     {
       "source": "/data-feeds/migration/transaction-verbose",
-      "destination": "/data-feeds/recipes/logs/contract-logs"
+      "destination": "/data-feeds/templates/logs/contract-logs"
     },
     {
       "source": "/data-feeds/migration/block",
-      "destination": "/data-feeds/recipes/logs/contract-logs"
+      "destination": "/data-feeds/templates/logs/contract-logs"
     },
     {
       "source": "/data-api/evm/token/holders/historical-token-holders",

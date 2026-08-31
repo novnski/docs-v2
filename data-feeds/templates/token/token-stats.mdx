@@ -37,11 +37,11 @@ This is by definition the ERC-20 transfer event collection (NFT and native trans
 | **Postgres** | `token_stats` (materialized view over `token_transfer_events`) | Unique index `(token_address)` |
 | **MySQL** | `token_stats` (trigger-maintained over `token_transfer_events`) | Primary key `(token_address)` |
 
-ClickHouse uses a **SummingMergeTree** counter table (not the collapsing pattern most recipes use): the table is keyed by `(chain_id, token_address)`, so every event for a token shares one key and the engine **sums** the per-event rows on background merges. The materialized view emits `transfers_total = sign` per event (`+1` for forward inserts, `-1` for reorg reverts), so the per-token sum is always the net count and is naturally reorg-safe.
+ClickHouse uses a **SummingMergeTree** counter table (not the collapsing pattern most templates use): the table is keyed by `(chain_id, token_address)`, so every event for a token shares one key and the engine **sums** the per-event rows on background merges. The materialized view emits `transfers_total = sign` per event (`+1` for forward inserts, `-1` for reorg reverts), so the per-token sum is always the net count and is naturally reorg-safe.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's deliberately minimal (one counter) and is a starting point for the forward-compatible counter pattern: add more summable columns to land more per-token stats on the same row (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)).
+Below is the complete read table this template produces. It's deliberately minimal (one counter) and is a starting point for the forward-compatible counter pattern: add more summable columns to land more per-token stats on the same row (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)).
 
 <Accordion title="ClickHouse, fact_token_stats">
 
@@ -146,7 +146,7 @@ GROUP BY token_address;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live, reorg-corrected counters, use ClickHouse; see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live, reorg-corrected counters, use ClickHouse; see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   On Postgres / MySQL the counter **only ever increments** in `historical` mode: there is no reorg-safe row-deletion path on these destinations, and the per-event `vendor_event_id` uniqueness only guards against double-ingestion of the same canonical event. `position` is block-level and array-expanded transfer rows share it, which constrains realtime/hybrid here. Run realtime/hybrid on **ClickHouse**, which corrects reorgs per-block via signed `-1` rows.
@@ -154,12 +154,12 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, every SPL token transfer contributes `+1`; the `vendor_event_id` is widened to stay unique even where a log index repeats within an instruction, so per-token counts round-trip identically in shape.
+The template is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, every SPL token transfer contributes `+1`; the `vendor_event_id` is widened to stay unique even where a log index repeats within an instruction, so per-token counts round-trip identically in shape.
 
 ### Related
 
 <Columns cols={2}>
-  <Card title="Token Transfers" href="/data-feeds/recipes/token/token-transfers" icon="arrow-right-arrow-left">
+  <Card title="Token Transfers" href="/data-feeds/templates/token/token-transfers" icon="arrow-right-arrow-left">
     The per-event transfer ledger this counter is derived from.
   </Card>
   <Card title="Token Analytics" href="/data-feeds/use-cases/token-analytics" icon="chart-line">

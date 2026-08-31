@@ -7,7 +7,7 @@ description: "Sync every DEX trade on a pool/pair, direct pool fills and aggrega
 
 > "Give me every DEX trade on pool/pair **0x…**, newest first, each row is one trade with both token legs, the side, the protocol, and a USD notional."
 
-Same trade projection as [Swaps by Token](/data-feeds/recipes/markets/swaps-by-token), but keyed by the **pool/pair address** with **one row per trade** (no per-token-side unpivot). `pool_address` is the **pair address** for direct pool fills and the **aggregator address** for aggregator-routed trades.
+Same trade projection as [Swaps by Token](/data-feeds/templates/markets/swaps-by-token), but keyed by the **pool/pair address** with **one row per trade** (no per-token-side unpivot). `pool_address` is the **pair address** for direct pool fills and the **aggregator address** for aggregator-routed trades.
 
 ### What you get
 
@@ -43,11 +43,11 @@ The two branches are disjoint by construction, together they give every fill exa
 | **Postgres** | `swaps` | Index lead `(pool_address, block_number DESC)` |
 | **MySQL** | `swaps` | Index lead `(pool_address, block_number)` |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct, the `+1/−1` reorg pair for a trade shares an identical key and collapses cleanly. The fact table's sort key is pool-first, so a pair's full trade feed is a contiguous range read.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct, the `+1/−1` reorg pair for a trade shares an identical key and collapses cleanly. The fact table's sort key is pool-first, so a pair's full trade feed is a contiguous range read.
 
 ### Full schema
 
-The complete read table this recipe produces, one row per trade. Keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` amounts are stored as text in ClickHouse (they exceed numeric precision); USD columns are nullable so an unpriced token leaves them empty.
+The complete read table this template produces, one row per trade. Keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)). Raw `uint256` amounts are stored as text in ClickHouse (they exceed numeric precision); USD columns are nullable so an unpriced token leaves them empty.
 
 <Accordion title="ClickHouse, fact_swaps_by_pair">
 
@@ -113,7 +113,7 @@ CREATE TABLE public.swaps (
   fee_usd            NUMERIC(38, 18)
 );
 
--- By-pair access (the recipe's primary purpose).
+-- By-pair access (the template's primary purpose).
 CREATE INDEX IF NOT EXISTS swaps_pool_block_idx
   ON public.swaps (pool_address, block_number DESC);
 -- Token + trader + block-range helpers.
@@ -171,7 +171,7 @@ LIMIT 50;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion use ClickHouse, see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level (many trades per block), so array-expanded trade rows can only carry a composite unique. Run realtime/hybrid on **ClickHouse** (the log table corrects reorgs per-block via the collapsing companion table); the Postgres / MySQL configs are intended for `historical` backfill.
@@ -179,13 +179,13 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized, point it at any supported EVM chain or Solana. On Solana, the same `logIndex` can be assigned to multiple events in one instruction, so for production the pool-fill event identity is widened with `(token0_address, token1_address, token0_amount)` to keep rows distinct; the trade feed it produces is identical in shape.
+The template is chain-parametrized, point it at any supported EVM chain or Solana. On Solana, the same `logIndex` can be assigned to multiple events in one instruction, so for production the pool-fill event identity is widened with `(token0_address, token1_address, token0_amount)` to keep rows distinct; the trade feed it produces is identical in shape.
 
 ### How much data does this consume?
 
-This recipe's exact selection has not been measured end to end yet. The closest measured scope: on **Solana mainnet**, a continuous real-time feed of `tokenSwaps` plus `tokenPriceUpdates` (plus the negligible `launchpadEvents` slice) measured **~250 GB** in a typical month and **~330 GB** in a busy one (measured 2026-08-04, 30 sampled partitions, `metered` delivery, uncompressed bytes).
+This template's exact selection has not been measured end to end yet. The closest measured scope: on **Solana mainnet**, a continuous real-time feed of `tokenSwaps` plus `tokenPriceUpdates` (plus the negligible `launchpadEvents` slice) measured **~250 GB** in a typical month and **~330 GB** in a busy one (measured 2026-08-04, 30 sampled partitions, `metered` delivery, uncompressed bytes).
 
-This recipe additionally reads `aggregateTokenSwaps`, so expect a somewhat larger figure than that band. Three caveats:
+This template additionally reads `aggregateTokenSwaps`, so expect a somewhat larger figure than that band. Three caveats:
 
 - **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
 - **Solana only.** Volume concentrates hard per chain, so this figure does not extrapolate to other chains.
@@ -195,20 +195,20 @@ If you want your exact scope measured before you commit to a plan, [reach out](/
 
 ### Fidelity gaps
 
-- **`price_usd` / `notional_usd` / `fee_usd` are `NULL`** when the relevant token had no in-block `tokenPriceUpdate` (illiquid or brand-new tokens). The recipe enriches only from same-block price updates, there is no cross-block carry-forward.
+- **`price_usd` / `notional_usd` / `fee_usd` are `NULL`** when the relevant token had no in-block `tokenPriceUpdate` (illiquid or brand-new tokens). The template enriches only from same-block price updates, there is no cross-block carry-forward.
 - **`fee_*` is populated for pool fills only.** Aggregator-routed trades carry no per-fill fee, so `fee_amount` / `fee_token` / `fee_usd` are `NULL` on `source_kind='aggregator'` rows.
 - **One trade can appear under two `pool_address` values** when it is observed both as a direct pool fill (the pair address) and as part of an aggregator route (the aggregator address). These are distinct events with distinct `vendor_event_id`s by design, the two source arrays are disjoint per event.
 
 ## Migrating from the REST API
 
-This recipe supplies the volume leg of the token-pairs REST endpoint. That endpoint composes a pool registry with live numbers, so there is **no 1:1 replacement**, you land the pieces and join them in one view. Fidelity labels: **exact** = straight from the chain, **calculated** = derived from real DEX trades (very close, compare with a tolerance), **add yourself** = off-chain signal not in the feed.
+This template supplies the volume leg of the token-pairs REST endpoint. That endpoint composes a pool registry with live numbers, so there is **no 1:1 replacement**, you land the pieces and join them in one view. Fidelity labels: **exact** = straight from the chain, **calculated** = derived from real DEX trades (very close, compare with a tolerance), **add yourself** = off-chain signal not in the feed.
 
 ### GET /erc20/:token_address/pairs
 
 Lists every DEX pool that trades a token, with price, liquidity, and 24h volume per pool. The pool list itself comes through exactly from a purpose-built registry; the live figures are computed from the same onchain trades the old endpoint uses.
 
 <Warning>
-This endpoint needs a **combination of recipes**, not one. The pool list comes from the `pairAddressLookup` registry recipe (`pair_address_lookup_observations`, one row per pool with exchange, protocol, fee, and both tokens); this recipe's `swaps` table supplies the 24h volume; add [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) for liquidity, [Token Prices](/data-feeds/recipes/token/token-prices) for `usd_price` and the 24h change, and [Token Metadata](/data-feeds/recipes/token/token-metadata) for symbols and `pair_label`, then join them in one view.
+This endpoint needs a **combination of templates**, not one. The pool list comes from the `pairAddressLookup` registry template (`pair_address_lookup_observations`, one row per pool with exchange, protocol, fee, and both tokens); this template's `swaps` table supplies the 24h volume; add [Pair Reserves](/data-feeds/templates/markets/pair-reserves) for liquidity, [Token Prices](/data-feeds/templates/token/token-prices) for `usd_price` and the 24h change, and [Token Metadata](/data-feeds/templates/token/token-metadata) for symbols and `pair_label`, then join them in one view.
 </Warning>
 
 | `/erc20/:token_address/pairs` | Data Feeds | Fidelity |
@@ -256,17 +256,17 @@ LEFT JOIN LATERAL (SELECT sum(notional_usd) AS volume_24h_usd FROM swaps
 
 - A token trades in **many** pools (fee tiers, DEXes), list them by matching either side of the registry, and sort by liquidity to surface the meaningful ones.
 - Backfill is mixed: the pool list needs history far enough back to see each pool's deployment (full history for completeness), while price, liquidity, and 24h volume only need `realtime` plus a 24-hour window. See [History & backfill](/data-feeds/concepts/history-and-backfill).
-- The volume join keys on the **pair address**, so it matches this recipe's `pool_fill` rows only, aggregator-routed fills carry the aggregator's address in `pool_address` (see [Fidelity gaps](#fidelity-gaps)).
+- The volume join keys on the **pair address**, so it matches this template's `pool_fill` rows only, aggregator-routed fills carry the aggregator's address in `pool_address` (see [Fidelity gaps](#fidelity-gaps)).
 - The live figures track the old endpoint closely but come from a pricing computation, compare with a tolerance, not bit-for-bit.
 - `exchange_logo` and `token_logo` are off-chain images, layer them in from your own source keyed by address, or drop them.
 
 ### Related
 
 <Columns cols={2}>
-  <Card title="Swaps by Token" href="/data-feeds/recipes/markets/swaps-by-token" icon="coins">
+  <Card title="Swaps by Token" href="/data-feeds/templates/markets/swaps-by-token" icon="coins">
     The same trade projection, keyed by token with one row per token side.
   </Card>
-  <Card title="Pair OHLCV" href="/data-feeds/recipes/markets/pair-ohlcv" icon="chart-candlestick">
+  <Card title="Pair OHLCV" href="/data-feeds/templates/markets/pair-ohlcv" icon="chart-candlestick">
     Roll a pair's trades into candlesticks for charting.
   </Card>
   <Card title="Trading & Charting" href="/data-feeds/use-cases/trading-charting" icon="chart-line">

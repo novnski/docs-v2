@@ -8,7 +8,7 @@ description: "Sync every raw event log of one signature, every Transfer, Approva
 
 > "Give me every raw event log of signature **T** (`topic0`), chain-wide, in on-chain order."
 
-The by-event-type mirror of [Contract Logs](/data-feeds/recipes/logs/contract-logs), the **same** raw-log extraction, but keyed by the event signature (`topic0`) instead of the emitting contract. Use it to index one event **across all contracts**: every `Transfer`, every `Approval`, every Uniswap `Swap`, typically scoped to a block range.
+The by-event-type mirror of [Contract Logs](/data-feeds/templates/logs/contract-logs), the **same** raw-log extraction, but keyed by the event signature (`topic0`) instead of the emitting contract. Use it to index one event **across all contracts**: every `Transfer`, every `Approval`, every Uniswap `Swap`, typically scoped to a block range.
 
 ### What you get
 
@@ -45,7 +45,7 @@ Same source and reorg model as Contract Logs (raw `block` array → `itemType = 
 
 ### Full schema
 
-Identical columns to [Contract Logs](/data-feeds/recipes/logs/contract-logs#full-schema), the only difference is the sort key leads with `topic0`. Keep the columns you need (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)).
+Identical columns to [Contract Logs](/data-feeds/templates/logs/contract-logs#full-schema), the only difference is the sort key leads with `topic0`. Keep the columns you need (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)).
 
 <Accordion title="ClickHouse, fact_logs (topic0-keyed)">
 
@@ -119,10 +119,10 @@ Like Contract Logs, this extracts EVM event logs (`topic0…3` + `data`); Solana
 ### Related
 
 <Columns cols={2}>
-  <Card title="Contract Logs" href="/data-feeds/recipes/logs/contract-logs" icon="file-lines">
+  <Card title="Contract Logs" href="/data-feeds/templates/logs/contract-logs" icon="file-lines">
     The sibling, every log from one contract, keyed by emitter.
   </Card>
   <Card title="Onchain Event Indexing" href="/data-feeds/use-cases/event-indexing" icon="cube">
-    The use case these raw-log recipes power.
+    The use case these raw-log templates power.
   </Card>
 </Columns>

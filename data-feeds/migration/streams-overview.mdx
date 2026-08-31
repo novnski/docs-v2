@@ -15,7 +15,7 @@ table you query.
 
 | In Streams | In Data Feeds |
 |---|---|
-| A **stream config** (addresses, topics, ABIs) | A **recipe** plus SQL filters, e.g. [token-transfers](/data-feeds/recipes/token/token-transfers), [contract-logs](/data-feeds/recipes/logs/contract-logs) filtered to your addresses or topics |
+| A **stream config** (addresses, topics, ABIs) | A **template** plus SQL filters, e.g. [token-transfers](/data-feeds/templates/token/token-transfers), [contract-logs](/data-feeds/templates/logs/contract-logs) filtered to your addresses or topics |
 | A **webhook payload** pushed per event | **Rows in your own database**, written by the sink as blocks land |
 | Your **webhook endpoint + retries + queue** | Nothing: delivery, ordering, and resume are the sink's job |
 | `confirmed: true/false` payloads for reorg safety | [Reorg handling](/data-feeds/concepts/reorgs) built into the pipe |
@@ -41,7 +41,7 @@ You can evaluate Data Feeds against your current Streams setup today:
 
 1. Run the **[quickstart](/data-feeds/migration/quickstart)**: live decoded data in your own Postgres in about
    ten minutes.
-2. Find the [recipe](/data-feeds/recipes/overview) closest to what your stream watches (token transfers, contract
+2. Find the [template](/data-feeds/templates/overview) closest to what your stream watches (token transfers, contract
    logs, swaps, NFT activity).
 3. Keep your stream running in parallel while you compare; nothing about trying Data Feeds disturbs your
    existing Streams setup.

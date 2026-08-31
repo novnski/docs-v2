@@ -7,11 +7,11 @@ description: "Sync every pump.fun / Raydium LaunchLab launchpad event, created, 
 
 > "For a Solana launchpad like **pump.fun**: which tokens just launched, which are still climbing the bonding curve, and which have graduated to a DEX, and what's a given token's bonding-curve status?"
 
-Lands one row per **launchpad event** (`created` / `traded` / `migrated`) from the decoded `launchpadEvents` feed, and derives a per-token latest-status projection. The four deprecated pump.fun surfaces, new, bonding, graduated, and per-token status, are all reads over this one recipe.
+Lands one row per **launchpad event** (`created` / `traded` / `migrated`) from the decoded `launchpadEvents` feed, and derives a per-token latest-status projection. The four deprecated pump.fun surfaces, new, bonding, graduated, and per-token status, are all reads over this one template.
 
 ### What you get
 
-The recipe reads the master-block `launchpadEvents` array and lands two surfaces:
+The template reads the master-block `launchpadEvents` array and lands two surfaces:
 
 - **The launchpad event log**, keyed by exchange, one row per `created` / `traded` / `migrated` event.
 - **A per-token status projection**, keyed by token, latest bonding progress, graduated flag, and graduation time.
@@ -206,11 +206,11 @@ Those give you the raw `launchpadEvents` array to project yourself, not these ta
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`**. For live launch discovery use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`**. For live launch discovery use ClickHouse, see the [overview](/data-feeds/templates/overview#modes).
 
 ### Multichain
 
-Launchpad activity is densest on **Solana** (pump.fun, Raydium LaunchLab) and **Base**; on Ethereum mainnet the `launchpadEvents` array is effectively empty. Point the recipe at Solana in the Admin Panel wizard for real coverage. On Solana `logIndex` isn't row-unique within an instruction, so `vendor_event_id` widens with `(tokenAddress, eventType)` to keep rows distinct.
+Launchpad activity is densest on **Solana** (pump.fun, Raydium LaunchLab) and **Base**; on Ethereum mainnet the `launchpadEvents` array is effectively empty. Point the template at Solana in the Admin Panel wizard for real coverage. On Solana `logIndex` isn't row-unique within an instruction, so `vendor_event_id` widens with `(tokenAddress, eventType)` to keep rows distinct.
 
 ### How much data does this consume?
 
@@ -223,19 +223,19 @@ Launchpad activity is densest on **Solana** (pump.fun, Raydium LaunchLab) and **
 
 <sub>Measured 2026-08-04 against the live feed, 30 sampled partitions over 30 days, `metered` delivery. Billing is on uncompressed bytes.</sub>
 
-**Size your allowance against the top of the band, not the middle.** Chain activity varies, and this recipe tracks launchpad activity specifically, which is bursty by nature: a quiet month and a memecoin frenzy are not the same month. Worked example, against a hypothetical 10 GB monthly allowance:
+**Size your allowance against the top of the band, not the middle.** Chain activity varies, and this template tracks launchpad activity specifically, which is bursty by nature: a quiet month and a memecoin frenzy are not the same month. Worked example, against a hypothetical 10 GB monthly allowance:
 
 | If the month runs at | Against a 10 GB allowance |
 | --- | --- |
 | 8.5 GB | Within allowance, nothing extra to pay |
 | 15 GB | 5 GB of overage |
 
-Both are inside the measured range for this recipe, so choose an allowance that covers the busy figure and treat the typical figure as the good case.
+Both are inside the measured range for this template, so choose an allowance that covers the busy figure and treat the typical figure as the good case.
 
 What this figure does and does not cover:
 
 - **Real-time only.** A historical backfill is billed separately and is usually the larger number; its size depends entirely on how far back you go.
-- **Solana.** On EVM chains the `launchpadEvents` array is effectively unpopulated (see [Multichain](#multichain)), so this recipe reads close to nothing on Ethereum.
+- **Solana.** On EVM chains the `launchpadEvents` array is effectively unpopulated (see [Multichain](#multichain)), so this template reads close to nothing on Ethereum.
 - **The whole slice, across every launchpad and every token.** Filtering to specific tokens, platforms, or programs happens after the data is delivered, so it does not reduce the figure. To reduce cost, narrow the **block range**, not the entity set.
 - **`metered` delivery.** Under `presigned_url` you are billed for whole partitions rather than the columns you project, which is a different number.
 
@@ -243,9 +243,9 @@ If you want your exact scope measured before you commit to a plan, [reach out](/
 
 ### Fidelity gaps
 
-- **`name` / `symbol`** ride on the `created` event; a token seen only via `traded` events carries none until you join [Token Metadata](/data-feeds/recipes/token/token-metadata) (also the source of `decimals`).
+- **`name` / `symbol`** ride on the `created` event; a token seen only via `traded` events carries none until you join [Token Metadata](/data-feeds/templates/token/token-metadata) (also the source of `decimals`).
 - **`progress_percentage` is sparse**: `created` events carry no curve progress (0 is coerced to null), so a freshly-created token has null progress until its first trade.
-- **No price in the feed.** `current_price` lands **empty on the Solana feed today** (0 populated in live sampling). Derive the **native price** per token from `traded` events (`native_amount / token_amount`), and convert to **USD** with a SOL/USD mark (e.g. wrapped SOL from a [Token Prices](/data-feeds/recipes/token/token-prices) sync). **Liquidity** (cumulative curve `native_amount`, or post-graduation [Pair Reserves](/data-feeds/recipes/markets/pair-reserves)) and **FDV** (`token_metadata.total_supply` × price) are derive-or-omit.
+- **No price in the feed.** `current_price` lands **empty on the Solana feed today** (0 populated in live sampling). Derive the **native price** per token from `traded` events (`native_amount / token_amount`), and convert to **USD** with a SOL/USD mark (e.g. wrapped SOL from a [Token Prices](/data-feeds/templates/token/token-prices) sync). **Liquidity** (cumulative curve `native_amount`, or post-graduation [Pair Reserves](/data-feeds/templates/markets/pair-reserves)) and **FDV** (`token_metadata.total_supply` × price) are derive-or-omit.
 - **`pool_address` arrives on the `migrated` event**: the DEX pool the token graduated into (verified live). A graduation can emit **more than one** `migrated` row, so take the non-empty value with `max(pool_address)` rather than `anyLast`.
 - **`logo`** and other off-chain metadata aren't in the feed.
 
@@ -254,7 +254,7 @@ Core fields, `token_address`, `exchange_address`, `event_type`, `progress_percen
 ## Migrating from the REST API
 
 <Warning>
-All four Solana launchpad endpoints below are **deprecated and sunset on July 31, 2026**. This one recipe replaces all of them, each REST response is a read over the tables above.
+All four Solana launchpad endpoints below are **deprecated and sunset on July 31, 2026**. This one template replaces all of them, each REST response is a read over the tables above.
 </Warning>
 
 The four endpoints share most of their response shape, so the common fields map once:
@@ -262,11 +262,11 @@ The four endpoints share most of their response shape, so the common fields map 
 | REST API field (all four endpoints) | Data Feeds | Fidelity |
 | --- | --- | --- |
 | `tokenAddress` / `mint` | `token_address` | exact |
-| `name`, `symbol` | `token_name` / `token_symbol` on the `created` event, or [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
-| `decimals` | `token_metadata.decimals` (join [Token Metadata](/data-feeds/recipes/token/token-metadata)) | exact |
+| `name`, `symbol` | `token_name` / `token_symbol` on the `created` event, or [Token Metadata](/data-feeds/templates/token/token-metadata) | exact |
+| `decimals` | `token_metadata.decimals` (join [Token Metadata](/data-feeds/templates/token/token-metadata)) | exact |
 | `priceNative` | derive `native_amount / token_amount` from `traded` events, `currentPrice` is **not populated** on the Solana feed today | calculated |
-| `priceUsd` | `priceNative` × a SOL/USD mark (wrapped SOL via [Token Prices](/data-feeds/recipes/token/token-prices)) | calculated |
-| `liquidity` | cumulative curve `native_amount` × price; post-graduation, [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) × price | calculated |
+| `priceUsd` | `priceNative` × a SOL/USD mark (wrapped SOL via [Token Prices](/data-feeds/templates/token/token-prices)) | calculated |
+| `liquidity` | cumulative curve `native_amount` × price; post-graduation, [Pair Reserves](/data-feeds/templates/markets/pair-reserves) × price | calculated |
 | `fullyDilutedValuation` | `token_metadata.total_supply` × price | calculated |
 | `logo` | not in the feed, bring your own token list, or omit | add yourself |
 
@@ -296,7 +296,7 @@ GROUP BY token_address, exchange_address;
 
 `createdAt` maps to `min(event_ts)` over the `created` event (exact).
 
-- Launches are an **event list**, run the recipe realtime for a live feed, no backfill needed; index back only to list tokens created before you started.
+- Launches are an **event list**, run the template realtime for a live feed, no backfill needed; index back only to list tokens created before you started.
 - A brand-new token has **no price and no curve progress** until its first trade.
 
 ### Bonding tokens by exchange
@@ -349,7 +349,7 @@ HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 `graduatedAt` maps to `minIf(event_ts, event_type = 'migrated')`, and `poolAddress`, which the old endpoint didn't even expose, is `max(pool_address)` over the token's `migrated` events (both exact).
 
 <Note>
-**This one is not a 1:1 swap.** The REST response bundled prices, liquidity, and FDV, but a graduated token trades on a normal DEX pool, so price it with [Token Prices](/data-feeds/recipes/token/token-prices) and read pool liquidity with [Pair Reserves](/data-feeds/recipes/markets/pair-reserves), keyed on the migrated `pool_address`. Run those recipes alongside this one if you serve those fields.
+**This one is not a 1:1 swap.** The REST response bundled prices, liquidity, and FDV, but a graduated token trades on a normal DEX pool, so price it with [Token Prices](/data-feeds/templates/token/token-prices) and read pool liquidity with [Pair Reserves](/data-feeds/templates/markets/pair-reserves), keyed on the migrated `pool_address`. Run those templates alongside this one if you serve those fields.
 </Note>
 
 - `pool_address` is **only populated on `migrated` events** (verified live), and a graduation can emit more than one `migrated` row, take the non-empty value with `max(pool_address)`, not `anyLast`.
@@ -361,7 +361,7 @@ HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 GET /token/:network/:address/bonding-status
 ```
 
-The most direct migration of the set, the recipe's per-token projection *is* this response. `mint`, `bondingProgress`, and `graduatedAt` map to `token_address`, `bonding_progress`, and `graduated_at` (all exact). On Postgres or MySQL it's a single-row lookup on the maintained status table:
+The most direct migration of the set, the template's per-token projection *is* this response. `mint`, `bondingProgress`, and `graduatedAt` map to `token_address`, `bonding_progress`, and `graduated_at` (all exact). On Postgres or MySQL it's a single-row lookup on the maintained status table:
 
 ```sql
 SELECT token_address AS mint, bonding_progress, graduated, graduated_at
@@ -377,10 +377,10 @@ On ClickHouse, use the per-token aggregate shown in [Example reads](#example-rea
 ### Related
 
 <Columns cols={2}>
-  <Card title="Token Metadata" href="/data-feeds/recipes/token/token-metadata" icon="tag">
+  <Card title="Token Metadata" href="/data-feeds/templates/token/token-metadata" icon="tag">
     Names, symbols, and decimals for launchpad tokens.
   </Card>
-  <Card title="Token Prices" href="/data-feeds/recipes/token/token-prices" icon="dollar-sign">
+  <Card title="Token Prices" href="/data-feeds/templates/token/token-prices" icon="dollar-sign">
     USD marks to layer onto bonding and graduated tokens.
   </Card>
 </Columns>

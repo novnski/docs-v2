@@ -25,8 +25,8 @@ depending on the feed and current availability:
 pulls. See [Streaming](../access-methods/streaming) and [Direct reads](../access-methods/direct-reads).
 
 ### Land it with the sink
-Point a **recipe** at your own **Postgres, MySQL, or ClickHouse** and the sink continuously lands
-ready-to-query tables. Moralis does the heavy lifting in the recipe, decoding, enrichment, and reorg
+Point a **template** at your own **Postgres, MySQL, or ClickHouse** and the sink continuously lands
+ready-to-query tables. Moralis does the heavy lifting in the template, decoding, enrichment, and reorg
 correction, so you get a production-grade dataset inside your own stack, queried however you like. This is
 the smoothest path for request/response needs (e.g. "a wallet's balances"). See
 [Database sinks](./destinations).
@@ -51,7 +51,7 @@ A few properties worth knowing:
 - **Decoded, not raw RPC.** Swaps, transfers, balances, and prices are already extracted, you don't decode
   logs yourself (though the raw logs are there if you want them).
 - **Real-time and historical.** Read the latest blocks as they land, backfill history, or both.
-- **Reorg-aware.** Each block records its position and parent, so consumers (and the sink's recipes) correct
+- **Reorg-aware.** Each block records its position and parent, so consumers (and the sink's templates) correct
   for chain reorganizations rather than serving stale data.
 - **Onchain data.** A feed contains what's on the chain. Off-chain signals (token logos, spam/verification
   labels, security scores) are layered on separately, see
@@ -60,6 +60,6 @@ A few properties worth knowing:
 ## Where to go next
 
 - **Migrating from a Moralis REST endpoint?** Start with the relevant migration guide.
-- **Building something new?** Browse the recipe cookbook for a ready-to-run feed.
+- **Building something new?** Browse the template cookbook for a ready-to-run feed.
 - **Choosing how to consume it?** The [access methods overview](../access-methods/overview) compares all four
   paths with a decision table.

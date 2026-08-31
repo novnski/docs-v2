@@ -7,7 +7,7 @@ description: "Sync the current ERC-20 allowances a wallet has granted, and to wh
 
 > "What ERC-20 allowances has wallet **0x…** granted, and to whom?" Mirrors Moralis `GET /wallets/{address}/approvals`.
 
-Each ERC-20 `Approval(owner, spender, value)` log is one approval event. The **current allowance** for an `(owner, token, spender)` triple is the latest approval by `(block_number, log_index)`, a fresh `approve` overwrites the prior allowance (latest-wins, the same machinery as the balances recipes). A revoke is just `approve(spender, 0)`, so it lands as a new event whose value is `'0'`.
+Each ERC-20 `Approval(owner, spender, value)` log is one approval event. The **current allowance** for an `(owner, token, spender)` triple is the latest approval by `(block_number, log_index)`, a fresh `approve` overwrites the prior allowance (latest-wins, the same machinery as the balances templates). A revoke is just `approve(spender, 0)`, so it lands as a new event whose value is `'0'`.
 
 ### What you get
 
@@ -41,11 +41,11 @@ The struct carries `approverAddress` (→ `owner_address`), `spenderAddress`, `t
 | **Postgres** | `token_approval_events` + `token_allowances` materialized view | Partial index `(owner_address, token_address, spender_address) WHERE value <> '0'` |
 | **MySQL** | `token_approval_events` + maintained `token_allowances` state table | PK `(owner_address, token_address, spender_address)` with `value = '0'` cleanup |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct. The fact table's sort key is owner-first, so "all allowances granted by owner Y" is a contiguous range read. Postgres keeps a flat event table plus a `token_allowances` materialized view (latest approve per triple, refreshed on a schedule); MySQL keeps the same event table plus a latest-wins state table.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct. The fact table's sort key is owner-first, so "all allowances granted by owner Y" is a contiguous range read. Postgres keeps a flat event table plus a `token_allowances` materialized view (latest approve per triple, refreshed on a schedule); MySQL keeps the same event table plus a latest-wins state table.
 
 ### Full schema
 
-Below is the complete read table this recipe produces, keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). The raw allowance `value` is stored as text on all three destinations: an unlimited approve uses `type(uint256).max` (78 digits), which overflows Postgres `NUMERIC(76,0)` and MySQL `DECIMAL(65,0)`.
+Below is the complete read table this template produces, keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)). The raw allowance `value` is stored as text on all three destinations: an unlimited approve uses `type(uint256).max` (78 digits), which overflows Postgres `NUMERIC(76,0)` and MySQL `DECIMAL(65,0)`.
 
 <Accordion title="ClickHouse, fact_token_approvals">
 
@@ -151,7 +151,7 @@ ORDER BY token_address, spender_address;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   Realtime / hybrid on Postgres / MySQL is constrained: the block-level cursor means array-expanded approval rows share a `position`, which collides with the single-column `UNIQUE` requirement. Run realtime / hybrid on **ClickHouse**, which corrects reorgs per-block via the collapsing log table; the Postgres / MySQL configs target `historical` backfill.
@@ -175,15 +175,15 @@ On-chain primitives, owner, spender, token, raw allowance value, block, and tx h
 GET /wallets/:address/approvals
 ```
 
-The **active allowance set**, allowance value, spender, token address, block and tx, comes from this recipe directly: the latest approve per `(owner, token, spender)` wins, and revokes (approve-to-zero) drop out. The rest of the endpoint's response (token metadata, wallet balance, USD figures) does not live on the `Approval` log, you rebuild it with joins.
+The **active allowance set**, allowance value, spender, token address, block and tx, comes from this template directly: the latest approve per `(owner, token, spender)` wins, and revokes (approve-to-zero) drop out. The rest of the endpoint's response (token metadata, wallet balance, USD figures) does not live on the `Approval` log, you rebuild it with joins.
 
 <Note>
-  **This endpoint needs four recipes.** Data Feeds are not 1:1 endpoint replicas, to reproduce the full response, run these together and join their tables yourself (query below):
+  **This endpoint needs four templates.** Data Feeds are not 1:1 endpoint replicas, to reproduce the full response, run these together and join their tables yourself (query below):
 
   - **Token Approvals** (this page), allowance, spender, token address, block / tx
-  - [Token Metadata](/data-feeds/recipes/token/token-metadata): `token.name`, `token.symbol`, `decimals` for `value_formatted`
-  - [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet): the wallet's current balance of each approved token
-  - [Token Prices](/data-feeds/recipes/token/token-prices): `usd_price`, and `usd_at_risk` derived from it
+  - [Token Metadata](/data-feeds/templates/token/token-metadata): `token.name`, `token.symbol`, `decimals` for `value_formatted`
+  - [Token Balances by Wallet](/data-feeds/templates/wallet/token-balances-by-wallet): the wallet's current balance of each approved token
+  - [Token Prices](/data-feeds/templates/token/token-prices): `usd_price`, and `usd_at_risk` derived from it
 </Note>
 
 **Field mapping**, **exact** comes from the chain, **calculated** is derived from real onchain trades (very close; compare with a small tolerance), **add yourself** is an off-chain signal:
@@ -202,7 +202,7 @@ The **active allowance set**, allowance value, spender, token address, block and
 | `token.logo`, `possible_spam`, `verified_contract`, `address_label` | add yourself | off-chain |
 | `spender.address_label`, `entity`, `entity_logo` | add yourself | off-chain |
 
-**The join** (Postgres; table names follow each recipe's default schema), one view that reproduces the response, with `usd_at_risk` computed the realistic way (`min(allowance, balance) × price`, a spender can't take more than the wallet holds):
+**The join** (Postgres; table names follow each template's default schema), one view that reproduces the response, with `usd_at_risk` computed the realistic way (`min(allowance, balance) × price`, a spender can't take more than the wallet holds):
 
 ```sql
 CREATE VIEW wallet_approvals AS
@@ -241,7 +241,7 @@ Query it per wallet with `ORDER BY usd_at_risk DESC NULLS LAST` so the riskiest 
 ### Related
 
 <Columns cols={2}>
-  <Card title="Wallet History" href="/data-feeds/recipes/wallet/wallet-history" icon="clock-rotate-left">
+  <Card title="Wallet History" href="/data-feeds/templates/wallet/wallet-history" icon="clock-rotate-left">
     The full chronological event feed, approvals included alongside transfers and swaps.
   </Card>
   <Card title="Compliance & AML" href="/data-feeds/use-cases/compliance-aml" icon="shield-check">

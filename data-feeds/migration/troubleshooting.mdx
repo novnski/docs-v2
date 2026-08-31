@@ -108,7 +108,7 @@ field yields a default instead of an error.
 
 ### The sink started but no rows have appeared yet
 
-**Why:** a recipe in `historical` or `hybrid` mode backfills a window of past blocks before (or while) it goes
+**Why:** a template in `historical` or `hybrid` mode backfills a window of past blocks before (or while) it goes
 live, so there is a short warm-up before rows land.
 
 **Do this:** give it a minute, then check the sink logs: healthy output shows the cursor seeded near the tip
@@ -117,7 +117,7 @@ and block windows advancing without errors. Still nothing? Confirm your chain ID
 
 ### The newest rows look duplicated or briefly wrong
 
-**Why:** near the tip a block can be replaced by a reorg. ClickHouse recipes write a **correcting row** rather
+**Why:** near the tip a block can be replaced by a reorg. ClickHouse templates write a **correcting row** rather
 than silently deleting, so a naive `SELECT *` can momentarily show both the original and its cancel.
 
 **Do this:** read ClickHouse fact tables with **`FINAL`** (or sign-aware sums for aggregates). Settled history
@@ -161,6 +161,6 @@ cleanly rate-limiting.
 <Note>
 **Still stuck?** Most first-run issues come down to the backfill window (too shallow → 0 rows, too deep →
 `Partition not found`), the `FINAL` reading rule, or an access/chain scope mismatch. If you have ruled those
-out, capture the recipe, chain, window, and the exact error, and reach out through your Data Feeds support
+out, capture the template, chain, window, and the exact error, and reach out through your Data Feeds support
 channel.
 </Note>

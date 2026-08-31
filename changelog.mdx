@@ -105,13 +105,13 @@ description: "New releases and improvements"
 
   **Solana token holders:**
 
-  - `GET /token/{network}/holders/{address}` — migrate to [Token Holders](/data-feeds/recipes/token/token-holders)
-  - `GET /token/{network}/{address}/top-holders` — migrate to [Token Holders](/data-feeds/recipes/token/token-holders)
-  - `GET /token/{network}/holders/{address}/historical` — migrate to [Historical Balances](/data-feeds/recipes/token/historical-balances)
+  - `GET /token/{network}/holders/{address}` — migrate to [Token Holders](/data-feeds/templates/token/token-holders)
+  - `GET /token/{network}/{address}/top-holders` — migrate to [Token Holders](/data-feeds/templates/token/token-holders)
+  - `GET /token/{network}/holders/{address}/historical` — migrate to [Historical Balances](/data-feeds/templates/token/historical-balances)
 
   **EVM token holders (historical only):**
 
-  - `GET /erc20/{tokenAddress}/holders/historical` — migrate to [Historical Balances](/data-feeds/recipes/token/historical-balances)
+  - `GET /erc20/{tokenAddress}/holders/historical` — migrate to [Historical Balances](/data-feeds/templates/token/historical-balances)
 
   The other two EVM token holder endpoints, [`GET /erc20/{tokenAddress}/holders`](/data-api/evm/token/holders/token-holder-stats) (holder stats) and [`GET /erc20/{token_address}/owners`](/data-api/evm/token/holders/token-holders) (token holders), **remain fully supported**.
 
@@ -122,7 +122,7 @@ description: "New releases and improvements"
   - `GET /token/{network}/exchange/{exchange}/graduated`
   - `GET /token/{network}/{address}/bonding-status`
 
-  All four are served by [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status).
+  All four are served by [Token Bonding Status](/data-feeds/templates/token/token-bonding-status).
 
   The API reference pages for these endpoints have been removed from the navigation, and their entries are gone from the OpenAPI sources so generated docs and API clients no longer advertise them.
 
@@ -171,8 +171,8 @@ description: "New releases and improvements"
 
   - [Overview and concepts](/data-feeds/overview): how Data Feeds works, modes, destinations, history and backfill, and reorg handling.
   - [Quickstart](/data-feeds/migration/quickstart): run your first sink with the starter pack and see data land in minutes.
-  - [Data Feed Recipes](/data-feeds/recipes/overview): 26 pre-built blueprints that reconstruct our most popular endpoints across Wallet, Token, Price, DeFi, NFT, and Blockchain APIs.
-  - [Migration guides](/data-feeds/migration/overview): field-by-field mappings from the Moralis REST API to recipes, including an [endpoint lookup](/data-feeds/migration/endpoints).
+  - [Data Feed Templates](/data-feeds/templates/overview): 26 pre-built blueprints that reconstruct our most popular endpoints across Wallet, Token, Price, DeFi, NFT, and Blockchain APIs.
+  - [Migration guides](/data-feeds/migration/overview): field-by-field mappings from the Moralis REST API to templates, including an [endpoint lookup](/data-feeds/migration/endpoints).
   - [Use cases](/data-feeds/use-cases/portfolio-tracking): portfolio tracking, accounting, token analytics, trading and charting, NFT marketplaces, compliance, and event indexing.
 
   Early access is limited. [Request access](https://admin.moralis.com/data-feeds) to get started.

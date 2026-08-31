@@ -1,7 +1,7 @@
 ---
 title: "How Data Feeds Works"
 sidebarTitle: "How It Works"
-description: "Understand the Data Feeds workflow: start from a recipe or a custom schema, configure your pipeline, and have indexed blockchain data delivered into your own database."
+description: "Understand the Data Feeds workflow: start from a template or a custom schema, configure your pipeline, and have indexed blockchain data delivered into your own database."
 ---
 
 ### Overview
@@ -10,9 +10,9 @@ Moralis Data Feeds handles the complexity of blockchain data indexing so you can
 
 ### 1. Define
 
-Start from a **recipe** or define a **custom schema**:
+Start from a **template** or define a **custom schema**:
 
-- **Recipes** – ready-made blueprints that reconstruct popular Moralis endpoints (wallet history, balances, prices, swaps, holders, raw logs). The fastest on-ramp. [Browse recipes →](/data-feeds/recipes/overview)
+- **Templates** – ready-made blueprints that reconstruct popular Moralis endpoints (wallet history, balances, prices, swaps, holders, raw logs). The fastest on-ramp. [Browse templates →](/data-feeds/templates/overview)
 - **Custom** – specify exactly which chains, contracts, events, and data types to index, with your own schema
 - **Chains** – EVM, Bitcoin, Solana, Stellar, Hyperliquid, or a custom chain via your own RPC
 - **Data types** – raw data, decoded data, or both
@@ -21,7 +21,7 @@ Start from a **recipe** or define a **custom schema**:
 
 Set up your schema and transformation rules:
 
-- Define your data models and field mappings (or adapt a recipe's)
+- Define your data models and field mappings (or adapt a template's)
 - Configure transformations and enrichments (e.g. inline USD valuation)
 - Set up filters to capture only the data you need
 - Choose your mode: **historical** backfill, **realtime** tail, or **hybrid** (both)

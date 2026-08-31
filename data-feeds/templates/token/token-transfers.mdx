@@ -38,11 +38,11 @@ There's no price join: transfers are unpriced, so there is no `amount_usd` colum
 | **Postgres** | `token_transfers` | Index on `(token_address, block_number DESC)`; plus `(from_address, …)` and `(to_address, …)` |
 | **MySQL** | `token_transfers` | Index on `(token_address, block_number)`; plus `(from_address, …)` and `(to_address, …)` |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct: the `+1/−1` reorg pair for a row shares an identical key and collapses on merge. The fact table's sort key is token-first, so all transfers of a token are a contiguous range read; by-wallet reads are accelerated by data-skipping bloom filters rather than a second sort key.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct: the `+1/−1` reorg pair for a row shares an identical key and collapses on merge. The fact table's sort key is token-first, so all transfers of a token are a contiguous range read; by-wallet reads are accelerated by data-skipping bloom filters rather than a second sort key.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `amount` is stored raw (`uint256` token units) because the transfer event carries no decimals; scale by `10^token_decimals` at read time.
+Below is the complete read table this template produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)). `amount` is stored raw (`uint256` token units) because the transfer event carries no decimals; scale by `10^token_decimals` at read time.
 
 <Accordion title="ClickHouse, fact_token_transfers">
 
@@ -98,7 +98,7 @@ CREATE TABLE public.token_transfers (
   initiated_by       TEXT        NOT NULL
 );
 
--- By-token access (the recipe's primary purpose).
+-- By-token access (the template's primary purpose).
 CREATE INDEX IF NOT EXISTS token_transfers_token_block_idx
   ON public.token_transfers (token_address, block_number DESC);
 -- By-wallet access (either side).
@@ -152,7 +152,7 @@ WHERE chain_id = 1 AND token_address = lower('0xtoken');
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse; see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse; see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level (many transfers share one block), so array-expanded transfer rows can only carry a composite unique. Run realtime/hybrid on **ClickHouse**, where the collapsing log table corrects reorgs per-block. The Postgres / MySQL configs are intended for `historical` backfill.
@@ -160,7 +160,7 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the `vendor_event_id` is widened with `(from_address, to_address, token_address, amount)` to keep rows distinct; the transfer log it produces is identical in shape.
+The template is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the `vendor_event_id` is widened with `(from_address, to_address, token_address, amount)` to keep rows distinct; the transfer log it produces is identical in shape.
 
 ### How much data does this consume?
 
@@ -184,18 +184,18 @@ If you want your exact scope measured before you commit to a plan, [reach out](/
 
 ### Fidelity gaps
 
-The recipe lands exactly what the `tokenTransfers` array carries. Fields a transfers endpoint might surface that have **no onchain source in this array** are omitted:
+The template lands exactly what the `tokenTransfers` array carries. Fields a transfers endpoint might surface that have **no onchain source in this array** are omitted:
 
 - **USD value**: a transfer carries no price. Pricing requires joining the same-block price data; that's out of scope for a plain transfer log (see Token Prices for the price-join pattern).
 - **Token metadata** (`symbol`, `name`, `decimals`, logo, verified/spam flags): these come from a separate token-metadata sync, not the transfer event. `amount` is therefore stored raw, not decimal-adjusted.
-- **Pre/post balances**: the balance surface lives in the balances recipes (Token Balances by Token / by Wallet); this transfer log stays a flat event stream.
+- **Pre/post balances**: the balance surface lives in the balances templates (Token Balances by Token / by Wallet); this transfer log stays a flat event stream.
 
 ## Migrating from the REST API
 
-This recipe replaces both ERC-20 transfer REST endpoints from one sync: the same `token_transfers` table serves the by-token and by-wallet reads.
+This template replaces both ERC-20 transfer REST endpoints from one sync: the same `token_transfers` table serves the by-token and by-wallet reads.
 
 <Note>
-  **Not 1:1.** The REST responses inlined `token_name` / `token_symbol` / `token_decimals` and a pre-scaled `value_decimal`; this recipe's `amount` is raw `uint256`. Pair it with [Token Metadata](/data-feeds/recipes/token/token-metadata) and join on `token_address` to scale amounts and label tokens. `token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity` fields are off-chain signals; add them from your own token/label lists or drop them.
+  **Not 1:1.** The REST responses inlined `token_name` / `token_symbol` / `token_decimals` and a pre-scaled `value_decimal`; this template's `amount` is raw `uint256`. Pair it with [Token Metadata](/data-feeds/templates/token/token-metadata) and join on `token_address` to scale amounts and label tokens. `token_logo`, `possible_spam`, `verified_contract`, `security_score`, and the address `*_label` / `*_entity` fields are off-chain signals; add them from your own token/label lists or drop them.
 </Note>
 
 Field mapping (both endpoints share it; **calculated** = derived at read time, **add yourself** = off-chain):
@@ -207,7 +207,7 @@ Field mapping (both endpoints share it; **calculated** = derived at read time, *
 | `value_decimal` | `amount / 10^decimals` (decimals via Token Metadata) | calculated |
 | `transaction_hash` | `token_transfers.tx_hash` | exact |
 | `block_number`, `block_timestamp`, `block_hash`, `transaction_index`, `log_index` | `token_transfers.*` | exact |
-| `token_name`, `token_symbol`, `token_decimals` | join [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
+| `token_name`, `token_symbol`, `token_decimals` | join [Token Metadata](/data-feeds/templates/token/token-metadata) | exact |
 | `token_logo`, `possible_spam`, `verified_contract`, `security_score` | None | add yourself |
 | `from/to_address_label`, `*_entity`, `*_entity_logo` | None | add yourself |
 
@@ -232,7 +232,7 @@ LIMIT 100;
 
 ### `GET /{address}/erc20/transfers`: transfers by wallet
 
-A wallet's transfers are the rows where it appears on **either side**; the recipe indexes both `from_address` and `to_address`, so it's one query:
+A wallet's transfers are the rows where it appears on **either side**; the template indexes both `from_address` and `to_address`, so it's one query:
 
 ```sql
 SELECT t.*,
@@ -252,7 +252,7 @@ LIMIT 100;
 ### Related
 
 <Columns cols={2}>
-  <Card title="Token Holders" href="/data-feeds/recipes/token/token-holders" icon="users">
+  <Card title="Token Holders" href="/data-feeds/templates/token/token-holders" icon="users">
     The balance roll-up these transfers feed: all non-zero holders of a token.
   </Card>
   <Card title="Accounting & Tax" href="/data-feeds/use-cases/accounting" icon="calculator">

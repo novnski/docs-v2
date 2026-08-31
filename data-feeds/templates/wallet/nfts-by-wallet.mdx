@@ -7,11 +7,11 @@ description: "Sync every NFT a wallet currently holds (collection, token ID, con
 
 > "Give me every NFT wallet **0x…** currently holds. Each row is a `(collection, token_id)` it owns, with the ERC-721/ERC-1155 contract type and current balance."
 
-Mirrors Moralis `GET /{address}/nft`. It's the NFT-keyed sibling of [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet): the same observation/latest-wins pattern, but sourced from NFT transfers and keyed on `(wallet, token_address, token_id)` instead of `(wallet, token_address)`.
+Mirrors Moralis `GET /{address}/nft`. It's the NFT-keyed sibling of [Token Balances by Wallet](/data-feeds/templates/wallet/token-balances-by-wallet): the same observation/latest-wins pattern, but sourced from NFT transfers and keyed on `(wallet, token_address, token_id)` instead of `(wallet, token_address)`.
 
 ### What you get
 
-The recipe lands **NFT holding observations**, then the current holding is the latest non-zero observation per `(wallet, token_address, token_id)`. Each NFT transfer carries the **absolute post-transfer holdings** of each side (`from`/`to`), so the recipe never has to sum a running balance; the latest observation *is* the balance.
+The template lands **NFT holding observations**, then the current holding is the latest non-zero observation per `(wallet, token_address, token_id)`. Each NFT transfer carries the **absolute post-transfer holdings** of each side (`from`/`to`), so the template never has to sum a running balance; the latest observation *is* the balance.
 
 | Column | Description |
 | --- | --- |
@@ -41,11 +41,11 @@ Each transfer becomes `(from_address, from_post_balance)` and `(to_address, to_p
 | **Postgres** | `wallet_nfts` (materialized view over `wallet_nft_observations`) | Partial index `(wallet_address, token_address, token_id) WHERE balance > 0` |
 | **MySQL** | `wallet_nfts` | PK `(wallet_address, token_address, token_id)` with zeroed positions cleaned up |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct. The fact table's sort key is wallet-first, so a wallet's full holdings set is a contiguous range read; `argMax` over `(block_number, log_index)` resolves the current balance per id. On Postgres/MySQL the current-holding table is derived by keeping the latest observation per `(wallet, token_address, token_id)`.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct. The fact table's sort key is wallet-first, so a wallet's full holdings set is a contiguous range read; `argMax` over `(block_number, log_index)` resolves the current balance per id. On Postgres/MySQL the current-holding table is derived by keeping the latest observation per `(wallet, token_address, token_id)`.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point, keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `token_id` is a `uint256` identifier stored as text (never numeric, ERC-1155/721 ids exceed any practical numeric precision), and `balance` is the absolute post-transfer holding.
+Below is the complete read table this template produces. It's a starting point, keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)). `token_id` is a `uint256` identifier stored as text (never numeric, ERC-1155/721 ids exceed any practical numeric precision), and `balance` is the absolute post-transfer holding.
 
 <Accordion title="ClickHouse, fact_wallet_nfts">
 
@@ -158,7 +158,7 @@ ORDER BY token_address, token_id;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   `position` is block-level, so realtime/hybrid on Postgres/MySQL is constrained by their single-column `UNIQUE` requirement. Run realtime/hybrid on **ClickHouse**; the Postgres/MySQL configs target `historical` backfill.
@@ -166,7 +166,7 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting, point it at any supported EVM chain or Solana. NFTs on Solana are emitted on `nftTokenTransfers` too; the `vendor_event_id` identity already includes `(from, to, token, tokenId, amount)` so each row stays unique under Solana's repeated log indices. The holdings table it produces is identical in shape.
+The template is chain-parametrized via the `chain` setting, point it at any supported EVM chain or Solana. NFTs on Solana are emitted on `nftTokenTransfers` too; the `vendor_event_id` identity already includes `(from, to, token, tokenId, amount)` so each row stays unique under Solana's repeated log indices. The holdings table it produces is identical in shape.
 
 ### Fidelity gaps
 
@@ -181,7 +181,7 @@ Core holding fields, `token_address`, `token_id`, `contract_type`, `balance`, ow
 
 ## Migrating from the REST API
 
-This recipe is the landing point for two wallet-NFT REST endpoints. In both cases the onchain holding is exact; the metadata, spam, and pricing layers the API bundled in are separate recipes or your own sources.
+This template is the landing point for two wallet-NFT REST endpoints. In both cases the onchain holding is exact; the metadata, spam, and pricing layers the API bundled in are separate templates or your own sources.
 
 ### GET /:address/nft
 
@@ -189,10 +189,10 @@ This recipe is the landing point for two wallet-NFT REST endpoints. In both case
 GET /:address/nft
 ```
 
-This recipe replaces it directly: one current row per `(wallet, token_address, token_id)` with a non-zero balance is exactly the holdings list the endpoint returned.
+This template replaces it directly: one current row per `(wallet, token_address, token_id)` with a non-zero balance is exactly the holdings list the endpoint returned.
 
 <Note>
-**Not 1:1**, the full response spans two recipes. This recipe supplies the holdings; join [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) (`nft_collection_metadata`, keyed by `token_address`) for `name`/`symbol`. Token-level metadata (`token_uri`, `metadata`, media) is resolved off-chain from each token's URI and is not in any per-block feed, you fetch it yourself or layer in a metadata source.
+**Not 1:1**, the full response spans two templates. This template supplies the holdings; join [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) (`nft_collection_metadata`, keyed by `token_address`) for `name`/`symbol`. Token-level metadata (`token_uri`, `metadata`, media) is resolved off-chain from each token's URI and is not in any per-block feed, you fetch it yourself or layer in a metadata source.
 </Note>
 
 | `/:address/nft` field | Here | Fidelity |
@@ -204,7 +204,7 @@ This recipe replaces it directly: one current row per `(wallet, token_address, t
 | `name`, `symbol` | `nft_collection_metadata.*` | exact |
 | `token_hash` | derive (hash of contract + token_id) | exact |
 | `token_uri`, `metadata`, `normalized_metadata`, `media` | resolve from the token URI | add yourself |
-| `rarity_*`, `floor_price*`, `last_sale`, `list_price` | marketplace/rarity data ([NFT Trades](/data-feeds/recipes/nft/nft-trades) for realized sales) | add yourself |
+| `rarity_*`, `floor_price*`, `last_sale`, `list_price` | marketplace/rarity data ([NFT Trades](/data-feeds/templates/nft/nft-trades) for realized sales) | add yourself |
 | `possible_spam`, `verified_collection`, collection art | your own lists / sources | add yourself |
 | `block_number_minted`, `minter_address`, `*_sync` | indexer-derived | add yourself |
 
@@ -234,10 +234,10 @@ Gotchas:
 GET /:address/nft/collections
 ```
 
-There is no separate collections dataset, this endpoint is a **`GROUP BY` rollup of this recipe's holdings table**. If you've built the per-NFT query above, the collection list is one more query over the same tables.
+There is no separate collections dataset, this endpoint is a **`GROUP BY` rollup of this template's holdings table**. If you've built the per-NFT query above, the collection list is one more query over the same tables.
 
 <Note>
-**Not 1:1**, combine this recipe (holdings to group) with [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) for `name`/`symbol`, and optionally [NFT Trades](/data-feeds/recipes/nft/nft-trades) if you want `last_sale` from realized onchain sales.
+**Not 1:1**, combine this template (holdings to group) with [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) for `name`/`symbol`, and optionally [NFT Trades](/data-feeds/templates/nft/nft-trades) if you want `last_sale` from realized onchain sales.
 </Note>
 
 | `/:address/nft/collections` field | Here | Fidelity |
@@ -273,10 +273,10 @@ Gotchas:
 ### Related
 
 <Columns cols={2}>
-  <Card title="Token Balances by Wallet" href="/data-feeds/recipes/wallet/token-balances-by-wallet" icon="wallet">
+  <Card title="Token Balances by Wallet" href="/data-feeds/templates/wallet/token-balances-by-wallet" icon="wallet">
     The ERC-20 sibling, same latest-wins pattern, keyed by (wallet, token).
   </Card>
-  <Card title="NFT Owners by Contract" href="/data-feeds/recipes/nft/nft-owners-by-contract" icon="users">
+  <Card title="NFT Owners by Contract" href="/data-feeds/templates/nft/nft-owners-by-contract" icon="users">
     The inverse view, all current holders of a collection.
   </Card>
   <Card title="Portfolio Tracking" href="/data-feeds/use-cases/portfolio-tracking" icon="chart-pie">

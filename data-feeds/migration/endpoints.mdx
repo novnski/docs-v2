@@ -1,16 +1,16 @@
 ---
-title: "Map Endpoints to Recipes"
-description: "Every covered Moralis REST API endpoint, mapped to the recipe (or combination of recipes) that replaces it. Find the endpoint you call today and see exactly what to turn on."
+title: "Map Endpoints to Templates"
+description: "Every covered Moralis REST API endpoint, mapped to the template (or combination of templates) that replaces it. Find the endpoint you call today and see exactly what to turn on."
 ---
 
 This is the full list of Moralis REST endpoints covered by Data Feeds, **ordered by how widely each is used**
-(most-used first). Find the endpoint you call today; the **Recipes** column tells you exactly what to turn on.
-Each recipe page has a **"Migrating from the REST API"** section with the field-by-field mapping for the
+(most-used first). Find the endpoint you call today; the **Templates** column tells you exactly what to turn on.
+Each template page has a **"Migrating from the REST API"** section with the field-by-field mapping for the
 endpoints it replaces.
 
 <Warning>
 **Data Feeds are not a 1:1 endpoint swap.** Many endpoints return pre-joined objects that map to **a
-combination of recipes**: the first recipe listed is the core dataset, the rest complete the response. Plan
+combination of templates**: the first template listed is the core dataset, the rest complete the response. Plan
 for a join (usually one SQL view) rather than a drop-in replacement.
 </Warning>
 
@@ -19,59 +19,59 @@ Data Feeds differ, then come back here to pick your endpoint.
 
 ## Endpoints by usage
 
-| # | REST endpoint | Recipes you need | Headline fidelity |
+| # | REST endpoint | Templates you need | Headline fidelity |
 |---|---|---|---|
-| 1 | `GET /wallets/:address/tokens` | [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet) + [Native Balances](/data-feeds/recipes/wallet/native-balances) + [Token Prices](/data-feeds/recipes/token/token-prices) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | balances exact, prices calculated |
-| 2 | `GET /erc20/:token_address/owners` | [Token Holders](/data-feeds/recipes/token/token-holders) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
-| 3 | `GET /wallets/:address/history` | [Wallet History](/data-feeds/recipes/wallet/wallet-history) | exact, decode-yourself + off-chain labels |
-| 4 | `GET /:address/nft` | [NFTs by Wallet](/data-feeds/recipes/wallet/nfts-by-wallet) + [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) | onchain exact, metadata add-yourself |
-| 5 | `GET /:address/erc20` | [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
-| 6 | `GET /erc20/prices` | [Token Prices](/data-feeds/recipes/token/token-prices) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | calculated |
-| 7 | `GET /erc20/:tokenAddress/holders` | [Token Holders](/data-feeds/recipes/token/token-holders) + [Token Transfers](/data-feeds/recipes/token/token-transfers) | counts exact, tiers your-definition |
-| 8 | `GET /:address/erc20/transfers` | [Token Transfers](/data-feeds/recipes/token/token-transfers) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | exact |
-| 9 | `POST /nft/getMultipleNFTs` | [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) + [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) | onchain exact, metadata add-yourself |
-| 10 | `GET /:address/nft/transfers` | [NFT Transfers](/data-feeds/recipes/nft/nft-transfers) | exact |
-| 11 | `GET /:address/nft/collections` | [NFTs by Wallet](/data-feeds/recipes/wallet/nfts-by-wallet) + [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) | exact |
-| 12 | `GET /erc20/:address/price` | [Token Prices](/data-feeds/recipes/token/token-prices) | calculated |
-| 13 | `GET /transaction/:hash/verbose` | [Contract Logs](/data-feeds/recipes/logs/contract-logs) + [the block array](/data-feeds/concepts/the-block-array) | raw exact, ABI decode-yourself |
-| 14 | `GET /block/:block_number_or_hash` | [Contract Logs](/data-feeds/recipes/logs/contract-logs) + [the block array](/data-feeds/concepts/the-block-array) | exact |
-| 15 | `GET /:address` (native txns) | [Wallet History](/data-feeds/recipes/wallet/wallet-history) | exact |
-| 16 | `GET /wallets/:address/net-worth` | [Token Balances by Wallet](/data-feeds/recipes/wallet/token-balances-by-wallet) + [Native Balances](/data-feeds/recipes/wallet/native-balances) + [Token Prices](/data-feeds/recipes/token/token-prices) | calculated |
-| 17 | `GET /wallets/:address/approvals` | [Token Approvals](/data-feeds/recipes/wallet/token-approvals) + [Token Metadata](/data-feeds/recipes/token/token-metadata) + [Token Prices](/data-feeds/recipes/token/token-prices) | exact, USD-at-risk calculated |
-| 18 | `GET /wallets/:address/chains` | [Wallet History](/data-feeds/recipes/wallet/wallet-history) | exact |
-| 19 | `GET /erc20/metadata` | [Token Metadata](/data-feeds/recipes/token/token-metadata) + [Token Prices](/data-feeds/recipes/token/token-prices) | exact, market data calculated |
-| 20 | `GET /pairs/:address/ohlcv` | [Pair OHLCV](/data-feeds/recipes/markets/pair-ohlcv) | calculated from real trades |
-| 21 | `GET /erc20/:token_address/pairs` | [Swaps by Pair](/data-feeds/recipes/markets/swaps-by-pair) + [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) + [Token Metadata](/data-feeds/recipes/token/token-metadata) | pools exact, market data calculated |
-| 22 | `GET /erc20/:address/transfers` | [Token Transfers](/data-feeds/recipes/token/token-transfers) | exact |
-| 23 | `GET /erc20/:tokenAddress/holders/historical` | [Historical Balances](/data-feeds/recipes/token/historical-balances) + [Token Transfers](/data-feeds/recipes/token/token-transfers) | exact + calculated |
-| 24 | `GET /nft/:address/metadata` | [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) | exact, off-chain extras |
-| 25 | `GET /tokens/:tokenAddress/analytics` | [Swaps by Token](/data-feeds/recipes/markets/swaps-by-token) + [Token Prices](/data-feeds/recipes/token/token-prices) + [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) | calculated |
-| 26 | `GET /:address/balance` | [Native Balances](/data-feeds/recipes/wallet/native-balances) | exact |
-| 27 | `GET /nft/:address` | [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) + [NFT Collection Metadata](/data-feeds/recipes/nft/nft-collection-metadata) | onchain exact, metadata add-yourself |
-| 28 | `GET /wallets/:address/stats` | [Wallet History](/data-feeds/recipes/wallet/wallet-history) + [NFTs by Wallet](/data-feeds/recipes/wallet/nfts-by-wallet) | exact |
-| 29 | `GET /wallets/:address/swaps` | [Swaps by Wallet](/data-feeds/recipes/markets/swaps-by-wallet) | onchain exact, USD calculated |
-| 30 | `GET /nft/:address/owners` | [NFT Owners by Contract](/data-feeds/recipes/nft/nft-owners-by-contract) | onchain exact |
+| 1 | `GET /wallets/:address/tokens` | [Token Balances by Wallet](/data-feeds/templates/wallet/token-balances-by-wallet) + [Native Balances](/data-feeds/templates/wallet/native-balances) + [Token Prices](/data-feeds/templates/token/token-prices) + [Token Metadata](/data-feeds/templates/token/token-metadata) | balances exact, prices calculated |
+| 2 | `GET /erc20/:token_address/owners` | [Token Holders](/data-feeds/templates/token/token-holders) + [Token Metadata](/data-feeds/templates/token/token-metadata) | exact |
+| 3 | `GET /wallets/:address/history` | [Wallet History](/data-feeds/templates/wallet/wallet-history) | exact, decode-yourself + off-chain labels |
+| 4 | `GET /:address/nft` | [NFTs by Wallet](/data-feeds/templates/wallet/nfts-by-wallet) + [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) | onchain exact, metadata add-yourself |
+| 5 | `GET /:address/erc20` | [Token Balances by Wallet](/data-feeds/templates/wallet/token-balances-by-wallet) + [Token Metadata](/data-feeds/templates/token/token-metadata) | exact |
+| 6 | `GET /erc20/prices` | [Token Prices](/data-feeds/templates/token/token-prices) + [Token Metadata](/data-feeds/templates/token/token-metadata) | calculated |
+| 7 | `GET /erc20/:tokenAddress/holders` | [Token Holders](/data-feeds/templates/token/token-holders) + [Token Transfers](/data-feeds/templates/token/token-transfers) | counts exact, tiers your-definition |
+| 8 | `GET /:address/erc20/transfers` | [Token Transfers](/data-feeds/templates/token/token-transfers) + [Token Metadata](/data-feeds/templates/token/token-metadata) | exact |
+| 9 | `POST /nft/getMultipleNFTs` | [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) + [NFT Owners by Contract](/data-feeds/templates/nft/nft-owners-by-contract) | onchain exact, metadata add-yourself |
+| 10 | `GET /:address/nft/transfers` | [NFT Transfers](/data-feeds/templates/nft/nft-transfers) | exact |
+| 11 | `GET /:address/nft/collections` | [NFTs by Wallet](/data-feeds/templates/wallet/nfts-by-wallet) + [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) | exact |
+| 12 | `GET /erc20/:address/price` | [Token Prices](/data-feeds/templates/token/token-prices) | calculated |
+| 13 | `GET /transaction/:hash/verbose` | [Contract Logs](/data-feeds/templates/logs/contract-logs) + [the block array](/data-feeds/concepts/the-block-array) | raw exact, ABI decode-yourself |
+| 14 | `GET /block/:block_number_or_hash` | [Contract Logs](/data-feeds/templates/logs/contract-logs) + [the block array](/data-feeds/concepts/the-block-array) | exact |
+| 15 | `GET /:address` (native txns) | [Wallet History](/data-feeds/templates/wallet/wallet-history) | exact |
+| 16 | `GET /wallets/:address/net-worth` | [Token Balances by Wallet](/data-feeds/templates/wallet/token-balances-by-wallet) + [Native Balances](/data-feeds/templates/wallet/native-balances) + [Token Prices](/data-feeds/templates/token/token-prices) | calculated |
+| 17 | `GET /wallets/:address/approvals` | [Token Approvals](/data-feeds/templates/wallet/token-approvals) + [Token Metadata](/data-feeds/templates/token/token-metadata) + [Token Prices](/data-feeds/templates/token/token-prices) | exact, USD-at-risk calculated |
+| 18 | `GET /wallets/:address/chains` | [Wallet History](/data-feeds/templates/wallet/wallet-history) | exact |
+| 19 | `GET /erc20/metadata` | [Token Metadata](/data-feeds/templates/token/token-metadata) + [Token Prices](/data-feeds/templates/token/token-prices) | exact, market data calculated |
+| 20 | `GET /pairs/:address/ohlcv` | [Pair OHLCV](/data-feeds/templates/markets/pair-ohlcv) | calculated from real trades |
+| 21 | `GET /erc20/:token_address/pairs` | [Swaps by Pair](/data-feeds/templates/markets/swaps-by-pair) + [Pair Reserves](/data-feeds/templates/markets/pair-reserves) + [Token Metadata](/data-feeds/templates/token/token-metadata) | pools exact, market data calculated |
+| 22 | `GET /erc20/:address/transfers` | [Token Transfers](/data-feeds/templates/token/token-transfers) | exact |
+| 23 | `GET /erc20/:tokenAddress/holders/historical` | [Historical Balances](/data-feeds/templates/token/historical-balances) + [Token Transfers](/data-feeds/templates/token/token-transfers) | exact + calculated |
+| 24 | `GET /nft/:address/metadata` | [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) | exact, off-chain extras |
+| 25 | `GET /tokens/:tokenAddress/analytics` | [Swaps by Token](/data-feeds/templates/markets/swaps-by-token) + [Token Prices](/data-feeds/templates/token/token-prices) + [Pair Reserves](/data-feeds/templates/markets/pair-reserves) | calculated |
+| 26 | `GET /:address/balance` | [Native Balances](/data-feeds/templates/wallet/native-balances) | exact |
+| 27 | `GET /nft/:address` | [NFT Owners by Contract](/data-feeds/templates/nft/nft-owners-by-contract) + [NFT Collection Metadata](/data-feeds/templates/nft/nft-collection-metadata) | onchain exact, metadata add-yourself |
+| 28 | `GET /wallets/:address/stats` | [Wallet History](/data-feeds/templates/wallet/wallet-history) + [NFTs by Wallet](/data-feeds/templates/wallet/nfts-by-wallet) | exact |
+| 29 | `GET /wallets/:address/swaps` | [Swaps by Wallet](/data-feeds/templates/markets/swaps-by-wallet) | onchain exact, USD calculated |
+| 30 | `GET /nft/:address/owners` | [NFT Owners by Contract](/data-feeds/templates/nft/nft-owners-by-contract) | onchain exact |
 
 ## Solana endpoints
 
-The removed Solana **token-holder** endpoints map onto the same holder recipes, pointed at Solana (the feed's
-SPL `tokenTransfers` carry absolute post-balances, so the recipes run unchanged):
+The removed Solana **token-holder** endpoints map onto the same holder templates, pointed at Solana (the feed's
+SPL `tokenTransfers` carry absolute post-balances, so the templates run unchanged):
 
-| REST endpoint | Recipes you need | Headline fidelity |
+| REST endpoint | Templates you need | Headline fidelity |
 |---|---|---|
-| `GET /token/:network/:address/top-holders` | [Token Holders](/data-feeds/recipes/token/token-holders) | exact, USD calculated |
-| `GET /token/:network/holders/:address` | [Token Holders](/data-feeds/recipes/token/token-holders) + [Token Transfers](/data-feeds/recipes/token/token-transfers) | totalHolders exact, tiers your-definition |
-| `GET /token/:network/holders/:address/historical` | [Historical Balances](/data-feeds/recipes/token/historical-balances) | per-bucket totals exact, change calculated |
+| `GET /token/:network/:address/top-holders` | [Token Holders](/data-feeds/templates/token/token-holders) | exact, USD calculated |
+| `GET /token/:network/holders/:address` | [Token Holders](/data-feeds/templates/token/token-holders) + [Token Transfers](/data-feeds/templates/token/token-transfers) | totalHolders exact, tiers your-definition |
+| `GET /token/:network/holders/:address/historical` | [Historical Balances](/data-feeds/templates/token/historical-balances) | per-bucket totals exact, change calculated |
 
 The removed **launchpad / discovery** endpoints (pump.fun, Raydium LaunchLab) are all served by the one
-[Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) recipe over the `launchpadEvents` feed:
+[Token Bonding Status](/data-feeds/templates/token/token-bonding-status) template over the `launchpadEvents` feed:
 
-| REST endpoint | Recipes you need | Headline fidelity |
+| REST endpoint | Templates you need | Headline fidelity |
 |---|---|---|
-| `GET /token/:network/exchange/:exchange/new` | [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) | exact, price calculated |
-| `GET /token/:network/exchange/:exchange/bonding` | [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) | progress exact, price calculated |
-| `GET /token/:network/exchange/:exchange/graduated` | [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) + [Token Prices](/data-feeds/recipes/token/token-prices) | exact (+ DEX pool) |
-| `GET /token/:network/:address/bonding-status` | [Token Bonding Status](/data-feeds/recipes/token/token-bonding-status) | exact |
+| `GET /token/:network/exchange/:exchange/new` | [Token Bonding Status](/data-feeds/templates/token/token-bonding-status) | exact, price calculated |
+| `GET /token/:network/exchange/:exchange/bonding` | [Token Bonding Status](/data-feeds/templates/token/token-bonding-status) | progress exact, price calculated |
+| `GET /token/:network/exchange/:exchange/graduated` | [Token Bonding Status](/data-feeds/templates/token/token-bonding-status) + [Token Prices](/data-feeds/templates/token/token-prices) | exact (+ DEX pool) |
+| `GET /token/:network/:address/bonding-status` | [Token Bonding Status](/data-feeds/templates/token/token-bonding-status) | exact |
 
 ## Not covered yet
 

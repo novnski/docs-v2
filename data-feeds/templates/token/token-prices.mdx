@@ -11,7 +11,7 @@ Token Prices is the **valuation join target** across Data Feeds. Any "what is th
 
 ### What you get
 
-The recipe lands **one row per in-block price update**: Moralis' continuous mark for each `(token, pair, protocol)` at the block it changed. A token traded across several pairs or protocols produces several marks per block; the table keeps them all, keyed for by-token lookups.
+The template lands **one row per in-block price update**: Moralis' continuous mark for each `(token, pair, protocol)` at the block it changed. A token traded across several pairs or protocols produces several marks per block; the table keeps them all, keyed for by-token lookups.
 
 | Column | Description |
 | --- | --- |
@@ -38,11 +38,11 @@ The transform reads one per-block array, `tokenPriceUpdates`, and lands one row 
 | **Postgres** | `token_price_updates` | Index on `(token_address, block_number DESC)` |
 | **MySQL** | `token_price_updates` | Index on `(token_address, block_number)` |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct. The fact table's sort key is token-first, so a token's full price history is a contiguous range read; the `latest_token_price_dict` dictionary holds the carry-forward mark for quiet positions.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct. The fact table's sort key is token-first, so a token's full price history is a contiguous range read; the `latest_token_price_dict` dictionary holds the carry-forward mark for quiet positions.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). `usd_price` and `native_price` are carried as text to preserve full precision across many orders of magnitude; cast at read time.
+Below is the complete read table this template produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)). `usd_price` and `native_price` are carried as text to preserve full precision across many orders of magnitude; cast at read time.
 
 <Accordion title="ClickHouse, fact_token_price_update">
 
@@ -116,7 +116,7 @@ CREATE TABLE public.token_price_updates (
   native_price       NUMERIC(38, 18)
 );
 
--- By-token price history (the recipe's primary purpose).
+-- By-token price history (the template's primary purpose).
 CREATE INDEX ON public.token_price_updates (token_address, block_number DESC);
 -- Block-range helper.
 CREATE INDEX ON public.token_price_updates (block_number);
@@ -164,7 +164,7 @@ LIMIT 24;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse; see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse; see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   The realtime reorg path needs a single-column `UNIQUE` on the position column, but `position` is block-level (many price updates share one block), so the array-expanded rows can only carry a composite unique. Run realtime/hybrid on **ClickHouse**, where the collapsing log table corrects reorgs per-block. The Postgres / MySQL configs are intended for `historical` backfill.
@@ -172,7 +172,7 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, the same `logIndex` can be assigned to multiple events in one instruction, so the event identity is widened with `pairAddress` (or `protocol`) to keep marks distinct; the price feed it produces is identical in shape.
+The template is chain-parametrized via the `chain` setting: point it at any supported EVM chain or Solana. On Solana, the same `logIndex` can be assigned to multiple events in one instruction, so the event identity is widened with `pairAddress` (or `protocol`) to keep marks distinct; the price feed it produces is identical in shape.
 
 ### How much data does this consume?
 
@@ -206,10 +206,10 @@ If you want your exact scope measured before you commit to a plan, [reach out](/
 
 ## Migrating from the REST API
 
-This recipe replaces both REST price endpoints. Their responses were **not 1:1 rows in one table**: prices, token details, and pair liquidity came bundled in a single payload, but they live in different parts of the dataset here.
+This template replaces both REST price endpoints. Their responses were **not 1:1 rows in one table**: prices, token details, and pair liquidity came bundled in a single payload, but they live in different parts of the dataset here.
 
 <Note>
-  Rebuilding the full REST response takes a **combination of recipes**: this one for the marks, plus [Token Metadata](/data-feeds/recipes/token/token-metadata) for `tokenName` / `tokenSymbol` / `tokenDecimals` and [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) if you need `pairTotalLiquidityUsd` (reserves × price). Join them at read time on `token_address` / `pair_address`.
+  Rebuilding the full REST response takes a **combination of templates**: this one for the marks, plus [Token Metadata](/data-feeds/templates/token/token-metadata) for `tokenName` / `tokenSymbol` / `tokenDecimals` and [Pair Reserves](/data-feeds/templates/markets/pair-reserves) if you need `pairTotalLiquidityUsd` (reserves × price). Join them at read time on `token_address` / `pair_address`.
 </Note>
 
 Two workflow changes to plan for:
@@ -226,10 +226,10 @@ Both endpoints returned the same shape, so one field mapping covers them:
 | `nativePrice` | latest `native_price` (a scalar, not the REST endpoint's object) | calculated |
 | `pairAddress`, `exchangeName` | `pair_address`, `protocol` | exact |
 | `priceLastChangedAtBlock`, `blockTimestamp` | `block_number`, `event_ts` (`block_timestamp` on Postgres / MySQL, in **seconds**, not ms) | exact |
-| `tokenName`, `tokenSymbol`, `tokenDecimals` | [Token Metadata](/data-feeds/recipes/token/token-metadata) recipe | exact |
+| `tokenName`, `tokenSymbol`, `tokenDecimals` | [Token Metadata](/data-feeds/templates/token/token-metadata) template | exact |
 | `24hrPercentChange`, `usdPrice24hr*` | derive: mark ~24h ago vs latest, from this table's history | calculated |
-| `pairTotalLiquidityUsd` | [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) recipe (reserves × price) | calculated |
-| `exchangeAddress` | not in these recipes: `protocol` names the venue; bring a factory list if you need the address | add yourself |
+| `pairTotalLiquidityUsd` | [Pair Reserves](/data-feeds/templates/markets/pair-reserves) template (reserves × price) | calculated |
+| `exchangeAddress` | not in these templates: `protocol` names the venue; bring a factory list if you need the address | add yourself |
 | `tokenLogo`, `possibleSpam`, `verifiedContract`, `securityScore` | off-chain signals; bring your own token / allow / deny lists | add yourself |
 
 ### GET /erc20/:address/price: single token price
@@ -238,7 +238,7 @@ Both endpoints returned the same shape, so one field mapping covers them:
 GET /erc20/:address/price
 ```
 
-Replaced by the newest mark for one token in this recipe's table, joined to [Token Metadata](/data-feeds/recipes/token/token-metadata) for the token details the endpoint bundled in. On Postgres:
+Replaced by the newest mark for one token in this template's table, joined to [Token Metadata](/data-feeds/templates/token/token-metadata) for the token details the endpoint bundled in. On Postgres:
 
 ```sql
 SELECT DISTINCT ON (p.token_address)
@@ -285,7 +285,7 @@ GROUP BY token_address;
 ### Related
 
 <Columns cols={2}>
-  <Card title="Token Transfers" href="/data-feeds/recipes/token/token-transfers" icon="right-left">
+  <Card title="Token Transfers" href="/data-feeds/templates/token/token-transfers" icon="right-left">
     The per-token transfer ledger you value against these marks.
   </Card>
   <Card title="Portfolio Tracking" href="/data-feeds/use-cases/portfolio-tracking" icon="chart-pie">

@@ -1,11 +1,11 @@
 ---
 title: "Modes: Historical, Realtime, and Hybrid"
-description: "A recipe runs in one of three modes. The mode decides whether the sink backfills past history, tails live blocks, or does both. Here's how to pick."
+description: "A template runs in one of three modes. The mode decides whether the sink backfills past history, tails live blocks, or does both. Here's how to pick."
 ---
 
 # Modes
 
-Every recipe runs in one of three modes. The mode is a single setting, but it decides the shape of your
+Every template runs in one of three modes. The mode is a single setting, but it decides the shape of your
 whole setup: whether the sink fills in **past history**, follows **new blocks** as they arrive, or does
 **both**. Pick the mode from what your product needs to show, then size the backfill window to match.
 
@@ -25,7 +25,7 @@ or a transfer alert, and you do not need any history.
 
 ### hybrid
 Backfill first, then hand off to live with no gap. The sink indexes your history window, then continues
-straight into realtime tailing. This is the default for most recipes because it gives you a complete table
+straight into realtime tailing. This is the default for most templates because it gives you a complete table
 that also stays current. Use it whenever you want both history and live data, which is most of the time.
 
 ## Quick reference
@@ -49,7 +49,7 @@ depends on whether your answer is current state or an event list, covered in
 
 ## How to set it
 
-The mode is set in the recipe's sink config, alongside the start block:
+The mode is set in the template's sink config, alongside the start block:
 
 ```yaml
 mode: hybrid
@@ -63,6 +63,6 @@ cutoff:
 <Note>
 **Realtime and hybrid run best on ClickHouse.** ClickHouse corrects chain reorgs at the block level
 automatically (see [Reorgs](./reorgs)), so it is the recommended destination for any live mode. The Postgres
-and MySQL recipe variants ship in `historical` mode for backfill loads. See [Destinations](./destinations)
+and MySQL template variants ship in `historical` mode for backfill loads. See [Destinations](./destinations)
 for the full trade-off.
 </Note>

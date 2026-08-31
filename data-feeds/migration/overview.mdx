@@ -29,7 +29,7 @@ join (usually one SQL view), and you decide what to do about the off-chain extra
 
 ## Start with the model, once
 
-Two concept pages explain how Data Feeds work, so every recipe links here instead of repeating it. Read these
+Two concept pages explain how Data Feeds work, so every template links here instead of repeating it. Read these
 first and the per-endpoint migration sections go quickly:
 
 - [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds) The one data lake, and the
@@ -40,12 +40,12 @@ first and the per-endpoint migration sections go quickly:
 
 ## The schema gotchas to plan for
 
-These are the differences that surprise people first. Each recipe's migration section states the answer for
+These are the differences that surprise people first. Each template's migration section states the answer for
 its own endpoint(s), but the pattern is always one of these:
 
 | You had in the API response | Where it comes from in Data Feeds |
 |---|---|
-| **One pre-joined object** (e.g. a wallet token with balance, price, metadata) | Several datasets you join yourself, usually in one SQL view. One endpoint often maps to **more than one recipe**. |
+| **One pre-joined object** (e.g. a wallet token with balance, price, metadata) | Several datasets you join yourself, usually in one SQL view. One endpoint often maps to **more than one template**. |
 | **A derived USD value** (price, net worth, USD-at-risk) | **Calculated** from live DEX trades. Very close to the old value, best compared with a small tolerance, not byte-equality. |
 | **An off-chain signal** (logos, spam flags, security scores) | **Not in the lake.** Bring your own source, or drop the field. |
 | **A field that needs full history to be correct** (balances, holders, approvals) | Correct only once you backfill. Decide your [backfill](/data-feeds/concepts/history-and-backfill) before you start. |
@@ -63,11 +63,11 @@ see three labels:
 
 ## Find your endpoint
 
-When you are ready, the **[Map endpoints to recipes](/data-feeds/migration/endpoints)** table maps every covered
-Moralis REST endpoint to the recipe (or **combination of recipes**) that replaces it, ordered by usage.
-Migration details live **on the recipe pages themselves**: each recipe has a "Migrating from the REST API"
-section with the field-by-field mapping, the required recipe combination, one reconstruction query, and the
-endpoint-specific gotchas. One page per dataset: the recipe is the single source of truth.
+When you are ready, the **[Map endpoints to templates](/data-feeds/migration/endpoints)** table maps every covered
+Moralis REST endpoint to the template (or **combination of templates**) that replaces it, ordered by usage.
+Migration details live **on the template pages themselves**: each template has a "Migrating from the REST API"
+section with the field-by-field mapping, the required template combination, one reconstruction query, and the
+endpoint-specific gotchas. One page per dataset: the template is the single source of truth.
 
 New to Data Feeds entirely? Start with the **[quickstart](/data-feeds/migration/quickstart)** to get live data
 flowing into your own database in about ten minutes, then come back and migrate your endpoints. And skim
@@ -76,11 +76,11 @@ known failure point with the fix.
 
 ## How each migration section is structured
 
-Every recipe's "Migrating from the REST API" section follows the same shape, so once you have read one you
+Every template's "Migrating from the REST API" section follows the same shape, so once you have read one you
 can skim the rest:
 
-1. **The REST endpoint(s)** it replaces, and whether you need this recipe alone or a **combination**,
-   stated up front, with links to the other recipes you need.
+1. **The REST endpoint(s)** it replaces, and whether you need this template alone or a **combination**,
+   stated up front, with links to the other templates you need.
 2. **Field mapping reference**, the per-field table with the fidelity label.
 3. **One reconstruction query**, the SQL view that rebuilds the old response shape.
 4. **Good to know**, the endpoint-specific gotchas worth knowing before you ship.

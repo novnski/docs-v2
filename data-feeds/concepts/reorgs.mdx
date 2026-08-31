@@ -1,5 +1,5 @@
 ---
-title: "Reorgs: How Chain Reorganizations Surface, and How Recipes Correct Them"
+title: "Reorgs: How Chain Reorganizations Surface, and How Templates Correct Them"
 description: "Near the chain tip, a block can be replaced by another. Data Feeds detect this and emit a correction, so your table converges on the canonical chain. Here's what that means for your queries."
 ---
 
@@ -42,8 +42,8 @@ FROM recipe_token_transfers.fact_token_transfers
 WHERE chain_id = 1 AND token_address = lower('0x...');
 ```
 
-The recipe's own example queries already follow this rule, so if you start from those you get it automatically.
-Postgres and MySQL recipe variants are intended for `historical` backfill of settled blocks, where reorgs do
+The template's own example queries already follow this rule, so if you start from those you get it automatically.
+Postgres and MySQL template variants are intended for `historical` backfill of settled blocks, where reorgs do
 not apply, which is why the live reorg path is a ClickHouse strength (see [Destinations](./destinations)).
 
 ## Only the tip is provisional

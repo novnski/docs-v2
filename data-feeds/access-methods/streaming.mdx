@@ -28,7 +28,7 @@ consume decoded records, not raw RPC payloads. See
 
 Streaming consumers see blocks as they land. Each block records its **position and parent**, so when the
 chain reorganizes, your consumer (or a downstream process) can detect the rollback and correct affected
-records. This differs from the [database sinks](../concepts/destinations), where recipes apply reorg
+records. This differs from the [database sinks](../concepts/destinations), where templates apply reorg
 corrections for you. See [Reorgs](../concepts/reorgs) for how rollbacks are signaled.
 
 ## Streaming vs. the sink

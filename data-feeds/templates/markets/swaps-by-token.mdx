@@ -11,7 +11,7 @@ A single read returns what the public Moralis Swaps endpoints serve by token, st
 
 ### What you get
 
-The recipe lands **one row per (trade, token side)**, each trade is unpivoted so it appears under both of its tokens, and a by-token lookup is a prefix scan. Key columns of the fact table:
+The template lands **one row per (trade, token side)**, each trade is unpivoted so it appears under both of its tokens, and a by-token lookup is a prefix scan. Key columns of the fact table:
 
 | Column | Description |
 | --- | --- |
@@ -45,11 +45,11 @@ The two branches are disjoint by construction, pool fills are keyed off the pair
 | **Postgres** | `swaps` | Indexes on `token0_address` and `token1_address`, each `(…, block_number DESC)` |
 | **MySQL** | `swaps` | Indexes on `token0_address` and `token1_address` |
 
-ClickHouse uses the collapsing log-table pattern (see the [recipes overview](/data-feeds/recipes/overview#destinations)) so chain reorganizations self-correct. The fact table is token-first, so all trades for a token, newest first, are a contiguous range read. Postgres/MySQL keep a flat one-row-per-trade `swaps` table and reach a token via either side's index.
+ClickHouse uses the collapsing log-table pattern (see the [templates overview](/data-feeds/templates/overview#destinations)) so chain reorganizations self-correct. The fact table is token-first, so all trades for a token, newest first, are a contiguous range read. Postgres/MySQL keep a flat one-row-per-trade `swaps` table and reach a token via either side's index.
 
 ### Full schema
 
-Below is the complete read table this recipe produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/recipes/overview#schema--flexibility)). Raw `uint256` amounts and fees are stored as text in ClickHouse and as `NUMERIC(76, 0)` in Postgres (explicit precision so large raw balances never overflow); USD columns are nullable wide decimals.
+Below is the complete read table this template produces. It's a starting point: keep the columns you need and drop the rest (see [Schema & flexibility](/data-feeds/templates/overview#schema--flexibility)). Raw `uint256` amounts and fees are stored as text in ClickHouse and as `NUMERIC(76, 0)` in Postgres (explicit precision so large raw balances never overflow); USD columns are nullable wide decimals.
 
 <Accordion title="ClickHouse, fact_swaps_by_token">
 
@@ -116,7 +116,7 @@ CREATE TABLE public.swaps (
   fee_usd            NUMERIC(38, 18)
 );
 
--- By-token access (the recipe's primary purpose).
+-- By-token access (the template's primary purpose).
 CREATE INDEX IF NOT EXISTS swaps_token0_block_idx
   ON public.swaps (token0_address, block_number DESC);
 CREATE INDEX IF NOT EXISTS swaps_token1_block_idx
@@ -171,7 +171,7 @@ LIMIT 50;
 
 ### Modes
 
-Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/recipes/overview#modes).
+Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / MySQL `historical`** (one-shot backfill). For live/reorg-safe ingestion, use ClickHouse, see the [overview](/data-feeds/templates/overview#modes).
 
 <Note>
   The realtime reorg path needs a single-column unique on the position cursor, but `position` is block-level (many trades per block), so the array-expanded trade rows can only carry a composite unique. Run **realtime/hybrid on ClickHouse**, where the collapsing log table corrects reorgs per-block; the Postgres/MySQL configs are intended for `historical` backfill.
@@ -179,7 +179,7 @@ Shipped defaults: **ClickHouse `hybrid`** (backfill → realtime), **Postgres / 
 
 ### Multichain
 
-The recipe is chain-parametrized, point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the pool-fill event identity is widened (with the token addresses and amount) to keep rows distinct; the by-token feed it produces is identical in shape.
+The template is chain-parametrized, point it at any supported EVM chain or Solana. On Solana, multiple events in one instruction can share a `logIndex`, so the pool-fill event identity is widened (with the token addresses and amount) to keep rows distinct; the by-token feed it produces is identical in shape.
 
 ### USD valuation and fidelity gaps
 
@@ -190,14 +190,14 @@ The recipe is chain-parametrized, point it at any supported EVM chain or Solana.
 
 ## Migrating from the REST API
 
-This recipe is the trade-level foundation for the token-analytics REST endpoint. That endpoint returns a pre-aggregated dashboard, so there is **no 1:1 replacement table**, you land the token's trades with this recipe and compute the rolling windows yourself, joining sibling recipes for price, liquidity, and FDV. Every figure is **calculated** (aggregated from real trades, prices, reserves, and supply, very close, compare with a tolerance); there are no off-chain fields to add.
+This template is the trade-level foundation for the token-analytics REST endpoint. That endpoint returns a pre-aggregated dashboard, so there is **no 1:1 replacement table**, you land the token's trades with this template and compute the rolling windows yourself, joining sibling templates for price, liquidity, and FDV. Every figure is **calculated** (aggregated from real trades, prices, reserves, and supply, very close, compare with a tolerance); there are no off-chain fields to add.
 
 ### GET /tokens/:tokenAddress/analytics
 
 Buy/sell volume, buyers/sellers, trade counts, unique wallets, price change, liquidity, and FDV per rolling window (5m / 1h / 6h / 24h). On Data Feeds those windows become queries you own, and so does any other window or metric (buy/sell ratio, VWAP, …).
 
 <Warning>
-This endpoint needs a **combination of recipes**, not one. Run this recipe (the trades) plus [Token Prices](/data-feeds/recipes/token/token-prices) (`token_price_updates`, `usdPrice` and `pricePercentChange`), [Pair Reserves](/data-feeds/recipes/markets/pair-reserves) (`pair_reserves`, `totalLiquidityUsd`), and [Token Metadata](/data-feeds/recipes/token/token-metadata) (`token_metadata.total_supply`, FDV) against the same database, then aggregate. There is no pre-aggregated analytics recipe, the composition is the supported path.
+This endpoint needs a **combination of templates**, not one. Run this template (the trades) plus [Token Prices](/data-feeds/templates/token/token-prices) (`token_price_updates`, `usdPrice` and `pricePercentChange`), [Pair Reserves](/data-feeds/templates/markets/pair-reserves) (`pair_reserves`, `totalLiquidityUsd`), and [Token Metadata](/data-feeds/templates/token/token-metadata) (`token_metadata.total_supply`, FDV) against the same database, then aggregate. There is no pre-aggregated analytics template, the composition is the supported path.
 </Warning>
 
 | `/tokens/:tokenAddress/analytics` | Data Feeds | Fidelity |
@@ -237,7 +237,7 @@ Layer the rest on top: `usdPrice` is the latest price update, `pricePercentChang
 ### Related
 
 <Columns cols={2}>
-  <Card title="Swaps by Pair" href="/data-feeds/recipes/markets/swaps-by-pair" icon="arrow-right-arrow-left">
+  <Card title="Swaps by Pair" href="/data-feeds/templates/markets/swaps-by-pair" icon="arrow-right-arrow-left">
     The sibling, every trade keyed by pool/pair address.
   </Card>
   <Card title="Token Analytics" href="/data-feeds/use-cases/token-analytics" icon="chart-mixed">
