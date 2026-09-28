@@ -926,7 +926,6 @@
               "data-feeds/concepts/what-are-data-feeds",
               "data-feeds/features",
               "data-feeds/how-it-works",
-              "data-feeds/early-access",
               "data-feeds/migration/quickstart"
             ]
           },
@@ -1951,7 +1950,11 @@
     },
     {
       "source": "/data-indexer/early-access",
-      "destination": "/data-feeds/early-access"
+      "destination": "/data-feeds/overview"
+    },
+    {
+      "source": "/data-feeds/early-access",
+      "destination": "/data-feeds/overview"
     },
     {
       "source": "/rpc-nodes/index",

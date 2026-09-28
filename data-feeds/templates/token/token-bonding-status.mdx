@@ -239,7 +239,7 @@ What this figure does and does not cover:
 - **The whole slice, across every launchpad and every token.** Filtering to specific tokens, platforms, or programs happens after the data is delivered, so it does not reduce the figure. To reduce cost, narrow the **block range**, not the entity set.
 - **`metered` delivery.** Under `presigned_url` you are billed for whole partitions rather than the columns you project, which is a different number.
 
-If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+If you want your exact scope measured before you commit to a plan, [reach out](https://admin.moralis.com/data-feeds) and we will probe it against the live feed rather than estimate it.
 
 ### Fidelity gaps
 
@@ -274,7 +274,7 @@ In every deprecated endpoint URL, `:exchange` is the launchpad's onchain **progr
 
 ### New tokens by exchange
 
-```
+```text
 GET /token/:network/exchange/:exchange/new
 ```
 
@@ -301,7 +301,7 @@ GROUP BY token_address, exchange_address;
 
 ### Bonding tokens by exchange
 
-```
+```text
 GET /token/:network/exchange/:exchange/bonding
 ```
 
@@ -327,7 +327,7 @@ HAVING maxIf(1, event_type = 'migrated') = 0   -- still bonding (not graduated)
 
 ### Graduated tokens by exchange
 
-```
+```text
 GET /token/:network/exchange/:exchange/graduated
 ```
 
@@ -357,7 +357,7 @@ HAVING maxIf(1, event_type = 'migrated') = 1;  -- has graduated
 
 ### Token bonding status
 
-```
+```text
 GET /token/:network/:address/bonding-status
 ```
 

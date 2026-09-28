@@ -196,7 +196,7 @@ The template is chain-parametrized via the `chain` setting: point it at any supp
 - **Measured chains only.** Volume concentrates hard per chain, so these figures do not extrapolate to unmeasured chains.
 - **Filtering does not reduce it.** Restricting to specific tokens or venues happens after the data is delivered. To reduce cost, narrow the **block range**, not the entity set.
 
-If you want your exact scope measured before you commit to a plan, [reach out](/data-feeds/early-access) and we will probe it against the live feed rather than estimate it.
+If you want your exact scope measured before you commit to a plan, [reach out](https://admin.moralis.com/data-feeds) and we will probe it against the live feed rather than estimate it.
 
 ### Fidelity and valuation notes
 
@@ -234,7 +234,7 @@ Both endpoints returned the same shape, so one field mapping covers them:
 
 ### GET /erc20/:address/price: single token price
 
-```
+```text
 GET /erc20/:address/price
 ```
 
@@ -259,7 +259,7 @@ ORDER BY p.token_address, p.block_number DESC;   -- newest mark
 
 ### POST /erc20/prices: batch token prices
 
-```
+```text
 POST /erc20/prices
 ```
 
