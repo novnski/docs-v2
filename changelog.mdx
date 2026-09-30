@@ -44,6 +44,18 @@ description: "New releases and improvements"
   [View all supported chains →](/data-api/supported-chains)
 </Update>
 
+<Update label="September 28, 2026" tags={["Deprecation"]}>
+  ## Sei Testnet Support Ends October 2, 2026
+
+  Moralis is removing support for **Sei Testnet** (`sei-testnet` / `0x530`) on **Friday, October 2, 2026**, across Data API, Streams, and Datashare. After that date, requests targeting Sei Testnet will return an unsupported-chain error.
+
+  **Sei mainnet is not affected.** Sei (`sei` / `0x531`) remains fully supported across Data API, Streams, and Datashare, and no action is needed for mainnet integrations.
+
+  If you use Sei Testnet for development or testing, switch to one of our other [supported testnets](/data-api/supported-chains) (such as Ethereum Sepolia, Base Sepolia, or Arbitrum Sepolia) before October 2, 2026, and update or delete any Streams configured for `0x530`.
+
+  [Reach out to the team](https://admin.moralis.com/) (via chat widget) if you need help migrating.
+</Update>
+
 <Update label="September 28, 2026" tags={["New Feature"]}>
   ## Moralis Data Feeds
 
