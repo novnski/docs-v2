@@ -52,7 +52,6 @@ export const DataApiSupportedChainsTable = () => {
     { name: "Lisk", type: "Mainnet", chainId: "0x46f (1135)", qp: ["lisk", "0x46f"], deprecated: T, depNote: "Support removed on September 25, 2026. Migrate to Ethereum or Base.", depHref: "/changelog#moonbeam-moonriver-and-lisk-support-ends-september-25-2026", s: mk(T, T, T, T, F, T, T, F, F, T, F, F, F) },
     { name: "Pulsechain", type: "Mainnet", chainId: "0x171 (369)", qp: ["pulse", "0x171"], s: mk(T, T, F, T, F, T, T, F, T, T, F, F, F) },
     { name: "Sei", type: "Mainnet", chainId: "0x531 (1329)", qp: ["sei", "0x531"], s: mk(T, T, T, T, T, T, T, F, T, T, T, T, T) },
-    { name: "Sei Testnet", type: "Testnet", chainId: "0x530 (1328)", qp: ["sei-testnet", "0x530"], s: mk(T, T, T, T, T, T, T, F, F, T, F, F, F) },
     { name: "Monad", type: "Mainnet", chainId: "0x8f (143)", qp: ["monad", "0x8f"], s: mk(T, T, T, T, T, T, T, F, T, T, T, T, T) },
     { name: "Robinhood Chain", type: "Mainnet", chainId: "0x1237 (4663)", qp: ["robinhood", "0x1237"], s: mk(T, T, F, T, F, F, T, F, T, F, F, F, F) },
     { name: "Bitcoin Mainnet", type: "Mainnet", chainId: "mainnet", qp: ["bitcoin", "bitcoin-mainnet"], s: mk(T, T, F, T, F, F, T, F, T, F, F, F, F) },
