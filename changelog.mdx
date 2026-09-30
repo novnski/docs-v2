@@ -4,9 +4,13 @@ description: "New releases and improvements"
 ---
 
 <Update label="September 30, 2026" tags={["New Chains"]}>
-  ## Robinhood Chain Support in the Universal API
+  ## Robinhood Chain is now supported
 
-  Robinhood Chain mainnet is now supported through the [Universal API](/data-api/universal/overview). Robinhood Chain is an EVM-compatible Layer 2 with ETH as its native token. Indexing covers the chain from its genesis block on 30 April 2026.
+  Robinhood Chain mainnet is now supported across Moralis Data APIs and Streams.
+
+  You can query Robinhood Chain for blocks, transactions, token prices, OHLCV data, DEX swaps, wallet token balances, and wallet transaction history, or use Streams to subscribe to realtime onchain events.
+
+  Moralis indexing covers the chain from its genesis block on 30 April 2026.
 
   | Detail | Value |
   | --- | --- |
@@ -14,19 +18,28 @@ description: "New releases and improvements"
   | Chain values | `robinhood`, `0x1237` |
   | Native token | ETH |
 
-  **Supported areas and how to pass the chain**
+  **Supported Data API capabilities**
 
-  | Area | Endpoints | How to pass Robinhood Chain |
-  | --- | --- | --- |
-  | Blockchain | Blocks, transactions | Required `chainAlias` path parameter |
-  | Token prices | Current token price, [price sparkline](/data-api/universal/token/price/token-price-sparkline), [price timeseries](/data-api/universal/token/price/token-price-timeseries) | Required `chainAlias` path parameter |
-  | Market data | OHLCV candlesticks, swaps by pair, swaps by token | Required `chainAlias` path parameter |
-  | Wallet | Wallet token balances, wallet transaction history | Optional `chains` query parameter |
+  - **Blockchain:** blocks and transactions
+  - **Token prices:** current price, [price sparkline](/data-api/universal/token/price/token-price-sparkline), [price timeseries](/data-api/universal/token/price/token-price-timeseries)
+  - **Market data:** OHLCV candlesticks, swaps by pair, swaps by token
+  - **Wallets:** token balances and transaction history
 
-  **Limitations**
+  For chain-specific endpoints, use `robinhood` or `0x1237` as the `chainAlias`.
 
-  - Internal transactions are not supported. Responses do not include internal native transfers, and contract deployments made through trace-level `CREATE` / `CREATE2` are not detected. Top-level contract creation is still reported through `contractAddress`. See [Internal Transactions](/data-api/data-features/data-enrichment/internal-transactions).
-  - Robinhood Chain is not available in the chain-specific EVM API.
+  For wallet token balances and wallet transaction history, pass Robinhood Chain through the `chains` query parameter.
+
+  **Streams**
+
+  Robinhood Chain is also supported in Moralis Streams, so you can subscribe to realtime onchain events from the network.
+
+  **Internal transactions**
+
+  Internal transactions are not supported on Robinhood Chain.
+
+  Internal native transfers and trace-level contract deployments created through `CREATE` or `CREATE2` are therefore not included. Top-level contract creation is still reported through `contractAddress`.
+
+  See [Internal Transactions](/data-api/data-features/data-enrichment/internal-transactions).
 
   [View all supported chains →](/data-api/supported-chains)
 </Update>
