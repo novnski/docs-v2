@@ -24,6 +24,44 @@ Where possible, new endpoints are introduced in the Universal API first. Robinho
 
 ---
 
+### Selecting a Chain
+
+Universal API endpoints take the chain in one of two ways, depending on the endpoint:
+
+| Parameter | Where | Chains per request | Example |
+| --- | --- | --- | --- |
+| `chainAlias` | Path | One | `GET /v1/chains/ethereum/tokens/{tokenAddress}/price` |
+| `chains` | Query | One or more | `GET /v1/wallets/{walletAddress}/tokens?chains=ethereum&chains=base` |
+
+When using `chains`:
+
+- To query several chains, repeat the parameter once per chain. Comma-separated values are not supported.
+- Use `chains` (plural). The singular `chain` parameter is rejected with a `400` error.
+- If you omit `chains`, the request covers every mainnet the endpoint supports.
+- The shortcuts `all`, `mainnets`, and `testnets` are also accepted. They work only with `chains`, not with `chainAlias`.
+
+EVM chains accept either the hex chain ID or an alias. Solana and Bitcoin accept aliases only. Common values:
+
+| Chain | Accepted values |
+| --- | --- |
+| Ethereum | `0x1`, `ethereum`, `eth` |
+| Base | `0x2105`, `base` |
+| BNB Chain | `0x38`, `binance`, `bsc` |
+| Polygon | `0x89`, `polygon`, `matic` |
+| Robinhood Chain | `0x1237`, `robinhood` |
+| Solana | `solana-mainnet`, `sol`, `solana` |
+| Bitcoin | `bitcoin-mainnet`, `bitcoin` |
+
+<Note>
+  Supported chains vary by endpoint. Each endpoint page lists one accepted value per chain; the other values in this table work too. For the full chain list, see [Supported Chains](/data-api/supported-chains).
+</Note>
+
+<Tip>
+  [Streams](/streams/supported-chains) uses hex chain IDs only (for example, `0x1`). Aliases such as `ethereum` or `robinhood` are not accepted there.
+</Tip>
+
+---
+
 ### Consolidation Strategy
 
 Moralis is **gradually consolidating cross-chain functionality into the Universal API**.
