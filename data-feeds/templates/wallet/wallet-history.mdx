@@ -206,7 +206,6 @@ The sink is the way to get **this pre-shaped table** (`wallet_history_full`), re
 
 - **Your existing message clients**: stream it with **Kafka / AMQP / SQS**.
 - **REST / Arrow Flight**: pull the decoded block stream directly.
-- **Your warehouse**: query it via **Iceberg** from Snowflake, BigQuery, Spark, or DuckDB.
 
 Those give you the **source arrays** (`tokenTransfers`, `tokenSwaps`, …) to assemble yourself, not this pre-stitched wallet table. All of them read the one data lake into **your** infrastructure. See [What are Data Feeds?](/data-feeds/concepts/what-are-data-feeds).
 

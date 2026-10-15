@@ -935,7 +935,6 @@
               "data-feeds/access-methods/overview",
               "data-feeds/concepts/destinations",
               "data-feeds/access-methods/streaming",
-              "data-feeds/access-methods/warehouse-access",
               "data-feeds/access-methods/direct-reads"
             ]
           },
@@ -1848,6 +1847,10 @@
     }
   },
   "redirects": [
+    {
+      "source": "/data-feeds/access-methods/warehouse-access",
+      "destination": "/data-feeds/access-methods/overview"
+    },
     {
       "source": "/data-feeds/recipes/:slug*",
       "destination": "/data-feeds/templates/:slug*"

@@ -31,12 +31,6 @@ correction, so you get a production-grade dataset inside your own stack, queried
 the smoothest path for request/response needs (e.g. "a wallet's balances"). See
 [Database sinks](./destinations).
 
-### Query it from your warehouse
-Feed data is designed for **Apache Iceberg**-compatible access, committed as data lands, so your warehouse
-and notebooks can read it **without moving data first**, on platforms like **Snowflake, BigQuery, Spark,
-Trino, Databricks, DuckDB, Pandas, and dbt**. See
-[Warehouse access](../access-methods/warehouse-access) for details and current availability.
-
 > It's the **same data lake** under all of these, they're access modes of one service, not separate products.
 > Choose by your stack and use case; you're never locked into one shape.
 
@@ -61,5 +55,5 @@ A few properties worth knowing:
 
 - **Migrating from a Moralis REST endpoint?** Start with the relevant migration guide.
 - **Building something new?** Browse the template cookbook for a ready-to-run feed.
-- **Choosing how to consume it?** The [access methods overview](../access-methods/overview) compares all four
+- **Choosing how to consume it?** The [access methods overview](../access-methods/overview) compares all three
   paths with a decision table.
