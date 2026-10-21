@@ -19,6 +19,7 @@ export const SupportedChains = ({ chains }) => {
     pulse: { name: "PulseChain", chainId: "0x171", alias: "pulse" },
     sei: { name: "Sei", chainId: "0x531", alias: "sei" },
     monad: { name: "Monad", chainId: "0x8f", alias: "monad" },
+    tempo: { name: "Tempo", chainId: "0x1079", alias: "tempo" },
     solana: { name: "Solana", chainId: "mainnet", alias: "solana" },
   };
 

@@ -53,6 +53,7 @@ export const DataApiSupportedChainsTable = () => {
     { name: "Pulsechain", type: "Mainnet", chainId: "0x171 (369)", qp: ["pulse", "0x171"], s: mk(T, T, F, T, F, T, T, F, T, T, F, F, F) },
     { name: "Sei", type: "Mainnet", chainId: "0x531 (1329)", qp: ["sei", "0x531"], s: mk(T, T, T, T, T, T, T, F, T, T, T, T, T) },
     { name: "Monad", type: "Mainnet", chainId: "0x8f (143)", qp: ["monad", "0x8f"], s: mk(T, T, T, T, T, T, T, F, T, T, T, T, T) },
+    { name: "Tempo", type: "Mainnet", chainId: "0x1079 (4217)", qp: ["tempo", "0x1079"], s: mk(T, T, T, T, F, T, T, T, T, T, F, F, F) },
     { name: "Robinhood Chain", type: "Mainnet", chainId: "0x1237 (4663)", qp: ["robinhood", "0x1237"], s: mk(T, T, F, T, F, F, T, F, T, F, F, F, F) },
     { name: "Bitcoin Mainnet", type: "Mainnet", chainId: "mainnet", qp: ["bitcoin", "bitcoin-mainnet"], s: mk(T, T, F, T, F, F, T, F, T, F, F, F, F) },
   ];

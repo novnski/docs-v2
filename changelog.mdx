@@ -3,6 +3,40 @@ title: "Product updates"
 description: "New releases and improvements"
 ---
 
+<Update label="October 21, 2026" tags={["New Chains"]}>
+  ## Tempo is now supported
+
+  Tempo mainnet is now supported across the Moralis Data API, Streams, Datashare and Data Feeds.
+
+  | Detail | Value |
+  | --- | --- |
+  | Chain ID | `0x1079` (4217) |
+  | Chain values | `tempo`, `0x1079` |
+  | Native token | None. Tempo has no native gas token, so balances and transfers are TIP-20 tokens |
+
+  **Data API**
+
+  Tempo supports every Data API feature except DeFi positions and NFT trades, sale prices and floor prices:
+
+  - **Wallets:** token balances, transaction history, net worth and profitability
+  - **Tokens:** metadata, transfers, owners and prices
+  - **NFTs:** NFTs by wallet, collection metadata and transfers
+  - **Blockchain:** blocks, transactions and [internal transactions](/data-api/data-features/data-enrichment/internal-transactions)
+  - **Entities:** labelled addresses and entities
+
+  Use `tempo` or `0x1079` as the `chain` or `chainAlias` value, or pass it through the `chains` query parameter on multi-chain endpoints.
+
+  **Streams**
+
+  Create Tempo streams with chain ID `0x1079` for token and NFT activity, contract events, internal transactions and transaction data. Streams requires the hex chain ID; the `tempo` alias is not accepted. See [Streams supported chains](/streams/supported-chains).
+
+  **Datashare and Data Feeds**
+
+  Tempo token transfers, NFT transfers and swaps are available through [Datashare](/datashare/supported-chains) and [Data Feeds](/data-feeds/overview).
+
+  [View all supported chains →](/data-api/supported-chains)
+</Update>
+
 <Update label="September 30, 2026" tags={["New Chains"]}>
   ## Robinhood Chain is now supported
 

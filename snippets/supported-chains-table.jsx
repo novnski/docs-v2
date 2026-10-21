@@ -44,6 +44,7 @@ export const SupportedChainsTable = () => {
     { name: "Sei", type: "Mainnet", chainId: "0x531 (1329)", s: mk(true, true, true, false, false) },
     { name: "Sei Testnet", type: "Testnet", chainId: "0x530 (1328)", s: mk(true, true, true, false, false) },
     { name: "Monad", type: "Mainnet", chainId: "0x8f (143)", s: mk(true, true, true, false, true) },
+    { name: "Tempo", type: "Mainnet", chainId: "0x1079 (4217)", s: mk(true, true, true, false, false) },
     { name: "Blast", type: "Mainnet", chainId: "0x13e31 (81457)", s: mk(false, false, false, true, false) },
     { name: "Blast Sepolia", type: "Testnet", chainId: "0xa0c71fd (168587773)", s: mk(false, false, false, true, false) },
     { name: "zkSync", type: "Mainnet", chainId: "0x144 (324)", s: mk(false, false, false, true, false) },
