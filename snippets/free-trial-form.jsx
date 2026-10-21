@@ -30,6 +30,11 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
     () => "ft-turnstile-" + Math.random().toString(36).slice(2)
   );
 
+  // Keep in step with FREE_EMAIL_DOMAINS in the Worker.
+  const FREE_EMAIL = ["gmail.com", "googlemail.com", "yahoo.com", "yahoo.co.uk", "ymail.com", "hotmail.com", "hotmail.co.uk", "outlook.com", "live.com", "msn.com", "icloud.com", "me.com", "mac.com", "aol.com", "proton.me", "protonmail.com", "pm.me", "gmx.com", "gmx.de", "gmx.net", "web.de", "mail.com", "yandex.com", "yandex.ru", "mail.ru", "qq.com", "163.com", "126.com", "zoho.com", "tutanota.com", "tuta.io", "hey.com", "fastmail.com"];
+  const WORK_EMAIL_MSG = "Please use your work email so we can set up your trial.";
+  const isFreeEmail = (v) => FREE_EMAIL.includes((v.trim().split("@")[1] || "").toLowerCase());
+
   const needsVolume = products.includes("Data API");
 
   useEffect(() => {
@@ -76,6 +81,7 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
   const submit = async (e) => {
     e.preventDefault();
     setError("");
+    if (isFreeEmail(email)) return setError(WORK_EMAIL_MSG);
     if (!products.length) return setError("Pick at least one product.");
     if (needsVolume && !volume) return setError("Select your expected API volume.");
     if (TURNSTILE_SITE_KEY && !token) return setError("Please complete the verification check.");
@@ -100,7 +106,7 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
       setStatus("sent");
     } catch (err) {
       setStatus("idle");
-      setError("Something went wrong. Please try again in a moment.");
+      setError(err.message === "personal email" ? WORK_EMAIL_MSG : "Something went wrong. Please try again in a moment.");
       if (window.turnstile) window.turnstile.reset("#" + widgetId);
     }
   };
