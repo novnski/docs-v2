@@ -30,9 +30,22 @@ description: "New releases and improvements"
 
   Create Tempo streams with chain ID `0x1079` for token and NFT activity, contract events, internal transactions and transaction data. Streams requires the hex chain ID; the `tempo` alias is not accepted. See [Streams supported chains](/streams/supported-chains).
 
-  **Datashare and Data Feeds**
+  **Data Feeds**
 
-  Tempo token transfers, NFT transfers and swaps are available through [Datashare](/datashare/supported-chains) and [Data Feeds](/data-feeds/overview).
+  [Data Feeds](/data-feeds/overview) index Tempo into your own infrastructure, from raw blocks through to decoded, USD-valued events, with no indexing layer to build or run.
+
+  - **Full history and live data:** backfill from genesis, tail the chain head in realtime, or do both in [hybrid mode](/data-feeds/concepts/modes). Reorgs near the tip are [corrected automatically](/data-feeds/concepts/reorgs).
+  - **Raw chain data:** block headers, transactions, receipts and every event log through the [`block` array](/data-feeds/concepts/the-block-array), for indexing any contract or event signature.
+  - **Decoded activity:** token transfers with post-transfer balances, NFT transfers, swaps, token prices and token metadata, in the same unified schema as every other chain.
+  - **Ready-made [templates](/data-feeds/templates/overview):** wallet history, token balances (current and historical), token holders, approvals, token transfers, prices and stats, swaps by wallet, token or pair, pair OHLCV and reserves, NFTs by wallet, NFT owners, NFT transfers and collection metadata, and contract logs.
+  - **Use-case bundles:** [accounting](/data-feeds/use-cases/accounting), [portfolio tracking](/data-feeds/use-cases/portfolio-tracking), [token analytics](/data-feeds/use-cases/token-analytics), [compliance and AML](/data-feeds/use-cases/compliance-aml) and [event indexing](/data-feeds/use-cases/event-indexing).
+  - **Your choice of destination:** land tables in [ClickHouse, Postgres or MySQL](/data-feeds/concepts/destinations), consume through [Kafka, RabbitMQ or SQS](/data-feeds/access-methods/streaming)-compatible clients, or pull with [REST or Arrow Flight](/data-feeds/access-methods/direct-reads).
+
+  Tempo has no native gas token, so native balance templates don't apply, and the NFT Trades template stays empty because no NFT marketplace trades have happened on Tempo.
+
+  **Datashare**
+
+  Tempo token transfers, NFT transfers and swaps are available as bulk historical exports through [Datashare](/datashare/supported-chains).
 
   [View all supported chains →](/data-api/supported-chains)
 </Update>
