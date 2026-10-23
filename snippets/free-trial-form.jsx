@@ -18,6 +18,7 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
 
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
+  const [telegram, setTelegram] = useState("");
   const [project, setProject] = useState("");
   const [products, setProducts] = useState([]);
   const [volume, setVolume] = useState("");
@@ -33,6 +34,8 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
   // Keep in step with FREE_EMAIL_DOMAINS in the Worker.
   const FREE_EMAIL = ["gmail.com", "googlemail.com", "yahoo.com", "yahoo.co.uk", "ymail.com", "hotmail.com", "hotmail.co.uk", "outlook.com", "live.com", "msn.com", "icloud.com", "me.com", "mac.com", "aol.com", "proton.me", "protonmail.com", "pm.me", "gmx.com", "gmx.de", "gmx.net", "web.de", "mail.com", "yandex.com", "yandex.ru", "mail.ru", "qq.com", "163.com", "126.com", "zoho.com", "tutanota.com", "tuta.io", "hey.com", "fastmail.com"];
   const WORK_EMAIL_MSG = "Please use your work email so we can set up your trial.";
+  const TELEGRAM_MSG = "Check your Telegram username, or leave it blank.";
+  const isTelegram = (v) => /^@?[A-Za-z0-9_]{5,32}$/.test(v.trim().replace(/^(https?:\/\/)?(t\.me|telegram\.me)\//i, ""));
   const isFreeEmail = (v) => FREE_EMAIL.includes((v.trim().split("@")[1] || "").toLowerCase());
 
   const needsVolume = products.includes("Data API");
@@ -82,6 +85,7 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
     e.preventDefault();
     setError("");
     if (isFreeEmail(email)) return setError(WORK_EMAIL_MSG);
+    if (telegram.trim() && !isTelegram(telegram)) return setError(TELEGRAM_MSG);
     if (!products.length) return setError("Pick at least one product.");
     if (needsVolume && !volume) return setError("Select your expected API volume.");
     if (TURNSTILE_SITE_KEY && !token) return setError("Please complete the verification check.");
@@ -94,6 +98,7 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
         body: JSON.stringify({
           email,
           company,
+          telegram: telegram.trim(),
           project,
           products,
           volume: needsVolume ? volume : "",
@@ -106,7 +111,11 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
       setStatus("sent");
     } catch (err) {
       setStatus("idle");
-      setError(err.message === "personal email" ? WORK_EMAIL_MSG : "Something went wrong. Please try again in a moment.");
+      setError(
+        err.message === "personal email" ? WORK_EMAIL_MSG
+          : err.message === "invalid telegram" ? TELEGRAM_MSG
+          : "Something went wrong. Please try again in a moment."
+      );
       if (window.turnstile) window.turnstile.reset("#" + widgetId);
     }
   };
@@ -152,6 +161,12 @@ export const FreeTrialForm = ({ modal = false, title = "Request a free trial" })
         <label style={label} htmlFor="ft-company">Company</label>
         <input id="ft-company" type="text" required value={company}
           onChange={(e) => setCompany(e.target.value)} style={input} />
+      </div>
+
+      <div style={field}>
+        <label style={label} htmlFor="ft-telegram">Telegram <span style={{ fontWeight: 400, opacity: 0.7 }}>(optional)</span></label>
+        <input id="ft-telegram" type="text" value={telegram} autoComplete="off"
+          onChange={(e) => setTelegram(e.target.value)} style={input} placeholder="@handle" />
       </div>
 
       <div style={field}>
