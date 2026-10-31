@@ -1,0 +1,119 @@
+---
+title: "Accurate Net Worth & Token Balances"
+sidebarTitle: "Accurate Net Worth & Balances"
+description: "Keep spam tokens and unreliable prices out of wallet balances and net worth. Which filters to use, recommended values for each use case, and checks to run on the response."
+---
+
+Wallets collect tokens they never asked for. Airdropped spam, dead tokens and tokens that trade in tiny pools can all carry a USD price, and one bad price is enough to inflate a portfolio total.
+
+You control how strict Moralis is when it values a wallet. This page explains the filters, recommends values for common use cases, and lists the extra checks worth running on the response.
+
+It applies to:
+
+- [Token Balances](/data-api/evm/wallet/token-balances) (`/wallets/{address}/tokens`)
+- [Wallet Net Worth](/data-api/evm/wallet/net-worth) (`/wallets/{address}/net-worth`)
+- [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances) (`/v1/wallets/{address}/tokens`)
+- [Token Price](/data-api/evm/token/prices/token-price) and [Token Prices (Batch)](/data-api/evm/token/prices/token-prices-batch), which take the price filters
+
+<Warning>
+  On these endpoints every filter is **off by default**. If you show balances or net worth to end users, set them explicitly.
+</Warning>
+
+---
+
+## Why values look wrong
+
+Moralis prices tokens from onchain DEX swaps: a token's price is the last price it traded at in its selected pool (see [Token Prices](/data-api/data-features/data-enrichment/token-prices)). This is accurate for actively traded tokens. It goes wrong in three cases:
+
+| Cause | What you see | Filter that fixes it |
+|---|---|---|
+| **Spam tokens.** Airdropped tokens with fake names, often copying a real token, sometimes with a pool set up to give them a price. | Unknown tokens with large balances and large USD values. | `exclude_spam` |
+| **Thin pools.** A token's only pool holds a few hundred dollars. One small swap moves the price by orders of magnitude. | A token's value spikes, then corrects on a later call once the pool trades again. | `min_pair_side_liquidity_usd` |
+| **Dead tokens.** Trading stopped weeks or months ago, so the last price is stale. | Tokens nobody can sell still add to net worth. | `max_token_inactivity` |
+
+If the inflated value goes away on the next call, the cause is almost always a thin pool. The price really was traded onchain, but in a pool too small to trust. A liquidity threshold stops those prices being used at all.
+
+---
+
+## The filters
+
+### `exclude_spam`
+
+Removes tokens that Moralis flags as `possible_spam`. Detection uses contract metadata, known spam and phishing patterns, and onchain behaviour, and is updated as new patterns appear. See [Spam Filtering](/data-api/resources/spam-filtering).
+
+**Recommendation: always set `exclude_spam=true`** for anything shown to users. Hardly any real holdings are flagged, and spam is the most common source of inflated totals.
+
+### `min_pair_side_liquidity_usd`
+
+Sets the minimum USD liquidity a pool must hold on **each side** before Moralis uses it to price a token. With `1000`, a TOKEN/USDC pool counts only if both the TOKEN side and the USDC side hold at least \$1,000. Tokens with no qualifying pool are excluded. The default on EVM chains is \$50 per side. See [Liquidity Filtering](/data-api/data-features/safety-and-trust/liquidity-filtering).
+
+This is the most effective filter against prices that jump and then correct. Pushing a price up with a single swap costs a lot more in a \$1,000-a-side pool than in a \$50-a-side pool.
+
+**Recommendation: `1000` for consumer wallets and portfolio apps.** Use `250` to keep more small-cap tokens, or `10000` or more for reporting, accounting or anything that moves money based on the value. Above \$1,000 a side you start losing real but small tokens, so raise it only when a false value costs more than a missing one.
+
+### `max_token_inactivity`
+
+Excludes tokens that have not traded for more than the given number of days.
+
+**Recommendation: `7`.** A price more than a week old isn't a fair current value for a portfolio. Raise it to `30` if your users hold long-tail tokens that trade rarely and you would rather show a stale price than none.
+
+### `exclude_unverified_contracts`
+
+Keeps only ERC20 tokens verified by CoinGecko (`verified_contract: true`). See [Verified Contracts](/data-api/data-features/safety-and-trust/verified-contracts).
+
+This is the strictest filter. It removes almost all spam and manipulated tokens, along with real tokens that are new or too small to be listed on CoinGecko.
+
+**Recommendation: use it for headline numbers that must be defensible**, such as a total balance shown on an exchange, a figure used in reporting, or an eligibility check. For a wallet that lists everything the user holds, leave it off and use the `verified_contract` field instead (see [Checks to run on the response](#checks-to-run-on-the-response)).
+
+---
+
+## Recommended settings
+
+| Use case | `exclude_spam` | `min_pair_side_liquidity_usd` | `max_token_inactivity` | `exclude_unverified_contracts` |
+|---|---|---|---|---|
+| **Wallet or portfolio app.** Show everything real, value it sensibly. | `true` | `1000` | `7` | `false` |
+| **Strict valuation.** Exchanges, reporting, rewards, risk and eligibility checks. | `true` | `10000` | `3` | `true` |
+| **Discovery or trading tools.** Users want the long tail and accept more noise. | `true` | `250` | `30` | `false` |
+
+Start with the first row. Move to a stricter row if users still report inflated values, and to a looser one if they report missing tokens.
+
+```bash Wallet or portfolio app
+curl "https://deep-index.moralis.io/api/v2.2/wallets/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045/net-worth?chains=eth&chains=base&exclude_spam=true&exclude_unverified_contracts=false&min_pair_side_liquidity_usd=1000&max_token_inactivity=7" \
+  -H "X-API-Key: YOUR_API_KEY"
+```
+
+Use **the same values** on Token Balances and Net Worth. Then the tokens in the list add up to the total, and users don't see a figure they can't reconcile.
+
+---
+
+## Checks to run on the response
+
+The filters cover most cases. For a portfolio that real users rely on, also check these Token Balances fields before showing a value:
+
+- **`verified_contract`**: when unverified tokens are left in, show them in the list but leave them out of the headline total, or label them "unverified". You get the stricter total without hiding anything.
+- **`possible_spam`**: if you don't use `exclude_spam`, for example to show spam in a separate "hidden" tab, never count these tokens towards value.
+- **`percentage_relative_to_total_supply`**: an ordinary wallet that holds a large share (say more than 1%) of an unverified token's supply has usually been airdropped it. Real holdings of that size are rare outside the team that issued the token.
+- **`usd_price_24hr_percent_change`**: a price that is up several thousand percent in a day, on an unverified token, is more likely a bad print than a real move. Hold it back until it repeats on the next call.
+- **`portfolio_percentage`**: if one unverified token suddenly makes up most of a wallet's value, check it before you show the total.
+
+If you store snapshots, compare each token's value with the previous snapshot. A low-liquidity token that jumps more than about 10x between two calls can safely wait one refresh cycle before you show the new value.
+
+---
+
+## Endpoint reference
+
+| Endpoint | Spam | Liquidity | Inactivity | Verified only |
+|---|---|---|---|---|
+| [Token Balances](/data-api/evm/wallet/token-balances) | `exclude_spam` | `min_pair_side_liquidity_usd` | `max_token_inactivity` | `exclude_unverified_contracts` |
+| [Wallet Net Worth](/data-api/evm/wallet/net-worth) | `exclude_spam` | `min_pair_side_liquidity_usd` | `max_token_inactivity` | `exclude_unverified_contracts` |
+| [Cross-Chain Token Balances](/data-api/universal/wallet/cross-chain-token-balances) | `excludeSpam` | `liquidityThreshold` | `maxTokenInactivity` | `excludeUnverifiedContracts` |
+| [Token Price](/data-api/evm/token/prices/token-price), [Token Prices (Batch)](/data-api/evm/token/prices/token-prices-batch) | n/a | `min_pair_side_liquidity_usd` | `max_token_inactivity` | n/a |
+| [Solana Token Balances](/data-api/solana/wallet/token-balances), [Solana Portfolio](/data-api/solana/wallet/portfolio) | `excludeSpam` | n/a | n/a | n/a |
+
+Cross-Chain Token Balances also returns `securityScore` on each token, the token's [Token Score](/data-api/data-features/token-scores). Filtering out low scores is a good extra check on top of the filters above.
+
+On Solana, the wallet endpoints don't return USD values, and there is no default liquidity threshold. Set `excludeSpam=true`, use `isVerifiedContract` the way you would use `verified_contract`, and apply your own checks to any prices you fetch.
+
+<Note>
+  The [legacy Token Balances](/data-api/evm/wallet/token-balances-legacy) endpoint (`/{address}/erc20`) excludes spam by default, but it doesn't take the price filters. Use [Token Balances](/data-api/evm/wallet/token-balances) for anything that shows USD values.
+</Note>
