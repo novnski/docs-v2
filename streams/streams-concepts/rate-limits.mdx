@@ -1,6 +1,23 @@
 ---
 title: "Rate Limits"
-description: "Understand Streams rate limits, address management constraints, and how stream reloads impact webhook delivery."
+description: "Understand Streams plan limits on streams and addresses, rate limits on address management, and how stream reloads impact webhook delivery."
+---
+
+## Stream & Address Limits
+
+The number of streams you can create, and the number of addresses each stream can watch, depend on your plan:
+
+| Plan | Streams per account | Addresses per stream |
+|---|---|---|
+| All plans below Enterprise | 200 | 50,000 |
+| Enterprise | Custom | Custom, up to millions per stream |
+
+If you need more than 50,000 addresses on a stream, or more than 200 streams, [reach out to the team](https://moralis.com/enterprise/) about an Enterprise plan.
+
+<Tip>
+  You rarely need one stream per user. A single stream can watch up to 50,000 addresses, so add new addresses to an existing stream instead of creating a new stream for each user or wallet.
+</Tip>
+
 ---
 
 ## Rate Limits & Address Management
@@ -125,6 +142,7 @@ These are governed by stream configuration and pricing, not per-request rate lim
 
 ## Summary
 
+- Plans below Enterprise allow 200 streams and 50,000 addresses per stream; Enterprise limits are custom
 - Address additions trigger stream reloads
 - Reloads are not instantaneous
 - Address add requests are rate limited
