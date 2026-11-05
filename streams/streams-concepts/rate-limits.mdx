@@ -5,17 +5,17 @@ description: "Understand Streams plan limits on streams and addresses, rate limi
 
 ## Stream & Address Limits
 
-The number of streams you can create, and the number of addresses each stream can watch, depend on your plan:
+The number of streams you can create, and the total number of addresses you can watch across all of them, depend on your plan:
 
-| Plan | Streams per account | Addresses per stream |
+| Plan | Streams per account | Watched addresses per account |
 |---|---|---|
 | All plans below Enterprise | 200 | 50,000 |
-| Enterprise | Custom | Custom, up to millions per stream |
+| Enterprise | Custom | Custom, into the millions |
 
-If you need more than 50,000 addresses on a stream, or more than 200 streams, [reach out to the team](https://moralis.com/enterprise/) about an Enterprise plan.
+The address limit applies to your **whole account**, not to each stream. If you need to watch more than 50,000 addresses, or need more than 200 streams, [reach out to the team](https://moralis.com/enterprise/) about an Enterprise plan.
 
 <Tip>
-  You rarely need one stream per user. A single stream can watch up to 50,000 addresses, so add new addresses to an existing stream instead of creating a new stream for each user or wallet.
+  You rarely need one stream per user. Add new addresses to an existing stream instead of creating a new stream for each user or wallet.
 </Tip>
 
 ---
@@ -142,7 +142,7 @@ These are governed by stream configuration and pricing, not per-request rate lim
 
 ## Summary
 
-- Plans below Enterprise allow 200 streams and 50,000 addresses per stream; Enterprise limits are custom
+- Plans below Enterprise allow 200 streams and 50,000 watched addresses per account; Enterprise limits are custom
 - Address additions trigger stream reloads
 - Reloads are not instantaneous
 - Address add requests are rate limited
